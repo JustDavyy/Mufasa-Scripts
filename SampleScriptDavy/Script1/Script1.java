@@ -7,7 +7,7 @@ import helpers.ScriptManifest;
 @ScriptManifest(
         name = "SampleScriptDavy",
         description = "A sample script for demonstration purposes - used by Davy",
-        version = "1.1",
+        version = "1.0",
         category = ScriptCategory.Agility
 )
 public class SampleScript extends AbstractScript {
