@@ -7,6 +7,9 @@
 # Ignore all build folders and their contents
 **/build/
 
+# Ignore all gradle folders and their contents
+**/gradle/
+
 # Ignore all gradlew and gradlew.bat files
 **/gradlew
 **/gradlew.bat
