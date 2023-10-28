@@ -1,15 +1,25 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.7.10'
+}
+repositories {
+        mavenCentral()
+        maven { url "https://repo1.maven.org/maven2" }
+        maven { url "https://openpnp.github.io/maven" }
+        google()
+    }
+dependencies {
+    implementation 'org.openpnp:opencv:4.5.3-4'
 }
 
-dependencies {
-    implementation files('resources/scriptSDK.jar')
+compileJava {
+    options.debug = true
+    options.compilerArgs += ['-g', '-parameters']
 }
 
 jar {
-    archiveFileName = 'SampleScript.jar'
-    destinationDirectory = file('../CompiledScripts')
+    //from sourceSets.main.allSource //This will include the SDK source itself (the .java files).
+    archiveFileName = 'scriptSDK.jar'
+    destinationDirectory = file('../client/src/main/resources')
 
     manifest {
         attributes(
@@ -18,3 +28,10 @@ jar {
         )
     }
 }
+
+task copyJarToSampleScript(type: Copy) {
+    from '../client/src/main/resources/scriptSDK.jar'
+    into '../SampleScript/resources/'
+}
+
+jar.finalizedBy copyJarToSampleScript
