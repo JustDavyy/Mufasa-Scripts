@@ -6,7 +6,7 @@ import java.util.Map;
 @ScriptManifest(
         name = "Chicken Killer",
         description = "Chicken Killer by JustDavyy, kills chickens in the lumbridge chicken pen and optionally picks up feathers.",
-        version = "1.4",
+        version = "1.7",
         category = ScriptCategory.Combat
 )
 @ScriptConfiguration.List(

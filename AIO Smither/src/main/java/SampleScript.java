@@ -6,7 +6,7 @@ import java.util.Map;
 @ScriptManifest(
         name = "AIO Smither",
         description = "AIO Smither by JustDavyy, supports all bar types and smithing items, support for multiple anvil locations.",
-        version = "1.7",
+        version = "1.8",
         category = ScriptCategory.Smithing
 )
 @ScriptConfiguration.List(
