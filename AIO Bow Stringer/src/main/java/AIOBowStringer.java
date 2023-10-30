@@ -4,10 +4,10 @@ import helpers.utils.OptionType;
 import java.util.Map;
 
 @ScriptManifest(
-        name = "AIO Woodcutter",
-        description = "AIO Woodcutter by JustDavyy",
-        version = "1.0",
-        category = ScriptCategory.Woodcutting
+        name = "AIO Bow Stringer",
+        description = "AIO Bow Stringer by JustDavyy",
+        version = "4.1",
+        category = ScriptCategory.Fletching
 )
 @ScriptConfiguration.List(
         {
@@ -32,7 +32,7 @@ import java.util.Map;
         }
 )
 
-public class SampleScript extends AbstractScript {
+public class AIOBowStringer extends AbstractScript {
     String chosenTest; //Lets save the 1st config value
     String anotherConfig; //Lets save the 2nd config value
 

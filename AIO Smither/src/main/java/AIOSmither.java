@@ -4,10 +4,10 @@ import helpers.utils.OptionType;
 import java.util.Map;
 
 @ScriptManifest(
-        name = "AIO Bow Stringer",
-        description = "AIO Bow Stringer by JustDavyy",
-        version = "3.8",
-        category = ScriptCategory.Fletching
+        name = "AIO Smither",
+        description = "AIO Smither by JustDavyy, supports all bar types and smithing items, support for multiple anvil locations.",
+        version = "1.9",
+        category = ScriptCategory.Smithing
 )
 @ScriptConfiguration.List(
         {
@@ -32,7 +32,7 @@ import java.util.Map;
         }
 )
 
-public class SampleScript extends AbstractScript {
+public class AIOSmither extends AbstractScript {
     String chosenTest; //Lets save the 1st config value
     String anotherConfig; //Lets save the 2nd config value
 

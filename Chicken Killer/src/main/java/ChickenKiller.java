@@ -4,10 +4,10 @@ import helpers.utils.OptionType;
 import java.util.Map;
 
 @ScriptManifest(
-        name = "AIO Smither",
-        description = "AIO Smither by JustDavyy, supports all bar types and smithing items, support for multiple anvil locations.",
-        version = "1.8",
-        category = ScriptCategory.Smithing
+        name = "Chicken Killer",
+        description = "Chicken Killer by JustDavyy, kills chickens in the lumbridge chicken pen and optionally picks up feathers.",
+        version = "69.69",
+        category = ScriptCategory.Combat
 )
 @ScriptConfiguration.List(
         {
@@ -32,7 +32,7 @@ import java.util.Map;
         }
 )
 
-public class SampleScript extends AbstractScript {
+public class ChickenKiller extends AbstractScript {
     String chosenTest; //Lets save the 1st config value
     String anotherConfig; //Lets save the 2nd config value
 
