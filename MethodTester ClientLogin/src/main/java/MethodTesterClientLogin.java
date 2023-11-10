@@ -6,7 +6,7 @@ import java.util.Map;
 @ScriptManifest(
         name = "Method Tester ClientLogin",
         description = "Simple test script to test out certain methods as actual script execution.",
-        version = "0.1",
+        version = "0.2",
         category = ScriptCategory.Combat
 )
 @ScriptConfiguration.List(
