@@ -1,14 +1,15 @@
-
-import helpers.AbstractScript;
-import helpers.ScriptCategory;
-import helpers.ScriptConfiguration;
-import helpers.ScriptManifest;
+import helpers.*;
 import helpers.utils.OptionType;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 @ScriptManifest(
-        name = "Method Tester ClientLogin",
+        name = "Method Tester Walker",
         description = "Simple test script to test out certain methods as actual script execution.",
         version = "0.2",
         category = ScriptCategory.Combat
@@ -36,7 +37,7 @@ import java.util.Map;
         }
 )
 
-public class MethodTesterClientLogin extends AbstractScript {
+public class MethodTesterWalker extends AbstractScript {
     String chosenTest; //Lets save the 1st config value
     String anotherConfig; //Lets save the 2nd config value
 
@@ -45,28 +46,23 @@ public class MethodTesterClientLogin extends AbstractScript {
         Map<String, String> configs = getConfigurations(); //Get the script configuration
         chosenTest = configs.get("Test configuration"); //Set this value to the 'chosenTest' string
         anotherConfig = configs.get("Another configuration"); //Get the value from the 2nd configuration option
-
-        //Logs for debugging purposes
-        logger.log("We are starting the Method Tester script and running onStart()");
-        logger.log("Test configuration set to: " + chosenTest);
-        logger.log("2nd config value set to: " + anotherConfig);
-        System.out.println("Starting the Method Tester script!");
+        System.out.println("Starting the Method Tester walking script!");
     }
 
     @Override
     public void poll() {
-        logger.log("We are now starting to log in to runescape!");
-        condition.sleep(2000);
-		logger.log("Running the client.login method...");
-		login.login();
-		logger.log("Sleeping for 10 seconds...");
-		condition.sleep(10000);
-		logger.log("We are now starting to log out of runescape!");
-		condition.sleep(2000);
-		logger.log("Running the client.logout method...");
-        logout.logout();
-		condition.sleep(2000);
-        System.out.println("Finished executing the poll method of the Method Tester script!");
-        // Main logic for the script
+        File file = new File("path/to/agility.png"); // Replace with the actual file path
+        BufferedImage image;
+        try {
+            image = ImageIO.read(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Point position1 = new Point(228, 701);
+        Point position2 = new Point(216, 701);
+        walker.walkTo(position1);
+        condition.wait((walker.getPlayerPosition(image).getKey().equals(position1)), 200, 20);
+        walker.walkTo(position2);
+        condition.wait((walker.getPlayerPosition(image).getKey().equals(position2)), 200, 20);
     }
 }
