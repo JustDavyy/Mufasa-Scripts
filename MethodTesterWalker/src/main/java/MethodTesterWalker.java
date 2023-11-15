@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 @ScriptManifest(
@@ -51,18 +52,31 @@ public class MethodTesterWalker extends AbstractScript {
 
     @Override
     public void poll() {
-        File file = new File("path/to/agility.png"); // Replace with the actual file path
-        BufferedImage image;
-        try {
-            image = ImageIO.read(file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        BufferedImage image = loadImageFromResources("/agility.png");
         Point position1 = new Point(228, 701);
         Point position2 = new Point(216, 701);
         walker.walkTo(position1);
         condition.wait((walker.getPlayerPosition(image).getKey().equals(position1)), 200, 20);
         walker.walkTo(position2);
         condition.wait((walker.getPlayerPosition(image).getKey().equals(position2)), 200, 20);
+    }
+
+    public static BufferedImage loadImageFromResources(String path) {
+        InputStream is = MethodTesterWalker.class.getResourceAsStream(path);
+        if (is == null) {
+            return null;
+        }
+        try {
+            return ImageIO.read(is);
+        } catch (IOException e) {
+            System.out.println("ImageLoader couldnt load the ressource!");
+            return null;
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
