@@ -6,7 +6,7 @@ import java.util.Map;
 @ScriptManifest(
         name = "ReadXP",
         description = "Reads your total XP on a loop.",
-        version = "1.0",
+        version = "1.1",
         category = ScriptCategory.Combat
 )
 @ScriptConfiguration.List(
@@ -51,7 +51,7 @@ public class ReadXP extends AbstractScript {
 
     @Override
     public void poll() {
-        client.readxp();
+        xpBar.getXP();
         condition.sleep(2000);
     }
 }
