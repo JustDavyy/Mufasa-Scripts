@@ -162,34 +162,36 @@ public class AIOBowFletcher extends AbstractScript {
             }
         }
 
-        // Check if knife is present in Inventory, otherwise withdraw it from the bank.
-        if (!inventory.contains(knife, 0.90)) {
-            logger.debugLog("Inventory doesn't contain a knife, withdrawing it from the bank.");
-            if (!bank.isSelectedQuantity1Button()) {
-                bank.tapQuantity1Button();
-                condition.wait(() -> bank.isSelectedQuantity1Button(), 500, 10);
-            }
-            bank.tapSearchButton();
-            condition.sleep(1000);
+        // Check if knife is present in Inventory, otherwise withdraw it from the bank (only if using the Cut method)
+        if (Objects.equals(method, "Cut")) {
+            if (!inventory.contains(knife, 0.90)) {
+                logger.debugLog("Inventory doesn't contain a knife, withdrawing it from the bank.");
+                if (!bank.isSelectedQuantity1Button()) {
+                    bank.tapQuantity1Button();
+                    condition.wait(() -> bank.isSelectedQuantity1Button(), 500, 10);
+                }
+                bank.tapSearchButton();
+                condition.sleep(1000);
 
-            // Send keystroke for each character
-            String textToSend = "knife";
-            for (char c : textToSend.toCharArray()) {
-                String keycode = "KEYCODE_" + Character.toUpperCase(c);
-                client.sendKeystroke(keycode);
-            }
+                // Send keystroke for each character
+                String textToSend = "knife";
+                for (char c : textToSend.toCharArray()) {
+                    String keycode = "KEYCODE_" + Character.toUpperCase(c);
+                    client.sendKeystroke(keycode);
+                }
 
-            condition.sleep(3000);
-            bank.withdrawItem(knife, 0.90);
-            condition.sleep(500);
+                condition.sleep(3000);
+                bank.withdrawItem(knife, 0.90);
+                condition.sleep(500);
 
-            // Send keystroke to close the search interface
-            client.sendKeystroke("KEYCODE_ENTER");
-            condition.sleep(1000);
+                // Send keystroke to close the search interface
+                client.sendKeystroke("KEYCODE_ENTER");
+                condition.sleep(1000);
 
-            if (!bank.isSelectedBankTab(banktab)) {
-                bank.openTab(banktab);
-                condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
+                if (!bank.isSelectedBankTab(banktab)) {
+                    bank.openTab(banktab);
+                    condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
+                }
             }
         }
 
