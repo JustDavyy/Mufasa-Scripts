@@ -119,11 +119,11 @@ public class AIOBowFletcher extends AbstractScript {
         // Setting the correct IDs to run the script
         if (longbow == null) {
             String[] itemIds = itemIDs.get(tier);
-            logs = itemIds[1];
-            shortbowU = itemIds[2];
-            longbowU = itemIds[3];
-            shortbow = itemIds[4];
-            longbow = itemIds[5];
+            logs = itemIds[0];
+            shortbowU = itemIds[1];
+            longbowU = itemIds[2];
+            shortbow = itemIds[3];
+            longbow = itemIds[4];
 
             System.out.println("Stored IDs for " + tier + ":\nLogs: " + logs + "\nUnstrung Shortbow: " + shortbowU + "\nUnstrung Longbow: " + longbowU + "\nShortbow: " + shortbow + "\nLongbow: " + longbow);
         }
