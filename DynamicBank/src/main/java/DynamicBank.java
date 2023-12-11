@@ -1,6 +1,7 @@
 import helpers.*;
 import helpers.utils.OptionType;
 
+import java.awt.*;
 import java.util.Map;
 
 @ScriptManifest(
@@ -37,6 +38,7 @@ import java.util.Map;
 public class DynamicBank extends AbstractScript {
     String chosenTest; //Lets save the 1st config value
     String anotherConfig; //Lets save the 2nd config value
+    String bankloc;
 
     @Override
     public void onStart(){
@@ -55,23 +57,34 @@ public class DynamicBank extends AbstractScript {
     public void poll() {
         logger.log("Starting the poll method for Dynamic Banking.");
         condition.sleep(2000);
+		
+		// Setting up stuff, storing it and so on...
+        if (bankloc == null) {
+            logger.log("Starting setup for Dynamic Banking.");
+            String bankloc = bank.setupDynamicBank();
+            logger.log("We're located at: " + bankloc + ".");
+            condition.sleep(5000);
+            logger.log("Attempting to open the Bank of Gielinor.");
+            bank.open(bankloc);
+            condition.wait(() -> bank.isOpen(), 250, 12);
+            logger.log("Bank interface detected!");
+            if (bank.isBankPinNeeded()) {
+                logger.log("Bank pin is needed!");
+                bank.enterBankPin();
+                condition.sleep(1000);
+                logger.log("Bank pin entered.");
+            } else {
+                logger.log("Bank pin is not needed, bank is open!");
+            }
+            logger.log("Closing the bank interface");
+            bank.close();
+        }
+
+
 
         // Main logic
         logger.log("Executing the main logic for Dynamic Banking.");
-        logger.log("Starting setup for Dynamic Banking.");
-        String bankloc = bank.setupDynamicBank();
-        logger.log("We're located at: " + bankloc + ".");
-        condition.sleep(5000);
-        logger.log("Attempting to open the Bank of Gielinor.");
-        bank.open(bankloc);
-        condition.wait(bank.isOpen(), 2000, 5);
-        logger.log("Bank interface detected!");
-        if (bank.isBankPinNeeded()) {
-            logger.log("Bank pin is needed!");
-            bank.enterBankPin();
-            logger.log("Bank pin entered.");
-        } else {
-            logger.log("Bank pin is not needed, bank is open!");
-        }
+        condition.sleep(2000);
+        xpBar.getXP();
     }
 }
