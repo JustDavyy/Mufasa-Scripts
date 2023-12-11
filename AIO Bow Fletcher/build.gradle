@@ -14,7 +14,7 @@ dependencies {
 }
 
 jar {
-    archiveFileName = 'SampleScript.jar'
+    archiveFileName = 'AIOBowFletcher.jar'
     destinationDirectory = file('jar/')
 
     manifest {
