@@ -213,7 +213,6 @@ public class AIOBowFletcher extends AbstractScript {
 
                 // Withdraw first set of items
                 bank.withdrawItem(logs, 0.90);
-                bank.withdrawItem(logs, 0.90);
                 logger.debugLog("Withdrew items from the bank.");
             }
         }
@@ -297,8 +296,10 @@ public class AIOBowFletcher extends AbstractScript {
             }
             // bank item needed based on choice in config
             if (Objects.equals(product, "Shortbow")) {
+                logger.debugLog("Depositing unstrung shortbows.");
                 inventory.tapItem(shortbowU, 0.90);
             } else {
+                logger.debugLog("Depositing unstring longbows.");
                 inventory.tapItem(longbowU, 0.90);
             }
             condition.sleep(randomBiggerDelay);
