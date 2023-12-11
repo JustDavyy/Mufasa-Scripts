@@ -61,7 +61,7 @@ public class DynamicBank extends AbstractScript {
 		// Setting up stuff, storing it and so on...
         if (bankloc == null) {
             logger.log("Starting setup for Dynamic Banking.");
-            String bankloc = bank.setupDynamicBank();
+            bankloc = bank.setupDynamicBank();
             logger.log("We're located at: " + bankloc + ".");
             condition.sleep(5000);
             logger.log("Attempting to open the Bank of Gielinor.");
