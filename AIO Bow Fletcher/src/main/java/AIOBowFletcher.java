@@ -286,13 +286,16 @@ public class AIOBowFletcher extends AbstractScript {
 
         // Main script logic for cut method
         if (Objects.equals(method, "Cut")) {
+            System.out.println("Starting main script logic for Cut method...");
             logger.debugLog("Starting main script logic for Cut method...");
             inventory.tapItem(knife, 0.90);
             int randomDelay = new Random().nextInt(500) + 500;
             int randomBiggerDelay = new Random().nextInt(500) + 1000;
+            System.out.println("Sleeping for randomDelay: " + randomDelay);
             logger.debugLog("Sleeping for randomDelay: " + randomDelay);
             condition.sleep(randomDelay);
             inventory.tapItem(logs, 0.90);
+            System.out.print("Waiting for the chatbox Make Menu to be visible...");
             logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
             condition.sleep(1000);
             condition.wait(() -> chatbox.isMakeMenuVisible(), 5000, 12);
@@ -300,9 +303,11 @@ public class AIOBowFletcher extends AbstractScript {
             // tap option needed based on choice in config
             if (Objects.equals(product, "Shortbow")) {
                 chatbox.makeOption(2);
+                System.out.println("Selected option 2 in chatbox.");
                 logger.debugLog("Selected option 2 in chatbox.");
             } else {
                 chatbox.makeOption(3);
+                System.out.println("Selected option 3 in chatbox.");
                 logger.debugLog("Selected option 3 in chatbox.");
             }
 
@@ -311,12 +316,14 @@ public class AIOBowFletcher extends AbstractScript {
             while (inventory.contains(logs, 0.90)) {
                 xpBar.getXP();
                 int randomDelay2 = new Random().nextInt(2000) + 1000;
+                System.out.println("Sleeping for randomDelay2: " + randomDelay2);
                 logger.debugLog("Sleeping for randomDelay2: " + randomDelay2);
                 condition.sleep(randomDelay2);
             }
             xpBar.getXP();
 
             bank.open(bankloc);
+            System.out.println("Attempting to open the bank.");
             logger.debugLog("Attempting to open the bank.");
             condition.sleep(1000);
             condition.wait(() -> bank.isOpen(), 250, 12);
@@ -324,29 +331,36 @@ public class AIOBowFletcher extends AbstractScript {
                 bank.openTab(banktab);
                 condition.sleep(1000);
                 condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
+                System.out.println("Opened bank tab " + banktab);
                 logger.debugLog("Opened bank tab " + banktab);
             }
             // bank item needed based on choice in config
             if (Objects.equals(product, "Shortbow")) {
+                System.out.println("Depositing unstrung shortbows.");
                 logger.debugLog("Depositing unstrung shortbows.");
                 inventory.tapItem(shortbowU, 0.90);
             } else {
+                System.out.println("Depositing unstring longbows.");
                 logger.debugLog("Depositing unstring longbows.");
                 inventory.tapItem(longbowU, 0.90);
             }
             condition.sleep(randomBiggerDelay);
 
             bank.withdrawItem(logs, 0.90);
+            System.out.println("Withdrew items from the bank.");
             logger.debugLog("Withdrew items from the bank.");
             condition.sleep(randomDelay);
             bank.close();
+            System.out.println("Closed the bank.");
             logger.debugLog("Closed the bank.");
             condition.sleep(randomBiggerDelay);
+            System.out.println("Ending main script logic for Cut method.");
             logger.debugLog("Ending main script logic for Cut method.");
         }
 
         // Main script logic for string method
         if (Objects.equals(method, "String")){
+            System.out.println("Starting main script logic for String method...");
             logger.debugLog("Starting main script logic for String method...");
             if (Objects.equals(product, "Shortbow")) {
                 inventory.tapItem(shortbowU, 0.90);
@@ -355,13 +369,16 @@ public class AIOBowFletcher extends AbstractScript {
             }
             int randomDelay = new Random().nextInt(500) + 1000;
             int randomBiggerDelay = new Random().nextInt(200) + 400;
+            System.out.println("Sleeping for randomDelay: " + randomDelay);
             logger.debugLog("Sleeping for randomDelay: " + randomDelay);
             condition.sleep(randomDelay);
             inventory.tapItem(bowstring, 0.90);
             condition.sleep(1000);
+            System.out.println("Waiting for the chatbox Make Menu to be visible...");
             logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
             condition.wait(() -> chatbox.isMakeMenuVisible(), 5000, 12);
             chatbox.makeOption(1);
+            System.out.println("Selected option 1 in chatbox.");
             logger.debugLog("Selected option 1 in chatbox.");
             condition.sleep(1000);
 
@@ -369,46 +386,62 @@ public class AIOBowFletcher extends AbstractScript {
             while (inventory.contains(bowstring, 0.90)) {
                 xpBar.getXP();
                 int randomDelay2 = new Random().nextInt(500) + 500;
+                System.out.println("Sleeping for randomDelay2: " + randomDelay2);
                 logger.debugLog("Sleeping for randomDelay2: " + randomDelay2);
                 condition.sleep(randomDelay2);
             }
             xpBar.getXP();
 
             bank.open(bankloc);
+            System.out.println("Attempting to open the bank.");
             logger.debugLog("Attempting to open the bank.");
             condition.wait(() -> bank.isOpen(), 5000, 12);
             if (!bank.isSelectedBankTab(banktab)) {
                 bank.openTab(banktab);
                 condition.sleep(1000);
                 condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
+                System.out.println("Opened bank tab " + banktab);
                 logger.debugLog("Opened bank tab " + banktab);
             }
             // bank item needed based on choice in config
             if (Objects.equals(product, "Shortbow")) {
+                System.out.println("Depositing strung shortbows.");
+                logger.debugLog("Depositing strung shortbows.");
                 inventory.tapItem(shortbow, 0.90);
             } else {
+                System.out.println("Depositing strung longbows.");
+                logger.debugLog("Depositing strung longbows.");
                 inventory.tapItem(longbow, 0.90);
             }
             condition.sleep(randomBiggerDelay);
 
             if (Objects.equals(product, "Shortbow")) {
+                System.out.println("Withdrawing unstrung shortbows");
+                logger.debugLog("Withdrawing unstrung shortbows.");
                 bank.withdrawItem(shortbowU, 0.90);
             } else {
+                System.out.println("Withdrawing unstrung longbows");
+                logger.debugLog("Withdrawing unstrung longbows.");
                 bank.withdrawItem(longbowU, 0.90);
             }
+            System.out.println("Withdrew items from the bank.");
             logger.debugLog("Withdrew items from the bank.");
             condition.sleep(randomDelay);
             bank.withdrawItem(bowstring, 0.90);
+            System.out.println("Withdrew items from the bank.");
             logger.debugLog("Withdrew items from the bank.");
             condition.sleep(randomDelay);
             bank.close();
+            System.out.println("Closed the bank.");
             logger.debugLog("Closed the bank.");
             condition.sleep(randomBiggerDelay);
+            System.out.println("Ending main script logic for String method.");
             logger.debugLog("Ending main script logic for String method.");
         }
 
         // ---------------------------------------------------------------- //
 
+        System.out.println("Ending poll() method...");
         logger.debugLog("Ending poll() method...");
         condition.sleep(1000);
     }
