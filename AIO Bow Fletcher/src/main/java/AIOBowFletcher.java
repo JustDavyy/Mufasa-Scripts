@@ -293,7 +293,7 @@ public class AIOBowFletcher extends AbstractScript {
             } else {
                 inventory.tapItem(longbowU, 0.90);
             }
-            int randomDelay = new Random().nextInt(251) + 50;
+            int randomDelay = new Random().nextInt(500) + 1000;
             int randomBiggerDelay = new Random().nextInt(200) + 400;
             condition.sleep(randomDelay);
             inventory.tapItem(bowstring, 0.90);
