@@ -410,6 +410,7 @@ public class AIOBowFletcher extends AbstractScript {
         // ---------------------------------------------------------------- //
 
         logger.debugLog("Ending poll() method...");
+        condition.sleep(1000);
     }
 
 }
