@@ -48,6 +48,24 @@ import java.util.Random;
                                 @AllowedValue(optionName = "Longbow")
                         },
                         optionType = OptionType.STRING
+                ),
+                @ScriptConfiguration(
+                        name =  "BankTab",
+                        description = "What bank tab are your resources located in?",
+                        defaultValue = "0",
+                        allowedValues = {
+                                @AllowedValue(optionName = "0"),
+                                @AllowedValue(optionName = "1"),
+                                @AllowedValue(optionName = "2"),
+                                @AllowedValue(optionName = "3"),
+                                @AllowedValue(optionName = "4"),
+                                @AllowedValue(optionName = "5"),
+                                @AllowedValue(optionName = "6"),
+                                @AllowedValue(optionName = "7"),
+                                @AllowedValue(optionName = "8"),
+                                @AllowedValue(optionName = "9"),
+                        },
+                        optionType = OptionType.INTEGER
                 )
         }
 )
@@ -58,6 +76,7 @@ public class AIOBowFletcher extends AbstractScript {
     String tier;
     String product;
     String bankloc;
+    int banktab;
     String initialsetup;
     String logs;
     String shortbowU;
@@ -74,6 +93,7 @@ public class AIOBowFletcher extends AbstractScript {
         method = configs.get("Method");
         tier = configs.get("Tier");
         product = configs.get("Product");
+        banktab = Integer.parseInt(configs.get("BankTab"));
 
         initializeItemIDs();
 
@@ -130,6 +150,8 @@ public class AIOBowFletcher extends AbstractScript {
                 bank.enterBankPin();
                 condition.sleep(2000);
                 logger.log("Bank pin entered.");
+                bank.openTab(banktab);
+                condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
             } else {
                 logger.log("Bank pin is not needed, bank is open!");
             }
@@ -232,6 +254,10 @@ public class AIOBowFletcher extends AbstractScript {
 
             bank.open(bankloc);
             condition.wait(() -> bank.isOpen(), 250, 12);
+            if (!bank.isSelectedBankTab(banktab)) {
+                bank.openTab(banktab);
+                condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
+            }
             // bank item needed based on choice in config
             if (Objects.equals(product, "Shortbow")) {
                 inventory.tapItem(shortbowU, 0.90);
@@ -270,6 +296,10 @@ public class AIOBowFletcher extends AbstractScript {
 
             bank.open(bankloc);
             condition.wait(() -> bank.isOpen(), 250, 12);
+            if (!bank.isSelectedBankTab(banktab)) {
+                bank.openTab(banktab);
+                condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
+            }
             // bank item needed based on choice in config
             if (Objects.equals(product, "Shortbow")) {
                 inventory.tapItem(shortbow, 0.90);
