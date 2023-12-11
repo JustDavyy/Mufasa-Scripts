@@ -213,6 +213,7 @@ public class AIOBowFletcher extends AbstractScript {
 
                 // Withdraw first set of items
                 bank.withdrawItem(logs, 0.90);
+                bank.withdrawItem(logs, 0.90);
                 logger.debugLog("Withdrew items from the bank.");
             }
         }
