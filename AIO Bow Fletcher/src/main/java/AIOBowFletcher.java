@@ -154,6 +154,11 @@ public class AIOBowFletcher extends AbstractScript {
                 condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
             } else {
                 logger.log("Bank pin is not needed, bank is open!");
+                if (!bank.isSelectedBankTab(banktab)) {
+                    logger.log("Opening bank tab " + banktab);
+                    bank.openTab(banktab);
+                    condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
+                }
             }
         }
 
