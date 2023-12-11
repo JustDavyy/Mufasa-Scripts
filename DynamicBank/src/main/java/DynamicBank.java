@@ -57,6 +57,11 @@ public class DynamicBank extends AbstractScript {
         condition.sleep(2000);
 
         // Main logic
+
+        logger.log("Just testing some stuff.");
+        String image = "/map.png";
+        walker.getPlayerPosition(image);
+
         logger.log("Executing the main logic for Dynamic Banking.");
         logger.log("Starting setup for Dynamic Banking.");
         String bankloc = bank.setupDynamicBank();
