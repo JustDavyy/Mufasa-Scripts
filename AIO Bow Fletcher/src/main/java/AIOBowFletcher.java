@@ -210,62 +210,66 @@ public class AIOBowFletcher extends AbstractScript {
         }
 
         // Specific setup for "cut" method
-        if (Objects.equals(method, "Cut")) {
-            logger.debugLog("Cut method was selected.");
-            if (!bank.isSelectedQuantityAllButton()) {
-                bank.tapQuantityAllButton();
-                condition.sleep(1000);
-                condition.wait(() -> bank.isSelectedQuantityAllButton(), 5000, 5);
-                logger.debugLog("Selected Quantity All button.");
+        if (!Objects.equals(initialsetup, "done")) {
+            if (Objects.equals(method, "Cut")) {
+                logger.debugLog("Cut method was selected.");
+                if (!bank.isSelectedQuantityAllButton()) {
+                    bank.tapQuantityAllButton();
+                    condition.sleep(1000);
+                    condition.wait(() -> bank.isSelectedQuantityAllButton(), 5000, 5);
+                    logger.debugLog("Selected Quantity All button.");
 
-                // Withdraw first set of items
-                bank.withdrawItem(logs, 0.90);
-                logger.debugLog("Withdrew items from the bank.");
-            } else {
-                // Withdraw first set of items
-                bank.withdrawItem(logs, 0.90);
-                logger.debugLog("Withdrew items from the bank.");
+                    // Withdraw first set of items
+                    bank.withdrawItem(logs, 0.90);
+                    logger.debugLog("Withdrew items from the bank.");
+                } else {
+                    // Withdraw first set of items
+                    bank.withdrawItem(logs, 0.90);
+                    logger.debugLog("Withdrew items from the bank.");
+                }
             }
         }
 
         // Specific setup for "string" method
-        if (Objects.equals(method, "String")){
-            logger.debugLog("String method was selected.");
-            if (!bank.isSelectedQuantityCustomButton()) {
-                Rectangle customQty = bank.findQuantityCustomButton();
-                client.longPressWithinRectangle(customQty);
-                condition.sleep(500);
-                client.tap(393, 499);
-                condition.sleep(1000);
-                client.sendKeystroke("KEYCODE_1");
-                client.sendKeystroke("KEYCODE_4");
-                client.sendKeystroke("KEYCODE_ENTER");
-                logger.debugLog("Set custom quantity for items in the bank.");
+        if (!Objects.equals(initialsetup, "done")) {
+            if (Objects.equals(method, "String")) {
+                logger.debugLog("String method was selected.");
+                if (!bank.isSelectedQuantityCustomButton()) {
+                    Rectangle customQty = bank.findQuantityCustomButton();
+                    client.longPressWithinRectangle(customQty);
+                    condition.sleep(500);
+                    client.tap(393, 499);
+                    condition.sleep(1000);
+                    client.sendKeystroke("KEYCODE_1");
+                    client.sendKeystroke("KEYCODE_4");
+                    client.sendKeystroke("KEYCODE_ENTER");
+                    logger.debugLog("Set custom quantity for items in the bank.");
 
-                condition.wait(() -> bank.isSelectedQuantityCustomButton(), 5000, 10);
-                logger.debugLog("Selected Quantity Custom button.");
+                    condition.wait(() -> bank.isSelectedQuantityCustomButton(), 5000, 10);
+                    logger.debugLog("Selected Quantity Custom button.");
 
-                // Withdraw first set of items
-                if (Objects.equals(product, "Shortbow")) {
-                    bank.withdrawItem(shortbowU, 0.90);
+                    // Withdraw first set of items
+                    if (Objects.equals(product, "Shortbow")) {
+                        bank.withdrawItem(shortbowU, 0.90);
+                    } else {
+                        bank.withdrawItem(longbowU, 0.90);
+                    }
+                    int randomDelay = new Random().nextInt(600) + 600;
+                    condition.sleep(randomDelay);
+                    bank.withdrawItem(bowstring, 0.90);
+                    logger.debugLog("Withdrew items from the bank.");
                 } else {
-                    bank.withdrawItem(longbowU, 0.90);
+                    // Withdraw first set of items
+                    if (Objects.equals(product, "Shortbow")) {
+                        bank.withdrawItem(shortbowU, 0.90);
+                    } else {
+                        bank.withdrawItem(longbowU, 0.90);
+                    }
+                    int randomDelay = new Random().nextInt(600) + 600;
+                    condition.sleep(randomDelay);
+                    bank.withdrawItem(bowstring, 0.90);
+                    logger.debugLog("Withdrew items from the bank.");
                 }
-                int randomDelay = new Random().nextInt(600) + 600;
-                condition.sleep(randomDelay);
-                bank.withdrawItem(bowstring, 0.90);
-                logger.debugLog("Withdrew items from the bank.");
-            } else {
-                // Withdraw first set of items
-                if (Objects.equals(product, "Shortbow")) {
-                    bank.withdrawItem(shortbowU, 0.90);
-                } else {
-                    bank.withdrawItem(longbowU, 0.90);
-                }
-                int randomDelay = new Random().nextInt(600) + 600;
-                condition.sleep(randomDelay);
-                bank.withdrawItem(bowstring, 0.90);
-                logger.debugLog("Withdrew items from the bank.");
             }
         }
 
