@@ -221,6 +221,10 @@ public class AIOBowFletcher extends AbstractScript {
                 // Withdraw first set of items
                 bank.withdrawItem(logs, 0.90);
                 logger.debugLog("Withdrew items from the bank.");
+            } else {
+                // Withdraw first set of items
+                bank.withdrawItem(logs, 0.90);
+                logger.debugLog("Withdrew items from the bank.");
             }
         }
 
@@ -241,6 +245,17 @@ public class AIOBowFletcher extends AbstractScript {
                 condition.wait(() -> bank.isSelectedQuantityCustomButton(), 5000, 10);
                 logger.debugLog("Selected Quantity Custom button.");
 
+                // Withdraw first set of items
+                if (Objects.equals(product, "Shortbow")) {
+                    bank.withdrawItem(shortbowU, 0.90);
+                } else {
+                    bank.withdrawItem(longbowU, 0.90);
+                }
+                int randomDelay = new Random().nextInt(600) + 600;
+                condition.sleep(randomDelay);
+                bank.withdrawItem(bowstring, 0.90);
+                logger.debugLog("Withdrew items from the bank.");
+            } else {
                 // Withdraw first set of items
                 if (Objects.equals(product, "Shortbow")) {
                     bank.withdrawItem(shortbowU, 0.90);
