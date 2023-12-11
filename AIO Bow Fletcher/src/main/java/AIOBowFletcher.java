@@ -143,7 +143,7 @@ public class AIOBowFletcher extends AbstractScript {
             condition.sleep(5000);
             logger.debugLog("Attempting to open the Bank of Gielinor.");
             bank.open(bankloc);
-            condition.wait(() -> bank.isOpen(), 250, 12);
+            condition.wait(() -> bank.isOpen(), 5000, 12);
             logger.debugLog("Bank interface detected!");
             if (bank.isBankPinNeeded()) {
                 logger.log("Bank pin is needed!");
@@ -151,13 +151,13 @@ public class AIOBowFletcher extends AbstractScript {
                 condition.sleep(2000);
                 logger.log("Bank pin entered.");
                 bank.openTab(banktab);
-                condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
+                condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
             } else {
                 logger.log("Bank pin is not needed, bank is open!");
                 if (!bank.isSelectedBankTab(banktab)) {
                     logger.log("Opening bank tab " + banktab);
                     bank.openTab(banktab);
-                    condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
+                    condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
                 }
             }
         }
@@ -168,7 +168,7 @@ public class AIOBowFletcher extends AbstractScript {
                 logger.debugLog("Inventory doesn't contain a knife, withdrawing it from the bank.");
                 if (!bank.isSelectedQuantity1Button()) {
                     bank.tapQuantity1Button();
-                    condition.wait(() -> bank.isSelectedQuantity1Button(), 500, 10);
+                    condition.wait(() -> bank.isSelectedQuantity1Button(), 5000, 10);
                 }
                 bank.tapSearchButton();
                 condition.sleep(1000);
@@ -190,7 +190,7 @@ public class AIOBowFletcher extends AbstractScript {
 
                 if (!bank.isSelectedBankTab(banktab)) {
                     bank.openTab(banktab);
-                    condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
+                    condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
                 }
             }
         }
@@ -200,7 +200,7 @@ public class AIOBowFletcher extends AbstractScript {
             logger.log("Cut method was selected.");
             if (!bank.isSelectedQuantityAllButton()) {
                 bank.tapQuantityAllButton();
-                condition.wait(() -> bank.isSelectedQuantityAllButton(), 1000, 5);
+                condition.wait(() -> bank.isSelectedQuantityAllButton(), 5000, 5);
 
                 // Withdraw first set of items
                 bank.withdrawItem(logs, 0.90);
@@ -220,7 +220,7 @@ public class AIOBowFletcher extends AbstractScript {
                 client.sendKeystroke("KEYCODE_4");
                 client.sendKeystroke("KEYCODE_ENTER");
 
-                condition.wait(() -> bank.isSelectedQuantityCustomButton(), 500, 10);
+                condition.wait(() -> bank.isSelectedQuantityCustomButton(), 5000, 10);
 
                 // Withdraw first set of items
                 if (Objects.equals(product, "Shortbow")) {
@@ -246,10 +246,10 @@ public class AIOBowFletcher extends AbstractScript {
         if (Objects.equals(method, "Cut")) {
             inventory.tapItem(knife, 0.90);
             int randomDelay = new Random().nextInt(251) + 50;
-            int randomBiggerDelay = new Random().nextInt(200) + 400;
+            int randomBiggerDelay = new Random().nextInt(500) + 1000;
             condition.sleep(randomDelay);
             inventory.tapItem(logs, 0.90);
-            condition.wait(() -> chatbox.isMakeMenuVisible(), 250, 12);
+            condition.wait(() -> chatbox.isMakeMenuVisible(), 5000, 12);
 
             // tap option needed based on choice in config
             if (Objects.equals(product, "Shortbow")) {
@@ -270,7 +270,7 @@ public class AIOBowFletcher extends AbstractScript {
             condition.wait(() -> bank.isOpen(), 250, 12);
             if (!bank.isSelectedBankTab(banktab)) {
                 bank.openTab(banktab);
-                condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
+                condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
             }
             // bank item needed based on choice in config
             if (Objects.equals(product, "Shortbow")) {
@@ -297,7 +297,7 @@ public class AIOBowFletcher extends AbstractScript {
             int randomBiggerDelay = new Random().nextInt(200) + 400;
             condition.sleep(randomDelay);
             inventory.tapItem(bowstring, 0.90);
-            condition.wait(() -> chatbox.isMakeMenuVisible(), 250, 12);
+            condition.wait(() -> chatbox.isMakeMenuVisible(), 5000, 12);
             chatbox.makeOption(1);
 
             // Wait for the inventory to finish
@@ -309,10 +309,10 @@ public class AIOBowFletcher extends AbstractScript {
             xpBar.getXP();
 
             bank.open(bankloc);
-            condition.wait(() -> bank.isOpen(), 250, 12);
+            condition.wait(() -> bank.isOpen(), 5000, 12);
             if (!bank.isSelectedBankTab(banktab)) {
                 bank.openTab(banktab);
-                condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
+                condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
             }
             // bank item needed based on choice in config
             if (Objects.equals(product, "Shortbow")) {
