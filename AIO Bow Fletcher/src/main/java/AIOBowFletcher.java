@@ -160,8 +160,10 @@ public class AIOBowFletcher extends AbstractScript {
         // Check if knife is present in Inventory, otherwise withdraw it from the bank.
         if (!inventory.contains(knife, 0.90)) {
             logger.debugLog("Inventory doesn't contain a knife, withdrawing it from the bank.");
-            bank.tapQuantity1Button();
-            condition.wait(() -> bank.isSelectedQuantity1Button(), 500, 10);
+            if (!bank.isSelectedQuantity1Button()) {
+                bank.tapQuantity1Button();
+                condition.wait(() -> bank.isSelectedQuantity1Button(), 500, 10);
+            }
             bank.tapSearchButton();
             condition.sleep(1000);
 
@@ -179,6 +181,11 @@ public class AIOBowFletcher extends AbstractScript {
             // Send keystroke to close the search interface
             client.sendKeystroke("KEYCODE_ENTER");
             condition.sleep(1000);
+
+            if (!bank.isSelectedBankTab(banktab)) {
+                bank.openTab(banktab);
+                condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
+            }
         }
 
         // Specific setup for "cut" method
