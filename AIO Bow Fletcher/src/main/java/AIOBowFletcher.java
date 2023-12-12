@@ -10,7 +10,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "AIO Bow Fletcher",
         description = "AIO Bow Fletcher, supports both cutting and stringing bows.",
-        version = "1.1",
+        version = "1.2",
         category = ScriptCategory.Fletching
 )
 @ScriptConfiguration.List(
@@ -77,7 +77,7 @@ public class AIOBowFletcher extends AbstractScript {
     String product;
     String bankloc;
     int banktab;
-    String initialsetup;
+    Boolean doneInitialSetup;
     String logs;
     String shortbowU;
     String longbowU;
@@ -87,9 +87,10 @@ public class AIOBowFletcher extends AbstractScript {
     String knife = "946";
     private Map<String, String[]> itemIDs;
 
+    // This is the onStart, and only gets ran once.
     @Override
     public void onStart(){
-        Map<String, String> configs = getConfigurations(); //Get the script configuration
+        Map<String, String> configs = getConfigurations();
         method = configs.get("Method");
         tier = configs.get("Tier");
         product = configs.get("Product");
@@ -102,7 +103,35 @@ public class AIOBowFletcher extends AbstractScript {
         System.out.println("Starting the AIO Bow Fletcher script!");
     }
 
+    // This is the main part of the script, poll gets looped constantly
+    @Override
+    public void poll() {
+        logger.debugLog("Running the poll() method.");
+        System.out.println("Running the poll() method.");
+
+        if (!doneInitialSetup) {
+            logger.debugLog("doneInitialSetup is false, running initial setups.");
+            setupItemIds();
+            setupBanking();
+            initialSetup();
+        }
+
+        if (Objects.equals(method, "Cut")) {
+            executeCutMethod();
+            bank();
+        }
+
+        else if (Objects.equals(method, "String")) {
+            executeStringMethod();
+            bank();
+        }
+
+    }
+
     private void initializeItemIDs() {
+        logger.debugLog("Running the initializeItemIDs() method.");
+        System.out.println("Running the initializeItemIDs() method.");
+
         itemIDs = new HashMap<>();
 
         // Map of itemIDs for LogID (1), UnstrungShortbowID (2), UnstrungLongbowID (3), StrungShortbowID (4) and StrungLongbowID (5)
@@ -112,13 +141,14 @@ public class AIOBowFletcher extends AbstractScript {
         itemIDs.put("Maple logs", new String[] {"1517", "64", "62", "853", "851"});
         itemIDs.put("Yew logs", new String[] {"1515", "68", "66", "857", "855"});
         itemIDs.put("Magic logs", new String[] {"1513", "72", "70", "861", "859"});
+
+        logger.debugLog("Ending the initializeItemIDs() method.");
+        System.out.println("Ending the initializeItemIDs() method.");
     }
 
-    @Override
-    public void poll() {
-        logger.debugLog("Starting poll() method...");
-
-        // Setting the correct IDs to run the script
+    private void setupItemIds() {
+        logger.debugLog("Running the setupItemIds() method.");
+        System.out.println("Running the setupItemIds() method.");
         if (longbow == null) {
             String[] itemIds = itemIDs.get(tier);
             logs = itemIds[0];
@@ -130,7 +160,13 @@ public class AIOBowFletcher extends AbstractScript {
             logger.debugLog("Stored IDs for " + tier + ":\nLogs: " + logs + "\nUnstrung Shortbow: " + shortbowU + "\nUnstrung Longbow: " + longbowU + "\nShortbow: " + shortbow + "\nLongbow: " + longbow);
         }
 
-        // Dynamic banking (and initially open the bank)
+        logger.debugLog("Ending the setupItemIds() method.");
+        System.out.println("Ending the setupItemIds() method.");
+    }
+
+    private void setupBanking() {
+        logger.debugLog("Starting setupBanking() method.");
+        System.out.println("Running the setupBanking() method.");
         if (bankloc == null) {
             logger.debugLog("Starting dynamic banking setup...");
 
@@ -148,262 +184,263 @@ public class AIOBowFletcher extends AbstractScript {
             logger.debugLog("Attempting to open the Bank of Gielinor.");
             bank.open(bankloc);
             condition.sleep(1000);
-            condition.wait(() -> bank.isOpen(), 5000, 12);
+            condition.wait(() -> bank.isOpen(), 2000, 12);
             logger.debugLog("Bank interface detected!");
             if (bank.isBankPinNeeded()) {
                 logger.debugLog("Bank pin is needed!");
                 bank.enterBankPin();
                 condition.sleep(2000);
                 logger.debugLog("Bank pin entered.");
+                logger.debugLog("Depositing inventory.");
+                bank.tapDepositInventoryButton();
+                condition.sleep(1016);
                 bank.openTab(banktab);
                 condition.sleep(1000);
-                condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
+                condition.wait(() -> bank.isSelectedBankTab(banktab), 2000, 12);
             } else {
                 logger.debugLog("Bank pin is not needed, bank is open!");
                 if (!bank.isSelectedBankTab(banktab)) {
+                    logger.debugLog("Depositing inventory.");
+                    bank.tapDepositInventoryButton();
+                    condition.sleep(1076);
                     logger.debugLog("Opening bank tab " + banktab);
                     bank.openTab(banktab);
                     condition.sleep(1000);
-                    condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
+                    condition.wait(() -> bank.isSelectedBankTab(banktab), 2000, 12);
                 }
             }
         }
+        logger.debugLog("Ending the setupBanking() method.");
+        System.out.println("Ending the setupBanking() method.");
+    }
 
-        // Check if knife is present in Inventory, otherwise withdraw it from the bank (only if using the Cut method)
-        if (Objects.equals(method, "Cut")) {
-            logger.debugLog("Checking for knife in inventory...");
-            if (!inventory.contains(knife, 0.90)) {
-                logger.debugLog("Inventory doesn't contain a knife, withdrawing it from the bank.");
-                if (!bank.isSelectedQuantity1Button()) {
-                    bank.tapQuantity1Button();
-                    condition.sleep(1000);
-                    condition.wait(() -> bank.isSelectedQuantity1Button(), 5000, 10);
-                }
-                bank.tapSearchButton();
-                condition.sleep(1000);
+    private void initialSetup() {
+        logger.debugLog("Starting initialSetup() method.");
+        System.out.println("Running the initialSetup() method.");
 
-                // Send keystroke for each character
-                String textToSend = "knife";
-                for (char c : textToSend.toCharArray()) {
-                    String keycode = "KEYCODE_" + Character.toUpperCase(c);
-                    client.sendKeystroke(keycode);
-                    logger.debugLog("Sent keystroke: " + keycode);
-                }
-
-                condition.sleep(3000);
-                bank.withdrawItem(knife, 0.90);
-                condition.sleep(500);
-                logger.debugLog("Withdrew knife from the bank.");
-
-                // Send keystroke to close the search interface
-                client.sendKeystroke("KEYCODE_ENTER");
-                condition.sleep(1000);
-                logger.debugLog("Closed search interface.");
-
-                if (!bank.isSelectedBankTab(banktab)) {
-                    bank.openTab(banktab);
-                    condition.sleep(1000);
-                    condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
-                    logger.debugLog("Opened bank tab " + banktab);
-                }
-            }
-        }
-
-        // Specific setup for "cut" method
-        if (!Objects.equals(initialsetup, "done")) {
-            if (Objects.equals(method, "Cut")) {
-                logger.debugLog("Cut method was selected.");
-                if (!bank.isSelectedQuantityAllButton()) {
-                    bank.tapQuantityAllButton();
-                    condition.sleep(1000);
-                    condition.wait(() -> bank.isSelectedQuantityAllButton(), 5000, 5);
-                    logger.debugLog("Selected Quantity All button.");
-
-                    // Withdraw first set of items
-                    bank.withdrawItem(logs, 0.90);
-                    logger.debugLog("Withdrew items from the bank.");
-                } else {
-                    // Withdraw first set of items
-                    bank.withdrawItem(logs, 0.90);
-                    logger.debugLog("Withdrew items from the bank.");
-                }
-            }
-        }
-
-        // Specific setup for "string" method
-        if (!Objects.equals(initialsetup, "done")) {
-            if (Objects.equals(method, "String")) {
-                logger.debugLog("String method was selected.");
-                if (!bank.isSelectedQuantityCustomButton()) {
-                    Rectangle customQty = bank.findQuantityCustomButton();
-                    client.longPressWithinRectangle(customQty);
-                    condition.sleep(500);
-                    client.tap(393, 499);
-                    condition.sleep(1000);
-                    client.sendKeystroke("KEYCODE_1");
-                    client.sendKeystroke("KEYCODE_4");
-                    client.sendKeystroke("KEYCODE_ENTER");
-                    logger.debugLog("Set custom quantity for items in the bank.");
-
-                    condition.wait(() -> bank.isSelectedQuantityCustomButton(), 5000, 10);
-                    logger.debugLog("Selected Quantity Custom button.");
-
-                    // Withdraw first set of items
-                    if (Objects.equals(product, "Shortbow")) {
-                        bank.withdrawItem(shortbowU, 0.90);
-                    } else {
-                        bank.withdrawItem(longbowU, 0.90);
-                    }
-                    int randomDelay = new Random().nextInt(600) + 600;
-                    condition.sleep(randomDelay);
-                    bank.withdrawItem(bowstring, 0.90);
-                    logger.debugLog("Withdrew items from the bank.");
-                } else {
-                    // Withdraw first set of items
-                    if (Objects.equals(product, "Shortbow")) {
-                        bank.withdrawItem(shortbowU, 0.90);
-                    } else {
-                        bank.withdrawItem(longbowU, 0.90);
-                    }
-                    int randomDelay = new Random().nextInt(600) + 600;
-                    condition.sleep(randomDelay);
-                    bank.withdrawItem(bowstring, 0.90);
-                    logger.debugLog("Withdrew items from the bank.");
-                }
-            }
-        }
-
-        // End the initial setup
-        if (!Objects.equals(initialsetup, "done")) {
-            logger.debugLog("Closing bank interface.");
-            bank.close();
-            condition.sleep(1500);
-            initialsetup = "done";
-            logger.debugLog("Closed bank interface.");
-        }
-
-        // ---------------------------------------------------------------- //
-
-        // Main script logic for cut method
-        if (Objects.equals(method, "Cut")) {
-            System.out.println("Starting main script logic for Cut method...");
-            logger.debugLog("Starting main script logic for Cut method...");
-            inventory.tapItem(knife, 0.90);
-            int randomDelay = new Random().nextInt(500) + 500;
-            int randomBiggerDelay = new Random().nextInt(500) + 1000;
-            System.out.println("Sleeping for randomDelay: " + randomDelay);
-            logger.debugLog("Sleeping for randomDelay: " + randomDelay);
-            condition.sleep(randomDelay);
-            inventory.tapItem(logs, 0.90);
-            System.out.print("Waiting for the chatbox Make Menu to be visible...");
-            logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
+        // Selecting the right bank tab again if needed
+        if (!bank.isSelectedBankTab(banktab)) {
+            bank.openTab(banktab);
             condition.sleep(1000);
-            condition.wait(() -> chatbox.isMakeMenuVisible(), 5000, 12);
+            condition.wait(() -> bank.isSelectedBankTab(banktab), 2000, 12);
+            logger.debugLog("Opened bank tab " + banktab);
+        }
 
-            // tap option needed based on choice in config
-            if (Objects.equals(product, "Shortbow")) {
-                chatbox.makeOption(2);
-                System.out.println("Selected option 2 in chatbox.");
-                logger.debugLog("Selected option 2 in chatbox.");
+        // Part if the Cut method was chosen
+        if (Objects.equals(method, "Cut")) {
+            logger.debugLog("Cut method was selected.");
+
+            // Withdrawing a knife from the bank
+            logger.debugLog("Withdrawing a knife from the bank.");
+            if (!bank.isSelectedQuantity1Button()) {
+                bank.tapQuantity1Button();
+                condition.sleep(1000);
+                condition.wait(() -> bank.isSelectedQuantity1Button(), 5000, 10);
+            }
+            bank.tapSearchButton();
+            condition.sleep(1000);
+
+            String textToSend = "knife";
+            for (char c : textToSend.toCharArray()) {
+                String keycode = "KEYCODE_" + Character.toUpperCase(c);
+                client.sendKeystroke(keycode);
+                logger.debugLog("Sent keystroke: " + keycode);
+            }
+
+            condition.sleep(3000);
+            bank.withdrawItem(knife, 0.90);
+            condition.sleep(500);
+            logger.debugLog("Withdrew knife from the bank.");
+
+            client.sendKeystroke("KEYCODE_ENTER");
+            condition.sleep(1000);
+            logger.debugLog("Closed search interface.");
+
+            // Grabbing the first items to process
+            if (!bank.isSelectedQuantityAllButton()) {
+                bank.tapQuantityAllButton();
+                condition.sleep(1000);
+                condition.wait(() -> bank.isSelectedQuantityAllButton(), 2000, 5);
+                logger.debugLog("Selected Quantity All button.");
+
+                // Withdraw first set of items
+                bank.withdrawItem(logs, 0.90);
+                logger.debugLog("Withdrew " + tier +  " from the bank.");
             } else {
-                chatbox.makeOption(3);
-                System.out.println("Selected option 3 in chatbox.");
-                logger.debugLog("Selected option 3 in chatbox.");
+                // Withdraw first set of items
+                bank.withdrawItem(logs, 0.90);
+                logger.debugLog("Withdrew " + tier +  " from the bank.");
             }
+        }
 
-            condition.sleep(1000);
-            // Wait for the inventory to finish
-            while (inventory.contains(logs, 0.90)) {
-                xpBar.getXP();
-                int randomDelay2 = new Random().nextInt(2000) + 1000;
-                System.out.println("Sleeping for randomDelay2: " + randomDelay2);
-                logger.debugLog("Sleeping for randomDelay2: " + randomDelay2);
-                condition.sleep(randomDelay2);
-            }
-            xpBar.getXP();
-
-            bank.open(bankloc);
-            System.out.println("Attempting to open the bank.");
-            logger.debugLog("Attempting to open the bank.");
-            condition.sleep(1000);
-            condition.wait(() -> bank.isOpen(), 250, 12);
-            if (!bank.isSelectedBankTab(banktab)) {
-                bank.openTab(banktab);
+        // Part if the String method was chosen
+        else if (Objects.equals(method, "String")) {
+            logger.debugLog("String method was selected.");
+            if (!bank.isSelectedQuantityCustomButton()) {
+                Rectangle customQty = bank.findQuantityCustomButton();
+                client.longPressWithinRectangle(customQty);
+                condition.sleep(500);
+                client.tap(393, 499);
                 condition.sleep(1000);
-                condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
-                System.out.println("Opened bank tab " + banktab);
-                logger.debugLog("Opened bank tab " + banktab);
+                client.sendKeystroke("KEYCODE_1");
+                client.sendKeystroke("KEYCODE_4");
+                client.sendKeystroke("KEYCODE_ENTER");
+                logger.debugLog("Set custom quantity 14 for items in the bank.");
+
+                condition.wait(() -> bank.isSelectedQuantityCustomButton(), 2000, 10);
+
+                // Withdraw first set of items
+                if (Objects.equals(product, "Shortbow")) {
+                    bank.withdrawItem(shortbowU, 0.90);
+                } else {
+                    bank.withdrawItem(longbowU, 0.90);
+                }
+                int randomDelay = new Random().nextInt(600) + 600;
+                condition.sleep(randomDelay);
+                bank.withdrawItem(bowstring, 0.90);
+                logger.debugLog("Withdrew 14 bowstrings and unstrung bows from the bank.");
+            } else {
+                // Withdraw first set of items
+                if (Objects.equals(product, "Shortbow")) {
+                    bank.withdrawItem(shortbowU, 0.90);
+                } else {
+                    bank.withdrawItem(longbowU, 0.90);
+                }
+                int randomDelay = new Random().nextInt(600) + 600;
+                condition.sleep(randomDelay);
+                bank.withdrawItem(bowstring, 0.90);
+                logger.debugLog("Withdrew 14 bowstrings and unstrung bows from the bank.");
             }
-            // bank item needed based on choice in config
+        }
+
+        // Finishing off with closing the bank
+        logger.debugLog("Closing bank interface.");
+        bank.close();
+        condition.sleep(1500);
+        logger.debugLog("Closed bank interface.");
+
+        doneInitialSetup = true;
+        logger.debugLog("Set the doneInitialSetup value to true.");
+
+        logger.debugLog("Ending the initialSetup() method.");
+        System.out.println("Ending the initialSetup() method.");
+    }
+
+    private void executeCutMethod() {
+        logger.debugLog("Starting executeCutMethod() method.");
+        System.out.println("Running the executeCutMethod() method.");
+
+        // Starting to process items
+        inventory.tapItem(knife, 0.90);
+        int randomDelay = new Random().nextInt(500) + 500;
+        System.out.println("Sleeping for randomDelay: " + randomDelay);
+        logger.debugLog("Sleeping for randomDelay: " + randomDelay);
+        condition.sleep(randomDelay);
+        inventory.tapItem(logs, 0.90);
+        System.out.print("Waiting for the chatbox Make Menu to be visible...");
+        logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
+        condition.sleep(1000);
+        condition.wait(() -> chatbox.isMakeMenuVisible(), 2000, 12);
+
+        // tap option needed based on choice in config
+        if (Objects.equals(product, "Shortbow")) {
+            chatbox.makeOption(2);
+            System.out.println("Selected option 2 in chatbox.");
+            logger.debugLog("Selected option 2 in chatbox.");
+        } else {
+            chatbox.makeOption(3);
+            System.out.println("Selected option 3 in chatbox.");
+            logger.debugLog("Selected option 3 in chatbox.");
+        }
+        condition.sleep(1000);
+
+        // Wait for the inventory to finish
+        while (inventory.contains(logs, 0.90)) {
+            readXP();
+            int randomDelay2 = new Random().nextInt(2000) + 1000;
+            System.out.println("Sleeping for randomDelay2: " + randomDelay2);
+            logger.debugLog("Sleeping for randomDelay2: " + randomDelay2);
+            condition.sleep(randomDelay2);
+        }
+        readXP();
+
+        logger.debugLog("Ending the executeCutMethod() method.");
+        System.out.println("Ending the executeCutMethod() method.");
+    }
+
+    private void executeStringMethod() {
+        logger.debugLog("Starting executeStringMethod() method.");
+        System.out.println("Running the executeStringMethod() method.");
+
+        // tap item needed based on choice in config
+        if (Objects.equals(product, "Shortbow")) {
+            inventory.tapItem(shortbowU, 0.90);
+        } else {
+            inventory.tapItem(longbowU, 0.90);
+        }
+
+        int randomDelay = new Random().nextInt(500) + 1000;
+        System.out.println("Sleeping for randomDelay: " + randomDelay);
+        logger.debugLog("Sleeping for randomDelay: " + randomDelay);
+        condition.sleep(randomDelay);
+        inventory.tapItem(bowstring, 0.90);
+        condition.sleep(1000);
+        System.out.println("Waiting for the chatbox Make Menu to be visible...");
+        logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
+        condition.wait(() -> chatbox.isMakeMenuVisible(), 5000, 12);
+        chatbox.makeOption(1);
+        System.out.println("Selected option 1 in chatbox.");
+        logger.debugLog("Selected option 1 in chatbox.");
+        condition.sleep(1000);
+
+        // Wait for the inventory to finish
+        while (inventory.contains(bowstring, 0.90)) {
+            readXP();
+            int randomDelay2 = new Random().nextInt(500) + 500;
+            System.out.println("Sleeping for randomDelay2: " + randomDelay2);
+            logger.debugLog("Sleeping for randomDelay2: " + randomDelay2);
+            condition.sleep(randomDelay2);
+        }
+        readXP();
+
+        logger.debugLog("Ending the executeStringMethod() method.");
+        System.out.println("Ending the executeStringMethod() method.");
+    }
+
+    private void bank() {
+        logger.debugLog("Starting bank() method.");
+        System.out.println("Running the bank() method.");
+        int randomDelay = new Random().nextInt(500) + 500;
+        int randomBiggerDelay = new Random().nextInt(500) + 1000;
+
+        // Opening the bank based on your location
+        logger.debugLog("Attempting to open the bank.");
+        bank.open(bankloc);
+        condition.sleep(1000);
+        condition.wait(() -> bank.isOpen(), 2000, 12);
+        logger.debugLog("Bank is open.");
+
+        // Select the right bank tab if needed.
+        if (!bank.isSelectedBankTab(banktab)) {
+            bank.openTab(banktab);
+            condition.sleep(1000);
+            condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
+            logger.debugLog("Opened bank tab " + banktab);
+        }
+
+        // Depositing items based on your tier/method
+        if (Objects.equals(method, "Cut")){
             if (Objects.equals(product, "Shortbow")) {
                 System.out.println("Depositing unstrung shortbows.");
                 logger.debugLog("Depositing unstrung shortbows.");
                 inventory.tapItem(shortbowU, 0.90);
             } else {
-                System.out.println("Depositing unstring longbows.");
-                logger.debugLog("Depositing unstring longbows.");
+                System.out.println("Depositing unstrung longbows.");
+                logger.debugLog("Depositing unstrung longbows.");
                 inventory.tapItem(longbowU, 0.90);
             }
-            condition.sleep(randomBiggerDelay);
-
-            bank.withdrawItem(logs, 0.90);
-            System.out.println("Withdrew items from the bank.");
-            logger.debugLog("Withdrew items from the bank.");
-            condition.sleep(randomDelay);
-            bank.close();
-            System.out.println("Closed the bank.");
-            logger.debugLog("Closed the bank.");
-            condition.sleep(randomBiggerDelay);
-            System.out.println("Ending main script logic for Cut method.");
-            logger.debugLog("Ending main script logic for Cut method.");
         }
-
-        // Main script logic for string method
-        if (Objects.equals(method, "String")){
-            System.out.println("Starting main script logic for String method...");
-            logger.debugLog("Starting main script logic for String method...");
-            if (Objects.equals(product, "Shortbow")) {
-                inventory.tapItem(shortbowU, 0.90);
-            } else {
-                inventory.tapItem(longbowU, 0.90);
-            }
-            int randomDelay = new Random().nextInt(500) + 1000;
-            int randomBiggerDelay = new Random().nextInt(200) + 400;
-            System.out.println("Sleeping for randomDelay: " + randomDelay);
-            logger.debugLog("Sleeping for randomDelay: " + randomDelay);
-            condition.sleep(randomDelay);
-            inventory.tapItem(bowstring, 0.90);
-            condition.sleep(1000);
-            System.out.println("Waiting for the chatbox Make Menu to be visible...");
-            logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
-            condition.wait(() -> chatbox.isMakeMenuVisible(), 5000, 12);
-            chatbox.makeOption(1);
-            System.out.println("Selected option 1 in chatbox.");
-            logger.debugLog("Selected option 1 in chatbox.");
-            condition.sleep(1000);
-
-            // Wait for the inventory to finish
-            while (inventory.contains(bowstring, 0.90)) {
-                xpBar.getXP();
-                int randomDelay2 = new Random().nextInt(500) + 500;
-                System.out.println("Sleeping for randomDelay2: " + randomDelay2);
-                logger.debugLog("Sleeping for randomDelay2: " + randomDelay2);
-                condition.sleep(randomDelay2);
-            }
-            xpBar.getXP();
-
-            bank.open(bankloc);
-            System.out.println("Attempting to open the bank.");
-            logger.debugLog("Attempting to open the bank.");
-            condition.wait(() -> bank.isOpen(), 5000, 12);
-            if (!bank.isSelectedBankTab(banktab)) {
-                bank.openTab(banktab);
-                condition.sleep(1000);
-                condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
-                System.out.println("Opened bank tab " + banktab);
-                logger.debugLog("Opened bank tab " + banktab);
-            }
-            // bank item needed based on choice in config
+        else if (Objects.equals(method, "String")) {
             if (Objects.equals(product, "Shortbow")) {
                 System.out.println("Depositing strung shortbows.");
                 logger.debugLog("Depositing strung shortbows.");
@@ -413,8 +450,19 @@ public class AIOBowFletcher extends AbstractScript {
                 logger.debugLog("Depositing strung longbows.");
                 inventory.tapItem(longbow, 0.90);
             }
-            condition.sleep(randomBiggerDelay);
+        }
+        condition.sleep(randomBiggerDelay);
 
+        // Withdrawing the items based on your tier/method
+        if (Objects.equals(method, "Cut")) {
+            bank.withdrawItem(logs, 0.90);
+            System.out.println("Withdrew " + tier + " from the bank.");
+            logger.debugLog("Withdrew " + tier + " from the bank.");
+            condition.sleep(randomDelay);
+        }
+        else if (Objects.equals(method, "String")) {
+
+            // Withdraw unstrung bow that was picked in the config
             if (Objects.equals(product, "Shortbow")) {
                 System.out.println("Withdrawing unstrung shortbows");
                 logger.debugLog("Withdrawing unstrung shortbows.");
@@ -424,174 +472,29 @@ public class AIOBowFletcher extends AbstractScript {
                 logger.debugLog("Withdrawing unstrung longbows.");
                 bank.withdrawItem(longbowU, 0.90);
             }
-            System.out.println("Withdrew items from the bank.");
-            logger.debugLog("Withdrew items from the bank.");
             condition.sleep(randomDelay);
+
+            // Withdraw bowstrings
+            System.out.println("Withdrawing bowstrings.");
+            logger.debugLog("Withdrawing bowstrings.");
             bank.withdrawItem(bowstring, 0.90);
+            condition.sleep(randomDelay);
             System.out.println("Withdrew items from the bank.");
             logger.debugLog("Withdrew items from the bank.");
-            condition.sleep(randomDelay);
-            bank.close();
-            System.out.println("Closed the bank.");
-            logger.debugLog("Closed the bank.");
-            condition.sleep(randomBiggerDelay);
-            System.out.println("Ending main script logic for String method.");
-            logger.debugLog("Ending main script logic for String method.");
         }
 
-        // ---------------------------------------------------------------- //
+        // Closing the bank, as banking should be done now
+        bank.close();
+        condition.sleep(randomBiggerDelay);
+        System.out.println("Closed the bank.");
+        logger.debugLog("Closed the bank.");
 
-        System.out.println("Ending poll() method...");
-        logger.debugLog("Ending poll() method...");
-        condition.sleep(1000);
-    }
-
-    private void setupItemIds() {
-        if (longbow == null) {
-            String[] itemIds = itemIDs.get(tier);
-            logs = itemIds[0];
-            shortbowU = itemIds[1];
-            longbowU = itemIds[2];
-            shortbow = itemIds[3];
-            longbow = itemIds[4];
-
-            logger.debugLog("Stored IDs for " + tier + ":\nLogs: " + logs + "\nUnstrung Shortbow: " + shortbowU + "\nUnstrung Longbow: " + longbowU + "\nShortbow: " + shortbow + "\nLongbow: " + longbow);
-        }
-    }
-
-    public void pollEXAMPLE() {
-        logger.debugLog("Starting poll() method...");
-
-        //if (!doneInitialSetup) {
-            setupItemIds();
-            setupBanking();
-        //}
-
-        if (!Objects.equals(initialsetup, "done")) {
-            initialSetup();
-        }
-
-        if (Objects.equals(initialsetup, "done")) {
-            if (Objects.equals(method, "Cut")) {
-                executeCutMethod();
-                bank();
-                readXP();
-            } else if (Objects.equals(method, "String")) {
-                executeStringMethod();
-                bank();
-                readXP();
-            }
-        }
-
-        logger.debugLog("Ending poll() method...");
-        condition.sleep(1000);
-    }
-
-    private void setupBanking() {
-        if (bankloc == null) {
-            logger.debugLog("Starting dynamic banking setup...");
-
-            // Opening the inventory if not yet opened.
-            logger.debugLog("Opening up the inventory.");
-            if (!gameTabs.isInventoryTabOpen()) {
-                gameTabs.openInventoryTab();
-                condition.sleep(1000);
-            }
-
-            logger.debugLog("Starting setup for Dynamic Banking.");
-            bankloc = bank.setupDynamicBank();
-            logger.debugLog("We're located at: " + bankloc + ".");
-            condition.sleep(5000);
-            logger.debugLog("Attempting to open the Bank of Gielinor.");
-            bank.open(bankloc);
-            condition.sleep(1000);
-            condition.wait(() -> bank.isOpen(), 5000, 12);
-            logger.debugLog("Bank interface detected!");
-            if (bank.isBankPinNeeded()) {
-                logger.debugLog("Bank pin is needed!");
-                bank.enterBankPin();
-                condition.sleep(2000);
-                logger.debugLog("Bank pin entered.");
-                bank.openTab(banktab);
-                condition.sleep(1000);
-                condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
-            } else {
-                logger.debugLog("Bank pin is not needed, bank is open!");
-                if (!bank.isSelectedBankTab(banktab)) {
-                    logger.debugLog("Opening bank tab " + banktab);
-                    bank.openTab(banktab);
-                    condition.sleep(1000);
-                    condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
-                }
-            }
-        }
-    }
-
-    private void initialSetup() {
-        if (Objects.equals(method, "Cut")) {
-            if (Objects.equals(method, "Cut")) {
-                logger.debugLog("Cut method was selected.");
-                if (!bank.isSelectedQuantityAllButton()) {
-                    bank.tapQuantityAllButton();
-                    condition.sleep(1000);
-                    condition.wait(() -> bank.isSelectedQuantityAllButton(), 5000, 5);
-                    logger.debugLog("Selected Quantity All button.");
-
-                    // Withdraw first set of items
-                    bank.withdrawItem(logs, 0.90);
-                    logger.debugLog("Withdrew items from the bank.");
-                } else {
-                    // Withdraw first set of items
-                    bank.withdrawItem(logs, 0.90);
-                    logger.debugLog("Withdrew items from the bank.");
-                }
-            }
-        } else if (Objects.equals(method, "String")) {
-            // Setup specific to 'String' method.
-        }
-        initialsetup = "done";
-    }
-
-    private void executeCutMethod() {
-        // Logic for handling the 'Cut' method.
-        // This includes inventory interactions, making choices in chatbox, banking, etc.
-    }
-
-    private void executeStringMethod() {
-        // Logic for handling the 'String' method.
-        // This includes inventory interactions, making choices in chatbox, banking, etc.
-    }
-
-    private void bank() {
-        logger.debugLog("Banking operations started.");
-
-        bank.open(bankloc);
-        logger.debugLog("Attempting to open the bank.");
-        condition.sleep(1000);
-        condition.wait(() -> bank.isOpen(), 250, 12);
-
-        if (!bank.isSelectedBankTab(banktab)) {
-            bank.openTab(banktab);
-            condition.sleep(1000);
-            condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
-            logger.debugLog("Opened bank tab " + banktab);
-        }
-
-        // Deposit and withdraw logic goes here
-        // This will vary based on whether it's 'Cut' or 'String' method
-        // Example:
-        // if (Objects.equals(method, "Cut")) {
-        //     // Deposit and withdraw logic for 'Cut'
-        // } else if (Objects.equals(method, "String")) {
-        //     // Deposit and withdraw logic for 'String'
-        // }
-
-        logger.debugLog("Banking operations completed.");
+        logger.debugLog("Ending the bank() method.");
+        System.out.println("Ending the bank() method.");
     }
 
     private void readXP() {
         xpBar.getXP();
     }
-
 
 }
