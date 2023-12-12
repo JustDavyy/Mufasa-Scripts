@@ -261,6 +261,13 @@ public class AIOBowFletcher extends AbstractScript {
                 condition.wait(() -> bank.isSelectedQuantityAllButton(), 200, 12);
                 logger.debugLog("Selected Quantity All button.");
 
+                // Selecting the right bank tab again if needed
+                if (!bank.isSelectedBankTab(banktab)) {
+                    bank.openTab(banktab);
+                    condition.wait(() -> bank.isSelectedBankTab(banktab), 200, 12);
+                    logger.debugLog("Opened bank tab " + banktab);
+                }
+
                 // Withdraw first set of items
                 bank.withdrawItem(logs, 0.90);
                 logger.debugLog("Withdrew " + tier +  " from the bank.");
