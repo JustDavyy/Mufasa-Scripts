@@ -174,7 +174,7 @@ public class AIOBowFletcher extends AbstractScript {
             logger.debugLog("Opening up the inventory.");
             if (!gameTabs.isInventoryTabOpen()) {
                 gameTabs.openInventoryTab();
-                condition.sleep(1000);
+                condition.wait(() -> gameTabs.isInventoryTabOpen(), 200, 12);
             }
 
             logger.debugLog("Starting setup for Dynamic Banking.");
@@ -183,20 +183,19 @@ public class AIOBowFletcher extends AbstractScript {
             condition.sleep(5000);
             logger.debugLog("Attempting to open the Bank of Gielinor.");
             bank.open(bankloc);
-            condition.sleep(1000);
-            condition.wait(() -> bank.isOpen(), 2000, 12);
+            condition.wait(() -> bank.isOpen(), 200, 12);
             logger.debugLog("Bank interface detected!");
             if (bank.isBankPinNeeded()) {
                 logger.debugLog("Bank pin is needed!");
                 bank.enterBankPin();
-                condition.sleep(2000);
+                condition.sleep(500);
+                condition.wait(() -> bank.isOpen(), 200, 12);
                 logger.debugLog("Bank pin entered.");
                 logger.debugLog("Depositing inventory.");
                 bank.tapDepositInventoryButton();
                 condition.sleep(1016);
                 bank.openTab(banktab);
-                condition.sleep(1000);
-                condition.wait(() -> bank.isSelectedBankTab(banktab), 2000, 12);
+                condition.wait(() -> bank.isSelectedBankTab(banktab), 200, 12);
             } else {
                 logger.debugLog("Bank pin is not needed, bank is open!");
                 if (!bank.isSelectedBankTab(banktab)) {
@@ -205,8 +204,7 @@ public class AIOBowFletcher extends AbstractScript {
                     condition.sleep(1076);
                     logger.debugLog("Opening bank tab " + banktab);
                     bank.openTab(banktab);
-                    condition.sleep(1000);
-                    condition.wait(() -> bank.isSelectedBankTab(banktab), 2000, 12);
+                    condition.wait(() -> bank.isSelectedBankTab(banktab), 200, 12);
                 }
             }
         }
@@ -218,11 +216,13 @@ public class AIOBowFletcher extends AbstractScript {
         logger.debugLog("Starting initialSetup() method.");
         System.out.println("Running the initialSetup() method.");
 
+        int randomDelay = new Random().nextInt(600) + 600;
+        int randomBiggerDelay = new Random().nextInt(1500) + 1500;
+
         // Selecting the right bank tab again if needed
         if (!bank.isSelectedBankTab(banktab)) {
             bank.openTab(banktab);
-            condition.sleep(1000);
-            condition.wait(() -> bank.isSelectedBankTab(banktab), 2000, 12);
+            condition.wait(() -> bank.isSelectedBankTab(banktab), 200, 12);
             logger.debugLog("Opened bank tab " + banktab);
         }
 
@@ -234,11 +234,10 @@ public class AIOBowFletcher extends AbstractScript {
             logger.debugLog("Withdrawing a knife from the bank.");
             if (!bank.isSelectedQuantity1Button()) {
                 bank.tapQuantity1Button();
-                condition.sleep(1000);
-                condition.wait(() -> bank.isSelectedQuantity1Button(), 5000, 10);
+                condition.wait(() -> bank.isSelectedQuantity1Button(), 200, 12);
             }
             bank.tapSearchButton();
-            condition.sleep(1000);
+            condition.sleep(randomDelay);
 
             String textToSend = "knife";
             for (char c : textToSend.toCharArray()) {
@@ -247,20 +246,19 @@ public class AIOBowFletcher extends AbstractScript {
                 logger.debugLog("Sent keystroke: " + keycode);
             }
 
-            condition.sleep(3000);
+            condition.sleep(randomBiggerDelay);
             bank.withdrawItem(knife, 0.90);
-            condition.sleep(500);
+            condition.sleep(randomDelay);
             logger.debugLog("Withdrew knife from the bank.");
 
             client.sendKeystroke("KEYCODE_ENTER");
-            condition.sleep(1000);
+            condition.sleep(randomDelay);
             logger.debugLog("Closed search interface.");
 
             // Grabbing the first items to process
             if (!bank.isSelectedQuantityAllButton()) {
                 bank.tapQuantityAllButton();
-                condition.sleep(1000);
-                condition.wait(() -> bank.isSelectedQuantityAllButton(), 2000, 5);
+                condition.wait(() -> bank.isSelectedQuantityAllButton(), 200, 12);
                 logger.debugLog("Selected Quantity All button.");
 
                 // Withdraw first set of items
@@ -275,19 +273,20 @@ public class AIOBowFletcher extends AbstractScript {
 
         // Part if the String method was chosen
         else if (Objects.equals(method, "String")) {
+            int randomDelay2 = new Random().nextInt(300) + 200;
+            int randomBiggerDelay2 = new Random().nextInt(400) + 600;
             logger.debugLog("String method was selected.");
             if (!bank.isSelectedQuantityCustomButton()) {
                 Rectangle customQty = bank.findQuantityCustomButton();
                 client.longPressWithinRectangle(customQty);
-                condition.sleep(500);
+                condition.sleep(randomDelay2);
                 client.tap(393, 499);
-                condition.sleep(1000);
+                condition.sleep(randomBiggerDelay2);
                 client.sendKeystroke("KEYCODE_1");
                 client.sendKeystroke("KEYCODE_4");
                 client.sendKeystroke("KEYCODE_ENTER");
                 logger.debugLog("Set custom quantity 14 for items in the bank.");
-
-                condition.wait(() -> bank.isSelectedQuantityCustomButton(), 2000, 10);
+                condition.wait(() -> bank.isSelectedQuantityCustomButton(), 200, 12);
 
                 // Withdraw first set of items
                 if (Objects.equals(product, "Shortbow")) {
@@ -295,8 +294,7 @@ public class AIOBowFletcher extends AbstractScript {
                 } else {
                     bank.withdrawItem(longbowU, 0.90);
                 }
-                int randomDelay = new Random().nextInt(600) + 600;
-                condition.sleep(randomDelay);
+                condition.sleep(randomDelay2);
                 bank.withdrawItem(bowstring, 0.90);
                 logger.debugLog("Withdrew 14 bowstrings and unstrung bows from the bank.");
             } else {
@@ -306,8 +304,7 @@ public class AIOBowFletcher extends AbstractScript {
                 } else {
                     bank.withdrawItem(longbowU, 0.90);
                 }
-                int randomDelay = new Random().nextInt(600) + 600;
-                condition.sleep(randomDelay);
+                condition.sleep(randomDelay2);
                 bank.withdrawItem(bowstring, 0.90);
                 logger.debugLog("Withdrew 14 bowstrings and unstrung bows from the bank.");
             }
@@ -316,7 +313,7 @@ public class AIOBowFletcher extends AbstractScript {
         // Finishing off with closing the bank
         logger.debugLog("Closing bank interface.");
         bank.close();
-        condition.sleep(1500);
+        condition.wait(() -> !bank.isOpen(), 250, 12);
         logger.debugLog("Closed bank interface.");
 
         doneInitialSetup = true;
@@ -333,14 +330,14 @@ public class AIOBowFletcher extends AbstractScript {
         // Starting to process items
         inventory.tapItem(knife, 0.90);
         int randomDelay = new Random().nextInt(500) + 500;
+        int randomDelay2 = new Random().nextInt(300) + 200;
         System.out.println("Sleeping for randomDelay: " + randomDelay);
         logger.debugLog("Sleeping for randomDelay: " + randomDelay);
-        condition.sleep(randomDelay);
+        condition.sleep(randomDelay2);
         inventory.tapItem(logs, 0.90);
         System.out.print("Waiting for the chatbox Make Menu to be visible...");
         logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
-        condition.sleep(1000);
-        condition.wait(() -> chatbox.isMakeMenuVisible(), 2000, 12);
+        condition.wait(() -> chatbox.isMakeMenuVisible(), 200, 12);
 
         // tap option needed based on choice in config
         if (Objects.equals(product, "Shortbow")) {
@@ -352,15 +349,14 @@ public class AIOBowFletcher extends AbstractScript {
             System.out.println("Selected option 3 in chatbox.");
             logger.debugLog("Selected option 3 in chatbox.");
         }
-        condition.sleep(1000);
 
         // Wait for the inventory to finish
         while (inventory.contains(logs, 0.90)) {
             readXP();
-            int randomDelay2 = new Random().nextInt(2000) + 1000;
+            int randomDelay3 = new Random().nextInt(2000) + 1000;
             System.out.println("Sleeping for randomDelay2: " + randomDelay2);
             logger.debugLog("Sleeping for randomDelay2: " + randomDelay2);
-            condition.sleep(randomDelay2);
+            condition.sleep(randomDelay3);
         }
         readXP();
 
@@ -379,27 +375,26 @@ public class AIOBowFletcher extends AbstractScript {
             inventory.tapItem(longbowU, 0.90);
         }
 
-        int randomDelay = new Random().nextInt(500) + 1000;
+        int randomDelay = new Random().nextInt(500) + 500;
+        int randomDelay2 = new Random().nextInt(300) + 200;
+        int randomDelay3 = new Random().nextInt(2000) + 2000;
         System.out.println("Sleeping for randomDelay: " + randomDelay);
         logger.debugLog("Sleeping for randomDelay: " + randomDelay);
-        condition.sleep(randomDelay);
+        condition.sleep(randomDelay2);
         inventory.tapItem(bowstring, 0.90);
-        condition.sleep(1000);
         System.out.println("Waiting for the chatbox Make Menu to be visible...");
         logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
-        condition.wait(() -> chatbox.isMakeMenuVisible(), 5000, 12);
+        condition.wait(() -> chatbox.isMakeMenuVisible(), 200, 12);
         chatbox.makeOption(1);
         System.out.println("Selected option 1 in chatbox.");
         logger.debugLog("Selected option 1 in chatbox.");
-        condition.sleep(1000);
 
         // Wait for the inventory to finish
         while (inventory.contains(bowstring, 0.90)) {
             readXP();
-            int randomDelay2 = new Random().nextInt(500) + 500;
-            System.out.println("Sleeping for randomDelay2: " + randomDelay2);
-            logger.debugLog("Sleeping for randomDelay2: " + randomDelay2);
-            condition.sleep(randomDelay2);
+            System.out.println("Sleeping for: " + randomDelay3);
+            logger.debugLog("Sleeping for: " + randomDelay3);
+            condition.sleep(randomDelay3);
         }
         readXP();
 
@@ -416,15 +411,13 @@ public class AIOBowFletcher extends AbstractScript {
         // Opening the bank based on your location
         logger.debugLog("Attempting to open the bank.");
         bank.open(bankloc);
-        condition.sleep(1000);
-        condition.wait(() -> bank.isOpen(), 2000, 12);
+        condition.wait(() -> bank.isOpen(), 250, 12);
         logger.debugLog("Bank is open.");
 
         // Select the right bank tab if needed.
         if (!bank.isSelectedBankTab(banktab)) {
             bank.openTab(banktab);
-            condition.sleep(1000);
-            condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
+            condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
             logger.debugLog("Opened bank tab " + banktab);
         }
 
@@ -485,7 +478,7 @@ public class AIOBowFletcher extends AbstractScript {
 
         // Closing the bank, as banking should be done now
         bank.close();
-        condition.sleep(randomBiggerDelay);
+        condition.wait(() -> !bank.isOpen(), 250, 12);
         System.out.println("Closed the bank.");
         logger.debugLog("Closed the bank.");
 
