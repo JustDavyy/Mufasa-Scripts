@@ -77,7 +77,7 @@ public class AIOBowFletcher extends AbstractScript {
     String product;
     String bankloc;
     int banktab;
-    Boolean doneInitialSetup;
+    boolean doneInitialSetup = false;
     String logs;
     String shortbowU;
     String longbowU;
