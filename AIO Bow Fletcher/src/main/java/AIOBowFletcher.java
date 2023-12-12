@@ -462,10 +462,9 @@ public class AIOBowFletcher extends AbstractScript {
     public void pollEXAMPLE() {
         logger.debugLog("Starting poll() method...");
 
-        if (!doneInitialSetup) {
             setupItemIds();
             setupBanking();
-        }
+        
 
         if (!Objects.equals(initialsetup, "done")) {
             initialSetup();
