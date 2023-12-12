@@ -446,4 +446,152 @@ public class AIOBowFletcher extends AbstractScript {
         condition.sleep(1000);
     }
 
+    private void setupItemIds() {
+        if (longbow == null) {
+            String[] itemIds = itemIDs.get(tier);
+            logs = itemIds[0];
+            shortbowU = itemIds[1];
+            longbowU = itemIds[2];
+            shortbow = itemIds[3];
+            longbow = itemIds[4];
+
+            logger.debugLog("Stored IDs for " + tier + ":\nLogs: " + logs + "\nUnstrung Shortbow: " + shortbowU + "\nUnstrung Longbow: " + longbowU + "\nShortbow: " + shortbow + "\nLongbow: " + longbow);
+        }
+    }
+
+    public void pollEXAMPLE() {
+        logger.debugLog("Starting poll() method...");
+
+        if (!doneInitialSetup) {
+            setupItemIds();
+            setupBanking();
+        }
+
+        if (!Objects.equals(initialsetup, "done")) {
+            initialSetup();
+        }
+
+        if (Objects.equals(initialsetup, "done")) {
+            if (Objects.equals(method, "Cut")) {
+                executeCutMethod();
+                bank();
+                readXP();
+            } else if (Objects.equals(method, "String")) {
+                executeStringMethod();
+                bank();
+                readXP();
+            }
+        }
+
+        logger.debugLog("Ending poll() method...");
+        condition.sleep(1000);
+    }
+
+    private void setupBanking() {
+        if (bankloc == null) {
+            logger.debugLog("Starting dynamic banking setup...");
+
+            // Opening the inventory if not yet opened.
+            logger.debugLog("Opening up the inventory.");
+            if (!gameTabs.isInventoryTabOpen()) {
+                gameTabs.openInventoryTab();
+                condition.sleep(1000);
+            }
+
+            logger.debugLog("Starting setup for Dynamic Banking.");
+            bankloc = bank.setupDynamicBank();
+            logger.debugLog("We're located at: " + bankloc + ".");
+            condition.sleep(5000);
+            logger.debugLog("Attempting to open the Bank of Gielinor.");
+            bank.open(bankloc);
+            condition.sleep(1000);
+            condition.wait(() -> bank.isOpen(), 5000, 12);
+            logger.debugLog("Bank interface detected!");
+            if (bank.isBankPinNeeded()) {
+                logger.debugLog("Bank pin is needed!");
+                bank.enterBankPin();
+                condition.sleep(2000);
+                logger.debugLog("Bank pin entered.");
+                bank.openTab(banktab);
+                condition.sleep(1000);
+                condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
+            } else {
+                logger.debugLog("Bank pin is not needed, bank is open!");
+                if (!bank.isSelectedBankTab(banktab)) {
+                    logger.debugLog("Opening bank tab " + banktab);
+                    bank.openTab(banktab);
+                    condition.sleep(1000);
+                    condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
+                }
+            }
+        }
+    }
+
+    private void initialSetup() {
+        if (Objects.equals(method, "Cut")) {
+            if (Objects.equals(method, "Cut")) {
+                logger.debugLog("Cut method was selected.");
+                if (!bank.isSelectedQuantityAllButton()) {
+                    bank.tapQuantityAllButton();
+                    condition.sleep(1000);
+                    condition.wait(() -> bank.isSelectedQuantityAllButton(), 5000, 5);
+                    logger.debugLog("Selected Quantity All button.");
+
+                    // Withdraw first set of items
+                    bank.withdrawItem(logs, 0.90);
+                    logger.debugLog("Withdrew items from the bank.");
+                } else {
+                    // Withdraw first set of items
+                    bank.withdrawItem(logs, 0.90);
+                    logger.debugLog("Withdrew items from the bank.");
+                }
+            }
+        } else if (Objects.equals(method, "String")) {
+            // Setup specific to 'String' method.
+        }
+        initialsetup = "done";
+    }
+
+    private void executeCutMethod() {
+        // Logic for handling the 'Cut' method.
+        // This includes inventory interactions, making choices in chatbox, banking, etc.
+    }
+
+    private void executeStringMethod() {
+        // Logic for handling the 'String' method.
+        // This includes inventory interactions, making choices in chatbox, banking, etc.
+    }
+
+    private void bank() {
+        logger.debugLog("Banking operations started.");
+
+        bank.open(bankloc);
+        logger.debugLog("Attempting to open the bank.");
+        condition.sleep(1000);
+        condition.wait(() -> bank.isOpen(), 250, 12);
+
+        if (!bank.isSelectedBankTab(banktab)) {
+            bank.openTab(banktab);
+            condition.sleep(1000);
+            condition.wait(() -> bank.isSelectedBankTab(banktab), 5000, 12);
+            logger.debugLog("Opened bank tab " + banktab);
+        }
+
+        // Deposit and withdraw logic goes here
+        // This will vary based on whether it's 'Cut' or 'String' method
+        // Example:
+        // if (Objects.equals(method, "Cut")) {
+        //     // Deposit and withdraw logic for 'Cut'
+        // } else if (Objects.equals(method, "String")) {
+        //     // Deposit and withdraw logic for 'String'
+        // }
+
+        logger.debugLog("Banking operations completed.");
+    }
+
+    private void readXP() {
+        xpBar.getXP();
+    }
+
+
 }
