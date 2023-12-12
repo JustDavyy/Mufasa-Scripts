@@ -117,6 +117,7 @@ public class AIOBowFletcher extends AbstractScript {
                 logger.debugLog("We are not logged in yet, logging in.");
                 System.out.println("We are not logged in yet, logging in.");
                 login.login();
+                client.moveCameraUp();
             }
 
             // Continue the rest of the setup
