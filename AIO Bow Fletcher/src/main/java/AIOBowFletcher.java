@@ -113,7 +113,9 @@ public class AIOBowFletcher extends AbstractScript {
             logger.debugLog("doneInitialSetup is false, running initial setups.");
 
             // Check if we are logged in, if not, login.
-            if (login.findPlayNowOption() == null) {
+            if (login.findPlayNowOption() != null) {
+                logger.debugLog("We are not logged in yet, logging in.");
+                System.out.println("We are not logged in yet, logging in.");
                 login.login();
             }
 
