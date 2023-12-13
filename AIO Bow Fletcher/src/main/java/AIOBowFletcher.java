@@ -10,7 +10,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "AIO Bow Fletcher",
         description = "AIO Bow Fletcher, supports both cutting and stringing bows.",
-        version = "1.2",
+        version = "1.3",
         category = ScriptCategory.Fletching
 )
 @ScriptConfiguration.List(
@@ -53,6 +53,7 @@ import java.util.Random;
                         name =  "BankTab",
                         description = "What bank tab are your resources located in?",
                         defaultValue = "0",
+                        minMaxIntValues = {0, 9},
                         allowedValues = {
                                 @AllowedValue(optionName = "0"),
                                 @AllowedValue(optionName = "1"),
