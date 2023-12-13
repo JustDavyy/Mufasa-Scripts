@@ -10,7 +10,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "AIO Bow Fletcher",
         description = "AIO Bow Fletcher, supports both cutting and stringing bows.",
-        version = "1.3",
+        version = "1.31",
         category = ScriptCategory.Fletching
 )
 @ScriptConfiguration.List(
@@ -257,7 +257,7 @@ public class AIOBowFletcher extends AbstractScript {
             }
 
             condition.sleep(randomBiggerDelay);
-            bank.withdrawItem(knife, 0.90);
+            bank.withdrawItem(knife, 0.75);
             condition.sleep(randomDelay);
             logger.debugLog("Withdrew knife from the bank.");
 
@@ -279,11 +279,11 @@ public class AIOBowFletcher extends AbstractScript {
                 }
 
                 // Withdraw first set of items
-                bank.withdrawItem(logs, 0.90);
+                bank.withdrawItem(logs, 0.75);
                 logger.debugLog("Withdrew " + tier +  " from the bank.");
             } else {
                 // Withdraw first set of items
-                bank.withdrawItem(logs, 0.90);
+                bank.withdrawItem(logs, 0.75);
                 logger.debugLog("Withdrew " + tier +  " from the bank.");
             }
         }
@@ -307,22 +307,22 @@ public class AIOBowFletcher extends AbstractScript {
 
                 // Withdraw first set of items
                 if (Objects.equals(product, "Shortbow")) {
-                    bank.withdrawItem(shortbowU, 0.90);
+                    bank.withdrawItem(shortbowU, 0.75);
                 } else {
-                    bank.withdrawItem(longbowU, 0.90);
+                    bank.withdrawItem(longbowU, 0.75);
                 }
                 condition.sleep(randomDelay2);
-                bank.withdrawItem(bowstring, 0.90);
+                bank.withdrawItem(bowstring, 0.75);
                 logger.debugLog("Withdrew 14 bowstrings and unstrung bows from the bank.");
             } else {
                 // Withdraw first set of items
                 if (Objects.equals(product, "Shortbow")) {
-                    bank.withdrawItem(shortbowU, 0.90);
+                    bank.withdrawItem(shortbowU, 0.75);
                 } else {
-                    bank.withdrawItem(longbowU, 0.90);
+                    bank.withdrawItem(longbowU, 0.75);
                 }
                 condition.sleep(randomDelay2);
-                bank.withdrawItem(bowstring, 0.90);
+                bank.withdrawItem(bowstring, 0.75);
                 logger.debugLog("Withdrew 14 bowstrings and unstrung bows from the bank.");
             }
         }
@@ -345,13 +345,13 @@ public class AIOBowFletcher extends AbstractScript {
         System.out.println("Running the executeCutMethod() method.");
 
         // Starting to process items
-        inventory.tapItem(knife, 0.90);
+        inventory.tapItem(knife, 0.75);
         int randomDelay = new Random().nextInt(500) + 500;
         int randomDelay2 = new Random().nextInt(300) + 200;
         System.out.println("Sleeping for randomDelay: " + randomDelay);
         logger.debugLog("Sleeping for randomDelay: " + randomDelay);
         condition.sleep(randomDelay2);
-        inventory.tapItem(logs, 0.90);
+        inventory.tapItem(logs, 0.75);
         System.out.print("Waiting for the chatbox Make Menu to be visible...");
         logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
         condition.wait(() -> chatbox.isMakeMenuVisible(), 200, 12);
@@ -368,7 +368,7 @@ public class AIOBowFletcher extends AbstractScript {
         }
 
         // Wait for the inventory to finish
-        while (inventory.contains(logs, 0.90)) {
+        while (inventory.contains(logs, 0.75)) {
             readXP();
             int randomDelay3 = new Random().nextInt(2000) + 1000;
             System.out.println("Sleeping for randomDelay2: " + randomDelay2);
@@ -387,9 +387,9 @@ public class AIOBowFletcher extends AbstractScript {
 
         // tap item needed based on choice in config
         if (Objects.equals(product, "Shortbow")) {
-            inventory.tapItem(shortbowU, 0.90);
+            inventory.tapItem(shortbowU, 0.75);
         } else {
-            inventory.tapItem(longbowU, 0.90);
+            inventory.tapItem(longbowU, 0.75);
         }
 
         int randomDelay = new Random().nextInt(500) + 500;
@@ -398,7 +398,7 @@ public class AIOBowFletcher extends AbstractScript {
         System.out.println("Sleeping for randomDelay: " + randomDelay);
         logger.debugLog("Sleeping for randomDelay: " + randomDelay);
         condition.sleep(randomDelay2);
-        inventory.tapItem(bowstring, 0.90);
+        inventory.tapItem(bowstring, 0.75);
         System.out.println("Waiting for the chatbox Make Menu to be visible...");
         logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
         condition.wait(() -> chatbox.isMakeMenuVisible(), 200, 12);
@@ -407,7 +407,7 @@ public class AIOBowFletcher extends AbstractScript {
         logger.debugLog("Selected option 1 in chatbox.");
 
         // Wait for the inventory to finish
-        while (inventory.contains(bowstring, 0.90)) {
+        while (inventory.contains(bowstring, 0.75)) {
             readXP();
             System.out.println("Sleeping for: " + randomDelay3);
             logger.debugLog("Sleeping for: " + randomDelay3);
@@ -443,29 +443,29 @@ public class AIOBowFletcher extends AbstractScript {
             if (Objects.equals(product, "Shortbow")) {
                 System.out.println("Depositing unstrung shortbows.");
                 logger.debugLog("Depositing unstrung shortbows.");
-                inventory.tapItem(shortbowU, 0.90);
+                inventory.tapItem(shortbowU, 0.75);
             } else {
                 System.out.println("Depositing unstrung longbows.");
                 logger.debugLog("Depositing unstrung longbows.");
-                inventory.tapItem(longbowU, 0.90);
+                inventory.tapItem(longbowU, 0.75);
             }
         }
         else if (Objects.equals(method, "String")) {
             if (Objects.equals(product, "Shortbow")) {
                 System.out.println("Depositing strung shortbows.");
                 logger.debugLog("Depositing strung shortbows.");
-                inventory.tapItem(shortbow, 0.90);
+                inventory.tapItem(shortbow, 0.75);
             } else {
                 System.out.println("Depositing strung longbows.");
                 logger.debugLog("Depositing strung longbows.");
-                inventory.tapItem(longbow, 0.90);
+                inventory.tapItem(longbow, 0.75);
             }
         }
         condition.sleep(randomBiggerDelay);
 
         // Withdrawing the items based on your tier/method
         if (Objects.equals(method, "Cut")) {
-            bank.withdrawItem(logs, 0.90);
+            bank.withdrawItem(logs, 0.75);
             System.out.println("Withdrew " + tier + " from the bank.");
             logger.debugLog("Withdrew " + tier + " from the bank.");
             condition.sleep(randomDelay);
@@ -476,18 +476,18 @@ public class AIOBowFletcher extends AbstractScript {
             if (Objects.equals(product, "Shortbow")) {
                 System.out.println("Withdrawing unstrung shortbows");
                 logger.debugLog("Withdrawing unstrung shortbows.");
-                bank.withdrawItem(shortbowU, 0.90);
+                bank.withdrawItem(shortbowU, 0.75);
             } else {
                 System.out.println("Withdrawing unstrung longbows");
                 logger.debugLog("Withdrawing unstrung longbows.");
-                bank.withdrawItem(longbowU, 0.90);
+                bank.withdrawItem(longbowU, 0.75);
             }
             condition.sleep(randomDelay);
 
             // Withdraw bowstrings
             System.out.println("Withdrawing bowstrings.");
             logger.debugLog("Withdrawing bowstrings.");
-            bank.withdrawItem(bowstring, 0.90);
+            bank.withdrawItem(bowstring, 0.75);
             condition.sleep(randomDelay);
             System.out.println("Withdrew items from the bank.");
             logger.debugLog("Withdrew items from the bank.");
