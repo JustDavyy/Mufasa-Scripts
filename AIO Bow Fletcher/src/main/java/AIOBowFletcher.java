@@ -120,11 +120,6 @@ public class AIOBowFletcher extends AbstractScript {
                 login.presetup();
             }
 
-            // Check if the inventory is open (needs this check after a break)
-            if (!gameTabs.isInventoryTabOpen()) {
-                gameTabs.openInventoryTab();
-            }
-
             // Continue the rest of the setup
             setupItemIds();
             setupBanking();
@@ -132,11 +127,13 @@ public class AIOBowFletcher extends AbstractScript {
         }
 
         if (Objects.equals(method, "Cut")) {
+            checkInventOpen();
             executeCutMethod();
             bank();
         }
 
         else if (Objects.equals(method, "String")) {
+            checkInventOpen();
             executeStringMethod();
             bank();
         }
@@ -506,6 +503,13 @@ public class AIOBowFletcher extends AbstractScript {
 
         logger.debugLog("Ending the bank() method.");
         System.out.println("Ending the bank() method.");
+    }
+
+    private void checkInventOpen() {
+        // Check if the inventory is open (needs this check after a break)
+        if (!gameTabs.isInventoryTabOpen()) {
+            gameTabs.openInventoryTab();
+        }
     }
 
     private void readXP() {
