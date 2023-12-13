@@ -120,6 +120,11 @@ public class AIOBowFletcher extends AbstractScript {
                 login.presetup();
             }
 
+            // Check if the inventory is open (needs this check after a break)
+            if (!gameTabs.isInventoryTabOpen()) {
+                gameTabs.openInventoryTab();
+            }
+
             // Continue the rest of the setup
             setupItemIds();
             setupBanking();
