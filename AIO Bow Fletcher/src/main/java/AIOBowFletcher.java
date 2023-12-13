@@ -509,6 +509,7 @@ public class AIOBowFletcher extends AbstractScript {
         // Check if the inventory is open (needs this check after a break)
         if (!gameTabs.isInventoryTabOpen()) {
             gameTabs.openInventoryTab();
+            condition.wait(() -> gameTabs.isInventoryTabOpen(), 250, 50);
         }
     }
 
