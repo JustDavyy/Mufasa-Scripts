@@ -10,7 +10,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "AIO Bow Fletcher",
         description = "AIO Bow Fletcher, supports both cutting and stringing bows.",
-        version = "1.31",
+        version = "1.32",
         category = ScriptCategory.Fletching
 )
 @ScriptConfiguration.List(
