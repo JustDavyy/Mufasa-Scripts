@@ -208,11 +208,9 @@ public class AIOBowFletcher extends AbstractScript {
                 condition.sleep(1076);
             } else {
                 logger.debugLog("Bank pin is not needed, bank is open!");
-                if (!bank.isSelectedBankTab(banktab)) {
-                    logger.debugLog("Depositing inventory.");
-                    bank.tapDepositInventoryButton();
-                    condition.sleep(1076);
-                }
+                logger.debugLog("Depositing inventory.");
+                bank.tapDepositInventoryButton();
+                condition.sleep(1076);
             }
         }
         logger.debugLog("Ending the setupBanking() method.");
