@@ -260,11 +260,10 @@ public class AIOBowFletcher extends AbstractScript {
             logger.debugLog("Closed search interface.");
 
             // Check if we have the knife in the inventory, otherwise stop script.
-            String[] items = {knife};
-            condition.wait(() -> inventory.contains(items, 0.75), 250,10);
-            if (!inventory.contains(items, 0.75)) {
-                logger.log("No items found in inventory, assuming we're out of items to process.");
-                System.out.println("No items found in inventory, assuming we're out of items to process.");
+            condition.wait(() -> inventory.contains(knife, 0.75), 250,10);
+            if (!inventory.contains(knife, 0.75)) {
+                logger.log("No knife found in inventory, assuming we're out of items to process.");
+                System.out.println("No knife found in inventory, assuming we're out of items to process.");
                 bank.close();
                 if (bank.isOpen()) {
                     bank.close();
@@ -290,11 +289,10 @@ public class AIOBowFletcher extends AbstractScript {
                 logger.debugLog("Withdrew " + tier +  " from the bank.");
 
                 // Check if we have the logs in the inventory, otherwise stop script.
-                String[] items2 = {logs};
-                condition.wait(() -> inventory.contains(items2, 0.75), 250,10);
-                if (!inventory.contains(items2, 0.75)) {
-                    logger.log("No items found in inventory, assuming we're out of items to process.");
-                    System.out.println("No items found in inventory, assuming we're out of items to process.");
+                condition.wait(() -> inventory.contains(logs, 0.75), 250,10);
+                if (!inventory.contains(logs, 0.75)) {
+                    logger.log("No logs found in inventory, assuming we're out of items to process.");
+                    System.out.println("No logs found in inventory, assuming we're out of items to process.");
                     bank.close();
                     if (bank.isOpen()) {
                         bank.close();
@@ -526,8 +524,8 @@ public class AIOBowFletcher extends AbstractScript {
             String[] items = {knife, logs};
             condition.wait(() -> inventory.contains(items, 0.75), 250,10);
             if (!inventory.contains(items, 0.75)) {
-                logger.log("No items found in inventory, assuming we're out of items to process.");
-                System.out.println("No items found in inventory, assuming we're out of items to process.");
+                logger.log("No knife and logs found in inventory, assuming we're out of items to process.");
+                System.out.println("No knife and log found in inventory, assuming we're out of items to process.");
                 bank.close();
                 if (bank.isOpen()) {
                     bank.close();
@@ -549,11 +547,10 @@ public class AIOBowFletcher extends AbstractScript {
                 bank.withdrawItem(shortbowU, 0.75);
 
                 // Check if we have unstrung bows in the inventory, otherwise stop script.
-                String[] items = {shortbowU};
-                condition.wait(() -> inventory.contains(items, 0.75), 250,10);
-                if (!inventory.contains(items, 0.75)) {
-                    logger.log("No items found in inventory, assuming we're out of items to process.");
-                    System.out.println("No items found in inventory, assuming we're out of items to process.");
+                condition.wait(() -> inventory.contains(shortbowU, 0.75), 250,10);
+                if (!inventory.contains(shortbowU, 0.75)) {
+                    logger.log("No unstrung shortbow found in inventory, assuming we're out of items to process.");
+                    System.out.println("No unstrung shortbow found in inventory, assuming we're out of items to process.");
                     bank.close();
                     if (bank.isOpen()) {
                         bank.close();
@@ -568,11 +565,10 @@ public class AIOBowFletcher extends AbstractScript {
                 bank.withdrawItem(longbowU, 0.75);
 
                 // Check if we have unstrung bows in the inventory, otherwise stop script.
-                String[] items = {longbowU};
-                condition.wait(() -> inventory.contains(items, 0.75), 250,10);
-                if (!inventory.contains(items, 0.75)) {
-                    logger.log("No items found in inventory, assuming we're out of items to process.");
-                    System.out.println("No items found in inventory, assuming we're out of items to process.");
+                condition.wait(() -> inventory.contains(longbowU, 0.75), 250,10);
+                if (!inventory.contains(longbowU, 0.75)) {
+                    logger.log("No unstrung longbow found in inventory, assuming we're out of items to process.");
+                    System.out.println("No unstrung longbow found in inventory, assuming we're out of items to process.");
                     bank.close();
                     if (bank.isOpen()) {
                         bank.close();
@@ -590,11 +586,10 @@ public class AIOBowFletcher extends AbstractScript {
             bank.withdrawItem(bowstring, 0.75);
 
             // Check if we have bowstrings in the inventory, otherwise stop script.
-            String[] items = {bowstring};
-            condition.wait(() -> inventory.contains(items, 0.75), 250,10);
-            if (!inventory.contains(items, 0.75)) {
-                logger.log("No items found in inventory, assuming we're out of items to process.");
-                System.out.println("No items found in inventory, assuming we're out of items to process.");
+            condition.wait(() -> inventory.contains(bowstring, 0.75), 250,10);
+            if (!inventory.contains(bowstring, 0.75)) {
+                logger.log("No bowstring found in inventory, assuming we're out of items to process.");
+                System.out.println("No bowstring found in inventory, assuming we're out of items to process.");
                 bank.close();
                 if (bank.isOpen()) {
                     bank.close();
