@@ -193,6 +193,12 @@ public class AIOBowFletcher extends AbstractScript {
             logger.debugLog("Starting setup for Dynamic Banking.");
             bankloc = bank.setupDynamicBank();
             logger.debugLog("We're located at: " + bankloc + ".");
+            if (bankloc == null) {
+                logger.debugLog("Could not find a dynamic bank location we are in, logging out and aborting script.");
+                System.out.println("Could not find a dynamic bank location we are in, logging out and aborting script.");
+                logout.logout();
+                script.forceStop();
+            }
             condition.sleep(5000);
             logger.debugLog("Attempting to open the Bank of Gielinor.");
             bank.open(bankloc);
