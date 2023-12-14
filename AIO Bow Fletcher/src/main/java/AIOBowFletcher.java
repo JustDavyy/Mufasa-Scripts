@@ -110,6 +110,9 @@ public class AIOBowFletcher extends AbstractScript {
         logger.debugLog("Running the poll() method.");
         System.out.println("Running the poll() method.");
 
+        System.out.println("Stopping script (testing)");
+        script.stop();
+
         if (!doneInitialSetup) {
             logger.debugLog("doneInitialSetup is false, running initial setups.");
 
