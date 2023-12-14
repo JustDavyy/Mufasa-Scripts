@@ -259,6 +259,20 @@ public class AIOBowFletcher extends AbstractScript {
             condition.sleep(randomDelay);
             logger.debugLog("Closed search interface.");
 
+            // Check if we have the knife in the inventory, otherwise stop script.
+            String[] items = {knife};
+            condition.wait(() -> inventory.contains(items, 0.75), 250,10);
+            if (!inventory.contains(items, 0.75)) {
+                logger.log("No items found in inventory, assuming we're out of items to process.");
+                System.out.println("No items found in inventory, assuming we're out of items to process.");
+                bank.close();
+                if (bank.isOpen()) {
+                    bank.close();
+                }
+                logout.logout();
+                script.forceStop();
+            }
+
             // Grabbing the first items to process
             if (!bank.isSelectedQuantityAllButton()) {
                 bank.tapQuantityAllButton();
@@ -275,10 +289,10 @@ public class AIOBowFletcher extends AbstractScript {
                 bank.withdrawItem(logs, 0.75);
                 logger.debugLog("Withdrew " + tier +  " from the bank.");
 
-                // Check if we have both a knife and the logs in the inventory, otherwise stop script.
-                String[] items = {knife, logs};
-                condition.wait(() -> inventory.contains(items, 0.75), 250,10);
-                if (!inventory.contains(items, 0.75)) {
+                // Check if we have the logs in the inventory, otherwise stop script.
+                String[] items2 = {logs};
+                condition.wait(() -> inventory.contains(items2, 0.75), 250,10);
+                if (!inventory.contains(items2, 0.75)) {
                     logger.log("No items found in inventory, assuming we're out of items to process.");
                     System.out.println("No items found in inventory, assuming we're out of items to process.");
                     bank.close();
@@ -293,9 +307,9 @@ public class AIOBowFletcher extends AbstractScript {
                 bank.withdrawItem(logs, 0.75);
 
                 // Check if we have both a knife and the logs in the inventory, otherwise stop script.
-                String[] items = {knife, logs};
-                condition.wait(() -> inventory.contains(items, 0.75), 250,10);
-                if (!inventory.contains(items, 0.75)) {
+                String[] items3 = {knife, logs};
+                condition.wait(() -> inventory.contains(items3, 0.75), 250,10);
+                if (!inventory.contains(items3, 0.75)) {
                     logger.log("No items found in inventory, assuming we're out of items to process.");
                     System.out.println("No items found in inventory, assuming we're out of items to process.");
                     bank.close();
