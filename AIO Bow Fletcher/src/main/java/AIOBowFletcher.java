@@ -230,12 +230,6 @@ public class AIOBowFletcher extends AbstractScript {
         int randomDelay = new Random().nextInt(600) + 600;
         int randomBiggerDelay = new Random().nextInt(1500) + 1500;
 
-        // Selecting the right bank tab again if needed
-        if (!bank.isSelectedBankTab(banktab)) {
-            bank.openTab(banktab);
-            logger.debugLog("Opened bank tab " + banktab);
-        }
-
         // Part if the Cut method was chosen
         if (Objects.equals(method, "Cut")) {
             logger.debugLog("Cut method was selected.");
@@ -280,9 +274,38 @@ public class AIOBowFletcher extends AbstractScript {
                 // Withdraw first set of items
                 bank.withdrawItem(logs, 0.75);
                 logger.debugLog("Withdrew " + tier +  " from the bank.");
+
+                // Check if we have both a knife and the logs in the inventory, otherwise stop script.
+                String[] items = {knife, logs};
+                condition.wait(() -> inventory.contains(items, 0.75), 250,10);
+                if (!inventory.contains(items, 0.75)) {
+                    logger.log("No items found in inventory, assuming we're out of items to process.");
+                    System.out.println("No items found in inventory, assuming we're out of items to process.");
+                    bank.close();
+                    if (bank.isOpen()) {
+                        bank.close();
+                    }
+                    logout.logout();
+                    script.forceStop();
+                }
             } else {
                 // Withdraw first set of items
                 bank.withdrawItem(logs, 0.75);
+
+                // Check if we have both a knife and the logs in the inventory, otherwise stop script.
+                String[] items = {knife, logs};
+                condition.wait(() -> inventory.contains(items, 0.75), 250,10);
+                if (!inventory.contains(items, 0.75)) {
+                    logger.log("No items found in inventory, assuming we're out of items to process.");
+                    System.out.println("No items found in inventory, assuming we're out of items to process.");
+                    bank.close();
+                    if (bank.isOpen()) {
+                        bank.close();
+                    }
+                    logout.logout();
+                    script.forceStop();
+                }
+
                 logger.debugLog("Withdrew " + tier +  " from the bank.");
             }
         }
@@ -484,6 +507,21 @@ public class AIOBowFletcher extends AbstractScript {
         // Withdrawing the items based on your tier/method
         if (Objects.equals(method, "Cut")) {
             bank.withdrawItem(logs, 0.75);
+
+            // Check if we have both a knife and the logs in the inventory, otherwise stop script.
+            String[] items = {knife, logs};
+            condition.wait(() -> inventory.contains(items, 0.75), 250,10);
+            if (!inventory.contains(items, 0.75)) {
+                logger.log("No items found in inventory, assuming we're out of items to process.");
+                System.out.println("No items found in inventory, assuming we're out of items to process.");
+                bank.close();
+                if (bank.isOpen()) {
+                    bank.close();
+                }
+                logout.logout();
+                script.forceStop();
+            }
+
             System.out.println("Withdrew " + tier + " from the bank.");
             logger.debugLog("Withdrew " + tier + " from the bank.");
             condition.sleep(randomDelay);
@@ -495,10 +533,40 @@ public class AIOBowFletcher extends AbstractScript {
                 System.out.println("Withdrawing unstrung shortbows");
                 logger.debugLog("Withdrawing unstrung shortbows.");
                 bank.withdrawItem(shortbowU, 0.75);
+
+                // Check if we have unstrung bows in the inventory, otherwise stop script.
+                String[] items = {shortbowU};
+                condition.wait(() -> inventory.contains(items, 0.75), 250,10);
+                if (!inventory.contains(items, 0.75)) {
+                    logger.log("No items found in inventory, assuming we're out of items to process.");
+                    System.out.println("No items found in inventory, assuming we're out of items to process.");
+                    bank.close();
+                    if (bank.isOpen()) {
+                        bank.close();
+                    }
+                    logout.logout();
+                    script.forceStop();
+                }
+
             } else {
                 System.out.println("Withdrawing unstrung longbows");
                 logger.debugLog("Withdrawing unstrung longbows.");
                 bank.withdrawItem(longbowU, 0.75);
+
+                // Check if we have unstrung bows in the inventory, otherwise stop script.
+                String[] items = {longbowU};
+                condition.wait(() -> inventory.contains(items, 0.75), 250,10);
+                if (!inventory.contains(items, 0.75)) {
+                    logger.log("No items found in inventory, assuming we're out of items to process.");
+                    System.out.println("No items found in inventory, assuming we're out of items to process.");
+                    bank.close();
+                    if (bank.isOpen()) {
+                        bank.close();
+                    }
+                    logout.logout();
+                    script.forceStop();
+                }
+
             }
             condition.sleep(randomDelay);
 
@@ -506,6 +574,21 @@ public class AIOBowFletcher extends AbstractScript {
             System.out.println("Withdrawing bowstrings.");
             logger.debugLog("Withdrawing bowstrings.");
             bank.withdrawItem(bowstring, 0.75);
+
+            // Check if we have bowstrings in the inventory, otherwise stop script.
+            String[] items = {bowstring};
+            condition.wait(() -> inventory.contains(items, 0.75), 250,10);
+            if (!inventory.contains(items, 0.75)) {
+                logger.log("No items found in inventory, assuming we're out of items to process.");
+                System.out.println("No items found in inventory, assuming we're out of items to process.");
+                bank.close();
+                if (bank.isOpen()) {
+                    bank.close();
+                }
+                logout.logout();
+                script.forceStop();
+            }
+
             condition.sleep(randomDelay);
             System.out.println("Withdrew items from the bank.");
             logger.debugLog("Withdrew items from the bank.");
@@ -528,15 +611,16 @@ public class AIOBowFletcher extends AbstractScript {
     }
 
     private void checkInventCutMethod() {
+        String[] items = {knife, logs};
         // Check if we have both a knife and the logs in the inventory.
-        if (!inventory.contains(logs, 0.75) && !inventory.contains(knife, 0.75)) {
+        if (!inventory.contains(items, 0.75)) {
             logger.log("1st check failed for knife and logs in our inventory, going back to banking!");
             System.out.println("1st check failed for a knife and logs in our inventory, going back to banking!");
             bank();
         }
 
         // Check if we have both a knife and the logs in the inventory.
-        if (!inventory.contains(logs, 0.75) && !inventory.contains(knife, 0.75)) {
+        if (!inventory.contains(items, 0.75)) {
             logger.log("2nd check failed for knife and logs in our inventory, logging out and aborting script!");
             System.out.println("2nd check failed for a knife and logs in our inventory, logging out and aborting script!");
             logout.logout();
@@ -547,13 +631,15 @@ public class AIOBowFletcher extends AbstractScript {
     private void checkInventStringMethod() {
         // Check if we have both unstrung bows and bowstrings in the inventory.
         if (Objects.equals(product, "Shortbow")) {
-            if (!inventory.contains(shortbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
+            String[] items = {shortbowU, bowstring};
+            if (!inventory.contains(items, 0.75)) {
                 logger.log("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
                 System.out.println("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
                 bank();
             }
         } else {
-            if (!inventory.contains(longbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
+            String[] items = {longbowU, bowstring};
+            if (!inventory.contains(items, 0.75)) {
                 logger.log("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
                 System.out.println("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
                 bank();
