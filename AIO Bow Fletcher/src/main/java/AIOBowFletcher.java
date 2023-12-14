@@ -107,11 +107,6 @@ public class AIOBowFletcher extends AbstractScript {
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
-
-        // Temporary script stop test
-        System.out.println("Stopping script.");
-        script.stop();
-
         logger.debugLog("Running the poll() method.");
         System.out.println("Running the poll() method.");
 
@@ -191,7 +186,6 @@ public class AIOBowFletcher extends AbstractScript {
             logger.debugLog("Opening up the inventory.");
             if (!gameTabs.isInventoryTabOpen()) {
                 gameTabs.openInventoryTab();
-                condition.wait(() -> gameTabs.isInventoryTabOpen(), 200, 12);
             }
 
             logger.debugLog("Starting setup for Dynamic Banking.");
@@ -200,7 +194,6 @@ public class AIOBowFletcher extends AbstractScript {
             condition.sleep(5000);
             logger.debugLog("Attempting to open the Bank of Gielinor.");
             bank.open(bankloc);
-            condition.wait(() -> bank.isOpen(), 200, 12);
             logger.debugLog("Bank interface detected!");
             if (bank.isBankPinNeeded()) {
                 logger.debugLog("Bank pin is needed!");
@@ -333,7 +326,6 @@ public class AIOBowFletcher extends AbstractScript {
         // Finishing off with closing the bank
         logger.debugLog("Closing bank interface.");
         bank.close();
-        condition.wait(() -> !bank.isOpen(), 250, 12);
         logger.debugLog("Closed bank interface.");
 
         doneInitialSetup = true;
@@ -431,13 +423,11 @@ public class AIOBowFletcher extends AbstractScript {
         // Opening the bank based on your location
         logger.debugLog("Attempting to open the bank.");
         bank.open(bankloc);
-        condition.wait(() -> bank.isOpen(), 250, 12);
         logger.debugLog("Bank is open.");
 
         // Select the right bank tab if needed.
         if (!bank.isSelectedBankTab(banktab)) {
             bank.openTab(banktab);
-            condition.wait(() -> bank.isSelectedBankTab(banktab), 250, 12);
             logger.debugLog("Opened bank tab " + banktab);
         }
 
@@ -498,7 +488,6 @@ public class AIOBowFletcher extends AbstractScript {
 
         // Closing the bank, as banking should be done now
         bank.close();
-        condition.wait(() -> !bank.isOpen(), 250, 12);
         System.out.println("Closed the bank.");
         logger.debugLog("Closed the bank.");
 
@@ -510,7 +499,6 @@ public class AIOBowFletcher extends AbstractScript {
         // Check if the inventory is open (needs this check after a break)
         if (!gameTabs.isInventoryTabOpen()) {
             gameTabs.openInventoryTab();
-            condition.wait(() -> gameTabs.isInventoryTabOpen(), 250, 50);
         }
     }
 
