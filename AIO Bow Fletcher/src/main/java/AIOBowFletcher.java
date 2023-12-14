@@ -343,7 +343,7 @@ public class AIOBowFletcher extends AbstractScript {
         System.out.println("Running the executeCutMethod() method.");
 
         // Check if we have both a knife and the logs in the inventory.
-        if (!inventory.contains(knife, 0.75) && !inventory.contains(logs, 0.75)) {
+        if (!inventory.contains(logs, 0.75) && !inventory.contains(knife, 0.75)) {
             logger.log("We don't have a knife and logs in our inventory, going back to banking!");
             System.out.println("We don't have a knife and logs in our inventory, going back to banking!");
             return;
@@ -392,13 +392,13 @@ public class AIOBowFletcher extends AbstractScript {
 
         // Check if we have both unstrung bows and bowstrings in the inventory.
         if (Objects.equals(product, "Shortbow")) {
-            if (!inventory.contains(shortbowU, 0.75) &  !inventory.contains(bowstring, 0.75)) {
+            if (!inventory.contains(shortbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
                 logger.log("We don't have unstrung bows and bowstring in our inventory, going back to banking!");
                 System.out.println("We don't have unstrung bows and bowstring in our inventory, going back to banking!");
                 return;
             }
         } else {
-            if (!inventory.contains(longbowU, 0.75) &  !inventory.contains(bowstring, 0.75)) {
+            if (!inventory.contains(longbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
                 logger.log("We don't have unstrung bows and bowstring in our inventory, going back to banking!");
                 System.out.println("We don't have unstrung bows and bowstring in our inventory, going back to banking!");
                 return;
@@ -529,14 +529,14 @@ public class AIOBowFletcher extends AbstractScript {
 
     private void checkInventCutMethod() {
         // Check if we have both a knife and the logs in the inventory.
-        if (!inventory.contains(knife, 0.75) && !inventory.contains(logs, 0.75)) {
+        if (!inventory.contains(logs, 0.75) && !inventory.contains(knife, 0.75)) {
             logger.log("1st check failed for knife and logs in our inventory, going back to banking!");
             System.out.println("1st check failed for a knife and logs in our inventory, going back to banking!");
             bank();
         }
 
         // Check if we have both a knife and the logs in the inventory.
-        if (!inventory.contains(knife, 0.75) && !inventory.contains(logs, 0.75)) {
+        if (!inventory.contains(logs, 0.75) && !inventory.contains(knife, 0.75)) {
             logger.log("2nd check failed for knife and logs in our inventory, logging out and aborting script!");
             System.out.println("2nd check failed for a knife and logs in our inventory, logging out and aborting script!");
             logout.logout();
@@ -547,13 +547,13 @@ public class AIOBowFletcher extends AbstractScript {
     private void checkInventStringMethod() {
         // Check if we have both unstrung bows and bowstrings in the inventory.
         if (Objects.equals(product, "Shortbow")) {
-            if (!inventory.contains(shortbowU, 0.75) &  !inventory.contains(bowstring, 0.75)) {
+            if (!inventory.contains(shortbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
                 logger.log("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
                 System.out.println("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
                 bank();
             }
         } else {
-            if (!inventory.contains(longbowU, 0.75) &  !inventory.contains(bowstring, 0.75)) {
+            if (!inventory.contains(longbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
                 logger.log("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
                 System.out.println("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
                 bank();
@@ -562,14 +562,14 @@ public class AIOBowFletcher extends AbstractScript {
 
         // Check if we have both unstrung bows and bowstrings in the inventory.
         if (Objects.equals(product, "Shortbow")) {
-            if (!inventory.contains(shortbowU, 0.75) &  !inventory.contains(bowstring, 0.75)) {
+            if (!inventory.contains(shortbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
                 logger.log("2nd check failed for unstrung bows and bowstring in our inventory, logging out and aborting script!");
                 System.out.println("2nd check failed for unstrung bows and bowstring in our inventory, logging out and aborting script!");
                 logout.logout();
                 script.forceStop();
             }
         } else {
-            if (!inventory.contains(longbowU, 0.75) &  !inventory.contains(bowstring, 0.75)) {
+            if (!inventory.contains(longbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
                 logger.log("2nd check failed for unstrung bows and bowstring in our inventory, logging out and aborting script!");
                 System.out.println("2nd check failed for unstrung bows and bowstring in our inventory, logging out and aborting script!");
                 logout.logout();
