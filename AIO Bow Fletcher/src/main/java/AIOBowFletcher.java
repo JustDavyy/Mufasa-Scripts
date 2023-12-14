@@ -265,6 +265,7 @@ public class AIOBowFletcher extends AbstractScript {
                 logger.log("No knife found in inventory, assuming we're out of items to process.");
                 System.out.println("No knife found in inventory, assuming we're out of items to process.");
                 bank.close();
+                condition.wait(() -> !bank.isOpen(), 200, 5);
                 if (bank.isOpen()) {
                     bank.close();
                 }
@@ -294,6 +295,7 @@ public class AIOBowFletcher extends AbstractScript {
                     logger.log("No logs found in inventory, assuming we're out of items to process.");
                     System.out.println("No logs found in inventory, assuming we're out of items to process.");
                     bank.close();
+                    condition.wait(() -> !bank.isOpen(), 200, 5);
                     if (bank.isOpen()) {
                         bank.close();
                     }
@@ -311,6 +313,7 @@ public class AIOBowFletcher extends AbstractScript {
                     logger.log("No items found in inventory, assuming we're out of items to process.");
                     System.out.println("No items found in inventory, assuming we're out of items to process.");
                     bank.close();
+                    condition.wait(() -> !bank.isOpen(), 200, 5);
                     if (bank.isOpen()) {
                         bank.close();
                     }
@@ -527,6 +530,7 @@ public class AIOBowFletcher extends AbstractScript {
                 logger.log("No knife and logs found in inventory, assuming we're out of items to process.");
                 System.out.println("No knife and log found in inventory, assuming we're out of items to process.");
                 bank.close();
+                condition.wait(() -> !bank.isOpen(), 200, 5);
                 if (bank.isOpen()) {
                     bank.close();
                 }
@@ -552,6 +556,7 @@ public class AIOBowFletcher extends AbstractScript {
                     logger.log("No unstrung shortbow found in inventory, assuming we're out of items to process.");
                     System.out.println("No unstrung shortbow found in inventory, assuming we're out of items to process.");
                     bank.close();
+                    condition.wait(() -> !bank.isOpen(), 200, 5);
                     if (bank.isOpen()) {
                         bank.close();
                     }
@@ -570,6 +575,7 @@ public class AIOBowFletcher extends AbstractScript {
                     logger.log("No unstrung longbow found in inventory, assuming we're out of items to process.");
                     System.out.println("No unstrung longbow found in inventory, assuming we're out of items to process.");
                     bank.close();
+                    condition.wait(() -> !bank.isOpen(), 200, 5);
                     if (bank.isOpen()) {
                         bank.close();
                     }
@@ -591,6 +597,7 @@ public class AIOBowFletcher extends AbstractScript {
                 logger.log("No bowstring found in inventory, assuming we're out of items to process.");
                 System.out.println("No bowstring found in inventory, assuming we're out of items to process.");
                 bank.close();
+                condition.wait(() -> !bank.isOpen(), 200, 5);
                 if (bank.isOpen()) {
                     bank.close();
                 }
