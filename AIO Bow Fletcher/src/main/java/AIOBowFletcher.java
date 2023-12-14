@@ -107,6 +107,11 @@ public class AIOBowFletcher extends AbstractScript {
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
+
+        // Temporary script stop test
+        System.out.println("Stopping script.");
+        script.stop();
+
         logger.debugLog("Running the poll() method.");
         System.out.println("Running the poll() method.");
 
@@ -207,7 +212,6 @@ public class AIOBowFletcher extends AbstractScript {
                 bank.tapDepositInventoryButton();
                 condition.sleep(1016);
                 bank.openTab(banktab);
-                condition.wait(() -> bank.isSelectedBankTab(banktab), 200, 12);
             } else {
                 logger.debugLog("Bank pin is not needed, bank is open!");
                 if (!bank.isSelectedBankTab(banktab)) {
@@ -216,7 +220,6 @@ public class AIOBowFletcher extends AbstractScript {
                     condition.sleep(1076);
                     logger.debugLog("Opening bank tab " + banktab);
                     bank.openTab(banktab);
-                    condition.wait(() -> bank.isSelectedBankTab(banktab), 200, 12);
                 }
             }
         }
@@ -234,7 +237,6 @@ public class AIOBowFletcher extends AbstractScript {
         // Selecting the right bank tab again if needed
         if (!bank.isSelectedBankTab(banktab)) {
             bank.openTab(banktab);
-            condition.wait(() -> bank.isSelectedBankTab(banktab), 200, 12);
             logger.debugLog("Opened bank tab " + banktab);
         }
 
@@ -276,7 +278,6 @@ public class AIOBowFletcher extends AbstractScript {
                 // Selecting the right bank tab again if needed
                 if (!bank.isSelectedBankTab(banktab)) {
                     bank.openTab(banktab);
-                    condition.wait(() -> bank.isSelectedBankTab(banktab), 200, 12);
                     logger.debugLog("Opened bank tab " + banktab);
                 }
 
