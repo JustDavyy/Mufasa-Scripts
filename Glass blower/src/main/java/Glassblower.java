@@ -125,22 +125,6 @@ public class Glassblower extends AbstractScript {
         makeOptions.put("Lantern lens", new String[]{"7", "4542"});
         makeOptions.put("Empty light orb", new String[]{"8", "10980"});
 
-        String[] makeOptionData = makeOptions.get(product);
-
-        if (makeOptionData != null) {
-            int makeOption = Integer.parseInt(makeOptionData[0]);
-            String itemID = makeOptionData[1];
-
-            System.out.println("The make option for " + product + " is: " + makeOption);
-            System.out.println("The itemID for " + product + " is: " + itemID);
-
-            logger.debugLog("The make option for " + product + " is: " + makeOption);
-            logger.debugLog("The itemID for " + product + " is: " + itemID);
-        } else {
-            System.out.println("Product not found in makeOptions map.");
-            logger.debugLog("Product not found in makeOptions map.");
-        }
-
         logger.debugLog("Ending the initializeMakeOptions() method.");
         System.out.println("Ending the initializeMakeOptions() method.");
     }
@@ -150,8 +134,8 @@ public class Glassblower extends AbstractScript {
         System.out.println("Running the setupMakeOptions() method.");
         if (makeOption == 0) {
             String[] makeOptionData = makeOptions.get(product);
-            int optionInt = Integer.parseInt(makeOptionData[0]);
-            String optionItemID = makeOptionData[1];
+            optionInt = Integer.parseInt(makeOptionData[0]);
+            optionItemID = makeOptionData[1];
 
             logger.debugLog("\nMake option int number: " + optionInt + " \nitemID of final product: " + optionItemID);
         }
