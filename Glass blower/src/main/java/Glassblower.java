@@ -9,7 +9,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "Glass blower",
         description = "Blows molten glass into glass objects to train crafting. Supports all options and dynamic banking.",
-        version = "1.00",
+        version = "1.01",
         category = ScriptCategory.Crafting
 )
 @ScriptConfiguration.List(
@@ -224,8 +224,8 @@ public class Glassblower extends AbstractScript {
         // Check if we have the glassblowing pipe in the inventory, otherwise stop script.
         condition.wait(() -> inventory.contains(glassblowingpipe, 0.75), 250,10);
         if (!inventory.contains(glassblowingpipe, 0.75)) {
-            logger.log("No knife found in inventory, assuming we're out of items to process.");
-            System.out.println("No knife found in inventory, assuming we're out of items to process.");
+            logger.log("No glassblowing pipe found in inventory, assuming we're out of items to process.");
+            System.out.println("No glassblowinmg pipe found in inventory, assuming we're out of items to process.");
             bank.close();
             if (bank.isOpen()) {
                 bank.close();
@@ -299,7 +299,7 @@ public class Glassblower extends AbstractScript {
         logger.debugLog("Starting executeGlassblowingMethod() method.");
         System.out.println("Running the executeGlassblowingMethod() method.");
 
-        // Check if we have both a knife and the logs in the inventory.
+        // Check if we have both a glassblowing pipe and molten glass in the inventory.
         if (!inventory.contains(glassblowingpipe, 0.75) && !inventory.contains(moltenglass, 0.75)) {
             logger.log("We don't have a glassblowing pipe and molten glass in our inventory, going back to banking!");
             System.out.println("We don't have a glassblowing pipe and molten glass in our inventory, going back to banking!");
