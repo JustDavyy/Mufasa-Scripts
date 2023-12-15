@@ -9,7 +9,7 @@ import java.util.Random;
 
 @ScriptManifest(
         name = "Wine maker",
-        description = "Created well fermented wine for those juicy cooking gains. Supports dynamic banking.",
+        description = "Creates well fermented wine for those juicy cooking gains. Supports dynamic banking.",
         version = "1.00",
         category = ScriptCategory.Cooking
 )
