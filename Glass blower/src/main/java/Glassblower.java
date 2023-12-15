@@ -59,6 +59,8 @@ public class Glassblower extends AbstractScript {
     String itemID;
     int banktab;
     int makeOption;
+    int optionInt;
+    String optionItemID;
     boolean doneInitialSetup = false;
     String moltenglass = "1775";
     String glassblowingpipe = "1785";
@@ -95,10 +97,10 @@ public class Glassblower extends AbstractScript {
             }
 
             // Continue the rest of the setup
+            setupMakeOptions();
             setupBanking();
             initialSetup();
         }
-
 
         checkInventOpen();
         checkInventGlassblowing();
@@ -141,6 +143,21 @@ public class Glassblower extends AbstractScript {
 
         logger.debugLog("Ending the initializeMakeOptions() method.");
         System.out.println("Ending the initializeMakeOptions() method.");
+    }
+
+    private void setupMakeOptions() {
+        logger.debugLog("Running the setupMakeOptions() method.");
+        System.out.println("Running the setupMakeOptions() method.");
+        if (makeOption == 0) {
+            String[] makeOptionData = makeOptions.get(product);
+            int optionInt = Integer.parseInt(makeOptionData[0]);
+            String optionItemID = makeOptionData[1];
+
+            logger.debugLog("\nMake option int number: " + optionInt + " \nitemID of final product: " + optionItemID);
+        }
+
+        logger.debugLog("Ending the setupMakeOptions() method.");
+        System.out.println("Ending the setupMakeOptions() method.");
     }
 
     private void setupBanking() {
@@ -314,8 +331,8 @@ public class Glassblower extends AbstractScript {
         System.out.print("Waiting for the chatbox Make Menu to be visible...");
         logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
         condition.wait(() -> chatbox.isMakeMenuVisible(), 200, 12);
-        chatbox.makeOption(makeOption);
-        logger.debugLog("Selected option " + makeOption + " in chatbox.");
+        chatbox.makeOption(optionInt);
+        logger.debugLog("Selected option " + optionInt + " in chatbox.");
 
         // Wait for the inventory to finish (with a timeout)
         long startTime = System.currentTimeMillis();
@@ -356,7 +373,7 @@ public class Glassblower extends AbstractScript {
         // Depositing items based on your product chosen
         System.out.println("Depositing " + product + ".");
         logger.debugLog("Depositing " + product + ".");
-        inventory.tapItem(itemID, 0.75);
+        inventory.tapItem(optionItemID, 0.75);
         condition.sleep(randomDelay);
 
         bank.withdrawItem(moltenglass, 0.75);
