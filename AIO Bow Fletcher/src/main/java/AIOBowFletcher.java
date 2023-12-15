@@ -10,7 +10,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "AIO Bow Fletcher",
         description = "AIO Bow Fletcher, supports both cutting and stringing bows.",
-        version = "1.32",
+        version = "1.33",
         category = ScriptCategory.Fletching
 )
 @ScriptConfiguration.List(
@@ -211,12 +211,12 @@ public class AIOBowFletcher extends AbstractScript {
                 logger.debugLog("Bank pin entered.");
                 logger.debugLog("Depositing inventory.");
                 bank.tapDepositInventoryButton();
-                condition.sleep(1076);
+                condition.sleep(638);
             } else {
                 logger.debugLog("Bank pin is not needed, bank is open!");
                 logger.debugLog("Depositing inventory.");
                 bank.tapDepositInventoryButton();
-                condition.sleep(1076);
+                condition.sleep(629);
             }
         }
         logger.debugLog("Ending the setupBanking() method.");
@@ -386,10 +386,8 @@ public class AIOBowFletcher extends AbstractScript {
 
         // Starting to process items
         inventory.tapItem(knife, 0.75);
-        int randomDelay = new Random().nextInt(500) + 500;
-        int randomDelay2 = new Random().nextInt(300) + 200;
-        System.out.println("Sleeping for randomDelay: " + randomDelay);
-        logger.debugLog("Sleeping for randomDelay: " + randomDelay);
+        int randomDelay2 = new Random().nextInt(150) + 100;
+        int randomDelay3 = new Random().nextInt(1500) + 500;
         condition.sleep(randomDelay2);
         inventory.tapItem(logs, 0.75);
         System.out.print("Waiting for the chatbox Make Menu to be visible...");
@@ -410,9 +408,6 @@ public class AIOBowFletcher extends AbstractScript {
         // Wait for the inventory to finish
         while (inventory.contains(logs, 0.75)) {
             readXP();
-            int randomDelay3 = new Random().nextInt(2000) + 1000;
-            System.out.println("Sleeping for randomDelay2: " + randomDelay2);
-            logger.debugLog("Sleeping for randomDelay2: " + randomDelay2);
             condition.sleep(randomDelay3);
         }
         readXP();
@@ -447,11 +442,8 @@ public class AIOBowFletcher extends AbstractScript {
             inventory.tapItem(longbowU, 0.75);
         }
 
-        int randomDelay = new Random().nextInt(500) + 500;
-        int randomDelay2 = new Random().nextInt(300) + 200;
-        int randomDelay3 = new Random().nextInt(2000) + 2000;
-        System.out.println("Sleeping for randomDelay: " + randomDelay);
-        logger.debugLog("Sleeping for randomDelay: " + randomDelay);
+        int randomDelay2 = new Random().nextInt(150) + 100;
+        int randomDelay3 = new Random().nextInt(1500) + 500;
         condition.sleep(randomDelay2);
         inventory.tapItem(bowstring, 0.75);
         System.out.println("Waiting for the chatbox Make Menu to be visible...");
@@ -464,8 +456,6 @@ public class AIOBowFletcher extends AbstractScript {
         // Wait for the inventory to finish
         while (inventory.contains(bowstring, 0.75)) {
             readXP();
-            System.out.println("Sleeping for: " + randomDelay3);
-            logger.debugLog("Sleeping for: " + randomDelay3);
             condition.sleep(randomDelay3);
         }
         readXP();
@@ -477,8 +467,7 @@ public class AIOBowFletcher extends AbstractScript {
     private void bank() {
         logger.debugLog("Starting bank() method.");
         System.out.println("Running the bank() method.");
-        int randomDelay = new Random().nextInt(500) + 500;
-        int randomBiggerDelay = new Random().nextInt(500) + 1000;
+        int randomDelay = new Random().nextInt(250) + 250;
 
         // Opening the bank based on your location
         logger.debugLog("Attempting to open the bank.");
@@ -514,29 +503,14 @@ public class AIOBowFletcher extends AbstractScript {
                 inventory.tapItem(longbow, 0.75);
             }
         }
-        condition.sleep(randomBiggerDelay);
+        condition.sleep(randomDelay);
 
         // Withdrawing the items based on your tier/method
         if (Objects.equals(method, "Cut")) {
             bank.withdrawItem(logs, 0.75);
 
-            // Check if we have both a knife and the logs in the inventory, otherwise stop script.
-            String[] items = {knife, logs};
-            condition.wait(() -> inventory.contains(items, 0.75), 250,10);
-            if (!inventory.contains(items, 0.75)) {
-                logger.log("No knife and logs found in inventory, assuming we're out of items to process.");
-                System.out.println("No knife and log found in inventory, assuming we're out of items to process.");
-                bank.close();
-                if (bank.isOpen()) {
-                    bank.close();
-                }
-                logout.logout();
-                script.forceStop();
-            }
-
             System.out.println("Withdrew " + tier + " from the bank.");
             logger.debugLog("Withdrew " + tier + " from the bank.");
-            condition.sleep(randomDelay);
         }
         else if (Objects.equals(method, "String")) {
 
@@ -546,61 +520,20 @@ public class AIOBowFletcher extends AbstractScript {
                 logger.debugLog("Withdrawing unstrung shortbows.");
                 bank.withdrawItem(shortbowU, 0.75);
 
-                // Check if we have unstrung bows in the inventory, otherwise stop script.
-                condition.wait(() -> inventory.contains(shortbowU, 0.75), 250,10);
-                if (!inventory.contains(shortbowU, 0.75)) {
-                    logger.log("No unstrung shortbow found in inventory, assuming we're out of items to process.");
-                    System.out.println("No unstrung shortbow found in inventory, assuming we're out of items to process.");
-                    bank.close();
-                    if (bank.isOpen()) {
-                        bank.close();
-                    }
-                    logout.logout();
-                    script.forceStop();
-                }
-
             } else {
                 System.out.println("Withdrawing unstrung longbows");
                 logger.debugLog("Withdrawing unstrung longbows.");
                 bank.withdrawItem(longbowU, 0.75);
 
-                // Check if we have unstrung bows in the inventory, otherwise stop script.
-                condition.wait(() -> inventory.contains(longbowU, 0.75), 250,10);
-                if (!inventory.contains(longbowU, 0.75)) {
-                    logger.log("No unstrung longbow found in inventory, assuming we're out of items to process.");
-                    System.out.println("No unstrung longbow found in inventory, assuming we're out of items to process.");
-                    bank.close();
-                    if (bank.isOpen()) {
-                        bank.close();
-                    }
-                    logout.logout();
-                    script.forceStop();
-                }
-
             }
-            condition.sleep(randomDelay);
 
             // Withdraw bowstrings
             System.out.println("Withdrawing bowstrings.");
             logger.debugLog("Withdrawing bowstrings.");
             bank.withdrawItem(bowstring, 0.75);
 
-            // Check if we have bowstrings in the inventory, otherwise stop script.
-            condition.wait(() -> inventory.contains(bowstring, 0.75), 250,10);
-            if (!inventory.contains(bowstring, 0.75)) {
-                logger.log("No bowstring found in inventory, assuming we're out of items to process.");
-                System.out.println("No bowstring found in inventory, assuming we're out of items to process.");
-                bank.close();
-                if (bank.isOpen()) {
-                    bank.close();
-                }
-                logout.logout();
-                script.forceStop();
-            }
-
-            condition.sleep(randomDelay);
-            System.out.println("Withdrew items from the bank.");
-            logger.debugLog("Withdrew items from the bank.");
+            System.out.println("Withdrew all items from the bank.");
+            logger.debugLog("Withdrew all items from the bank.");
         }
 
         // Closing the bank, as banking should be done now
