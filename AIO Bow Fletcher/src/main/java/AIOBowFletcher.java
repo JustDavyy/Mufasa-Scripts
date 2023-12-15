@@ -10,7 +10,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "AIO Bow Fletcher",
         description = "AIO Bow Fletcher, supports both cutting and stringing bows.",
-        version = "1.33",
+        version = "1.34",
         category = ScriptCategory.Fletching
 )
 @ScriptConfiguration.List(
@@ -417,10 +417,19 @@ public class AIOBowFletcher extends AbstractScript {
             logger.debugLog("Selected option 3 in chatbox.");
         }
 
-        // Wait for the inventory to finish
+        // Wait for the inventory to finish (with a timeout)
+        long startTime = System.currentTimeMillis();
+        long timeout = 60 * 1000; // 60 seconds in milliseconds as a full invent is about 45-50 seconds.
         while (inventory.contains(logs, 0.75)) {
             readXP();
             condition.sleep(randomDelay3);
+
+            // Check if we have passed the timeout
+            if (System.currentTimeMillis() - startTime > timeout) {
+                System.out.println("Timeout reached for inventory.contains() method");
+                logger.debugLog("Timeout reached for inventory.contains() method");
+                break;
+            }
         }
         readXP();
 
@@ -465,10 +474,19 @@ public class AIOBowFletcher extends AbstractScript {
         System.out.println("Selected option 1 in chatbox.");
         logger.debugLog("Selected option 1 in chatbox.");
 
-        // Wait for the inventory to finish
+        // Wait for the inventory to finish (with a timeout)
+        long startTime = System.currentTimeMillis();
+        long timeout = 22 * 1000; // 22 seconds in milliseconds as a full invent is about 15-17 seconds.
         while (inventory.contains(bowstring, 0.75)) {
             readXP();
             condition.sleep(randomDelay3);
+
+            // Check if we have passed the timeout
+            if (System.currentTimeMillis() - startTime > timeout) {
+                System.out.println("Timeout reached for inventory.contains() method");
+                logger.debugLog("Timeout reached for inventory.contains() method");
+                break;
+            }
         }
         readXP();
 
