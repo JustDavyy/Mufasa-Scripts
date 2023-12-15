@@ -355,6 +355,12 @@ public class AIOBowFletcher extends AbstractScript {
                 bank.withdrawItem(bowstring, 0.75);
                 logger.debugLog("Withdrew 14 bowstrings and unstrung bows from the bank.");
             } else {
+                // Select the right bank tab if needed.
+                if (!bank.isSelectedBankTab(banktab)) {
+                    bank.openTab(banktab);
+                    logger.debugLog("Opened bank tab " + banktab);
+                }
+
                 // Withdraw first set of items
                 if (Objects.equals(product, "Shortbow")) {
                     bank.withdrawItem(shortbowU, 0.75);
