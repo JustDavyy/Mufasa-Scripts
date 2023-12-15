@@ -339,6 +339,12 @@ public class AIOBowFletcher extends AbstractScript {
                 logger.debugLog("Set custom quantity 14 for items in the bank.");
                 condition.wait(() -> bank.isSelectedQuantityCustomButton(), 200, 12);
 
+                // Select the right bank tab if needed.
+                if (!bank.isSelectedBankTab(banktab)) {
+                    bank.openTab(banktab);
+                    logger.debugLog("Opened bank tab " + banktab);
+                }
+
                 // Withdraw first set of items
                 if (Objects.equals(product, "Shortbow")) {
                     bank.withdrawItem(shortbowU, 0.75);
