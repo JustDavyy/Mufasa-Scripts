@@ -69,7 +69,7 @@ public class Winemaker extends AbstractScript {
             if (login.findPlayNowOption() != null) {
                 logger.debugLog("We are not logged in yet, logging in.");
                 System.out.println("We are not logged in yet, logging in.");
-                login.presetup();
+                login.preSetup();
             }
 
             // Continue the rest of the setup
