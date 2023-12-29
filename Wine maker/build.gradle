@@ -11,7 +11,7 @@ repositories {
     }
 
 dependencies {
-    implementation 'com.github.Mufasa-SDK:SDKRepo:main-SNAPSHOT'
+    implementation 'com.github.Mufasa-SDK:SDKRepo:latest.integration'
 }
 
 jar {
