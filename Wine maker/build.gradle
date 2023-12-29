@@ -6,11 +6,12 @@ repositories {
         mavenCentral()
         maven { url "https://repo1.maven.org/maven2" }
         maven { url "https://openpnp.github.io/maven" }
+        maven { url 'https://jitpack.io' }
         google()
     }
 
 dependencies {
-    implementation files('resources/scriptSDK.jar')
+    implementation 'com.github.Mufasa-SDK:SDKRepo:main-SNAPSHOT'
 }
 
 jar {
