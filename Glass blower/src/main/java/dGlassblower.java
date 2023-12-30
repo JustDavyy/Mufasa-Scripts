@@ -9,7 +9,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dGlass blower",
         description = "Blows molten glass into glass objects to train crafting. Supports all options and dynamic banking.",
-        version = "1.01",
+        version = "1.00",
         category = ScriptCategory.Crafting
 )
 @ScriptConfiguration.List(
