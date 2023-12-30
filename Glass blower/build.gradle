@@ -23,7 +23,7 @@ dependencies {
 }
 
 jar {
-    archiveFileName = 'Glassblower.jar'
+    archiveFileName = 'dGlassblower.jar'
     destinationDirectory = file('jar/')
 
     manifest {

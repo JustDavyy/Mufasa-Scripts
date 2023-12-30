@@ -23,7 +23,7 @@ dependencies {
 }
 
 jar {
-    archiveFileName = 'Winemaker.jar'
+    archiveFileName = 'dWinemaker.jar'
     destinationDirectory = file('jar/')
 
     manifest {

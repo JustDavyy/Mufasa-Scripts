@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Random;
 
 @ScriptManifest(
-        name = "Glass blower",
+        name = "dGlass blower",
         description = "Blows molten glass into glass objects to train crafting. Supports all options and dynamic banking.",
         version = "1.01",
         category = ScriptCategory.Crafting
@@ -52,7 +52,7 @@ import java.util.Random;
         }
 )
 
-public class Glassblower extends AbstractScript {
+public class dGlassblower extends AbstractScript {
     // Creating the strings for later use
     String product;
     String bankloc;
@@ -76,15 +76,13 @@ public class Glassblower extends AbstractScript {
         initializeMakeOptions();
 
         //Logs for debugging purposes
-        logger.log("Thank you for using the Glass blower script!");
-        System.out.println("Starting the Glass blower script!");
+        logger.log("Thank you for using the dGlass blower script!");
     }
 
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
         logger.debugLog("Running the poll() method.");
-        System.out.println("Running the poll() method.");
 
         if (!doneInitialSetup) {
             logger.debugLog("doneInitialSetup is false, running initial setups.");
@@ -92,7 +90,6 @@ public class Glassblower extends AbstractScript {
             // Check if we are logged in, if not, login.
             if (login.findPlayNowOption() != null) {
                 logger.debugLog("We are not logged in yet, logging in.");
-                System.out.println("We are not logged in yet, logging in.");
                 login.preSetup();
             }
 
@@ -111,7 +108,6 @@ public class Glassblower extends AbstractScript {
 
     private void initializeMakeOptions() {
         logger.debugLog("Running the initializeMakeOptions() method.");
-        System.out.println("Running the initializeMakeOptions() method.");
 
         makeOptions = new HashMap<>();
 
@@ -126,12 +122,10 @@ public class Glassblower extends AbstractScript {
         makeOptions.put("Empty light orb", new String[]{"8", "10980"});
 
         logger.debugLog("Ending the initializeMakeOptions() method.");
-        System.out.println("Ending the initializeMakeOptions() method.");
     }
 
     private void setupMakeOptions() {
         logger.debugLog("Running the setupMakeOptions() method.");
-        System.out.println("Running the setupMakeOptions() method.");
         if (makeOption == 0) {
             String[] makeOptionData = makeOptions.get(product);
             optionInt = Integer.parseInt(makeOptionData[0]);
@@ -141,12 +135,10 @@ public class Glassblower extends AbstractScript {
         }
 
         logger.debugLog("Ending the setupMakeOptions() method.");
-        System.out.println("Ending the setupMakeOptions() method.");
     }
 
     private void setupBanking() {
         logger.debugLog("Starting setupBanking() method.");
-        System.out.println("Running the setupBanking() method.");
         if (bankloc == null) {
             logger.debugLog("Starting dynamic banking setup...");
 
@@ -158,10 +150,10 @@ public class Glassblower extends AbstractScript {
 
             logger.debugLog("Starting setup for Dynamic Banking.");
             bankloc = bank.setupDynamicBank();
+            logger.log("We're located at: " + bankloc + ".");
             logger.debugLog("We're located at: " + bankloc + ".");
             if (bankloc == null) {
                 logger.debugLog("Could not find a dynamic bank location we are in, logging out and aborting script.");
-                System.out.println("Could not find a dynamic bank location we are in, logging out and aborting script.");
                 logout.logout();
                 script.forceStop();
             }
@@ -186,12 +178,10 @@ public class Glassblower extends AbstractScript {
             }
         }
         logger.debugLog("Ending the setupBanking() method.");
-        System.out.println("Ending the setupBanking() method.");
     }
 
     private void initialSetup() {
         logger.debugLog("Starting initialSetup() method.");
-        System.out.println("Running the initialSetup() method.");
 
         int randomDelay = new Random().nextInt(600) + 600;
         int randomBiggerDelay = new Random().nextInt(1500) + 1500;
@@ -225,7 +215,6 @@ public class Glassblower extends AbstractScript {
         condition.wait(() -> inventory.contains(glassblowingpipe, 0.75), 250,10);
         if (!inventory.contains(glassblowingpipe, 0.75)) {
             logger.log("No glassblowing pipe found in inventory, assuming we're out of items to process.");
-            System.out.println("No glassblowinmg pipe found in inventory, assuming we're out of items to process.");
             bank.close();
             if (bank.isOpen()) {
                 bank.close();
@@ -254,7 +243,6 @@ public class Glassblower extends AbstractScript {
             condition.wait(() -> inventory.contains(moltenglass, 0.75), 250,10);
             if (!inventory.contains(moltenglass, 0.75)) {
                 logger.log("No molten glass found in inventory, assuming we're out of items to process.");
-                System.out.println("No molten glass found in inventory, assuming we're out of items to process.");
                 bank.close();
                 if (bank.isOpen()) {
                     bank.close();
@@ -271,7 +259,6 @@ public class Glassblower extends AbstractScript {
             condition.wait(() -> inventory.contains(items3, 0.75), 250,10);
             if (!inventory.contains(items3, 0.75)) {
                 logger.log("No items found in inventory, assuming we're out of items to process.");
-                System.out.println("No items found in inventory, assuming we're out of items to process.");
                 bank.close();
                 if (bank.isOpen()) {
                     bank.close();
@@ -292,17 +279,14 @@ public class Glassblower extends AbstractScript {
         logger.debugLog("Set the doneInitialSetup value to true.");
 
         logger.debugLog("Ending the initialSetup() method.");
-        System.out.println("Ending the initialSetup() method.");
     }
 
     private void executeGlassblowingMethod() {
         logger.debugLog("Starting executeGlassblowingMethod() method.");
-        System.out.println("Running the executeGlassblowingMethod() method.");
 
         // Check if we have both a glassblowing pipe and molten glass in the inventory.
         if (!inventory.contains(glassblowingpipe, 0.75) && !inventory.contains(moltenglass, 0.75)) {
             logger.log("We don't have a glassblowing pipe and molten glass in our inventory, going back to banking!");
-            System.out.println("We don't have a glassblowing pipe and molten glass in our inventory, going back to banking!");
             return;
         }
 
@@ -312,7 +296,6 @@ public class Glassblower extends AbstractScript {
         int randomDelay3 = new Random().nextInt(1500) + 500;
         condition.sleep(randomDelay2);
         inventory.tapItem(moltenglass, 0.75);
-        System.out.print("Waiting for the chatbox Make Menu to be visible...");
         logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
         condition.wait(() -> chatbox.isMakeMenuVisible(), 200, 12);
         chatbox.makeOption(optionInt);
@@ -327,7 +310,6 @@ public class Glassblower extends AbstractScript {
 
             // Check if we have passed the timeout
             if (System.currentTimeMillis() - startTime > timeout) {
-                System.out.println("Timeout reached for inventory.contains() method");
                 logger.debugLog("Timeout reached for inventory.contains() method");
                 break;
             }
@@ -335,12 +317,10 @@ public class Glassblower extends AbstractScript {
         readXP();
 
         logger.debugLog("Ending the executeGlassblowingMethod() method.");
-        System.out.println("Ending the executeGlassblowingMethod() method.");
     }
 
     private void bank() {
         logger.debugLog("Starting bank() method.");
-        System.out.println("Running the bank() method.");
         int randomDelay = new Random().nextInt(250) + 250;
 
         // Opening the bank based on your location
@@ -355,22 +335,18 @@ public class Glassblower extends AbstractScript {
         }
 
         // Depositing items based on your product chosen
-        System.out.println("Depositing " + product + ".");
         logger.debugLog("Depositing " + product + ".");
         inventory.tapItem(optionItemID, 0.75);
         condition.sleep(randomDelay);
 
         bank.withdrawItem(moltenglass, 0.75);
-        System.out.println("Withdrew molten glass from the bank.");
         logger.debugLog("Withdrew molten glass from the bank.");
 
         // Closing the bank, as banking should be done now
         bank.close();
-        System.out.println("Closed the bank.");
         logger.debugLog("Closed the bank.");
 
         logger.debugLog("Ending the bank() method.");
-        System.out.println("Ending the bank() method.");
     }
 
     private void checkInventOpen() {
@@ -385,14 +361,12 @@ public class Glassblower extends AbstractScript {
         // Check if we have both a glassblowing pipe and molten glass in the inventory.
         if (!inventory.contains(items, 0.75)) {
             logger.log("1st check failed for a glassblowing pipe and molten glass in our inventory, going back to banking!");
-            System.out.println("1st check failed for a glassblowing pipe and molten glass in our inventory, going back to banking!");
             bank();
         }
 
         // Check if we have both a glassblowing pipe and molten glass in the inventory.
         if (!inventory.contains(items, 0.75)) {
             logger.log("2nd check failed for a glassblowing pipe and molten glass in our inventory, logging out and aborting script!");
-            System.out.println("2nd check failed for a a glassblowing pipe and molten glass in our inventory, logging out and aborting script!");
             logout.logout();
             script.forceStop();
         }

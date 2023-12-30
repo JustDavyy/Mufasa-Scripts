@@ -8,8 +8,8 @@ import java.util.Objects;
 import java.util.Random;
 
 @ScriptManifest(
-        name = "AIO Bow Fletcher",
-        description = "AIO Bow Fletcher, supports both cutting and stringing bows.",
+        name = "dAIO Bow Fletcher",
+        description = "dAIO Bow Fletcher, supports both cutting and stringing bows.",
         version = "1.34",
         category = ScriptCategory.Fletching
 )
@@ -71,7 +71,7 @@ import java.util.Random;
         }
 )
 
-public class AIOBowFletcher extends AbstractScript {
+public class dAIOBowFletcher extends AbstractScript {
     // Creating the strings for later use
     String method;
     String tier;
@@ -101,22 +101,20 @@ public class AIOBowFletcher extends AbstractScript {
 
         //Logs for debugging purposes
         logger.log("Thank you for using the AIO Bow Fletcher script!");
-        System.out.println("Starting the AIO Bow Fletcher script!");
     }
 
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
         logger.debugLog("Running the poll() method.");
-        System.out.println("Running the poll() method.");
 
         if (!doneInitialSetup) {
             logger.debugLog("doneInitialSetup is false, running initial setups.");
 
             // Check if we are logged in, if not, login.
             if (login.findPlayNowOption() != null) {
+                logger.log("Logging in...");
                 logger.debugLog("We are not logged in yet, logging in.");
-                System.out.println("We are not logged in yet, logging in.");
                 login.preSetup();
             }
 
@@ -144,7 +142,6 @@ public class AIOBowFletcher extends AbstractScript {
 
     private void initializeItemIDs() {
         logger.debugLog("Running the initializeItemIDs() method.");
-        System.out.println("Running the initializeItemIDs() method.");
 
         itemIDs = new HashMap<>();
 
@@ -157,12 +154,10 @@ public class AIOBowFletcher extends AbstractScript {
         itemIDs.put("Magic logs", new String[] {"1513", "72", "70", "861", "859"});
 
         logger.debugLog("Ending the initializeItemIDs() method.");
-        System.out.println("Ending the initializeItemIDs() method.");
     }
 
     private void setupItemIds() {
         logger.debugLog("Running the setupItemIds() method.");
-        System.out.println("Running the setupItemIds() method.");
         if (longbow == null) {
             String[] itemIds = itemIDs.get(tier);
             logs = itemIds[0];
@@ -175,32 +170,30 @@ public class AIOBowFletcher extends AbstractScript {
         }
 
         logger.debugLog("Ending the setupItemIds() method.");
-        System.out.println("Ending the setupItemIds() method.");
     }
 
     private void setupBanking() {
         logger.debugLog("Starting setupBanking() method.");
-        System.out.println("Running the setupBanking() method.");
         if (bankloc == null) {
             logger.debugLog("Starting dynamic banking setup...");
 
             // Opening the inventory if not yet opened.
-            logger.debugLog("Opening up the inventory.");
+            logger.log("Opening up the inventory.");
             if (!gameTabs.isInventoryTabOpen()) {
                 gameTabs.openInventoryTab();
             }
 
             logger.debugLog("Starting setup for Dynamic Banking.");
             bankloc = bank.setupDynamicBank();
+            logger.log("We're located at: " + bankloc + ".");
             logger.debugLog("We're located at: " + bankloc + ".");
             if (bankloc == null) {
                 logger.debugLog("Could not find a dynamic bank location we are in, logging out and aborting script.");
-                System.out.println("Could not find a dynamic bank location we are in, logging out and aborting script.");
                 logout.logout();
                 script.forceStop();
             }
             condition.sleep(5000);
-            logger.debugLog("Attempting to open the Bank of Gielinor.");
+            logger.log("Opening the Bank of Gielinor.");
             bank.open(bankloc);
             logger.debugLog("Bank interface detected!");
             if (bank.isBankPinNeeded()) {
@@ -209,23 +202,21 @@ public class AIOBowFletcher extends AbstractScript {
                 condition.sleep(500);
                 condition.wait(() -> bank.isOpen(), 200, 12);
                 logger.debugLog("Bank pin entered.");
-                logger.debugLog("Depositing inventory.");
+                logger.log("Depositing inventory.");
                 bank.tapDepositInventoryButton();
                 condition.sleep(638);
             } else {
                 logger.debugLog("Bank pin is not needed, bank is open!");
-                logger.debugLog("Depositing inventory.");
+                logger.log("Depositing inventory.");
                 bank.tapDepositInventoryButton();
                 condition.sleep(629);
             }
         }
         logger.debugLog("Ending the setupBanking() method.");
-        System.out.println("Ending the setupBanking() method.");
     }
 
     private void initialSetup() {
         logger.debugLog("Starting initialSetup() method.");
-        System.out.println("Running the initialSetup() method.");
 
         int randomDelay = new Random().nextInt(600) + 600;
         int randomBiggerDelay = new Random().nextInt(1500) + 1500;
@@ -263,7 +254,6 @@ public class AIOBowFletcher extends AbstractScript {
             condition.wait(() -> inventory.contains(knife, 0.75), 250,10);
             if (!inventory.contains(knife, 0.75)) {
                 logger.log("No knife found in inventory, assuming we're out of items to process.");
-                System.out.println("No knife found in inventory, assuming we're out of items to process.");
                 bank.close();
                 if (bank.isOpen()) {
                     bank.close();
@@ -281,7 +271,7 @@ public class AIOBowFletcher extends AbstractScript {
                 // Selecting the right bank tab again if needed
                 if (!bank.isSelectedBankTab(banktab)) {
                     bank.openTab(banktab);
-                    logger.debugLog("Opened bank tab " + banktab);
+                    logger.log("Selecting bank tab " + banktab);
                 }
 
                 // Withdraw first set of items
@@ -292,7 +282,6 @@ public class AIOBowFletcher extends AbstractScript {
                 condition.wait(() -> inventory.contains(logs, 0.75), 250,10);
                 if (!inventory.contains(logs, 0.75)) {
                     logger.log("No logs found in inventory, assuming we're out of items to process.");
-                    System.out.println("No logs found in inventory, assuming we're out of items to process.");
                     bank.close();
                     if (bank.isOpen()) {
                         bank.close();
@@ -308,8 +297,7 @@ public class AIOBowFletcher extends AbstractScript {
                 String[] items3 = {knife, logs};
                 condition.wait(() -> inventory.contains(items3, 0.75), 250,10);
                 if (!inventory.contains(items3, 0.75)) {
-                    logger.log("No items found in inventory, assuming we're out of items to process.");
-                    System.out.println("No items found in inventory, assuming we're out of items to process.");
+                    logger.log("Not all items found in inventory, assuming we're out of items to process.");
                     bank.close();
                     if (bank.isOpen()) {
                         bank.close();
@@ -342,7 +330,7 @@ public class AIOBowFletcher extends AbstractScript {
                 // Select the right bank tab if needed.
                 if (!bank.isSelectedBankTab(banktab)) {
                     bank.openTab(banktab);
-                    logger.debugLog("Opened bank tab " + banktab);
+                    logger.log("Selecting bank tab " + banktab);
                 }
 
                 // Withdraw first set of items
@@ -358,7 +346,7 @@ public class AIOBowFletcher extends AbstractScript {
                 // Select the right bank tab if needed.
                 if (!bank.isSelectedBankTab(banktab)) {
                     bank.openTab(banktab);
-                    logger.debugLog("Opened bank tab " + banktab);
+                    logger.log("Selecting bank tab " + banktab);
                 }
 
                 // Withdraw first set of items
@@ -382,17 +370,14 @@ public class AIOBowFletcher extends AbstractScript {
         logger.debugLog("Set the doneInitialSetup value to true.");
 
         logger.debugLog("Ending the initialSetup() method.");
-        System.out.println("Ending the initialSetup() method.");
     }
 
     private void executeCutMethod() {
         logger.debugLog("Starting executeCutMethod() method.");
-        System.out.println("Running the executeCutMethod() method.");
 
         // Check if we have both a knife and the logs in the inventory.
         if (!inventory.contains(logs, 0.75) && !inventory.contains(knife, 0.75)) {
             logger.log("We don't have a knife and logs in our inventory, going back to banking!");
-            System.out.println("We don't have a knife and logs in our inventory, going back to banking!");
             return;
         }
 
@@ -402,18 +387,15 @@ public class AIOBowFletcher extends AbstractScript {
         int randomDelay3 = new Random().nextInt(1500) + 500;
         condition.sleep(randomDelay2);
         inventory.tapItem(logs, 0.75);
-        System.out.print("Waiting for the chatbox Make Menu to be visible...");
         logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
         condition.wait(() -> chatbox.isMakeMenuVisible(), 200, 12);
 
         // tap option needed based on choice in config
         if (Objects.equals(product, "Shortbow")) {
             chatbox.makeOption(2);
-            System.out.println("Selected option 2 in chatbox.");
             logger.debugLog("Selected option 2 in chatbox.");
         } else {
             chatbox.makeOption(3);
-            System.out.println("Selected option 3 in chatbox.");
             logger.debugLog("Selected option 3 in chatbox.");
         }
 
@@ -426,7 +408,6 @@ public class AIOBowFletcher extends AbstractScript {
 
             // Check if we have passed the timeout
             if (System.currentTimeMillis() - startTime > timeout) {
-                System.out.println("Timeout reached for inventory.contains() method");
                 logger.debugLog("Timeout reached for inventory.contains() method");
                 break;
             }
@@ -434,24 +415,20 @@ public class AIOBowFletcher extends AbstractScript {
         readXP();
 
         logger.debugLog("Ending the executeCutMethod() method.");
-        System.out.println("Ending the executeCutMethod() method.");
     }
 
     private void executeStringMethod() {
         logger.debugLog("Starting executeStringMethod() method.");
-        System.out.println("Running the executeStringMethod() method.");
 
         // Check if we have both unstrung bows and bowstrings in the inventory.
         if (Objects.equals(product, "Shortbow")) {
             if (!inventory.contains(shortbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
                 logger.log("We don't have unstrung bows and bowstring in our inventory, going back to banking!");
-                System.out.println("We don't have unstrung bows and bowstring in our inventory, going back to banking!");
                 return;
             }
         } else {
             if (!inventory.contains(longbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
                 logger.log("We don't have unstrung bows and bowstring in our inventory, going back to banking!");
-                System.out.println("We don't have unstrung bows and bowstring in our inventory, going back to banking!");
                 return;
             }
         }
@@ -467,11 +444,9 @@ public class AIOBowFletcher extends AbstractScript {
         int randomDelay3 = new Random().nextInt(1500) + 500;
         condition.sleep(randomDelay2);
         inventory.tapItem(bowstring, 0.75);
-        System.out.println("Waiting for the chatbox Make Menu to be visible...");
         logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
         condition.wait(() -> chatbox.isMakeMenuVisible(), 200, 12);
         chatbox.makeOption(1);
-        System.out.println("Selected option 1 in chatbox.");
         logger.debugLog("Selected option 1 in chatbox.");
 
         // Wait for the inventory to finish (with a timeout)
@@ -483,7 +458,6 @@ public class AIOBowFletcher extends AbstractScript {
 
             // Check if we have passed the timeout
             if (System.currentTimeMillis() - startTime > timeout) {
-                System.out.println("Timeout reached for inventory.contains() method");
                 logger.debugLog("Timeout reached for inventory.contains() method");
                 break;
             }
@@ -491,12 +465,11 @@ public class AIOBowFletcher extends AbstractScript {
         readXP();
 
         logger.debugLog("Ending the executeStringMethod() method.");
-        System.out.println("Ending the executeStringMethod() method.");
     }
 
     private void bank() {
         logger.debugLog("Starting bank() method.");
-        System.out.println("Running the bank() method.");
+        logger.log("Banking.");
         int randomDelay = new Random().nextInt(250) + 250;
 
         // Opening the bank based on your location
@@ -507,28 +480,24 @@ public class AIOBowFletcher extends AbstractScript {
         // Select the right bank tab if needed.
         if (!bank.isSelectedBankTab(banktab)) {
             bank.openTab(banktab);
-            logger.debugLog("Opened bank tab " + banktab);
+            logger.log("Opened bank tab " + banktab);
         }
 
         // Depositing items based on your tier/method
         if (Objects.equals(method, "Cut")){
             if (Objects.equals(product, "Shortbow")) {
-                System.out.println("Depositing unstrung shortbows.");
                 logger.debugLog("Depositing unstrung shortbows.");
                 inventory.tapItem(shortbowU, 0.75);
             } else {
-                System.out.println("Depositing unstrung longbows.");
                 logger.debugLog("Depositing unstrung longbows.");
                 inventory.tapItem(longbowU, 0.75);
             }
         }
         else if (Objects.equals(method, "String")) {
             if (Objects.equals(product, "Shortbow")) {
-                System.out.println("Depositing strung shortbows.");
                 logger.debugLog("Depositing strung shortbows.");
                 inventory.tapItem(shortbow, 0.75);
             } else {
-                System.out.println("Depositing strung longbows.");
                 logger.debugLog("Depositing strung longbows.");
                 inventory.tapItem(longbow, 0.75);
             }
@@ -539,40 +508,33 @@ public class AIOBowFletcher extends AbstractScript {
         if (Objects.equals(method, "Cut")) {
             bank.withdrawItem(logs, 0.75);
 
-            System.out.println("Withdrew " + tier + " from the bank.");
             logger.debugLog("Withdrew " + tier + " from the bank.");
         }
         else if (Objects.equals(method, "String")) {
 
             // Withdraw unstrung bow that was picked in the config
             if (Objects.equals(product, "Shortbow")) {
-                System.out.println("Withdrawing unstrung shortbows");
-                logger.debugLog("Withdrawing unstrung shortbows.");
+                logger.debugLog("Withdrawing unstrung shortbows");
                 bank.withdrawItem(shortbowU, 0.75);
 
             } else {
-                System.out.println("Withdrawing unstrung longbows");
-                logger.debugLog("Withdrawing unstrung longbows.");
+                logger.debugLog("Withdrawing unstrung longbows");
                 bank.withdrawItem(longbowU, 0.75);
 
             }
 
             // Withdraw bowstrings
-            System.out.println("Withdrawing bowstrings.");
             logger.debugLog("Withdrawing bowstrings.");
             bank.withdrawItem(bowstring, 0.75);
 
-            System.out.println("Withdrew all items from the bank.");
-            logger.debugLog("Withdrew all items from the bank.");
+            logger.log("Withdrew all items from the bank.");
         }
 
         // Closing the bank, as banking should be done now
         bank.close();
-        System.out.println("Closed the bank.");
         logger.debugLog("Closed the bank.");
 
         logger.debugLog("Ending the bank() method.");
-        System.out.println("Ending the bank() method.");
     }
 
     private void checkInventOpen() {
@@ -586,15 +548,13 @@ public class AIOBowFletcher extends AbstractScript {
         String[] items = {knife, logs};
         // Check if we have both a knife and the logs in the inventory.
         if (!inventory.contains(items, 0.75)) {
-            logger.log("1st check failed for knife and logs in our inventory, going back to banking!");
-            System.out.println("1st check failed for a knife and logs in our inventory, going back to banking!");
+            logger.debugLog("1st check failed for knife and logs in our inventory, going back to banking!");
             bank();
         }
 
         // Check if we have both a knife and the logs in the inventory.
         if (!inventory.contains(items, 0.75)) {
             logger.log("2nd check failed for knife and logs in our inventory, logging out and aborting script!");
-            System.out.println("2nd check failed for a knife and logs in our inventory, logging out and aborting script!");
             logout.logout();
             script.forceStop();
         }
@@ -605,15 +565,13 @@ public class AIOBowFletcher extends AbstractScript {
         if (Objects.equals(product, "Shortbow")) {
             String[] items = {shortbowU, bowstring};
             if (!inventory.contains(items, 0.75)) {
-                logger.log("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
-                System.out.println("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
+                logger.debugLog("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
                 bank();
             }
         } else {
             String[] items = {longbowU, bowstring};
             if (!inventory.contains(items, 0.75)) {
-                logger.log("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
-                System.out.println("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
+                logger.debugLog("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
                 bank();
             }
         }
@@ -622,14 +580,12 @@ public class AIOBowFletcher extends AbstractScript {
         if (Objects.equals(product, "Shortbow")) {
             if (!inventory.contains(shortbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
                 logger.log("2nd check failed for unstrung bows and bowstring in our inventory, logging out and aborting script!");
-                System.out.println("2nd check failed for unstrung bows and bowstring in our inventory, logging out and aborting script!");
                 logout.logout();
                 script.forceStop();
             }
         } else {
             if (!inventory.contains(longbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
                 logger.log("2nd check failed for unstrung bows and bowstring in our inventory, logging out and aborting script!");
-                System.out.println("2nd check failed for unstrung bows and bowstring in our inventory, logging out and aborting script!");
                 logout.logout();
                 script.forceStop();
             }

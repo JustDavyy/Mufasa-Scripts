@@ -23,7 +23,7 @@ dependencies {
 }
 
 jar {
-    archiveFileName = 'AIOBowFletcher.jar'
+    archiveFileName = 'dAIOBowFletcher.jar'
     destinationDirectory = file('jar/')
 
     manifest {
