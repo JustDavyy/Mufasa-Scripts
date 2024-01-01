@@ -3,7 +3,7 @@ import helpers.utils.OptionType;
 
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Objects;
+import static helpers.Interfaces.*;
 import java.util.Random;
 
 @ScriptManifest(

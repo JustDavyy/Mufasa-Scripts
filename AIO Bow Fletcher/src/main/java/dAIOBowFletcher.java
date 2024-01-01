@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
+import static helpers.Interfaces.*;
 
 @ScriptManifest(
         name = "dAIO Bow Fletcher",
