@@ -133,7 +133,7 @@ public class dWinemaker extends AbstractScript {
         // Set custom quantity to 14 if needed
         if (!bank.isSelectedQuantityCustomButton()) {
             Rectangle customQty = bank.findQuantityCustomButton();
-            client.longPressWithinRectangle(customQty);
+            client.longPress(customQty);
             condition.sleep(randomDelay2);
             client.tap(392, 498);
             condition.sleep(randomBiggerDelay);

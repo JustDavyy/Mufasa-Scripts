@@ -318,7 +318,7 @@ public class dAIOBowFletcher extends AbstractScript {
             logger.debugLog("String method was selected.");
             if (!bank.isSelectedQuantityCustomButton()) {
                 Rectangle customQty = bank.findQuantityCustomButton();
-                client.longPressWithinRectangle(customQty);
+                client.longPress(customQty);
                 condition.sleep(randomDelay2);
                 client.tap(393, 499);
                 condition.sleep(randomBiggerDelay2);
