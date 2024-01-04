@@ -204,6 +204,7 @@ public class dAIOBowFletcher extends AbstractScript {
         Logger.debugLog("Ending the setupBanking() method.");
     }
 
+    @SuppressWarnings("IfStatementWithIdenticalBranches")
     private void initialSetup() {
         Logger.debugLog("Starting initialSetup() method.");
 
@@ -551,6 +552,7 @@ public class dAIOBowFletcher extends AbstractScript {
 
     private void checkInventStringMethod() {
         // Check if we have both unstrung bows and bowstrings in the inventory.
+        //noinspection IfStatementWithIdenticalBranches
         if (Objects.equals(product, "Shortbow")) {
             String[] items = {shortbowU, bowstring};
             if (!Inventory.contains(items, 0.75)) {
