@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
 import static helpers.Interfaces.*;
+import static helpers.Interfaces.Logout;
 
 @ScriptManifest(
         name = "dAIO Bow Fletcher",
@@ -51,23 +52,10 @@ import static helpers.Interfaces.*;
                         optionType = OptionType.STRING
                 ),
                 @ScriptConfiguration(
-                        name =  "BankTab",
+                        name =  "Bank Tab",
                         description = "What bank tab are your resources located in?",
                         defaultValue = "0",
-                        minMaxIntValues = {0, 9},
-                        allowedValues = {
-                                @AllowedValue(optionName = "0"),
-                                @AllowedValue(optionName = "1"),
-                                @AllowedValue(optionName = "2"),
-                                @AllowedValue(optionName = "3"),
-                                @AllowedValue(optionName = "4"),
-                                @AllowedValue(optionName = "5"),
-                                @AllowedValue(optionName = "6"),
-                                @AllowedValue(optionName = "7"),
-                                @AllowedValue(optionName = "8"),
-                                @AllowedValue(optionName = "9"),
-                        },
-                        optionType = OptionType.INTEGER
+                        optionType = OptionType.BANKTABS
                 )
         }
 )
@@ -96,27 +84,27 @@ public class dAIOBowFletcher extends AbstractScript {
         method = configs.get("Method");
         tier = configs.get("Tier");
         product = configs.get("Product");
-        banktab = Integer.parseInt(configs.get("BankTab"));
+        banktab = Integer.parseInt(configs.get("Bank Tab"));
 
         initializeItemIDs();
 
         //Logs for debugging purposes
-        logger.log("Thank you for using the AIO Bow Fletcher script!");
+        Logger.log("Thank you for using the AIO Bow Fletcher script!");
     }
 
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
-        logger.debugLog("Running the poll() method.");
+        Logger.debugLog("Running the poll() method.");
 
         if (!doneInitialSetup) {
-            logger.debugLog("doneInitialSetup is false, running initial setups.");
+            Logger.debugLog("doneInitialSetup is false, running initial setups.");
 
             // Check if we are logged in, if not, login.
-            if (login.findPlayNowOption() != null) {
-                logger.log("Logging in...");
-                logger.debugLog("We are not logged in yet, logging in.");
-                login.preSetup();
+            if (Login.findPlayNowOption() != null) {
+                Logger.log("Logging in...");
+                Logger.debugLog("We are not logged in yet, logging in.");
+                Login.preSetup();
             }
 
             // Continue the rest of the setup
@@ -142,7 +130,7 @@ public class dAIOBowFletcher extends AbstractScript {
     }
 
     private void initializeItemIDs() {
-        logger.debugLog("Running the initializeItemIDs() method.");
+        Logger.debugLog("Running the initializeItemIDs() method.");
 
         itemIDs = new HashMap<>();
 
@@ -154,11 +142,11 @@ public class dAIOBowFletcher extends AbstractScript {
         itemIDs.put("Yew logs", new String[] {"1515", "68", "66", "857", "855"});
         itemIDs.put("Magic logs", new String[] {"1513", "72", "70", "861", "859"});
 
-        logger.debugLog("Ending the initializeItemIDs() method.");
+        Logger.debugLog("Ending the initializeItemIDs() method.");
     }
 
     private void setupItemIds() {
-        logger.debugLog("Running the setupItemIds() method.");
+        Logger.debugLog("Running the setupItemIds() method.");
         if (longbow == null) {
             String[] itemIds = itemIDs.get(tier);
             logs = itemIds[0];
@@ -167,147 +155,147 @@ public class dAIOBowFletcher extends AbstractScript {
             shortbow = itemIds[3];
             longbow = itemIds[4];
 
-            logger.debugLog("Stored IDs for " + tier + ":\nLogs: " + logs + "\nUnstrung Shortbow: " + shortbowU + "\nUnstrung Longbow: " + longbowU + "\nShortbow: " + shortbow + "\nLongbow: " + longbow);
+            Logger.debugLog("Stored IDs for " + tier + ":\nLogs: " + logs + "\nUnstrung Shortbow: " + shortbowU + "\nUnstrung Longbow: " + longbowU + "\nShortbow: " + shortbow + "\nLongbow: " + longbow);
         }
 
-        logger.debugLog("Ending the setupItemIds() method.");
+        Logger.debugLog("Ending the setupItemIds() method.");
     }
 
     private void setupBanking() {
-        logger.debugLog("Starting setupBanking() method.");
+        Logger.debugLog("Starting setupBanking() method.");
         if (bankloc == null) {
-            logger.debugLog("Starting dynamic banking setup...");
+            Logger.debugLog("Starting dynamic banking setup...");
 
             // Opening the inventory if not yet opened.
-            logger.log("Opening up the inventory.");
-            if (!gameTabs.isInventoryTabOpen()) {
-                gameTabs.openInventoryTab();
+            Logger.log("Opening up the inventory.");
+            if (!GameTabs.isInventoryTabOpen()) {
+                GameTabs.openInventoryTab();
             }
 
-            logger.debugLog("Starting setup for Dynamic Banking.");
-            bankloc = bank.setupDynamicBank();
-            logger.log("We're located at: " + bankloc + ".");
-            logger.debugLog("We're located at: " + bankloc + ".");
+            Logger.debugLog("Starting setup for Dynamic Banking.");
+            bankloc = Bank.setupDynamicBank();
+            Logger.log("We're located at: " + bankloc + ".");
+            Logger.debugLog("We're located at: " + bankloc + ".");
             if (bankloc == null) {
-                logger.debugLog("Could not find a dynamic bank location we are in, logging out and aborting script.");
-                logout.logout();
-                script.forceStop();
+                Logger.debugLog("Could not find a dynamic bank location we are in, logging out and aborting script.");
+                Logout.logout();
+                Script.forceStop();
             }
-            condition.sleep(5000);
-            logger.log("Opening the Bank of Gielinor.");
-            bank.open(bankloc);
-            logger.debugLog("Bank interface detected!");
-            if (bank.isBankPinNeeded()) {
-                logger.debugLog("Bank pin is needed!");
-                bank.enterBankPin();
-                condition.sleep(500);
-                condition.wait(() -> bank.isOpen(), 200, 12);
-                logger.debugLog("Bank pin entered.");
-                logger.log("Depositing inventory.");
-                bank.tapDepositInventoryButton();
-                condition.sleep(638);
+            Condition.sleep(5000);
+            Logger.log("Opening the Bank of Gielinor.");
+            Bank.open(bankloc);
+            Logger.debugLog("Bank interface detected!");
+            if (Bank.isBankPinNeeded()) {
+                Logger.debugLog("Bank pin is needed!");
+                Bank.enterBankPin();
+                Condition.sleep(500);
+                Condition.wait(() -> Bank.isOpen(), 200, 12);
+                Logger.debugLog("Bank pin entered.");
+                Logger.log("Depositing inventory.");
+                Bank.tapDepositInventoryButton();
+                Condition.sleep(638);
             } else {
-                logger.debugLog("Bank pin is not needed, bank is open!");
-                logger.log("Depositing inventory.");
-                bank.tapDepositInventoryButton();
-                condition.sleep(629);
+                Logger.debugLog("Bank pin is not needed, bank is open!");
+                Logger.log("Depositing inventory.");
+                Bank.tapDepositInventoryButton();
+                Condition.sleep(629);
             }
         }
-        logger.debugLog("Ending the setupBanking() method.");
+        Logger.debugLog("Ending the setupBanking() method.");
     }
 
     private void initialSetup() {
-        logger.debugLog("Starting initialSetup() method.");
+        Logger.debugLog("Starting initialSetup() method.");
 
         int randomDelay = new Random().nextInt(600) + 600;
         int randomBiggerDelay = new Random().nextInt(1500) + 1500;
 
         // Part if the Cut method was chosen
         if (Objects.equals(method, "Cut")) {
-            logger.debugLog("Cut method was selected.");
+            Logger.debugLog("Cut method was selected.");
 
             // Withdrawing a knife from the bank
-            logger.debugLog("Withdrawing a knife from the bank.");
-            if (!bank.isSelectedQuantity1Button()) {
-                bank.tapQuantity1Button();
-                condition.wait(() -> bank.isSelectedQuantity1Button(), 200, 12);
+            Logger.debugLog("Withdrawing a knife from the bank.");
+            if (!Bank.isSelectedQuantity1Button()) {
+                Bank.tapQuantity1Button();
+                Condition.wait(() -> Bank.isSelectedQuantity1Button(), 200, 12);
             }
-            bank.tapSearchButton();
-            condition.sleep(randomDelay);
+            Bank.tapSearchButton();
+            Condition.sleep(randomDelay);
 
             String textToSend = "knife";
             for (char c : textToSend.toCharArray()) {
                 String keycode = "KEYCODE_" + Character.toUpperCase(c);
-                client.sendKeystroke(keycode);
-                logger.debugLog("Sent keystroke: " + keycode);
+                Client.sendKeystroke(keycode);
+                Logger.debugLog("Sent keystroke: " + keycode);
             }
 
-            condition.sleep(randomBiggerDelay);
-            bank.withdrawItem(knife, 0.75);
-            condition.sleep(randomDelay);
-            logger.debugLog("Withdrew knife from the bank.");
+            Condition.sleep(randomBiggerDelay);
+            Bank.withdrawItem(knife, 0.75);
+            Condition.sleep(randomDelay);
+            Logger.debugLog("Withdrew knife from the bank.");
 
-            client.sendKeystroke("KEYCODE_ENTER");
-            condition.sleep(randomDelay);
-            logger.debugLog("Closed search interface.");
+            Client.sendKeystroke("KEYCODE_ENTER");
+            Condition.sleep(randomDelay);
+            Logger.debugLog("Closed search interface.");
 
             // Check if we have the knife in the inventory, otherwise stop script.
-            condition.wait(() -> inventory.contains(knife, 0.75), 250,10);
-            if (!inventory.contains(knife, 0.75)) {
-                logger.log("No knife found in inventory, assuming we're out of items to process.");
-                bank.close();
-                if (bank.isOpen()) {
-                    bank.close();
+            Condition.wait(() -> Inventory.contains(knife, 0.75), 250,10);
+            if (!Inventory.contains(knife, 0.75)) {
+                Logger.log("No knife found in inventory, assuming we're out of items to process.");
+                Bank.close();
+                if (Bank.isOpen()) {
+                    Bank.close();
                 }
-                logout.logout();
-                script.forceStop();
+                Logout.logout();
+                Script.forceStop();
             }
 
             // Grabbing the first items to process
-            if (!bank.isSelectedQuantityAllButton()) {
-                bank.tapQuantityAllButton();
-                condition.wait(() -> bank.isSelectedQuantityAllButton(), 200, 12);
-                logger.debugLog("Selected Quantity All button.");
+            if (!Bank.isSelectedQuantityAllButton()) {
+                Bank.tapQuantityAllButton();
+                Condition.wait(() -> Bank.isSelectedQuantityAllButton(), 200, 12);
+                Logger.debugLog("Selected Quantity All button.");
 
                 // Selecting the right bank tab again if needed
-                if (!bank.isSelectedBankTab(banktab)) {
-                    bank.openTab(banktab);
-                    logger.log("Selecting bank tab " + banktab);
+                if (!Bank.isSelectedBankTab(banktab)) {
+                    Bank.openTab(banktab);
+                    Logger.log("Selecting bank tab " + banktab);
                 }
 
                 // Withdraw first set of items
-                bank.withdrawItem(logs, 0.75);
-                logger.debugLog("Withdrew " + tier +  " from the bank.");
+                Bank.withdrawItem(logs, 0.75);
+                Logger.debugLog("Withdrew " + tier +  " from the bank.");
 
                 // Check if we have the logs in the inventory, otherwise stop script.
-                condition.wait(() -> inventory.contains(logs, 0.75), 250,10);
-                if (!inventory.contains(logs, 0.75)) {
-                    logger.log("No logs found in inventory, assuming we're out of items to process.");
-                    bank.close();
-                    if (bank.isOpen()) {
-                        bank.close();
+                Condition.wait(() -> Inventory.contains(logs, 0.75), 250,10);
+                if (!Inventory.contains(logs, 0.75)) {
+                    Logger.log("No logs found in inventory, assuming we're out of items to process.");
+                    Bank.close();
+                    if (Bank.isOpen()) {
+                        Bank.close();
                     }
-                    logout.logout();
-                    script.forceStop();
+                    Logout.logout();
+                    Script.forceStop();
                 }
             } else {
                 // Withdraw first set of items
-                bank.withdrawItem(logs, 0.75);
+                Bank.withdrawItem(logs, 0.75);
 
                 // Check if we have both a knife and the logs in the inventory, otherwise stop script.
                 String[] items3 = {knife, logs};
-                condition.wait(() -> inventory.contains(items3, 0.75), 250,10);
-                if (!inventory.contains(items3, 0.75)) {
-                    logger.log("Not all items found in inventory, assuming we're out of items to process.");
-                    bank.close();
-                    if (bank.isOpen()) {
-                        bank.close();
+                Condition.wait(() -> Inventory.contains(items3, 0.75), 250,10);
+                if (!Inventory.contains(items3, 0.75)) {
+                    Logger.log("Not all items found in inventory, assuming we're out of items to process.");
+                    Bank.close();
+                    if (Bank.isOpen()) {
+                        Bank.close();
                     }
-                    logout.logout();
-                    script.forceStop();
+                    Logout.logout();
+                    Script.forceStop();
                 }
 
-                logger.debugLog("Withdrew " + tier +  " from the bank.");
+                Logger.debugLog("Withdrew " + tier +  " from the bank.");
             }
         }
 
@@ -315,249 +303,249 @@ public class dAIOBowFletcher extends AbstractScript {
         else if (Objects.equals(method, "String")) {
             int randomDelay2 = new Random().nextInt(300) + 200;
             int randomBiggerDelay2 = new Random().nextInt(400) + 600;
-            logger.debugLog("String method was selected.");
-            if (!bank.isSelectedQuantityCustomButton()) {
-                Rectangle customQty = bank.findQuantityCustomButton();
-                client.longPress(customQty);
-                condition.sleep(randomDelay2);
-                client.tap(393, 499);
-                condition.sleep(randomBiggerDelay2);
-                client.sendKeystroke("KEYCODE_1");
-                client.sendKeystroke("KEYCODE_4");
-                client.sendKeystroke("KEYCODE_ENTER");
-                logger.debugLog("Set custom quantity 14 for items in the bank.");
-                condition.wait(() -> bank.isSelectedQuantityCustomButton(), 200, 12);
+            Logger.debugLog("String method was selected.");
+            if (!Bank.isSelectedQuantityCustomButton()) {
+                Rectangle customQty = Bank.findQuantityCustomButton();
+                Client.longPress(customQty);
+                Condition.sleep(randomDelay2);
+                Client.tap(393, 499);
+                Condition.sleep(randomBiggerDelay2);
+                Client.sendKeystroke("KEYCODE_1");
+                Client.sendKeystroke("KEYCODE_4");
+                Client.sendKeystroke("KEYCODE_ENTER");
+                Logger.debugLog("Set custom quantity 14 for items in the bank.");
+                Condition.wait(() -> Bank.isSelectedQuantityCustomButton(), 200, 12);
 
                 // Select the right bank tab if needed.
-                if (!bank.isSelectedBankTab(banktab)) {
-                    bank.openTab(banktab);
-                    logger.log("Selecting bank tab " + banktab);
+                if (!Bank.isSelectedBankTab(banktab)) {
+                    Bank.openTab(banktab);
+                    Logger.log("Selecting bank tab " + banktab);
                 }
 
                 // Withdraw first set of items
                 if (Objects.equals(product, "Shortbow")) {
-                    bank.withdrawItem(shortbowU, 0.75);
+                    Bank.withdrawItem(shortbowU, 0.75);
                 } else {
-                    bank.withdrawItem(longbowU, 0.75);
+                    Bank.withdrawItem(longbowU, 0.75);
                 }
-                condition.sleep(randomDelay2);
-                bank.withdrawItem(bowstring, 0.75);
-                logger.debugLog("Withdrew 14 bowstrings and unstrung bows from the bank.");
+                Condition.sleep(randomDelay2);
+                Bank.withdrawItem(bowstring, 0.75);
+                Logger.debugLog("Withdrew 14 bowstrings and unstrung bows from the bank.");
             } else {
                 // Select the right bank tab if needed.
-                if (!bank.isSelectedBankTab(banktab)) {
-                    bank.openTab(banktab);
-                    logger.log("Selecting bank tab " + banktab);
+                if (!Bank.isSelectedBankTab(banktab)) {
+                    Bank.openTab(banktab);
+                    Logger.log("Selecting bank tab " + banktab);
                 }
 
                 // Withdraw first set of items
                 if (Objects.equals(product, "Shortbow")) {
-                    bank.withdrawItem(shortbowU, 0.75);
+                    Bank.withdrawItem(shortbowU, 0.75);
                 } else {
-                    bank.withdrawItem(longbowU, 0.75);
+                    Bank.withdrawItem(longbowU, 0.75);
                 }
-                condition.sleep(randomDelay2);
-                bank.withdrawItem(bowstring, 0.75);
-                logger.debugLog("Withdrew 14 bowstrings and unstrung bows from the bank.");
+                Condition.sleep(randomDelay2);
+                Bank.withdrawItem(bowstring, 0.75);
+                Logger.debugLog("Withdrew 14 bowstrings and unstrung bows from the bank.");
             }
         }
 
         // Finishing off with closing the bank
-        logger.debugLog("Closing bank interface.");
-        bank.close();
-        logger.debugLog("Closed bank interface.");
+        Logger.debugLog("Closing bank interface.");
+        Bank.close();
+        Logger.debugLog("Closed bank interface.");
 
         doneInitialSetup = true;
-        logger.debugLog("Set the doneInitialSetup value to true.");
+        Logger.debugLog("Set the doneInitialSetup value to true.");
 
-        logger.debugLog("Ending the initialSetup() method.");
+        Logger.debugLog("Ending the initialSetup() method.");
     }
 
     private void executeCutMethod() {
-        logger.debugLog("Starting executeCutMethod() method.");
+        Logger.debugLog("Starting executeCutMethod() method.");
 
         // Check if we have both a knife and the logs in the inventory.
-        if (!inventory.contains(logs, 0.75) && !inventory.contains(knife, 0.75)) {
-            logger.log("We don't have a knife and logs in our inventory, going back to banking!");
+        if (!Inventory.contains(logs, 0.75) && !Inventory.contains(knife, 0.75)) {
+            Logger.log("We don't have a knife and logs in our inventory, going back to banking!");
             return;
         }
 
         // Starting to process items
-        inventory.tapItem(knife, 0.75);
+        Inventory.tapItem(knife, 0.75);
         int randomDelay2 = new Random().nextInt(150) + 100;
         int randomDelay3 = new Random().nextInt(1500) + 500;
-        condition.sleep(randomDelay2);
-        inventory.tapItem(logs, 0.75);
-        logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
-        condition.wait(() -> chatbox.isMakeMenuVisible(), 200, 12);
+        Condition.sleep(randomDelay2);
+        Inventory.tapItem(logs, 0.75);
+        Logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
+        Condition.wait(() -> Chatbox.isMakeMenuVisible(), 200, 12);
 
         // tap option needed based on choice in config
         if (Objects.equals(product, "Shortbow")) {
-            chatbox.makeOption(2);
-            logger.debugLog("Selected option 2 in chatbox.");
+            Chatbox.makeOption(2);
+            Logger.debugLog("Selected option 2 in chatbox.");
         } else {
-            chatbox.makeOption(3);
-            logger.debugLog("Selected option 3 in chatbox.");
+            Chatbox.makeOption(3);
+            Logger.debugLog("Selected option 3 in chatbox.");
         }
 
         // Wait for the inventory to finish (with a timeout)
         long startTime = System.currentTimeMillis();
         long timeout = 60 * 1000; // 60 seconds in milliseconds as a full invent is about 45-50 seconds.
-        while (inventory.contains(logs, 0.75)) {
+        while (Inventory.contains(logs, 0.75)) {
             readXP();
-            condition.sleep(randomDelay3);
+            Condition.sleep(randomDelay3);
 
             // Check if we have passed the timeout
             if (System.currentTimeMillis() - startTime > timeout) {
-                logger.debugLog("Timeout reached for inventory.contains() method");
+                Logger.debugLog("Timeout reached for inventory.contains() method");
                 break;
             }
         }
         readXP();
 
-        logger.debugLog("Ending the executeCutMethod() method.");
+        Logger.debugLog("Ending the executeCutMethod() method.");
     }
 
     private void executeStringMethod() {
-        logger.debugLog("Starting executeStringMethod() method.");
+        Logger.debugLog("Starting executeStringMethod() method.");
 
         // Check if we have both unstrung bows and bowstrings in the inventory.
         if (Objects.equals(product, "Shortbow")) {
-            if (!inventory.contains(shortbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
-                logger.log("We don't have unstrung bows and bowstring in our inventory, going back to banking!");
+            if (!Inventory.contains(shortbowU, 0.75) && !Inventory.contains(bowstring, 0.75)) {
+                Logger.log("We don't have unstrung bows and bowstring in our inventory, going back to banking!");
                 return;
             }
         } else {
-            if (!inventory.contains(longbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
-                logger.log("We don't have unstrung bows and bowstring in our inventory, going back to banking!");
+            if (!Inventory.contains(longbowU, 0.75) && !Inventory.contains(bowstring, 0.75)) {
+                Logger.log("We don't have unstrung bows and bowstring in our inventory, going back to banking!");
                 return;
             }
         }
 
         // tap item needed based on choice in config
         if (Objects.equals(product, "Shortbow")) {
-            inventory.tapItem(shortbowU, 0.75);
+            Inventory.tapItem(shortbowU, 0.75);
         } else {
-            inventory.tapItem(longbowU, 0.75);
+            Inventory.tapItem(longbowU, 0.75);
         }
 
         int randomDelay2 = new Random().nextInt(150) + 100;
         int randomDelay3 = new Random().nextInt(1500) + 500;
-        condition.sleep(randomDelay2);
-        inventory.tapItem(bowstring, 0.75);
-        logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
-        condition.wait(() -> chatbox.isMakeMenuVisible(), 200, 12);
-        chatbox.makeOption(1);
-        logger.debugLog("Selected option 1 in chatbox.");
+        Condition.sleep(randomDelay2);
+        Inventory.tapItem(bowstring, 0.75);
+        Logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
+        Condition.wait(() -> Chatbox.isMakeMenuVisible(), 200, 12);
+        Chatbox.makeOption(1);
+        Logger.debugLog("Selected option 1 in chatbox.");
 
         // Wait for the inventory to finish (with a timeout)
         long startTime = System.currentTimeMillis();
         long timeout = 22 * 1000; // 22 seconds in milliseconds as a full invent is about 15-17 seconds.
-        while (inventory.contains(bowstring, 0.75)) {
+        while (Inventory.contains(bowstring, 0.75)) {
             readXP();
-            condition.sleep(randomDelay3);
+            Condition.sleep(randomDelay3);
 
             // Check if we have passed the timeout
             if (System.currentTimeMillis() - startTime > timeout) {
-                logger.debugLog("Timeout reached for inventory.contains() method");
+                Logger.debugLog("Timeout reached for inventory.contains() method");
                 break;
             }
         }
         readXP();
 
-        logger.debugLog("Ending the executeStringMethod() method.");
+        Logger.debugLog("Ending the executeStringMethod() method.");
     }
 
     private void bank() {
-        logger.debugLog("Starting bank() method.");
-        logger.log("Banking.");
+        Logger.debugLog("Starting bank() method.");
+        Logger.log("Banking.");
         int randomDelay = new Random().nextInt(250) + 250;
 
         // Opening the bank based on your location
-        logger.debugLog("Attempting to open the bank.");
-        bank.open(bankloc);
-        logger.debugLog("Bank is open.");
+        Logger.debugLog("Attempting to open the bank.");
+        Bank.open(bankloc);
+        Logger.debugLog("Bank is open.");
 
         // Select the right bank tab if needed.
-        if (!bank.isSelectedBankTab(banktab)) {
-            bank.openTab(banktab);
-            logger.log("Opened bank tab " + banktab);
+        if (!Bank.isSelectedBankTab(banktab)) {
+            Bank.openTab(banktab);
+            Logger.log("Opened bank tab " + banktab);
         }
 
         // Depositing items based on your tier/method
         if (Objects.equals(method, "Cut")){
             if (Objects.equals(product, "Shortbow")) {
-                logger.debugLog("Depositing unstrung shortbows.");
-                inventory.tapItem(shortbowU, 0.75);
+                Logger.debugLog("Depositing unstrung shortbows.");
+                Inventory.tapItem(shortbowU, 0.75);
             } else {
-                logger.debugLog("Depositing unstrung longbows.");
-                inventory.tapItem(longbowU, 0.75);
+                Logger.debugLog("Depositing unstrung longbows.");
+                Inventory.tapItem(longbowU, 0.75);
             }
         }
         else if (Objects.equals(method, "String")) {
             if (Objects.equals(product, "Shortbow")) {
-                logger.debugLog("Depositing strung shortbows.");
-                inventory.tapItem(shortbow, 0.75);
+                Logger.debugLog("Depositing strung shortbows.");
+                Inventory.tapItem(shortbow, 0.75);
             } else {
-                logger.debugLog("Depositing strung longbows.");
-                inventory.tapItem(longbow, 0.75);
+                Logger.debugLog("Depositing strung longbows.");
+                Inventory.tapItem(longbow, 0.75);
             }
         }
-        condition.sleep(randomDelay);
+        Condition.sleep(randomDelay);
 
         // Withdrawing the items based on your tier/method
         if (Objects.equals(method, "Cut")) {
-            bank.withdrawItem(logs, 0.75);
+            Bank.withdrawItem(logs, 0.75);
 
-            logger.debugLog("Withdrew " + tier + " from the bank.");
+            Logger.debugLog("Withdrew " + tier + " from the bank.");
         }
         else if (Objects.equals(method, "String")) {
 
             // Withdraw unstrung bow that was picked in the config
             if (Objects.equals(product, "Shortbow")) {
-                logger.debugLog("Withdrawing unstrung shortbows");
-                bank.withdrawItem(shortbowU, 0.75);
+                Logger.debugLog("Withdrawing unstrung shortbows");
+                Bank.withdrawItem(shortbowU, 0.75);
 
             } else {
-                logger.debugLog("Withdrawing unstrung longbows");
-                bank.withdrawItem(longbowU, 0.75);
+                Logger.debugLog("Withdrawing unstrung longbows");
+                Bank.withdrawItem(longbowU, 0.75);
 
             }
 
             // Withdraw bowstrings
-            logger.debugLog("Withdrawing bowstrings.");
-            bank.withdrawItem(bowstring, 0.75);
+            Logger.debugLog("Withdrawing bowstrings.");
+            Bank.withdrawItem(bowstring, 0.75);
 
-            logger.log("Withdrew all items from the bank.");
+            Logger.log("Withdrew all items from the bank.");
         }
 
         // Closing the bank, as banking should be done now
-        bank.close();
-        logger.debugLog("Closed the bank.");
+        Bank.close();
+        Logger.debugLog("Closed the bank.");
 
-        logger.debugLog("Ending the bank() method.");
+        Logger.debugLog("Ending the bank() method.");
     }
 
     private void checkInventOpen() {
         // Check if the inventory is open (needs this check after a break)
-        if (!gameTabs.isInventoryTabOpen()) {
-            gameTabs.openInventoryTab();
+        if (!GameTabs.isInventoryTabOpen()) {
+            GameTabs.openInventoryTab();
         }
     }
 
     private void checkInventCutMethod() {
         String[] items = {knife, logs};
         // Check if we have both a knife and the logs in the inventory.
-        if (!inventory.contains(items, 0.75)) {
-            logger.debugLog("1st check failed for knife and logs in our inventory, going back to banking!");
+        if (!Inventory.contains(items, 0.75)) {
+            Logger.debugLog("1st check failed for knife and logs in our inventory, going back to banking!");
             bank();
         }
 
         // Check if we have both a knife and the logs in the inventory.
-        if (!inventory.contains(items, 0.75)) {
-            logger.log("2nd check failed for knife and logs in our inventory, logging out and aborting script!");
-            logout.logout();
-            script.forceStop();
+        if (!Inventory.contains(items, 0.75)) {
+            Logger.log("2nd check failed for knife and logs in our inventory, logging out and aborting script!");
+            Logout.logout();
+            Script.forceStop();
         }
     }
 
@@ -565,36 +553,36 @@ public class dAIOBowFletcher extends AbstractScript {
         // Check if we have both unstrung bows and bowstrings in the inventory.
         if (Objects.equals(product, "Shortbow")) {
             String[] items = {shortbowU, bowstring};
-            if (!inventory.contains(items, 0.75)) {
-                logger.debugLog("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
+            if (!Inventory.contains(items, 0.75)) {
+                Logger.debugLog("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
                 bank();
             }
         } else {
             String[] items = {longbowU, bowstring};
-            if (!inventory.contains(items, 0.75)) {
-                logger.debugLog("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
+            if (!Inventory.contains(items, 0.75)) {
+                Logger.debugLog("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
                 bank();
             }
         }
 
         // Check if we have both unstrung bows and bowstrings in the inventory.
         if (Objects.equals(product, "Shortbow")) {
-            if (!inventory.contains(shortbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
-                logger.log("2nd check failed for unstrung bows and bowstring in our inventory, logging out and aborting script!");
-                logout.logout();
-                script.forceStop();
+            if (!Inventory.contains(shortbowU, 0.75) && !Inventory.contains(bowstring, 0.75)) {
+                Logger.log("2nd check failed for unstrung bows and bowstring in our inventory, logging out and aborting script!");
+                Logout.logout();
+                Script.forceStop();
             }
         } else {
-            if (!inventory.contains(longbowU, 0.75) && !inventory.contains(bowstring, 0.75)) {
-                logger.log("2nd check failed for unstrung bows and bowstring in our inventory, logging out and aborting script!");
-                logout.logout();
-                script.forceStop();
+            if (!Inventory.contains(longbowU, 0.75) && !Inventory.contains(bowstring, 0.75)) {
+                Logger.log("2nd check failed for unstrung bows and bowstring in our inventory, logging out and aborting script!");
+                Logout.logout();
+                Script.forceStop();
             }
         }
     }
 
     private void readXP() {
-        xpBar.getXP();
+        XpBar.getXP();
     }
 
 }

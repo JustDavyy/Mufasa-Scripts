@@ -4,6 +4,8 @@ import helpers.utils.OptionType;
 import java.util.Map;
 import java.util.HashMap;
 import static helpers.Interfaces.*;
+import static helpers.Interfaces.Logout;
+
 import java.util.Random;
 
 @ScriptManifest(
@@ -31,23 +33,10 @@ import java.util.Random;
                         optionType = OptionType.STRING
                 ),
                 @ScriptConfiguration(
-                        name =  "BankTab",
+                        name =  "Bank Tab",
                         description = "What bank tab are your resources located in?",
                         defaultValue = "0",
-                        minMaxIntValues = {0, 9},
-                        allowedValues = {
-                                @AllowedValue(optionName = "0"),
-                                @AllowedValue(optionName = "1"),
-                                @AllowedValue(optionName = "2"),
-                                @AllowedValue(optionName = "3"),
-                                @AllowedValue(optionName = "4"),
-                                @AllowedValue(optionName = "5"),
-                                @AllowedValue(optionName = "6"),
-                                @AllowedValue(optionName = "7"),
-                                @AllowedValue(optionName = "8"),
-                                @AllowedValue(optionName = "9"),
-                        },
-                        optionType = OptionType.INTEGER
+                        optionType = OptionType.BANKTABS
                 )
         }
 )
@@ -71,26 +60,26 @@ public class dGlassblower extends AbstractScript {
     public void onStart(){
         Map<String, String> configs = getConfigurations();
         product = configs.get("Product");
-        banktab = Integer.parseInt(configs.get("BankTab"));
+        banktab = Integer.parseInt(configs.get("Bank Tab"));
 
         initializeMakeOptions();
 
         //Logs for debugging purposes
-        logger.log("Thank you for using the dGlass blower script!");
+        Logger.log("Thank you for using the dGlass blower script!");
     }
 
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
-        logger.debugLog("Running the poll() method.");
+        Logger.debugLog("Running the poll() method.");
 
         if (!doneInitialSetup) {
-            logger.debugLog("doneInitialSetup is false, running initial setups.");
+            Logger.debugLog("doneInitialSetup is false, running initial setups.");
 
             // Check if we are logged in, if not, login.
-            if (login.findPlayNowOption() != null) {
-                logger.debugLog("We are not logged in yet, logging in.");
-                login.preSetup();
+            if (Login.findPlayNowOption() != null) {
+                Logger.debugLog("We are not logged in yet, logging in.");
+                Login.preSetup();
             }
 
             // Continue the rest of the setup
@@ -107,7 +96,7 @@ public class dGlassblower extends AbstractScript {
     }
 
     private void initializeMakeOptions() {
-        logger.debugLog("Running the initializeMakeOptions() method.");
+        Logger.debugLog("Running the initializeMakeOptions() method.");
 
         makeOptions = new HashMap<>();
 
@@ -121,259 +110,259 @@ public class dGlassblower extends AbstractScript {
         makeOptions.put("Lantern lens", new String[]{"7", "4542"});
         makeOptions.put("Empty light orb", new String[]{"8", "10980"});
 
-        logger.debugLog("Ending the initializeMakeOptions() method.");
+        Logger.debugLog("Ending the initializeMakeOptions() method.");
     }
 
     private void setupMakeOptions() {
-        logger.debugLog("Running the setupMakeOptions() method.");
+        Logger.debugLog("Running the setupMakeOptions() method.");
         if (makeOption == 0) {
             String[] makeOptionData = makeOptions.get(product);
             optionInt = Integer.parseInt(makeOptionData[0]);
             optionItemID = makeOptionData[1];
 
-            logger.debugLog("\nMake option int number: " + optionInt + " \nitemID of final product: " + optionItemID);
+            Logger.debugLog("\nMake option int number: " + optionInt + " \nitemID of final product: " + optionItemID);
         }
 
-        logger.debugLog("Ending the setupMakeOptions() method.");
+        Logger.debugLog("Ending the setupMakeOptions() method.");
     }
 
     private void setupBanking() {
-        logger.debugLog("Starting setupBanking() method.");
+        Logger.debugLog("Starting setupBanking() method.");
         if (bankloc == null) {
-            logger.debugLog("Starting dynamic banking setup...");
+            Logger.debugLog("Starting dynamic banking setup...");
 
             // Opening the inventory if not yet opened.
-            logger.debugLog("Opening up the inventory.");
-            if (!gameTabs.isInventoryTabOpen()) {
-                gameTabs.openInventoryTab();
+            Logger.debugLog("Opening up the inventory.");
+            if (!GameTabs.isInventoryTabOpen()) {
+                GameTabs.openInventoryTab();
             }
 
-            logger.debugLog("Starting setup for Dynamic Banking.");
-            bankloc = bank.setupDynamicBank();
-            logger.log("We're located at: " + bankloc + ".");
-            logger.debugLog("We're located at: " + bankloc + ".");
+            Logger.debugLog("Starting setup for Dynamic Banking.");
+            bankloc = Bank.setupDynamicBank();
+            Logger.log("We're located at: " + bankloc + ".");
+            Logger.debugLog("We're located at: " + bankloc + ".");
             if (bankloc == null) {
-                logger.debugLog("Could not find a dynamic bank location we are in, logging out and aborting script.");
-                logout.logout();
-                script.forceStop();
+                Logger.debugLog("Could not find a dynamic bank location we are in, logging out and aborting script.");
+                Logout.logout();
+                Script.forceStop();
             }
-            condition.sleep(5000);
-            logger.debugLog("Attempting to open the Bank of Gielinor.");
-            bank.open(bankloc);
-            logger.debugLog("Bank interface detected!");
-            if (bank.isBankPinNeeded()) {
-                logger.debugLog("Bank pin is needed!");
-                bank.enterBankPin();
-                condition.sleep(500);
-                condition.wait(() -> bank.isOpen(), 200, 12);
-                logger.debugLog("Bank pin entered.");
-                logger.debugLog("Depositing inventory.");
-                bank.tapDepositInventoryButton();
-                condition.sleep(677);
+            Condition.sleep(5000);
+            Logger.debugLog("Attempting to open the Bank of Gielinor.");
+            Bank.open(bankloc);
+            Logger.debugLog("Bank interface detected!");
+            if (Bank.isBankPinNeeded()) {
+                Logger.debugLog("Bank pin is needed!");
+                Bank.enterBankPin();
+                Condition.sleep(500);
+                Condition.wait(() -> Bank.isOpen(), 200, 12);
+                Logger.debugLog("Bank pin entered.");
+                Logger.debugLog("Depositing inventory.");
+                Bank.tapDepositInventoryButton();
+                Condition.sleep(677);
             } else {
-                logger.debugLog("Bank pin is not needed, bank is open!");
-                logger.debugLog("Depositing inventory.");
-                bank.tapDepositInventoryButton();
-                condition.sleep(705);
+                Logger.debugLog("Bank pin is not needed, bank is open!");
+                Logger.debugLog("Depositing inventory.");
+                Bank.tapDepositInventoryButton();
+                Condition.sleep(705);
             }
         }
-        logger.debugLog("Ending the setupBanking() method.");
+        Logger.debugLog("Ending the setupBanking() method.");
     }
 
     private void initialSetup() {
-        logger.debugLog("Starting initialSetup() method.");
+        Logger.debugLog("Starting initialSetup() method.");
 
         int randomDelay = new Random().nextInt(600) + 600;
         int randomBiggerDelay = new Random().nextInt(1500) + 1500;
 
         // Withdrawing a glassblowing pipe from the bank
-        logger.debugLog("Withdrawing a glassblowing pipe from the bank.");
-        if (!bank.isSelectedQuantity1Button()) {
-            bank.tapQuantity1Button();
-            condition.wait(() -> bank.isSelectedQuantity1Button(), 200, 12);
+        Logger.debugLog("Withdrawing a glassblowing pipe from the bank.");
+        if (!Bank.isSelectedQuantity1Button()) {
+            Bank.tapQuantity1Button();
+            Condition.wait(() -> Bank.isSelectedQuantity1Button(), 200, 12);
         }
-        bank.tapSearchButton();
-        condition.sleep(randomDelay);
+        Bank.tapSearchButton();
+        Condition.sleep(randomDelay);
 
         String textToSend = "glassblowing";
         for (char c : textToSend.toCharArray()) {
             String keycode = "KEYCODE_" + Character.toUpperCase(c);
-            client.sendKeystroke(keycode);
-            logger.debugLog("Sent keystroke: " + keycode);
+            Client.sendKeystroke(keycode);
+            Logger.debugLog("Sent keystroke: " + keycode);
         }
 
-        condition.sleep(randomBiggerDelay);
-        bank.withdrawItem(glassblowingpipe, 0.75);
-        condition.sleep(randomDelay);
-        logger.debugLog("Withdrew glassblowing pipe from the bank.");
+        Condition.sleep(randomBiggerDelay);
+        Bank.withdrawItem(glassblowingpipe, 0.75);
+        Condition.sleep(randomDelay);
+        Logger.debugLog("Withdrew glassblowing pipe from the bank.");
 
-        client.sendKeystroke("KEYCODE_ENTER");
-        condition.sleep(randomDelay);
-        logger.debugLog("Closed search interface.");
+        Client.sendKeystroke("KEYCODE_ENTER");
+        Condition.sleep(randomDelay);
+        Logger.debugLog("Closed search interface.");
 
         // Check if we have the glassblowing pipe in the inventory, otherwise stop script.
-        condition.wait(() -> inventory.contains(glassblowingpipe, 0.75), 250,10);
-        if (!inventory.contains(glassblowingpipe, 0.75)) {
-            logger.log("No glassblowing pipe found in inventory, assuming we're out of items to process.");
-            bank.close();
-            if (bank.isOpen()) {
-                bank.close();
+        Condition.wait(() -> Inventory.contains(glassblowingpipe, 0.75), 250,10);
+        if (!Inventory.contains(glassblowingpipe, 0.75)) {
+            Logger.log("No glassblowing pipe found in inventory, assuming we're out of items to process.");
+            Bank.close();
+            if (Bank.isOpen()) {
+                Bank.close();
             }
-            logout.logout();
-            script.forceStop();
+            Logout.logout();
+            Script.forceStop();
         }
 
         // Grabbing the first molten glass to process
-        if (!bank.isSelectedQuantityAllButton()) {
-            bank.tapQuantityAllButton();
-            condition.wait(() -> bank.isSelectedQuantityAllButton(), 200, 12);
-            logger.debugLog("Selected Quantity All button.");
+        if (!Bank.isSelectedQuantityAllButton()) {
+            Bank.tapQuantityAllButton();
+            Condition.wait(() -> Bank.isSelectedQuantityAllButton(), 200, 12);
+            Logger.debugLog("Selected Quantity All button.");
 
             // Selecting the right bank tab again if needed
-            if (!bank.isSelectedBankTab(banktab)) {
-                bank.openTab(banktab);
-                logger.debugLog("Opened bank tab " + banktab);
+            if (!Bank.isSelectedBankTab(banktab)) {
+                Bank.openTab(banktab);
+                Logger.debugLog("Opened bank tab " + banktab);
             }
 
             // Withdraw first set of items
-            bank.withdrawItem(moltenglass, 0.75);
-            logger.debugLog("Withdrew molten glass from the bank.");
+            Bank.withdrawItem(moltenglass, 0.75);
+            Logger.debugLog("Withdrew molten glass from the bank.");
 
             // Check if we have the molten glass in the inventory, otherwise stop script.
-            condition.wait(() -> inventory.contains(moltenglass, 0.75), 250,10);
-            if (!inventory.contains(moltenglass, 0.75)) {
-                logger.log("No molten glass found in inventory, assuming we're out of items to process.");
-                bank.close();
-                if (bank.isOpen()) {
-                    bank.close();
+            Condition.wait(() -> Inventory.contains(moltenglass, 0.75), 250,10);
+            if (!Inventory.contains(moltenglass, 0.75)) {
+                Logger.log("No molten glass found in inventory, assuming we're out of items to process.");
+                Bank.close();
+                if (Bank.isOpen()) {
+                    Bank.close();
                 }
-                logout.logout();
-                script.forceStop();
+                Logout.logout();
+                Script.forceStop();
             }
         } else {
             // Withdraw first set of items
-            bank.withdrawItem(moltenglass, 0.75);
+            Bank.withdrawItem(moltenglass, 0.75);
 
             // Check if we have both molten glass and a glassblowing pipe in the inventory, otherwise stop script.
             String[] items3 = {glassblowingpipe, moltenglass};
-            condition.wait(() -> inventory.contains(items3, 0.75), 250,10);
-            if (!inventory.contains(items3, 0.75)) {
-                logger.log("No items found in inventory, assuming we're out of items to process.");
-                bank.close();
-                if (bank.isOpen()) {
-                    bank.close();
+            Condition.wait(() -> Inventory.contains(items3, 0.75), 250,10);
+            if (!Inventory.contains(items3, 0.75)) {
+                Logger.log("No items found in inventory, assuming we're out of items to process.");
+                Bank.close();
+                if (Bank.isOpen()) {
+                    Bank.close();
                 }
-                logout.logout();
-                script.forceStop();
+                Logout.logout();
+                Script.forceStop();
             }
 
-            logger.debugLog("Withdrew molten glass from the bank.");
+            Logger.debugLog("Withdrew molten glass from the bank.");
         }
 
         // Finishing off with closing the bank
-        logger.debugLog("Closing bank interface.");
-        bank.close();
-        logger.debugLog("Closed bank interface.");
+        Logger.debugLog("Closing bank interface.");
+        Bank.close();
+        Logger.debugLog("Closed bank interface.");
 
         doneInitialSetup = true;
-        logger.debugLog("Set the doneInitialSetup value to true.");
+        Logger.debugLog("Set the doneInitialSetup value to true.");
 
-        logger.debugLog("Ending the initialSetup() method.");
+        Logger.debugLog("Ending the initialSetup() method.");
     }
 
     private void executeGlassblowingMethod() {
-        logger.debugLog("Starting executeGlassblowingMethod() method.");
+        Logger.debugLog("Starting executeGlassblowingMethod() method.");
 
         // Check if we have both a glassblowing pipe and molten glass in the inventory.
-        if (!inventory.contains(glassblowingpipe, 0.75) && !inventory.contains(moltenglass, 0.75)) {
-            logger.log("We don't have a glassblowing pipe and molten glass in our inventory, going back to banking!");
+        if (!Inventory.contains(glassblowingpipe, 0.75) && !Inventory.contains(moltenglass, 0.75)) {
+            Logger.log("We don't have a glassblowing pipe and molten glass in our inventory, going back to banking!");
             return;
         }
 
         // Starting to process items
-        inventory.tapItem(glassblowingpipe, 0.75);
+        Inventory.tapItem(glassblowingpipe, 0.75);
         int randomDelay2 = new Random().nextInt(150) + 100;
         int randomDelay3 = new Random().nextInt(1500) + 500;
-        condition.sleep(randomDelay2);
-        inventory.tapItem(moltenglass, 0.75);
-        logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
-        condition.wait(() -> chatbox.isMakeMenuVisible(), 200, 12);
-        chatbox.makeOption(optionInt);
-        logger.debugLog("Selected option " + optionInt + " in chatbox.");
+        Condition.sleep(randomDelay2);
+        Inventory.tapItem(moltenglass, 0.75);
+        Logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
+        Condition.wait(() -> Chatbox.isMakeMenuVisible(), 200, 12);
+        Chatbox.makeOption(optionInt);
+        Logger.debugLog("Selected option " + optionInt + " in chatbox.");
 
         // Wait for the inventory to finish (with a timeout)
         long startTime = System.currentTimeMillis();
         long timeout = 60 * 1000; // 60 seconds in milliseconds as a full invent is about 45-50 seconds.
-        while (inventory.contains(moltenglass, 0.75)) {
+        while (Inventory.contains(moltenglass, 0.75)) {
             readXP();
-            condition.sleep(randomDelay3);
+            Condition.sleep(randomDelay3);
 
             // Check if we have passed the timeout
             if (System.currentTimeMillis() - startTime > timeout) {
-                logger.debugLog("Timeout reached for inventory.contains() method");
+                Logger.debugLog("Timeout reached for inventory.contains() method");
                 break;
             }
         }
         readXP();
 
-        logger.debugLog("Ending the executeGlassblowingMethod() method.");
+        Logger.debugLog("Ending the executeGlassblowingMethod() method.");
     }
 
     private void bank() {
-        logger.debugLog("Starting bank() method.");
+        Logger.debugLog("Starting bank() method.");
         int randomDelay = new Random().nextInt(250) + 250;
 
         // Opening the bank based on your location
-        logger.debugLog("Attempting to open the bank.");
-        bank.open(bankloc);
-        logger.debugLog("Bank is open.");
+        Logger.debugLog("Attempting to open the bank.");
+        Bank.open(bankloc);
+        Logger.debugLog("Bank is open.");
 
         // Select the right bank tab if needed.
-        if (!bank.isSelectedBankTab(banktab)) {
-            bank.openTab(banktab);
-            logger.debugLog("Opened bank tab " + banktab);
+        if (!Bank.isSelectedBankTab(banktab)) {
+            Bank.openTab(banktab);
+            Logger.debugLog("Opened bank tab " + banktab);
         }
 
         // Depositing items based on your product chosen
-        logger.debugLog("Depositing " + product + ".");
-        inventory.tapItem(optionItemID, 0.75);
-        condition.sleep(randomDelay);
+        Logger.debugLog("Depositing " + product + ".");
+        Inventory.tapItem(optionItemID, 0.75);
+        Condition.sleep(randomDelay);
 
-        bank.withdrawItem(moltenglass, 0.75);
-        logger.debugLog("Withdrew molten glass from the bank.");
+        Bank.withdrawItem(moltenglass, 0.75);
+        Logger.debugLog("Withdrew molten glass from the bank.");
 
         // Closing the bank, as banking should be done now
-        bank.close();
-        logger.debugLog("Closed the bank.");
+        Bank.close();
+        Logger.debugLog("Closed the bank.");
 
-        logger.debugLog("Ending the bank() method.");
+        Logger.debugLog("Ending the bank() method.");
     }
 
     private void checkInventOpen() {
         // Check if the inventory is open (needs this check after a break)
-        if (!gameTabs.isInventoryTabOpen()) {
-            gameTabs.openInventoryTab();
+        if (!GameTabs.isInventoryTabOpen()) {
+            GameTabs.openInventoryTab();
         }
     }
 
     private void checkInventGlassblowing() {
         String[] items = {glassblowingpipe, moltenglass};
         // Check if we have both a glassblowing pipe and molten glass in the inventory.
-        if (!inventory.contains(items, 0.75)) {
-            logger.log("1st check failed for a glassblowing pipe and molten glass in our inventory, going back to banking!");
+        if (!Inventory.contains(items, 0.75)) {
+            Logger.log("1st check failed for a glassblowing pipe and molten glass in our inventory, going back to banking!");
             bank();
         }
 
         // Check if we have both a glassblowing pipe and molten glass in the inventory.
-        if (!inventory.contains(items, 0.75)) {
-            logger.log("2nd check failed for a glassblowing pipe and molten glass in our inventory, logging out and aborting script!");
-            logout.logout();
-            script.forceStop();
+        if (!Inventory.contains(items, 0.75)) {
+            Logger.log("2nd check failed for a glassblowing pipe and molten glass in our inventory, logging out and aborting script!");
+            Logout.logout();
+            Script.forceStop();
         }
     }
 
     private void readXP() {
-        xpBar.getXP();
+        XpBar.getXP();
     }
 
 }
