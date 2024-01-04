@@ -12,7 +12,7 @@ import static helpers.Interfaces.Logout;
 @ScriptManifest(
         name = "dAIO Bow Fletcher",
         description = "dAIO Bow Fletcher, supports both cutting and stringing bows.",
-        version = "1.34",
+        version = "1.35",
         category = ScriptCategory.Fletching
 )
 @ScriptConfiguration.List(

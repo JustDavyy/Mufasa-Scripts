@@ -11,7 +11,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dGlass blower",
         description = "Blows molten glass into glass objects to train crafting. Supports all options and dynamic banking.",
-        version = "1.00",
+        version = "1.02",
         category = ScriptCategory.Crafting
 )
 @ScriptConfiguration.List(
@@ -45,7 +45,6 @@ public class dGlassblower extends AbstractScript {
     // Creating the strings for later use
     String product;
     String bankloc;
-    String itemID;
     int banktab;
     int makeOption;
     int optionInt;

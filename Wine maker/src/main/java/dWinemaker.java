@@ -10,7 +10,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dWine maker",
         description = "Creates well fermented wine for those juicy cooking gains. Supports dynamic banking.",
-        version = "1.00",
+        version = "1.02",
         category = ScriptCategory.Cooking
 )
 @ScriptConfiguration.List(
