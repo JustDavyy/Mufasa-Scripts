@@ -11,7 +11,7 @@ import static helpers.Interfaces.Logout;
 
 @ScriptManifest(
         name = "dAIO Bow Fletcher",
-        description = "dAIO Bow Fletcher, supports both cutting and stringing bows.",
+        description = "Cuts or strings bows for you. Supports all log tiers, and both short and longbows with dynamic banking.",
         version = "1.35",
         category = ScriptCategory.Fletching
 )
