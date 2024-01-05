@@ -10,7 +10,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dWine maker",
         description = "Creates well fermented wine for those juicy cooking gains. Supports dynamic banking.",
-        version = "1.02",
+        version = "1.03",
         category = ScriptCategory.Cooking
 )
 @ScriptConfiguration.List(
@@ -169,12 +169,6 @@ public class dWinemaker extends AbstractScript {
 
     private void executeMakeWineMethod() {
         Logger.debugLog("Starting executeMakeWineMethod() method.");
-
-        // Check if we have the jugs of water and grapes in the inventory.
-        if (!Inventory.contains(jugofwater, 0.75) && !Inventory.contains(grapes, 0.75)) {
-            Logger.log("We don't have jugs of water/grapes in our inventory, going back to banking!");
-            return;
-        }
 
         // Starting to process items
         Inventory.tapItem(jugofwater, 0.75);
