@@ -8,9 +8,9 @@ import java.util.Random;
 import static helpers.Interfaces.*;
 
 @ScriptManifest(
-        name = "dWine maker",
+        name = "dWinemaker",
         description = "Creates well fermented wine for those juicy cooking gains. Supports dynamic banking.",
-        version = "1.03",
+        version = "1.04",
         category = ScriptCategory.Cooking
 )
 @ScriptConfiguration.List(
@@ -38,28 +38,24 @@ public class dWinemaker extends AbstractScript {
         Map<String, String> configs = getConfigurations();
         banktab = Integer.parseInt(configs.get("Bank Tab"));
 
-        //Logs for debugging purposes
-        Logger.log("Thank you for using the dWine maker script!");
+        Logger.log("Thank you for using the dWinemaker script!\nSetting up everything for your gains now...");
+
+        // Doing the one-time setup here
+        if (Login.findPlayNowOption() != null) {
+            Logger.debugLog("We are not logged in yet, logging in.");
+            Login.preSetup();
+        } else {
+            Logger.debugLog("We are already logged in, moving camera up.");
+            Client.moveCameraUp();
+        }
+
+        setupBanking();
+        initialSetup();
     }
 
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
-        Logger.debugLog("Running the poll() method.");
-
-        if (!doneInitialSetup) {
-            Logger.debugLog("doneInitialSetup is false, running initial setups.");
-
-            // Check if we are logged in, if not, login.
-            if (Login.findPlayNowOption() != null) {
-                Logger.debugLog("We are not logged in yet, logging in.");
-                Login.preSetup();
-            }
-
-            // Continue the rest of the setup
-            setupBanking();
-            initialSetup();
-        }
 
         checkInventOpen();
         checkInventWineMaking();
