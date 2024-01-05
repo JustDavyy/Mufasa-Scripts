@@ -28,7 +28,6 @@ public class dWinemaker extends AbstractScript {
     // Creating the strings for later use
     String bankloc;
     int banktab;
-    boolean doneInitialSetup = false;
     String grapes = "1987";
     String jugofwater = "1937";
 
@@ -156,9 +155,6 @@ public class dWinemaker extends AbstractScript {
         Logger.debugLog("Closing bank interface.");
         Bank.close();
         Logger.debugLog("Closed bank interface.");
-
-        doneInitialSetup = true;
-        Logger.debugLog("Set the doneInitialSetup value to true.");
 
         Logger.debugLog("Ending the initialSetup() method.");
     }
