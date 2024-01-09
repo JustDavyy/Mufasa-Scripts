@@ -67,7 +67,6 @@ public class dAIOBowFletcher extends AbstractScript {
     String product;
     String bankloc;
     int banktab;
-    boolean doneInitialSetup = false;
     String logs;
     String shortbowU;
     String longbowU;
@@ -86,32 +85,19 @@ public class dAIOBowFletcher extends AbstractScript {
         product = configs.get("Product");
         banktab = Integer.parseInt(configs.get("Bank Tab"));
 
+        // One-time setup
         initializeItemIDs();
+        setupItemIds();
+        setupBanking();
+        initialSetup();
 
         //Logs for debugging purposes
-        Logger.log("Thank you for using the AIO Bow Fletcher script!");
+        Logger.log("Thank you for using the dAIO Bow Fletcher script!");
     }
 
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
-        Logger.debugLog("Running the poll() method.");
-
-        if (!doneInitialSetup) {
-            Logger.debugLog("doneInitialSetup is false, running initial setups.");
-
-            // Check if we are logged in, if not, login.
-            if (Login.findPlayNowOption() != null) {
-                Logger.log("Logging in...");
-                Logger.debugLog("We are not logged in yet, logging in.");
-                Login.preSetup();
-            }
-
-            // Continue the rest of the setup
-            setupItemIds();
-            setupBanking();
-            initialSetup();
-        }
 
         if (Objects.equals(method, "Cut")) {
             checkInventOpen();
@@ -355,9 +341,6 @@ public class dAIOBowFletcher extends AbstractScript {
         Logger.debugLog("Closing bank interface.");
         Bank.close();
         Logger.debugLog("Closed bank interface.");
-
-        doneInitialSetup = true;
-        Logger.debugLog("Set the doneInitialSetup value to true.");
 
         Logger.debugLog("Ending the initialSetup() method.");
     }

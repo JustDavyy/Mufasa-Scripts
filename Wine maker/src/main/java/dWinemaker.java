@@ -39,15 +39,6 @@ public class dWinemaker extends AbstractScript {
 
         Logger.log("Thank you for using the dWinemaker script!\nSetting up everything for your gains now...");
 
-        // Doing the one-time setup here
-        if (Login.findPlayNowOption() != null) {
-            Logger.debugLog("We are not logged in yet, logging in.");
-            Login.preSetup();
-        } else {
-            Logger.debugLog("We are already logged in, moving camera up.");
-            Client.moveCameraUp();
-        }
-
         setupBanking();
         initialSetup();
     }

@@ -49,7 +49,6 @@ public class dGlassblower extends AbstractScript {
     int makeOption;
     int optionInt;
     String optionItemID;
-    boolean doneInitialSetup = false;
     String moltenglass = "1775";
     String glassblowingpipe = "1785";
     Map<String, String[]> makeOptions;
@@ -63,6 +62,11 @@ public class dGlassblower extends AbstractScript {
 
         initializeMakeOptions();
 
+        // One-time setup
+        setupMakeOptions();
+        setupBanking();
+        initialSetup();
+
         //Logs for debugging purposes
         Logger.log("Thank you for using the dGlass blower script!");
     }
@@ -70,22 +74,6 @@ public class dGlassblower extends AbstractScript {
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
-        Logger.debugLog("Running the poll() method.");
-
-        if (!doneInitialSetup) {
-            Logger.debugLog("doneInitialSetup is false, running initial setups.");
-
-            // Check if we are logged in, if not, login.
-            if (Login.findPlayNowOption() != null) {
-                Logger.debugLog("We are not logged in yet, logging in.");
-                Login.preSetup();
-            }
-
-            // Continue the rest of the setup
-            setupMakeOptions();
-            setupBanking();
-            initialSetup();
-        }
 
         checkInventOpen();
         checkInventGlassblowing();
@@ -262,9 +250,6 @@ public class dGlassblower extends AbstractScript {
         Logger.debugLog("Closing bank interface.");
         Bank.close();
         Logger.debugLog("Closed bank interface.");
-
-        doneInitialSetup = true;
-        Logger.debugLog("Set the doneInitialSetup value to true.");
 
         Logger.debugLog("Ending the initialSetup() method.");
     }
