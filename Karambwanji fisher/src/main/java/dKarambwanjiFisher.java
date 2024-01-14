@@ -12,7 +12,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dKarambwanji Fisher",
         description = "Fishes Karambwanji at Karamja to use as bait for Karambwans. Has a safe option for low HP accounts (keep in mind, that option is slower)",
-        version = "1.00",
+        version = "1.01",
         category = ScriptCategory.Fishing
 )
 @ScriptConfiguration.List(
