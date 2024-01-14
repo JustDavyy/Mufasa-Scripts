@@ -19,7 +19,7 @@ import static helpers.Interfaces.*;
         {
                 @ScriptConfiguration(
                         name =  "Use safe mode?",
-                        description = "Would you like to enable to low HP level safe mode? (this results in less karambwanjis an hour).\nThis only uses the N/NE/E spots, and ignores the S and other spots.",
+                        description = "Would you like to enable to low HP level safe mode? (this results in less karambwanjis an hour). This only uses the N/NE/E spots, and ignores the S and other spots.",
                         defaultValue = "false",
                         optionType = OptionType.BOOLEAN
                 )
