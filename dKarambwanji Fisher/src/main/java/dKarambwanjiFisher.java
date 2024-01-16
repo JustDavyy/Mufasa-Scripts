@@ -12,7 +12,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dKarambwanji Fisher",
         description = "Fishes Karambwanji at Karamja to use as bait for Karambwans. Has a safe option for low HP accounts (keep in mind, this slows down the catch rate).",
-        version = "1.01",
+        version = "1.02",
         category = ScriptCategory.Fishing
 )
 @ScriptConfiguration.List(
@@ -34,12 +34,12 @@ private Instant lastXpGainTime = Instant.now().minusSeconds(15);
 String previousXP = null;
 String newXP;
 Color FishSpotColor = Color.decode("#27ffff");
-Point SouthSpot = new Point(167, 148);
+Point SouthSpot = new Point(195, 140);
 Point NorthEastSpot = new Point(191, 100);
 Point NorthWestSpot = new Point(127, 108);
 Point EastSpot = new Point(207, 116);
 String mapString = "maps/KarambwanjiArea.png";
-Point[] fishingSpots = new Point[] {NorthEastSpot, NorthWestSpot, EastSpot, SouthSpot};
+Point[] fishingSpots = new Point[] {NorthEastSpot, EastSpot, NorthWestSpot, SouthSpot};
 private Instant lastActionTime = Instant.now();
 
     // This is the onStart, and only gets ran once.
