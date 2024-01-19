@@ -5,8 +5,9 @@ import Tasks.CheckPickaxe;
 import Tasks.VarrockEast;
 import helpers.*;
 import helpers.utils.OptionType;
-import utils.Task;
+import utils.*;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ import static helpers.Interfaces.*;
                         defaultValue = "Soul isles",
                         allowedValues = {
                                 @AllowedValue(optionName = "Varrock East"),
-                                @AllowedValue(optionName = "Varrock west"),
+                                @AllowedValue(optionName = "Varrock West"),
                                 //@AllowedValue(optionName = "Soul isles"),
                                 //@AllowedValue(optionName = "Al kharid South"),
                                 //@AllowedValue(optionName = "Mining Guild"),
@@ -66,12 +67,23 @@ import static helpers.Interfaces.*;
 )
 
 public class AIOMiner extends AbstractScript {
+    List<Task> miningTasks = Arrays.asList(
+            new CheckPickaxe(),
+            new Bank(),
+            new VarrockEast()
+    );
+
     public static String Location;
     public static String oreType;
     public static Boolean bankOres;
     public static int miningLevel;
     public String hopProfile;
     public Boolean hopEnabled;
+
+    LocationInfo locationInfo;
+    RegionInfo regionInfo;
+    VeinColors veinColors;
+    PathsToBanks pathsToBanks;
 
     @Override
     public void onStart(){
@@ -82,6 +94,12 @@ public class AIOMiner extends AbstractScript {
         bankOres = Boolean.valueOf((configs.get("Bank ores")));
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
+
+        //Setup enum values
+        setupRegionInfo();
+        setupLocationInfo();
+        setupVeinColors();
+        setupPathsToBank();
 
         //Check and cache STARTING mining level (just to make sure people dont fuck up)
         if (!GameTabs.isStatsTabOpen()) {
@@ -100,12 +118,6 @@ public class AIOMiner extends AbstractScript {
         }
 
         //Run tasks
-            List<Task> miningTasks = Arrays.asList(
-                    new CheckPickaxe(),
-                    new Bank(),
-                    new VarrockEast()
-            );
-
             for (Task task : miningTasks) {
                 if (task.activate()) {
                     task.execute();
@@ -116,5 +128,81 @@ public class AIOMiner extends AbstractScript {
 
     private void hopActions() {
         Game.hop(hopProfile, true, false);
+    }
+
+    private void setupRegionInfo() {
+        switch (Location) {
+            case "Varrock East":
+                regionInfo = RegionInfo.VARROCK_EAST;
+                break;
+            case "Varrock West":
+                regionInfo = RegionInfo.VARROCK_WEST;
+                break;
+        }
+    }
+
+    private void setupLocationInfo() {
+        if (regionInfo.equals(RegionInfo.VARROCK_EAST)) {
+            switch (oreType) {
+                case "Tin ore":
+                    locationInfo = LocationInfo.VARROCK_EAST_TIN;
+                    break;
+                case "Copper ore":
+                    locationInfo = LocationInfo.VARROCK_EAST_COPPER;
+                    break;
+                case "Iron ore":
+                    locationInfo = LocationInfo.VARROCK_EAST_IRON;
+                    break;
+                default:
+                    Logger.log("Incorrect setup configuration");
+                    break;
+            }
+        } else if (regionInfo.equals(RegionInfo.VARROCK_WEST)) {
+            switch (oreType) {
+                case "Clay":
+                    locationInfo = LocationInfo.VARROCK_WEST_CLAY;
+                    break;
+                case "Silver ore":
+                    locationInfo = LocationInfo.VARROCK_WEST_SILVER;
+                    break;
+                case "Iron ore":
+                    locationInfo = LocationInfo.VARROCK_WEST_IRON;
+                    break;
+                default:
+                    Logger.log("Incorrect setup configuration");
+                    break;
+            }
+        }
+    }
+
+    private void setupVeinColors() {
+        switch (oreType) {
+            case "Copper ore":
+                veinColors = VeinColors.COPPER_VEIN;
+                break;
+            case "Tin ore":
+                veinColors = VeinColors.TIN_VEIN;
+                break;
+            case "Iron ore":
+                veinColors = VeinColors.IRON_VEIN;
+                break;
+            case "Clay":
+                veinColors = VeinColors.CLAY;
+                break;
+            case "Silver ore":
+                veinColors = VeinColors.SILVER;
+                break;
+        }
+    }
+
+    private void setupPathsToBank() {
+        switch (Location) {
+            case "Varrock East":
+                pathsToBanks = PathsToBanks.VARROCK_EAST_BANKPATHS;
+                break;
+            case "Varrock West":
+                pathsToBanks = PathsToBanks.VARROCK_WEST_BANKPATHS;
+                break;
+        }
     }
 }
