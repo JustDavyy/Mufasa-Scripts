@@ -1,9 +1,10 @@
+import Tasks.VarrockEast;
 import helpers.*;
 import helpers.utils.OptionType;
-import utils.LocationInfo;
-import utils.LocationRegions;
+import utils.Task;
 
-import javax.xml.stream.Location;
+import java.util.Arrays;
+import java.util.List;
 
 @ScriptManifest(
         name = "AIO Miner",
@@ -19,10 +20,10 @@ import javax.xml.stream.Location;
                         defaultValue = "Soul isles",
                         allowedValues = {
                                 @AllowedValue(optionName = "Varrock East"),
-                                @AllowedValue(optionName = "Varrock west"),
-                                @AllowedValue(optionName = "Soul isles"),
-                                @AllowedValue(optionName = "Al kharid"),
-                                @AllowedValue(optionName = "Mining Guild"),
+                                //@AllowedValue(optionName = "Varrock west"),
+                                //@AllowedValue(optionName = "Soul isles"),
+                                //@AllowedValue(optionName = "Al kharid"),
+                                //@AllowedValue(optionName = "Mining Guild"),
 
                         },
                         optionType = OptionType.STRING
@@ -59,6 +60,15 @@ public class Main extends AbstractScript {
 
     @Override
     public void poll() {
-        //This will loop continuously.
-    }
+            List<Task> agilityTasks = Arrays.asList(
+                    new VarrockEast()
+            );
+
+            for (Task task : agilityTasks) {
+                if (task.activate()) {
+                    task.execute();
+                    return;
+                }
+            }
+        }
 }
