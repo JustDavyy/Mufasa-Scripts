@@ -34,6 +34,36 @@ public enum LocationInfo {
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
             new RegionBox("VarrockEastTin", 8522, 2996, 8522, 2996), //Step
             new RegionBox("VarrockEastMineRegion", 8733, 3147, 8138, 2615) //Location region
+    ),
+    VARROCK_WEST_CLAY(
+            new Rectangle(394, 264, 13, 19), //Check1
+            new Rectangle(430, 226, 20, 23), //Check2
+            new Rectangle(1, 1, 1, 1), //Check3 (only 2 ores)
+            new Rectangle(384, 295, 24, 25), //Click1
+            new Rectangle(429, 255, 26, 27), //Click2
+            new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
+            new RegionBox("VarrockWestClay", 8114, 2964, 8114, 2964), //Step
+            new RegionBox("VarrockWestMineRegion", 7963, 2567, 8300, 3135) //Location region
+    ),
+    VARROCK_WEST_IRON(
+            new Rectangle(440, 299, 16, 20), //Check1
+            new Rectangle(428, 219, 29, 14), //Check2
+            new Rectangle(1, 1, 1, 1), //Check3 (only 2 ores)
+            new Rectangle(429, 302, 26, 31), //Click1
+            new Rectangle(457, 219, 22, 22), //Click2
+            new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
+            new RegionBox("VarrockWestIron", 8094, 2980, 8094, 2980), //Step
+            new RegionBox("VarrockWestMineRegion", 7963, 2567, 8300, 3135) //Location region
+    ),
+    VARROCK_WEST_SILVER(
+            new Rectangle(435, 314, 23, 33), //Check1
+            new Rectangle(481, 268, 31, 25), //Check2
+            new Rectangle(1, 1, 1, 1), //Check3 (only 2 ores)
+            new Rectangle(435, 314, 23, 33), //Click1
+            new Rectangle(481, 268, 31, 25), //Click2
+            new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
+            new RegionBox("VarrockWestSilver", 8098, 2984, 8098, 2984), //Step
+            new RegionBox("VarrockWestMineRegion", 7963, 2567, 8300, 3135) //Location region
     );
     // ...
 

@@ -1,3 +1,5 @@
+package main;
+
 import Tasks.Bank;
 import Tasks.CheckPickaxe;
 import Tasks.VarrockEast;
@@ -31,7 +33,7 @@ import static helpers.Interfaces.*;
                         defaultValue = "Soul isles",
                         allowedValues = {
                                 @AllowedValue(optionName = "Varrock East"),
-                                //@AllowedValue(optionName = "Varrock west"),
+                                @AllowedValue(optionName = "Varrock west"),
                                 //@AllowedValue(optionName = "Soul isles"),
                                 //@AllowedValue(optionName = "Al kharid"),
                                 //@AllowedValue(optionName = "Mining Guild"),
@@ -52,7 +54,8 @@ import static helpers.Interfaces.*;
                         allowedValues = {
                                 @AllowedValue(optionIcon = "436", optionName = "Copper ore"),
                                 @AllowedValue(optionIcon = "438", optionName = "Tin ore"),
-                                //@AllowedValue(optionIcon = "434", optionName = "Clay"),
+                                @AllowedValue(optionIcon = "434", optionName = "Clay"),
+                                @AllowedValue(optionIcon = "442", optionName = "Silver ore"),
                                 @AllowedValue(optionIcon = "440", optionName = "Iron ore"),
                                 //@AllowedValue(optionIcon = "453", optionName = "Coal"),
 

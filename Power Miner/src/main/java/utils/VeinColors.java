@@ -14,6 +14,14 @@ public enum VeinColors {
     IRON_VEIN(
             new Color(0x4b2d23),
             new Color(0x4b2d23) //not done yet
+    ),
+    CLAY(
+            new Color(0x6f5932),
+            new Color(0x6f5932) //not done yet
+    ),
+    SILVER(
+            new Color(0x897e7d),
+            new Color(0x897e7d) //not done yet
     );
 
     // Enum setup

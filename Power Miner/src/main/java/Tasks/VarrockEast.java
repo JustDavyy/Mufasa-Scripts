@@ -1,10 +1,13 @@
 package Tasks;
 
+import main.AIOMiner;
 import utils.Task;
 
 public class VarrockEast extends Task {
     public boolean activate() {
-        //Activate
+        if (AIOMiner.Location.equals("Varrock East")) {
+            return true;
+        }
         return false;
     }
     @Override
