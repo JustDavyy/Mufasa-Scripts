@@ -5,7 +5,7 @@ import helpers.utils.RegionBox;
 import java.awt.*;
 
 public enum LocationInfo {
-    varrockEastCopper(
+    VARROCK_EAST_COPPER(
             new Rectangle(393, 279, 10, 10), //Check1
             new Rectangle(443, 226, 14, 22), //Check2
             new Rectangle(1, 1, 1, 1), //Check3 (only 2 ores)
@@ -15,7 +15,7 @@ public enum LocationInfo {
             new RegionBox("VarrockEastCopper", 8542, 2992, 8542, 2992), //Step
             new RegionBox("VarrockEastMineRegion", 8733, 3147, 8138, 2615) //Location region
     ),
-    varrockEastIron(
+    VARROCK_EAST_IRON(
             new Rectangle(390, 266, 12, 14), //Check1
             new Rectangle(427, 224, 30, 20), //Check2
             new Rectangle(1, 1, 1, 1), //Check3 (only 2 ores)
@@ -23,6 +23,16 @@ public enum LocationInfo {
             new Rectangle(428, 229, 30, 21), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
             new RegionBox("VarrockEastIron", 8538, 2976, 8538, 2976), //Step
+            new RegionBox("VarrockEastMineRegion", 8733, 3147, 8138, 2615) //Location region
+    ),
+    VARROCK_EAST_TIN(
+            new Rectangle(382, 274, 21, 22), //Check1
+            new Rectangle(431, 227, 21, 19), //Check2
+            new Rectangle(1, 1, 1, 1), //Check3 (only 2 ores)
+            new Rectangle(379, 271, 33, 27), //Click1
+            new Rectangle(427, 230, 32, 26), //Click2
+            new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
+            new RegionBox("VarrockEastTin", 8522, 2996, 8522, 2996), //Step
             new RegionBox("VarrockEastMineRegion", 8733, 3147, 8138, 2615) //Location region
     );
     // ...

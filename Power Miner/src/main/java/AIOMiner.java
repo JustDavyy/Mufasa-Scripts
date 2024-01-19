@@ -9,8 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static helpers.Interfaces.GameTabs;
-import static helpers.Interfaces.Stats;
+import static helpers.Interfaces.*;
 
 @ScriptManifest(
         name = "AIO Miner",
@@ -20,6 +19,12 @@ import static helpers.Interfaces.Stats;
 )
 @ScriptConfiguration.List(
         {
+                @ScriptConfiguration(
+                        name =  "Use world hopper?",
+                        description = "Would you like to hop worlds based on your hop profile settings? WDH is disabled for this script, as there's users on every world mostly.",
+                        defaultValue = "1",
+                        optionType = OptionType.WORLDHOPPER
+                ),
                 @ScriptConfiguration(
                         name =  "Location",
                         description = "Which location would you like to use? be sure to read the script guide for which ores are supported in specific locations",
@@ -46,10 +51,10 @@ import static helpers.Interfaces.Stats;
                         defaultValue = "Iron ore",
                         allowedValues = {
                                 @AllowedValue(optionIcon = "436", optionName = "Copper ore"),
-                                @AllowedValue(optionIcon = "442", optionName = "Silver ore"),
-                                @AllowedValue(optionIcon = "434", optionName = "Clay"),
+                                @AllowedValue(optionIcon = "438", optionName = "Tin ore"),
+                                //@AllowedValue(optionIcon = "434", optionName = "Clay"),
                                 @AllowedValue(optionIcon = "440", optionName = "Iron ore"),
-                                @AllowedValue(optionIcon = "453", optionName = "Coal"),
+                                //@AllowedValue(optionIcon = "453", optionName = "Coal"),
 
                         },
                         optionType = OptionType.STRING
@@ -62,6 +67,8 @@ public class AIOMiner extends AbstractScript {
     public static String oreType;
     public static Boolean bankOres;
     public static int miningLevel;
+    public String hopProfile;
+    public Boolean hopEnabled;
 
     @Override
     public void onStart(){
@@ -70,6 +77,8 @@ public class AIOMiner extends AbstractScript {
         Location = configs.get("Location");
         oreType = configs.get("Ore type");
         bankOres = Boolean.valueOf((configs.get("Bank ores")));
+        hopProfile = (configs.get("Use world hopper?"));
+        hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
 
         //Check and cache STARTING mining level (just to make sure people dont fuck up)
         if (!GameTabs.isStatsTabOpen()) {
@@ -82,6 +91,11 @@ public class AIOMiner extends AbstractScript {
 
     @Override
     public void poll() {
+        //Check if we should do hopping
+        if(hopEnabled) {
+            hopActions();
+        }
+
         //Run tasks
             List<Task> miningTasks = Arrays.asList(
                     new CheckPickaxe(),
@@ -96,4 +110,8 @@ public class AIOMiner extends AbstractScript {
                 }
             }
         }
+
+    private void hopActions() {
+        Game.hop(hopProfile, true, false);
+    }
 }
