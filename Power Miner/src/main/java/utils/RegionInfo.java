@@ -2,8 +2,6 @@ package utils;
 
 import helpers.utils.RegionBox;
 
-import java.awt.*;
-
 public enum RegionInfo {
     VARROCK_EAST(
             new RegionBox("WorldRegion", 8225, 2600, 8699, 3167),

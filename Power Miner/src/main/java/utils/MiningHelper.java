@@ -7,7 +7,7 @@ import static helpers.Interfaces.Client;
 import static helpers.Interfaces.Condition;
 
 public class MiningHelper {
-    private Random random = new Random();
+    private final Random random = new Random();
 
     public void checkPositions(LocationInfo locationInfo, VeinColors veinColors) {
         if (isValidRect(locationInfo.getCheckLocation1()) && Client.isColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation1(), 10)) {

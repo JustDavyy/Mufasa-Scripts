@@ -28,8 +28,8 @@ public class CheckPickaxe extends Task {
 
             if (GameTabs.isInventoryTabOpen()) {
                 if (Inventory.containsAny(pickaxeIDs, 0.75)) {
-                    checkedForPickaxe = true;
                     hasPickaxe = true;
+                    checkedForPickaxe = true;
                     return true;
                 }
             }
@@ -46,6 +46,7 @@ public class CheckPickaxe extends Task {
                 for (int pickaxeID : pickaxeIDs) {
                     if (Equipment.itemAt(EquipmentSlot.WEAPON, pickaxeID)) {
                         hasPickaxe = true;
+                        checkedForPickaxe = true;
                         return true;
                     }
                 }
@@ -53,15 +54,7 @@ public class CheckPickaxe extends Task {
             checkedEquipment = true;
         }
 
-        if (checkedInventory && checkedEquipment && !hasPickaxe) {
-            Logger.log("You dont have a pickaxe in inventory or equipped");
-            Script.stop();
-        }
-        if (checkedInventory && checkedEquipment && hasPickaxe) {
-            hasPickaxe = true;
-            return true;
-        }
-
+        checkedForPickaxe = true;
         return false;
     }
 }
