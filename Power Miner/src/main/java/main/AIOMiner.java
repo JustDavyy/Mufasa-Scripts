@@ -35,7 +35,7 @@ import static helpers.Interfaces.*;
                                 @AllowedValue(optionName = "Varrock East"),
                                 @AllowedValue(optionName = "Varrock west"),
                                 //@AllowedValue(optionName = "Soul isles"),
-                                //@AllowedValue(optionName = "Al kharid"),
+                                //@AllowedValue(optionName = "Al kharid South"),
                                 //@AllowedValue(optionName = "Mining Guild"),
 
                         },

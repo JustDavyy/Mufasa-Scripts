@@ -10,8 +10,7 @@ import static helpers.Interfaces.Condition;
 
 public class MiningHelper {
     public void checkPositions(LocationInfo locationInfo, VeinColors veinColors) {
-        // You need to define Client or a similar class that has the isColorInRect method
-        if (isValidRect(locationInfo.getCheckLocation1()) && Client.isColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation1(), 10)) { // Assuming tolerance of 10
+        if (isValidRect(locationInfo.getCheckLocation1()) && Client.isColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation1(), 10)) {
             clickPositions(locationInfo, 1, veinColors);
         }
 

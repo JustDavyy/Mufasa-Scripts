@@ -12,8 +12,7 @@ public enum LocationInfo {
             new Rectangle(383, 272, 28, 31), //Click1
             new Rectangle(428, 229, 30, 21), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
-            new RegionBox("VarrockEastCopper", 8542, 2992, 8542, 2992), //Step
-            new RegionBox("VarrockEastMineRegion", 8733, 3147, 8138, 2615) //Location region
+            new RegionBox("VarrockEastCopper", 8542, 2992, 8542, 2992) //Step
     ),
     VARROCK_EAST_IRON(
             new Rectangle(390, 266, 12, 14), //Check1
@@ -22,8 +21,7 @@ public enum LocationInfo {
             new Rectangle(383, 260, 33, 33), //Click1
             new Rectangle(428, 229, 30, 21), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
-            new RegionBox("VarrockEastIron", 8538, 2976, 8538, 2976), //Step
-            new RegionBox("VarrockEastMineRegion", 8733, 3147, 8138, 2615) //Location region
+            new RegionBox("VarrockEastIron", 8538, 2976, 8538, 2976) //Step
     ),
     VARROCK_EAST_TIN(
             new Rectangle(382, 274, 21, 22), //Check1
@@ -32,8 +30,7 @@ public enum LocationInfo {
             new Rectangle(379, 271, 33, 27), //Click1
             new Rectangle(427, 230, 32, 26), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
-            new RegionBox("VarrockEastTin", 8522, 2996, 8522, 2996), //Step
-            new RegionBox("VarrockEastMineRegion", 8733, 3147, 8138, 2615) //Location region
+            new RegionBox("VarrockEastTin", 8522, 2996, 8522, 2996) //Step
     ),
     VARROCK_WEST_CLAY(
             new Rectangle(394, 264, 13, 19), //Check1
@@ -42,8 +39,7 @@ public enum LocationInfo {
             new Rectangle(384, 295, 24, 25), //Click1
             new Rectangle(429, 255, 26, 27), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
-            new RegionBox("VarrockWestClay", 8114, 2964, 8114, 2964), //Step
-            new RegionBox("VarrockWestMineRegion", 7963, 2567, 8300, 3135) //Location region
+            new RegionBox("VarrockWestClay", 8114, 2964, 8114, 2964) //Step
     ),
     VARROCK_WEST_IRON(
             new Rectangle(440, 299, 16, 20), //Check1
@@ -52,8 +48,7 @@ public enum LocationInfo {
             new Rectangle(429, 302, 26, 31), //Click1
             new Rectangle(457, 219, 22, 22), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
-            new RegionBox("VarrockWestIron", 8094, 2980, 8094, 2980), //Step
-            new RegionBox("VarrockWestMineRegion", 7963, 2567, 8300, 3135) //Location region
+            new RegionBox("VarrockWestIron", 8094, 2980, 8094, 2980) //Step
     ),
     VARROCK_WEST_SILVER(
             new Rectangle(435, 314, 23, 33), //Check1
@@ -62,8 +57,7 @@ public enum LocationInfo {
             new Rectangle(435, 314, 23, 33), //Click1
             new Rectangle(481, 268, 31, 25), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
-            new RegionBox("VarrockWestSilver", 8098, 2984, 8098, 2984), //Step
-            new RegionBox("VarrockWestMineRegion", 7963, 2567, 8300, 3135) //Location region
+            new RegionBox("VarrockWestSilver", 8098, 2984, 8098, 2984) //Step
     );
     // ...
 
@@ -74,9 +68,8 @@ public enum LocationInfo {
     private final Rectangle clickLocation2;
     private final Rectangle clickLocation3;
     private final RegionBox stepLocation;
-    private final RegionBox worldRegion;
 
-    LocationInfo(Rectangle checkLocation1, Rectangle checkLocation2, Rectangle checkLocation3, Rectangle clickLocation1, Rectangle clickLocation2, Rectangle clickLocation3, RegionBox stepLocation, RegionBox worldRegion) {
+    LocationInfo(Rectangle checkLocation1, Rectangle checkLocation2, Rectangle checkLocation3, Rectangle clickLocation1, Rectangle clickLocation2, Rectangle clickLocation3, RegionBox stepLocation) {
         this.checkLocation1 = checkLocation1;
         this.checkLocation2 = checkLocation2;
         this.checkLocation3 = checkLocation3;
@@ -84,7 +77,6 @@ public enum LocationInfo {
         this.clickLocation2 = clickLocation2;
         this.clickLocation3 = clickLocation3;
         this.stepLocation = stepLocation;
-        this.worldRegion = worldRegion;
     }
 
     public Rectangle getCheckLocation1() {
@@ -109,9 +101,5 @@ public enum LocationInfo {
 
     public RegionBox getStepLocation() {
         return stepLocation;
-    }
-
-    public RegionBox getWorldRegion() {
-        return worldRegion;
     }
 }
