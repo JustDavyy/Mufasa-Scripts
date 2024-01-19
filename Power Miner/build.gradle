@@ -17,19 +17,19 @@ configurations.all {
 }
 
 dependencies {
-    implementation('com.github.Mufasa-SDK:SDKRepo:1.+') {
+    implementation('com.github.Mufasa-SDK:SDKRepo:1.1.17') {
         changing = true
     }
 }
 
 jar {
-    archiveFileName = 'dAIOBowFletcher.jar'
+    archiveFileName = 'AIOMiner.jar'
     destinationDirectory = file('jar/')
 
     manifest {
         attributes(
                 'Manifest-Version': '1.0',
-                'Created-By': 'JustDavyy'
+                'Created-By': 'Moeinich'
         )
     }
 }

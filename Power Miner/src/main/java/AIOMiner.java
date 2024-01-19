@@ -1,3 +1,5 @@
+import Tasks.Bank;
+import Tasks.CheckPickaxe;
 import Tasks.VarrockEast;
 import helpers.*;
 import helpers.utils.OptionType;
@@ -5,6 +7,10 @@ import utils.Task;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+
+import static helpers.Interfaces.GameTabs;
+import static helpers.Interfaces.Stats;
 
 @ScriptManifest(
         name = "AIO Miner",
@@ -51,20 +57,39 @@ import java.util.List;
         }
 )
 
-public class Main extends AbstractScript {
+public class AIOMiner extends AbstractScript {
+    public static String Location;
+    public static String oreType;
+    public static Boolean bankOres;
+    public static int miningLevel;
 
     @Override
     public void onStart(){
-        // Things you want to do before the script itself starts running
+        //Setup configs
+        Map<String, String> configs = getConfigurations();
+        Location = configs.get("Location");
+        oreType = configs.get("Ore type");
+        bankOres = Boolean.valueOf((configs.get("Bank ores")));
+
+        //Check and cache STARTING mining level (just to make sure people dont fuck up)
+        if (!GameTabs.isStatsTabOpen()) {
+            GameTabs.openStatsTab();
+        }
+        if (GameTabs.isStatsTabOpen()) {
+            miningLevel = Stats.getRealLevel("MINING");
+        }
     }
 
     @Override
     public void poll() {
-            List<Task> agilityTasks = Arrays.asList(
+        //Run tasks
+            List<Task> miningTasks = Arrays.asList(
+                    new CheckPickaxe(),
+                    new Bank(),
                     new VarrockEast()
             );
 
-            for (Task task : agilityTasks) {
+            for (Task task : miningTasks) {
                 if (task.activate()) {
                     task.execute();
                     return;

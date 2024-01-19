@@ -1,0 +1,67 @@
+package Tasks;
+
+import helpers.utils.EquipmentSlot;
+import helpers.utils.ItemList;
+import utils.Task;
+
+import static helpers.Interfaces.*;
+
+public class CheckPickaxe extends Task {
+    public static boolean hasPickaxe = false;
+    boolean checkedForPickaxe = false;
+    boolean checkedInventory = false;
+    boolean checkedEquipment = false;
+    int[] pickaxeIDs = {ItemList.BRONZE_PICKAXE_1265, ItemList.IRON_PICKAXE_1267, ItemList.STEEL_PICKAXE_1269, ItemList.BLACK_PICKAXE_12297, ItemList.MITHRIL_PICKAXE_1273, ItemList.ADAMANT_PICKAXE_1271, ItemList.RUNE_PICKAXE_1275, ItemList.DRAGON_PICKAXE_11920};
+
+
+    public boolean activate() {
+        return !checkedForPickaxe;
+    }
+
+    @Override
+    public boolean execute() {
+        if (!checkedInventory) {
+            if (!GameTabs.isInventoryTabOpen()) {
+                GameTabs.openInventoryTab();
+                Condition.wait(() -> GameTabs.isInventoryTabOpen(), 50, 10);
+            }
+
+            if (GameTabs.isInventoryTabOpen()) {
+                if (Inventory.containsAny(pickaxeIDs, 0.75)) {
+                    checkedForPickaxe = true;
+                    hasPickaxe = true;
+                    return true;
+                }
+            }
+            checkedInventory = true;
+        }
+
+        if (!checkedEquipment) {
+            if (!GameTabs.isEquipTabOpen()) {
+                GameTabs.openEquipTab();
+                Condition.wait(() -> GameTabs.isEquipTabOpen(), 50, 10);
+            }
+
+            if (GameTabs.isEquipTabOpen()) {
+                for (int pickaxeID : pickaxeIDs) {
+                    if (Equipment.itemAt(EquipmentSlot.WEAPON, pickaxeID)) {
+                        hasPickaxe = true;
+                        return true;
+                    }
+                }
+            }
+            checkedEquipment = true;
+        }
+
+        if (checkedInventory && checkedEquipment && !hasPickaxe) {
+            Logger.log("You dont have a pickaxe in inventory or equipped");
+            Script.stop();
+        }
+        if (checkedInventory && checkedEquipment && hasPickaxe) {
+            hasPickaxe = true;
+            return true;
+        }
+
+        return false;
+    }
+}
