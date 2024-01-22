@@ -4,7 +4,6 @@ import helpers.utils.OptionType;
 import java.awt.*;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Random;
 import static helpers.Interfaces.*;
 import static helpers.Interfaces.Logout;
@@ -99,14 +98,14 @@ public class dAIOBowFletcher extends AbstractScript {
     @Override
     public void poll() {
 
-        if (Objects.equals(method, "Cut")) {
+        if (method.equals("Cut")) {
             checkInventOpen();
             checkInventCutMethod();
             executeCutMethod();
             bank();
         }
 
-        else if (Objects.equals(method, "String")) {
+        else if (method.equals("String")) {
             checkInventOpen();
             checkInventStringMethod();
             executeStringMethod();
@@ -198,7 +197,7 @@ public class dAIOBowFletcher extends AbstractScript {
         int randomBiggerDelay = new Random().nextInt(1500) + 1500;
 
         // Part if the Cut method was chosen
-        if (Objects.equals(method, "Cut")) {
+        if (method.equals("Cut")) {
             Logger.debugLog("Cut method was selected.");
 
             // Withdrawing a knife from the bank
@@ -287,7 +286,7 @@ public class dAIOBowFletcher extends AbstractScript {
         }
 
         // Part if the String method was chosen
-        else if (Objects.equals(method, "String")) {
+        else if (method.equals("String")) {
             int randomDelay2 = new Random().nextInt(300) + 200;
             int randomBiggerDelay2 = new Random().nextInt(400) + 600;
             Logger.debugLog("String method was selected.");
@@ -310,7 +309,7 @@ public class dAIOBowFletcher extends AbstractScript {
                 }
 
                 // Withdraw first set of items
-                if (Objects.equals(product, "Shortbow")) {
+                if (product.equals("Shortbow")) {
                     Bank.withdrawItem(shortbowU, 0.75);
                 } else {
                     Bank.withdrawItem(longbowU, 0.75);
@@ -326,7 +325,7 @@ public class dAIOBowFletcher extends AbstractScript {
                 }
 
                 // Withdraw first set of items
-                if (Objects.equals(product, "Shortbow")) {
+                if (product.equals("Shortbow")) {
                     Bank.withdrawItem(shortbowU, 0.75);
                 } else {
                     Bank.withdrawItem(longbowU, 0.75);
@@ -364,7 +363,7 @@ public class dAIOBowFletcher extends AbstractScript {
         Condition.wait(() -> Chatbox.isMakeMenuVisible(), 200, 12);
 
         // tap option needed based on choice in config
-        if (Objects.equals(product, "Shortbow")) {
+        if (product.equals("Shortbow")) {
             Chatbox.makeOption(2);
             Logger.debugLog("Selected option 2 in chatbox.");
         } else {
@@ -394,7 +393,7 @@ public class dAIOBowFletcher extends AbstractScript {
         Logger.debugLog("Starting executeStringMethod() method.");
 
         // Check if we have both unstrung bows and bowstrings in the inventory.
-        if (Objects.equals(product, "Shortbow")) {
+        if (product.equals("Shortbow")) {
             if (!Inventory.contains(shortbowU, 0.75) && !Inventory.contains(bowstring, 0.75)) {
                 Logger.log("We don't have unstrung bows and bowstring in our inventory, going back to banking!");
                 return;
@@ -407,7 +406,7 @@ public class dAIOBowFletcher extends AbstractScript {
         }
 
         // tap item needed based on choice in config
-        if (Objects.equals(product, "Shortbow")) {
+        if (product.equals("Shortbow")) {
             Inventory.tapItem(shortbowU, 0.75);
         } else {
             Inventory.tapItem(longbowU, 0.75);
@@ -457,8 +456,8 @@ public class dAIOBowFletcher extends AbstractScript {
         }
 
         // Depositing items based on your tier/method
-        if (Objects.equals(method, "Cut")){
-            if (Objects.equals(product, "Shortbow")) {
+        if (method.equals("Cut")){
+            if (product.equals("Shortbow")) {
                 Logger.debugLog("Depositing unstrung shortbows.");
                 Inventory.tapItem(shortbowU, 0.75);
             } else {
@@ -466,8 +465,8 @@ public class dAIOBowFletcher extends AbstractScript {
                 Inventory.tapItem(longbowU, 0.75);
             }
         }
-        else if (Objects.equals(method, "String")) {
-            if (Objects.equals(product, "Shortbow")) {
+        else if (method.equals("String")) {
+            if (product.equals("Shortbow")) {
                 Logger.debugLog("Depositing strung shortbows.");
                 Inventory.tapItem(shortbow, 0.75);
             } else {
@@ -478,15 +477,15 @@ public class dAIOBowFletcher extends AbstractScript {
         Condition.sleep(randomDelay);
 
         // Withdrawing the items based on your tier/method
-        if (Objects.equals(method, "Cut")) {
+        if (method.equals("Cut")) {
             Bank.withdrawItem(logs, 0.75);
 
             Logger.debugLog("Withdrew " + tier + " from the bank.");
         }
-        else if (Objects.equals(method, "String")) {
+        else if (method.equals("String")) {
 
             // Withdraw unstrung bow that was picked in the config
-            if (Objects.equals(product, "Shortbow")) {
+            if (product.equals("Shortbow")) {
                 Logger.debugLog("Withdrawing unstrung shortbows");
                 Bank.withdrawItem(shortbowU, 0.75);
 
@@ -536,7 +535,7 @@ public class dAIOBowFletcher extends AbstractScript {
     private void checkInventStringMethod() {
         // Check if we have both unstrung bows and bowstrings in the inventory.
         //noinspection IfStatementWithIdenticalBranches
-        if (Objects.equals(product, "Shortbow")) {
+        if (product.equals("Shortbow")) {
             String[] items = {shortbowU, bowstring};
             if (!Inventory.contains(items, 0.75)) {
                 Logger.debugLog("1st check failed for unstrung bows and bowstring in our inventory, going back to banking!");
@@ -551,7 +550,7 @@ public class dAIOBowFletcher extends AbstractScript {
         }
 
         // Check if we have both unstrung bows and bowstrings in the inventory.
-        if (Objects.equals(product, "Shortbow")) {
+        if (product.equals("Shortbow")) {
             if (!Inventory.contains(shortbowU, 0.75) && !Inventory.contains(bowstring, 0.75)) {
                 Logger.log("2nd check failed for unstrung bows and bowstring in our inventory, logging out and aborting script!");
                 Logout.logout();
