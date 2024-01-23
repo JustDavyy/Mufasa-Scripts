@@ -17,6 +17,7 @@ import static helpers.Interfaces.*;
         name = "AIO Miner",
         description = "Mines ores in different places",
         version = "1.0",
+        guideLink = "",
         category = ScriptCategory.Mining
 )
 @ScriptConfiguration.List(
