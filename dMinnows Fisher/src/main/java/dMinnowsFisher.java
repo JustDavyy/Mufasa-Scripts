@@ -15,6 +15,7 @@ import static helpers.Interfaces.*;
         name = "dMinnows Fisher",
         description = "Fishes Minnows at Kylie Minnow's fishing platform at the Fishing Guild. The angler's outfit is needed to unlock the platform.",
         version = "1.00",
+        guideLink = "https://wiki.mufasaclient.com/docs/dminnows-fisher/",
         category = ScriptCategory.Fishing
 )
 @ScriptConfiguration.List(

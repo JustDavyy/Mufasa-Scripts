@@ -12,6 +12,7 @@ import static helpers.Interfaces.Logout;
         name = "dAIO Bow Fletcher",
         description = "Cuts or strings bows for you. Supports all log tiers, and both short and longbows with dynamic banking.",
         version = "1.35",
+        guideLink = "https://wiki.mufasaclient.com/docs/daio-bow-fletcher/",
         category = ScriptCategory.Fletching
 )
 @ScriptConfiguration.List(
