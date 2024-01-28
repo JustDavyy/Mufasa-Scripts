@@ -1,6 +1,8 @@
 import helpers.*;
 import helpers.utils.OptionType;
-
+import helpers.utils.OverlayColor;
+import helpers.utils.Tile;
+import helpers.utils.Area;
 import java.awt.*;
 import java.time.Duration;
 import java.util.Map;
@@ -28,19 +30,21 @@ import static helpers.Interfaces.*;
 )
 
 public class dKarambwanjiFisher extends AbstractScript {
-Rectangle FishingArea = new Rectangle(75, 60, 147, 119);
+Area FishingArea = new Area(
+        new Tile(1, 0),
+        new Tile(97, 77)
+);
+String FishingSpot;
 Boolean SafeModeOn;
-Point playerPos;
 private Instant lastXpGainTime = Instant.now().minusSeconds(15);
 String previousXP = null;
 String newXP;
-Color FishSpotColor = Color.decode("#27ffff");
-Point SouthSpot = new Point(195, 140);
-Point NorthEastSpot = new Point(191, 100);
-Point NorthWestSpot = new Point(127, 108);
-Point EastSpot = new Point(207, 116);
+Tile SouthSpot = new Tile(55, 49);
+Tile NorthEastSpot = new Tile(63, 32);
+Tile NorthWestSpot = new Tile(42, 34);
+Tile EastSpot = new Tile(69, 38);
 String mapString = "maps/KarambwanjiArea.png";
-Point[] fishingSpots = new Point[] {NorthEastSpot, EastSpot, NorthWestSpot, SouthSpot};
+Tile[] fishingSpots = new Tile[] {NorthEastSpot, EastSpot, NorthWestSpot, SouthSpot};
 private Instant lastActionTime = Instant.now();
 
     // This is the onStart, and only gets ran once.
@@ -53,8 +57,8 @@ private Instant lastActionTime = Instant.now();
         Logger.log("Setting up everything for your gains now...");
 
         // Checking if we are at the right location
-        Point playerPos = Walker.getPlayerPosition(mapString);
-        if (FishingArea.contains(playerPos)) {
+        Tile playerPos = Walker.getPlayerPosition(mapString);
+        if (Player.isTileWithinArea(playerPos, FishingArea)) {
             Logger.debugLog("We are located at the Karambwanji fishing area, checking if we have a small fishing net...");
         } else {
             Logger.log("Could not locate us in the Karambwanji fishing area. Please move there and start the script again.");
@@ -95,7 +99,7 @@ private Instant lastActionTime = Instant.now();
     }
 
     private void FishKarambwanjis() {
-        Polygon fishSquare = Overlay.findNearest(FishSpotColor);
+        Polygon fishSquare = Overlay.findNearest(OverlayColor.FISHING);
         if (fishSquare != null) {
             Client.tap(fishSquare);
             lastXpGainTime = Instant.now();
@@ -136,13 +140,22 @@ private Instant lastActionTime = Instant.now();
             index = random.nextInt(fishingSpots.length);
         }
 
-        Point selectedSpot = fishingSpots[index];
+        Tile selectedSpot = fishingSpots[index];
+        if (index == 0){
+            FishingSpot = "North-East";
+        } else if (index == 1) {
+            FishingSpot = "East";
+        } else if (index == 2) {
+            FishingSpot = "North-West";
+        } else if (index == 3) {
+            FishingSpot = "South";
+        }
         // Log the selected spot
-        Logger.debugLog("Moving to a new fishing spot: " + selectedSpot);
+        Logger.debugLog("Moving to a new fishing spot: " + FishingSpot);
 
         Walker.stepCustomMap(selectedSpot, mapString);
         lastActionTime = Instant.now();
-        Condition.wait(() -> Walker.getPlayerPosition(mapString).equals(selectedSpot), 500, 35);
+        Condition.wait(() -> Player.atTileCustom(mapString, selectedSpot), 500, 35);
     }
 
     private void performAntiAFKAction() {
