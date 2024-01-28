@@ -1,12 +1,13 @@
 import helpers.*;
 import helpers.utils.OptionType;
 import helpers.utils.RegionBox;
+import helpers.utils.Tile;
+import helpers.utils.Area;
 
 import java.awt.*;
 import java.time.Duration;
 import java.util.Map;
 import java.time.Instant;
-import java.util.Objects;
 import java.util.Random;
 
 import static helpers.Interfaces.*;
@@ -30,8 +31,16 @@ import static helpers.Interfaces.*;
 )
 
 public class dMinnowsFisher extends AbstractScript {
-Rectangle minnowPlatform = new Rectangle(5789, 2633, 119, 85);
-Point playerPos;
+Area minnowPlatform = new Area(
+        new Tile(1935, 883),
+        new Tile(1965, 903)
+);
+RegionBox minnowRegion = new RegionBox(
+        "minnows",
+        5616, 2490,
+        6090, 2928
+);
+Tile playerPos;
 private Instant lastXpGainTime = Instant.now().minusSeconds(5);
 private Instant lastSharkAction = Instant.now();
 String previousXP = null;
@@ -69,7 +78,7 @@ Random random = new Random();
 
         // Checking if we are at the right location
         playerPos = Walker.getPlayerPosition("maps/map.png");
-        if (minnowPlatform.contains(playerPos)) {
+        if (Player.isTileWithinArea(playerPos, minnowPlatform)) {
             Logger.debugLog("We are located at the Minnow platform, checking if we have a small fishing net...");
         } else {
             Logger.log("Could not locate us at the Minnow platform. Please move there and start the script again.");
