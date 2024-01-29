@@ -43,7 +43,7 @@ Tile SouthSpot = new Tile(55, 49);
 Tile NorthEastSpot = new Tile(63, 32);
 Tile NorthWestSpot = new Tile(42, 34);
 Tile EastSpot = new Tile(69, 38);
-String mapString = "maps/KarambwanjiArea.png";
+String mapString = "/maps/KarambwanjiArea.png";
 Tile[] fishingSpots = new Tile[] {NorthEastSpot, EastSpot, NorthWestSpot, SouthSpot};
 private Instant lastActionTime = Instant.now();
 
