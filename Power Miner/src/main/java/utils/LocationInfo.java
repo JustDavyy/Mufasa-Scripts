@@ -1,6 +1,7 @@
 package utils;
 
 import helpers.utils.RegionBox;
+import helpers.utils.Tile;
 
 import java.awt.*;
 
@@ -12,7 +13,7 @@ public enum LocationInfo {
             new Rectangle(383, 272, 28, 31), //Click1
             new Rectangle(428, 229, 30, 21), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
-            new RegionBox("VarrockEastCopper", 8542, 2992, 8542, 2992) //Step
+            new Tile(2847,998) //Step
     ),
     VARROCK_EAST_IRON(
             new Rectangle(390, 266, 12, 14), //Check1
@@ -21,7 +22,7 @@ public enum LocationInfo {
             new Rectangle(383, 260, 33, 33), //Click1
             new Rectangle(428, 229, 30, 21), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
-            new RegionBox("VarrockEastIron", 8538, 2976, 8538, 2976) //Step
+            new Tile(2846,992) //Step
     ),
     VARROCK_EAST_TIN(
             new Rectangle(382, 274, 21, 22), //Check1
@@ -30,7 +31,7 @@ public enum LocationInfo {
             new Rectangle(379, 271, 33, 27), //Click1
             new Rectangle(427, 230, 32, 26), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
-            new RegionBox("VarrockEastTin", 8522, 2996, 8522, 2996) //Step
+            new Tile(2840,999) //Step
     ),
     VARROCK_WEST_CLAY(
             new Rectangle(394, 264, 13, 19), //Check1
@@ -67,9 +68,9 @@ public enum LocationInfo {
     private final Rectangle clickLocation1;
     private final Rectangle clickLocation2;
     private final Rectangle clickLocation3;
-    private final RegionBox stepLocation;
+    private final Tile stepLocation;
 
-    LocationInfo(Rectangle checkLocation1, Rectangle checkLocation2, Rectangle checkLocation3, Rectangle clickLocation1, Rectangle clickLocation2, Rectangle clickLocation3, RegionBox stepLocation) {
+    LocationInfo(Rectangle checkLocation1, Rectangle checkLocation2, Rectangle checkLocation3, Rectangle clickLocation1, Rectangle clickLocation2, Rectangle clickLocation3, Tile stepLocation) {
         this.checkLocation1 = checkLocation1;
         this.checkLocation2 = checkLocation2;
         this.checkLocation3 = checkLocation3;
@@ -99,7 +100,7 @@ public enum LocationInfo {
         return clickLocation3;
     }
 
-    public RegionBox getStepLocation() {
+    public Tile getStepLocation() {
         return stepLocation;
     }
 }

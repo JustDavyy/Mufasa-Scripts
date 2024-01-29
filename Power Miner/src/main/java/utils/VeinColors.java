@@ -5,15 +5,15 @@ import java.awt.*;
 public enum VeinColors {
     COPPER_VEIN(
             new Color(0x865d3a),
-            new Color(0x865d3a) //not done yet
+            new Color(0x4c4646) //not done yet
     ),
     TIN_VEIN(
             new Color(0x665d5d),
-            new Color(0x665d5d) //not done yet
+            new Color(0x585252) //not done yet
     ),
     IRON_VEIN(
-            new Color(0x4b2d23),
-            new Color(0x4b2d23) //not done yet
+            new Color(0x8d8181),
+            new Color(0x585252) //not done yet
     ),
     CLAY(
             new Color(0x6f5932),
