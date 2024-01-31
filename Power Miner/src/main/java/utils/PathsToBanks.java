@@ -1,38 +1,48 @@
 package utils;
 
-import java.awt.*;
+import helpers.utils.Tile;
 
 public enum PathsToBanks {
     VARROCK_EAST_BANKPATHS(
-            new java.awt.Point[]{new java.awt.Point(8544, 2965), new java.awt.Point(8557, 2951), new java.awt.Point(8564, 2935), new java.awt.Point(8562, 2912), new java.awt.Point(8559, 2890), new java.awt.Point(8558, 2864), new java.awt.Point(8557, 2851), new java.awt.Point(8559, 2830), new java.awt.Point(8549, 2805), new java.awt.Point(8540, 2786), new java.awt.Point(8530, 2757), new java.awt.Point(8515, 2754), new java.awt.Point(8501, 2743), new java.awt.Point(8479, 2741), new java.awt.Point(8453, 2742), new java.awt.Point(8428, 2737), new java.awt.Point(8410, 2745)},
-            new java.awt.Point[]{new java.awt.Point(8541, 2963), new java.awt.Point(8552, 2954), new java.awt.Point(8555, 2939), new java.awt.Point(8556, 2920), new java.awt.Point(8553, 2896), new java.awt.Point(8551, 2875), new java.awt.Point(8549, 2852), new java.awt.Point(8551, 2834), new java.awt.Point(8549, 2809), new java.awt.Point(8529, 2794), new java.awt.Point(8516, 2780), new java.awt.Point(8505, 2763), new java.awt.Point(8503, 2749), new java.awt.Point(8485, 2739), new java.awt.Point(8468, 2741), new java.awt.Point(8444, 2741), new java.awt.Point(8419, 2735), new java.awt.Point(8408, 2743)},
-            new java.awt.Point[]{new java.awt.Point(8553, 2963), new java.awt.Point(8558, 2945), new java.awt.Point(8558, 2936), new java.awt.Point(8561, 2918), new java.awt.Point(8559, 2892), new java.awt.Point(8558, 2866), new java.awt.Point(8558, 2853), new java.awt.Point(8556, 2836), new java.awt.Point(8552, 2813), new java.awt.Point(8541, 2795), new java.awt.Point(8521, 2782), new java.awt.Point(8509, 2765), new java.awt.Point(8505, 2750), new java.awt.Point(8493, 2737), new java.awt.Point(8468, 2738), new java.awt.Point(8429, 2738), new java.awt.Point(8411, 2739), new java.awt.Point(8408, 2766)}
+            new Tile[] {
+                    new Tile(2846, 988), new Tile(2850, 986), new Tile(2854, 982), new Tile(2854, 979), new Tile(2854, 972), new Tile(2853, 965), new Tile(2852, 961), new Tile(2853, 953), new Tile(2852, 949), new Tile(2850, 941), new Tile(2849, 934), new Tile(2847, 926), new Tile(2844, 922), new Tile(2837, 917), new Tile(2828, 914), new Tile(2819, 915), new Tile(2809, 912), new Tile(2802, 916)},
+            new Tile[] {
+                    new Tile(2849, 988), new Tile(2851, 986), new Tile(2854, 982), new Tile(2852, 974), new Tile(2852, 969), new Tile(2852, 964), new Tile(2851, 960), new Tile(2851, 955), new Tile(2850, 951), new Tile(2850, 944), new Tile(2849, 940), new Tile(2846, 935), new Tile(2841, 931), new Tile(2838, 926), new Tile(2835, 918), new Tile(2827, 914), new Tile(2818, 914), new Tile(2808, 912), new Tile(2802, 917)
+            },
+            new Tile[] {
+                    new Tile(2844, 989), new Tile(2845, 988), new Tile(2849, 985), new Tile(2852, 982), new Tile(2854, 978), new Tile(2854, 972), new Tile(2854, 968), new Tile(2853, 961), new Tile(2852, 957), new Tile(2852, 951), new Tile(2851, 943), new Tile(2850, 937), new Tile(2848, 930), new Tile(2847, 924), new Tile(2844, 920), new Tile(2840, 918), new Tile(2833, 916), new Tile(2828, 914), new Tile(2820, 913), new Tile(2814, 913), new Tile(2806, 912), new Tile(2803, 916)
+            }
     ),
     VARROCK_WEST_BANKPATHS(
-            new java.awt.Point[]{new java.awt.Point(8125, 2953), new java.awt.Point(8122, 2936), new java.awt.Point(8109, 2918), new java.awt.Point(8086, 2879), new java.awt.Point(8079, 2852), new java.awt.Point(8077, 2820), new java.awt.Point(8080, 2786), new java.awt.Point(8082, 2769), new java.awt.Point(8083, 2747), new java.awt.Point(8101, 2739), new java.awt.Point(8122, 2718)},
-            new java.awt.Point[]{new java.awt.Point(8124, 2952), new java.awt.Point(8124, 2935), new java.awt.Point(8115, 2923), new java.awt.Point(8104, 2906), new java.awt.Point(8093, 2891), new java.awt.Point(8088, 2869), new java.awt.Point(8079, 2846), new java.awt.Point(8073, 2825), new java.awt.Point(8071, 2809), new java.awt.Point(8075, 2790), new java.awt.Point(8079, 2769), new java.awt.Point(8081, 2756), new java.awt.Point(8094, 2743), new java.awt.Point(8109, 2732), new java.awt.Point(8123, 2727), new java.awt.Point(8125, 2708)},
-            new java.awt.Point[]{new java.awt.Point(8119, 2959), new java.awt.Point(8125, 2952), new java.awt.Point(8128, 2940), new java.awt.Point(8122, 2930), new java.awt.Point(8115, 2918), new java.awt.Point(8110, 2900), new java.awt.Point(8105, 2882), new java.awt.Point(8083, 2869), new java.awt.Point(8080, 2856), new java.awt.Point(8079, 2830), new java.awt.Point(8081, 2817), new java.awt.Point(8078, 2791), new java.awt.Point(8079, 2777), new java.awt.Point(8081, 2759), new java.awt.Point(8088, 2743), new java.awt.Point(8106, 2738), new java.awt.Point(8121, 2723)}
+            new Tile[] {
+                    new Tile(2697, 981), new Tile(2696, 977), new Tile(2695, 970), new Tile(2693, 962), new Tile(2693, 953), new Tile(2692, 945), new Tile(2692, 938), new Tile(2692, 933), new Tile(2693, 927), new Tile(2693, 921), new Tile(2694, 918), new Tile(2697, 915), new Tile(2701, 911), new Tile(2708, 908)
+            },
+            new Tile[] {
+                    new Tile(2700, 979), new Tile(2699, 973), new Tile(2698, 968), new Tile(2696, 960), new Tile(2695, 955), new Tile(2693, 947), new Tile(2693, 939), new Tile(2693, 932), new Tile(2693, 925), new Tile(2694, 921), new Tile(2699, 913), new Tile(2707, 909)
+            },
+            new Tile[] {
+                    new Tile(2702, 978), new Tile(2700, 975), new Tile(2698, 969), new Tile(2696, 963), new Tile(2694, 959), new Tile(2693, 954), new Tile(2692, 948), new Tile(2692, 941), new Tile(2693, 935), new Tile(2693, 930), new Tile(2694, 925), new Tile(2694, 921), new Tile(2695, 916), new Tile(2701, 914), new Tile(2707, 908)
+            }
     );
 
-
     // Enum setup
-    private final Point[] Path1;
-    private final Point[] Path2;
-    private final Point[] Path3;
+    private final Tile[] Path1;
+    private final Tile[] Path2;
+    private final Tile[] Path3;
 
-    PathsToBanks(Point[] Path1, Point[] Path2, Point[] Path3) {
+    PathsToBanks(Tile[] Path1, Tile[] Path2, Tile[] Path3) {
         this.Path1 = Path1;
         this.Path2 = Path2;
         this.Path3 = Path3;
     }
 
-    public Point[] Path1() {
+    public Tile[] Path1() {
         return Path1;
     }
-    public Point[] Path2() {
+    public Tile[] Path2() {
         return Path2;
     }
-    public Point[] Path3() {
+    public Tile[] Path3() {
         return Path3;
     }
 }

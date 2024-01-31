@@ -2,9 +2,13 @@ package Tasks;
 
 import utils.Task;
 
+import static helpers.Interfaces.Inventory;
+
 public class Bank extends Task {
     public boolean activate() {
-        //Activate
+        if (Inventory.isFull()) {
+            return true;
+        }
         return false;
     }
     @Override

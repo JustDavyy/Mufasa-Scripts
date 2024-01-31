@@ -1,21 +1,23 @@
 package utils;
 
+import helpers.utils.Area;
 import helpers.utils.RegionBox;
+import helpers.utils.Tile;
 
 public enum RegionInfo {
     VARROCK_EAST(
-            new RegionBox("WorldRegion", 8225, 2600, 8699, 3167),
-            new RegionBox("MineRegion", 8498, 2959, 8575, 3027)
+            new RegionBox("VARROCK_EAST", 8225, 2600, 8699, 3167),
+            new Area(new Tile(8498, 2959), new Tile(8575, 3027))
     ),
     VARROCK_WEST(
-            new RegionBox("WorldRegion", 7916, 2548, 8285, 3123),
-            new RegionBox("MineRegion", 8077, 2995, 8140, 2930)
+            new RegionBox("VARROCK_WEST", 7916, 2548, 8285, 3123),
+            new Area(new Tile(8077, 2995), new Tile(8140, 2930))
     );
 
     private final RegionBox worldRegion;
-    private final RegionBox mineRegion;
+    private final Area mineRegion;
 
-    RegionInfo(RegionBox worldRegion, RegionBox mineRegion) {
+    RegionInfo(RegionBox worldRegion, Area mineRegion) {
         this.worldRegion = worldRegion;
         this.mineRegion = mineRegion;
     }
@@ -23,7 +25,7 @@ public enum RegionInfo {
     public RegionBox getWorldRegion() {
         return worldRegion;
     }
-    public RegionBox getMineRegion() {
+    public Area getMineRegion() {
         return mineRegion;
     }
 }
