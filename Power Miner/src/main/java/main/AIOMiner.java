@@ -18,7 +18,7 @@ import static helpers.Interfaces.*;
         description = "Mines ores in different places",
         version = "1.0",
         guideLink = "",
-        category = ScriptCategory.Mining
+        categories = {ScriptCategory.Mining}
 )
 @ScriptConfiguration.List(
         {

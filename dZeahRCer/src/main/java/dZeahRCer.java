@@ -16,7 +16,7 @@ import static helpers.Interfaces.*;
         description = "Crafts blood or soul runes in Zeah.",
         version = "1.00",
         guideLink = "To be added.",
-        category = ScriptCategory.Fishing
+        categories = {ScriptCategory.Runecrafting}
 )
 @ScriptConfiguration.List(
         {

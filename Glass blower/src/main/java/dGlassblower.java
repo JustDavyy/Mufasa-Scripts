@@ -13,7 +13,7 @@ import java.util.Random;
         description = "Blows molten glass into glass objects to train crafting. Supports all options and dynamic banking.",
         version = "1.02",
         guideLink = "https://wiki.mufasaclient.com/docs/dglass-blower/",
-        category = ScriptCategory.Crafting
+        categories = {ScriptCategory.Crafting}
 )
 @ScriptConfiguration.List(
         {
