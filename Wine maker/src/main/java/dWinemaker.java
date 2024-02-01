@@ -12,7 +12,7 @@ import static helpers.Interfaces.*;
         description = "Creates well fermented wine for those juicy cooking gains. Supports dynamic banking.",
         version = "1.04",
         guideLink = "https://wiki.mufasaclient.com/docs/dwinemaker/",
-        category = ScriptCategory.Cooking
+        categories = {ScriptCategory.Cooking}
 )
 @ScriptConfiguration.List(
         {
