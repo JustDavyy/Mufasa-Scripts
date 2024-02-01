@@ -16,7 +16,7 @@ import static helpers.Interfaces.*;
         description = "The cooker script to cook all your raw fish (or seaweed) at various different places.",
         version = "1.00",
         guideLink = "To be added.",
-        categories = {ScriptCategory.Cooking, ScriptCategory.Slayer}
+        categories = {ScriptCategory.Cooking}
 )
 @ScriptConfiguration.List(
         {
