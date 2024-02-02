@@ -11,16 +11,7 @@ public class DropOres  extends Task {
         if (bankOres) {
             return false;
         }
-
-        Logger.debugLog("Checking if we should be dropping ores");
-        if (!GameTabs.isInventoryTabOpen()) {
-            GameTabs.openInventoryTab();
-        }
-
-        if (GameTabs.isInventoryTabOpen()) {
-            return Inventory.isFull();
-        }
-        return false;
+        return Inventory.isFull();
     }
     @Override
     public boolean execute() {

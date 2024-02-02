@@ -32,7 +32,7 @@ import static helpers.Interfaces.*;
                 @ScriptConfiguration(
                         name =  "Location",
                         description = "Which location would you like to use? be sure to read the script guide for which ores are supported in specific locations",
-                        defaultValue = "Soul isles",
+                        defaultValue = "Varrock East",
                         allowedValues = {
                                 @AllowedValue(optionName = "Varrock East"),
                                 @AllowedValue(optionName = "Varrock West"),
@@ -79,7 +79,7 @@ public class AIOMiner extends AbstractScript {
     public static String oreType;
     public static int oreTypeInt;
     public static Boolean bankOres;
-    public static int miningLevel;
+    //public static int miningLevel;
     public static String hopProfile;
     public static Boolean hopEnabled;
 
@@ -106,16 +106,20 @@ public class AIOMiner extends AbstractScript {
         setupOreTypeInts();
 
         //Check and cache STARTING mining level (just to make sure people dont fuck up)
-        if (!GameTabs.isStatsTabOpen()) {
-            GameTabs.openStatsTab();
-        }
-        if (GameTabs.isStatsTabOpen()) {
-            miningLevel = Stats.getRealLevel("Mining");
-        }
+        //if (!GameTabs.isStatsTabOpen()) {
+        //    GameTabs.openStatsTab();
+        //}
+        //if (GameTabs.isStatsTabOpen()) {
+        //    miningLevel = Stats.getRealLevel("Mining");
+        //}
     }
 
     @Override
     public void poll() {
+        if (!GameTabs.isInventoryTabOpen()) {
+            GameTabs.openInventoryTab();
+        }
+
         //Run tasks
             for (Task task : miningTasks) {
                 if (task.activate()) {

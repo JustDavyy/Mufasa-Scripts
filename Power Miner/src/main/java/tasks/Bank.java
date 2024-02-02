@@ -23,15 +23,7 @@ public class Bank extends Task {
             Walker.walkPath(regionInfo.getWorldRegion(), miningHelper.pickRandomPathReversed(pathsToBanks));
         }
 
-        if (!GameTabs.isInventoryTabOpen()) {
-            GameTabs.openInventoryTab();
-        }
-
-        if (GameTabs.isInventoryTabOpen()) {
-            return Inventory.isFull();
-        }
-
-        return false;
+        return Inventory.isFull();
     }
     @Override
     public boolean execute() {
