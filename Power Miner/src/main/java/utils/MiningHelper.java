@@ -2,7 +2,6 @@ package utils;
 
 import helpers.utils.Tile;
 
-import javax.xml.xpath.XPath;
 import java.awt.*;
 import java.util.Random;
 
@@ -11,7 +10,7 @@ import static helpers.Interfaces.*;
 public class MiningHelper {
     private final Random random = new Random();
 
-    public boolean checkPositions(LocationInfo locationInfo, VeinColors veinColors) {
+    public boolean checkPositionsAndPerformActions(LocationInfo locationInfo, VeinColors veinColors) {
         // Check location 1
         if (isValidRect(locationInfo.getCheckLocation1()) && Client.isAnyColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation1(), 10)) {
             clickPositions(locationInfo, 1, veinColors);
@@ -38,6 +37,7 @@ public class MiningHelper {
         switch (position) {
             case 1:
                 if (isValidRect(locationInfo.getClickLocation1())) {
+                    Logger.log("Tapping vein 1");
                     Client.tap(locationInfo.getClickLocation1());
                     Condition.wait(() -> Client.isAnyColorInRect(veinColors.getInactiveColor(), locationInfo.getCheckLocation1(), 10), 50, 10);
                     XpBar.getXP();
@@ -45,6 +45,7 @@ public class MiningHelper {
                 break;
             case 2:
                 if (isValidRect(locationInfo.getClickLocation2())) {
+                    Logger.log("Tapping vein 2");
                     Client.tap(locationInfo.getClickLocation2());
                     Condition.wait(() -> Client.isAnyColorInRect(veinColors.getInactiveColor(), locationInfo.getCheckLocation2(), 10), 50, 10);
                     XpBar.getXP();
@@ -52,6 +53,7 @@ public class MiningHelper {
                 break;
             case 3:
                 if (isValidRect(locationInfo.getClickLocation3())) {
+                    Logger.log("Tapping vein 3");
                     Client.tap(locationInfo.getClickLocation3());
                     Condition.wait(() -> Client.isAnyColorInRect(veinColors.getInactiveColor(), locationInfo.getCheckLocation3(), 10), 50, 10);
                     XpBar.getXP();

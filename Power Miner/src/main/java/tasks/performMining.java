@@ -12,7 +12,9 @@ public class performMining extends Task {
     Tile location;
 
     public boolean activate() {
+        Logger.debugLog("Checking if we should do mining");
         location = Walker.getPlayerPosition(regionInfo.getWorldRegion()); // Cache our position so we only need to check once per loop
+        Logger.debugLog("Are we within mine area? " + Player.isTileWithinArea(location, regionInfo.getMineArea()));
         return Player.isTileWithinArea(location, regionInfo.getMineArea());
     }
     @Override
@@ -24,6 +26,7 @@ public class performMining extends Task {
 
         //Move to spot
         if (!location.equals(locationInfo.getStepLocation())) {
+            Logger.log("Stepping to vein spot");
             Walker.step(locationInfo.getStepLocation(), regionInfo.getWorldRegion());
             Condition.wait(() -> Player.atTile(locationInfo.getStepLocation(), regionInfo.getWorldRegion()), 100, 20);
         }
@@ -36,7 +39,7 @@ public class performMining extends Task {
     }
 
     private boolean doMining() {
-        return miningHelper.checkPositions(locationInfo, veinColors);
+        return miningHelper.checkPositionsAndPerformActions(locationInfo, veinColors);
     }
 
     private void hopActions() {
