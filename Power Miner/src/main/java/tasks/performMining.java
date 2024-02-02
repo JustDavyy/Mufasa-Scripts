@@ -33,7 +33,7 @@ public class performMining extends Task {
 
         //perform mining
         if (Player.tileEquals(locationInfo.getStepLocation(), location)) {
-            Logger.debugLog("Checking vein positions");
+            Logger.debugLog("Mining...");
             return doMining();
         }
         return false;
