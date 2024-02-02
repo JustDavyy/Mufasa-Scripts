@@ -2,51 +2,59 @@ package utils;
 
 import helpers.utils.Tile;
 
+import javax.xml.xpath.XPath;
 import java.awt.*;
 import java.util.Random;
 
-import static helpers.Interfaces.Client;
-import static helpers.Interfaces.Condition;
+import static helpers.Interfaces.*;
 
 public class MiningHelper {
     private final Random random = new Random();
 
-    public void checkPositions(LocationInfo locationInfo, VeinColors veinColors) {
+    public boolean checkPositions(LocationInfo locationInfo, VeinColors veinColors) {
         // Check location 1
         if (isValidRect(locationInfo.getCheckLocation1()) && Client.isAnyColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation1(), 10)) {
-            clickPositions(locationInfo, 2, veinColors);
+            clickPositions(locationInfo, 1, veinColors);
+            return true;
         }
 
         // Check location 2
         if (isValidRect(locationInfo.getCheckLocation2()) && Client.isAnyColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation2(), 10)) {
             clickPositions(locationInfo, 2, veinColors);
+            return true;
         }
 
         // Check location 3
         if (isValidRect(locationInfo.getCheckLocation3()) && Client.isAnyColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation3(), 10)) {
             clickPositions(locationInfo, 3, veinColors);
+            return true;
         }
+
+        return false;
     }
 
-    public void clickPositions(LocationInfo locationInfo, int position, VeinColors veinColors) {
+    private void clickPositions(LocationInfo locationInfo, int position, VeinColors veinColors) {
         // Assuming Client has a tap method
         switch (position) {
             case 1:
                 if (isValidRect(locationInfo.getClickLocation1())) {
                     Client.tap(locationInfo.getClickLocation1());
                     Condition.wait(() -> Client.isAnyColorInRect(veinColors.getInactiveColor(), locationInfo.getCheckLocation1(), 10), 50, 10);
+                    XpBar.getXP();
                 }
                 break;
             case 2:
                 if (isValidRect(locationInfo.getClickLocation2())) {
                     Client.tap(locationInfo.getClickLocation2());
                     Condition.wait(() -> Client.isAnyColorInRect(veinColors.getInactiveColor(), locationInfo.getCheckLocation2(), 10), 50, 10);
+                    XpBar.getXP();
                 }
                 break;
             case 3:
                 if (isValidRect(locationInfo.getClickLocation3())) {
                     Client.tap(locationInfo.getClickLocation3());
                     Condition.wait(() -> Client.isAnyColorInRect(veinColors.getInactiveColor(), locationInfo.getCheckLocation3(), 10), 50, 10);
+                    XpBar.getXP();
                 }
                 break;
         }
@@ -56,7 +64,7 @@ public class MiningHelper {
         return !(rect.width == 1 && rect.height == 1 && rect.x == 1 && rect.y == 1);
     }
 
-    private Tile[] pickRandomPath(PathsToBanks pathsToBanks) {
+    public Tile[] pickRandomPath(PathsToBanks pathsToBanks) {
         int pick = random.nextInt(3);
         switch (pick) {
             case 0:
@@ -69,5 +77,33 @@ public class MiningHelper {
                 // In case of an unexpected value, return null or handle appropriately
                 return null;
         }
+    }
+
+    public Tile[] pickRandomPathReversed(PathsToBanks pathsToBanks) {
+        int pick = random.nextInt(3);
+        Tile[] path;
+        switch (pick) {
+            case 0:
+                path = pathsToBanks.Path1();
+                break;
+            case 1:
+                path = pathsToBanks.Path2();
+                break;
+            case 2:
+                path = pathsToBanks.Path3();
+                break;
+            default:
+                // In case of an unexpected value, return null or handle appropriately
+                return null;
+        }
+        // Reverse the array
+        if (path != null) {
+            for (int i = 0; i < path.length / 2; i++) {
+                Tile temp = path[i];
+                path[i] = path[path.length - 1 - i];
+                path[path.length - 1 - i] = temp;
+            }
+        }
+        return path;
     }
 }

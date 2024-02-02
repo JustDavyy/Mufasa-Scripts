@@ -1,10 +1,11 @@
 package main;
 
-import Tasks.Bank;
-import Tasks.CheckPickaxe;
-import Tasks.VarrockEast;
 import helpers.*;
 import helpers.utils.OptionType;
+import tasks.Bank;
+import tasks.CheckPickaxe;
+import tasks.DropOres;
+import tasks.performMining;
 import utils.*;
 
 import java.util.Arrays;
@@ -70,20 +71,22 @@ public class AIOMiner extends AbstractScript {
     List<Task> miningTasks = Arrays.asList(
             new CheckPickaxe(),
             new Bank(),
-            new VarrockEast()
+            new DropOres(),
+            new performMining()
     );
 
     public static String Location;
     public static String oreType;
+    public static int oreTypeInt;
     public static Boolean bankOres;
     public static int miningLevel;
-    public String hopProfile;
-    public Boolean hopEnabled;
+    public static String hopProfile;
+    public static Boolean hopEnabled;
 
-    LocationInfo locationInfo;
-    RegionInfo regionInfo;
-    VeinColors veinColors;
-    PathsToBanks pathsToBanks;
+    public static LocationInfo locationInfo;
+    public static RegionInfo regionInfo;
+    public static VeinColors veinColors;
+    public static PathsToBanks pathsToBanks;
 
     @Override
     public void onStart(){
@@ -100,6 +103,7 @@ public class AIOMiner extends AbstractScript {
         setupLocationInfo();
         setupVeinColors();
         setupPathsToBank();
+        setupOreTypeInts();
 
         //Check and cache STARTING mining level (just to make sure people dont fuck up)
         if (!GameTabs.isStatsTabOpen()) {
@@ -112,11 +116,6 @@ public class AIOMiner extends AbstractScript {
 
     @Override
     public void poll() {
-        //Check if we should do hopping
-        if(hopEnabled) {
-            hopActions();
-        }
-
         //Run tasks
             for (Task task : miningTasks) {
                 if (task.activate()) {
@@ -125,10 +124,6 @@ public class AIOMiner extends AbstractScript {
                 }
             }
         }
-
-    private void hopActions() {
-        Game.hop(hopProfile, true, false);
-    }
 
     private void setupRegionInfo() {
         switch (Location) {
@@ -202,6 +197,26 @@ public class AIOMiner extends AbstractScript {
                 break;
             case "Varrock West":
                 pathsToBanks = PathsToBanks.VARROCK_WEST_BANKPATHS;
+                break;
+        }
+    }
+
+    private void setupOreTypeInts() {
+        switch (oreType) {
+            case "Copper ore":
+                oreTypeInt = 436;
+                break;
+            case "Tin ore":
+                oreTypeInt = 438;
+                break;
+            case "Clay":
+                oreTypeInt = 434;
+                break;
+            case "Silver ore":
+                oreTypeInt = 442;
+                break;
+            case "Iron ore":
+                oreTypeInt = 440;
                 break;
         }
     }

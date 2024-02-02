@@ -1,4 +1,4 @@
-package Tasks;
+package tasks;
 
 import helpers.utils.EquipmentSlot;
 import helpers.utils.ItemList;
@@ -30,6 +30,7 @@ public class CheckPickaxe extends Task {
                 if (Inventory.containsAny(pickaxeIDs, 0.75)) {
                     hasPickaxe = true;
                     checkedForPickaxe = true;
+                    Logger.log("Pickaxe in inventory, continuing");
                     return true;
                 }
             }
@@ -47,6 +48,7 @@ public class CheckPickaxe extends Task {
                     if (Equipment.itemAt(EquipmentSlot.WEAPON, pickaxeID)) {
                         hasPickaxe = true;
                         checkedForPickaxe = true;
+                        Logger.log("Pickaxe equipped, continuing");
                         return true;
                     }
                 }
@@ -55,6 +57,8 @@ public class CheckPickaxe extends Task {
         }
 
         checkedForPickaxe = true;
+        Logger.log("Pickaxe not found, stopping script");
+        Script.stop();
         return false;
     }
 }
