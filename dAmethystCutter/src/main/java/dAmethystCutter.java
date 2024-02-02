@@ -12,7 +12,7 @@ import java.util.Random;
         name = "dAmethyst Cutter",
         description = "Cuts amethyst into usable supplied, supports dynamic banking and world hops.",
         version = "1.00",
-        guideLink = "To be added",
+        guideLink = "https://wiki.mufasaclient.com/docs/damethyst-cutter/",
         categories = {ScriptCategory.Crafting}
 )
 @ScriptConfiguration.List(
