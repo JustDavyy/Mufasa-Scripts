@@ -12,7 +12,7 @@ public enum LocationInfo {
             new Rectangle(383, 272, 28, 31), //Click1
             new Rectangle(428, 229, 30, 21), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
-            new Tile(2847,998) //Step
+            new Tile(2847, 998) //Step
     ),
     VARROCK_EAST_IRON(
             new Rectangle(390, 266, 12, 14), //Check1
@@ -21,7 +21,7 @@ public enum LocationInfo {
             new Rectangle(383, 260, 33, 33), //Click1
             new Rectangle(428, 229, 30, 21), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
-            new Tile(2846,992) //Step
+            new Tile(2846, 992) //Step
     ),
     VARROCK_EAST_TIN(
             new Rectangle(382, 274, 21, 22), //Check1
@@ -30,7 +30,7 @@ public enum LocationInfo {
             new Rectangle(379, 271, 33, 27), //Click1
             new Rectangle(427, 230, 32, 26), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
-            new Tile(2840,999) //Step
+            new Tile(2840, 999) //Step
     ),
     VARROCK_WEST_CLAY(
             new Rectangle(394, 264, 13, 19), //Check1
