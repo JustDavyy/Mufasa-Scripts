@@ -19,20 +19,11 @@ public class Bank extends Task {
         }
         Logger.debugLog("Checking if we should bank");
         location = Walker.getPlayerPosition(regionInfo.getWorldRegion());
-
         if (!Inventory.isFull() && Player.isTileWithinArea(location, regionInfo.getBankArea())) {
             Walker.walkPath(regionInfo.getWorldRegion(), miningHelper.pickRandomPathReversed(pathsToBanks));
         }
 
-        if (!GameTabs.isInventoryTabOpen()) {
-            GameTabs.openInventoryTab();
-        }
-
-        if (GameTabs.isInventoryTabOpen()) {
-            return Inventory.isFull();
-        }
-
-        return false;
+        return Inventory.isFull();
     }
     @Override
     public boolean execute() {
