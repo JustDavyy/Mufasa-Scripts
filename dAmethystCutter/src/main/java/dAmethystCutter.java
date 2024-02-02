@@ -327,6 +327,9 @@ public class dAmethystCutter extends AbstractScript {
 
         // Closing the bank, as banking should be done now
         Bank.close();
+        if(Bank.isOpen()) {
+            Bank.close();
+        }
         Logger.debugLog("Closed the bank.");
 
         Logger.debugLog("Ending the bank() method.");
