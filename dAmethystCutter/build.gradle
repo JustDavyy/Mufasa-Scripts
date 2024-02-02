@@ -3,12 +3,12 @@ plugins {
 }
 
 repositories {
-        mavenCentral()
-        maven { url "https://repo1.maven.org/maven2" }
-        maven { url "https://openpnp.github.io/maven" }
-        maven { url 'https://jitpack.io' }
-        google()
-    }
+    mavenCentral()
+    maven { url "https://repo1.maven.org/maven2" }
+    maven { url "https://openpnp.github.io/maven" }
+    maven { url 'https://jitpack.io' }
+    google()
+}
 
 configurations.all {
     resolutionStrategy {
@@ -23,7 +23,7 @@ dependencies {
 }
 
 jar {
-    archiveFileName = 'dCooker.jar'
+    archiveFileName = 'dAmethystCutter.jar'
     destinationDirectory = file('jar/')
 
     manifest {
