@@ -110,7 +110,7 @@ public class AIOMiner extends AbstractScript {
             GameTabs.openStatsTab();
         }
         if (GameTabs.isStatsTabOpen()) {
-            miningLevel = Stats.getRealLevel("MINING");
+            miningLevel = Stats.getRealLevel("Mining");
         }
     }
 
@@ -126,6 +126,7 @@ public class AIOMiner extends AbstractScript {
         }
 
     private void setupRegionInfo() {
+        Logger.debugLog("Setting up region info");
         switch (Location) {
             case "Varrock East":
                 regionInfo = RegionInfo.VARROCK_EAST;
@@ -137,6 +138,7 @@ public class AIOMiner extends AbstractScript {
     }
 
     private void setupLocationInfo() {
+        Logger.debugLog("Setting up location info");
         if (regionInfo.equals(RegionInfo.VARROCK_EAST)) {
             switch (oreType) {
                 case "Tin ore":
@@ -171,6 +173,7 @@ public class AIOMiner extends AbstractScript {
     }
 
     private void setupVeinColors() {
+        Logger.debugLog("Setting up vein info");
         switch (oreType) {
             case "Copper ore":
                 veinColors = VeinColors.COPPER_VEIN;
@@ -191,6 +194,7 @@ public class AIOMiner extends AbstractScript {
     }
 
     private void setupPathsToBank() {
+        Logger.debugLog("Setting up bank pathing");
         switch (Location) {
             case "Varrock East":
                 pathsToBanks = PathsToBanks.VARROCK_EAST_BANKPATHS;
@@ -202,6 +206,7 @@ public class AIOMiner extends AbstractScript {
     }
 
     private void setupOreTypeInts() {
+        Logger.debugLog("Setting up ore type info");
         switch (oreType) {
             case "Copper ore":
                 oreTypeInt = 436;

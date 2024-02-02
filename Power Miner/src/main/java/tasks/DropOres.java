@@ -12,6 +12,7 @@ public class DropOres  extends Task {
             return false;
         }
 
+        Logger.debugLog("Checking if we should be dropping ores");
         if (!GameTabs.isInventoryTabOpen()) {
             GameTabs.openInventoryTab();
         }

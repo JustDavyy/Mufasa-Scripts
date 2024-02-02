@@ -17,6 +17,7 @@ public class performMining extends Task {
     }
     @Override
     public boolean execute() {
+        Logger.debugLog("Running mining sequence");
         if (hopEnabled) {
             hopActions();
         }

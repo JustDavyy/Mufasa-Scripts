@@ -13,11 +13,12 @@ public class Bank extends Task {
     Tile location;
 
     public boolean activate() {
-        Tile location = Walker.getPlayerPosition(regionInfo.getWorldRegion());
         // Early exit if banking is disabled!
         if (!bankOres) {
             return false;
         }
+        Logger.debugLog("Checking if we should bank");
+        location = Walker.getPlayerPosition(regionInfo.getWorldRegion());
 
         if (!Inventory.isFull() && Player.isTileWithinArea(location, regionInfo.getBankArea())) {
             Walker.walkPath(regionInfo.getWorldRegion(), miningHelper.pickRandomPathReversed(pathsToBanks));

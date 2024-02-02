@@ -20,6 +20,7 @@ public class CheckPickaxe extends Task {
 
     @Override
     public boolean execute() {
+        Logger.debugLog("Checking for pickaxe");
         if (!checkedInventory) {
             if (!GameTabs.isInventoryTabOpen()) {
                 GameTabs.openInventoryTab();
