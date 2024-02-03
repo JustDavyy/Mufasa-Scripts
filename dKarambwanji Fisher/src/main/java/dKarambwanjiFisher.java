@@ -43,13 +43,14 @@ Tile SouthSpot = new Tile(55, 49);
 Tile NorthEastSpot = new Tile(63, 32);
 Tile NorthWestSpot = new Tile(42, 34);
 Tile EastSpot = new Tile(69, 38);
-String mapString = "/maps/KarambwanjiArea.png";
 Tile[] fishingSpots = new Tile[] {NorthEastSpot, EastSpot, NorthWestSpot, SouthSpot};
 private Instant lastActionTime = Instant.now();
 
     // This is the onStart, and only gets ran once.
     @Override
     public void onStart(){
+        Walker.setup("/maps/KarambwanjiArea.png"); //Setup the walker!
+
         Map<String, String> configs = getConfigurations();
         SafeModeOn = Boolean.valueOf((configs.get("Use safe mode?")));
 
@@ -57,7 +58,7 @@ private Instant lastActionTime = Instant.now();
         Logger.log("Setting up everything for your gains now...");
 
         // Checking if we are at the right location
-        Tile playerPos = Walker.getPlayerPosition(mapString);
+        Tile playerPos = Walker.getPlayerPosition();
         if (Player.isTileWithinArea(playerPos, FishingArea)) {
             Logger.debugLog("We are located at the Karambwanji fishing area, checking if we have a small fishing net...");
         } else {
@@ -153,9 +154,9 @@ private Instant lastActionTime = Instant.now();
         // Log the selected spot
         Logger.debugLog("Moving to a new fishing spot: " + FishingSpot);
 
-        Walker.stepCustomMap(selectedSpot, mapString);
+        Walker.step(selectedSpot);
         lastActionTime = Instant.now();
-        Condition.wait(() -> Player.atTileCustom(mapString, selectedSpot), 500, 35);
+        Condition.wait(() -> Player.atTile(selectedSpot), 500, 35);
     }
 
     private void performAntiAFKAction() {

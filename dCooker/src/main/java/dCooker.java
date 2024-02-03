@@ -211,7 +211,7 @@ Tile playerPos;
                 checkLocation(cookingGuildRegion, cookingGuildArea, cookingGuildTile);
                 break;
             case "Hosidius kitchen":
-                playerPos = Walker.getPlayerPosition("maps/map.png");
+                playerPos = Walker.getPlayerPosition();
                 break;
             case "Mor Ul Rek":
                 checkLocation(morulrekRegion, morulrekArea, morulrekTile);

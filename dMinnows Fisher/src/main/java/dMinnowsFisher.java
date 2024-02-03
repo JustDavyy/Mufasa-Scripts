@@ -77,7 +77,7 @@ Random random = new Random();
         }
 
         // Checking if we are at the right location
-        playerPos = Walker.getPlayerPosition("maps/map.png");
+        playerPos = Walker.getPlayerPosition();
         if (Player.isTileWithinArea(playerPos, minnowPlatform)) {
             Logger.debugLog("We are located at the Minnow platform, checking if we have a small fishing net...");
         } else {

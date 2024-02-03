@@ -1,13 +1,14 @@
-import helpers.*;
+import helpers.AbstractScript;
+import helpers.ScriptCategory;
+import helpers.ScriptConfiguration;
+import helpers.ScriptManifest;
+import helpers.utils.Area;
 import helpers.utils.OptionType;
 import helpers.utils.OverlayColor;
 import helpers.utils.Tile;
-import helpers.utils.Area;
+
 import java.awt.*;
-import java.time.Duration;
 import java.util.Map;
-import java.time.Instant;
-import java.util.Random;
 
 import static helpers.Interfaces.*;
 
@@ -107,11 +108,12 @@ Area miningArea = new Area(
 );
 String hopProfile;
 Boolean hopEnabled;
-String mapString = "/maps/ZeahRC.png";
 
     // This is the onStart, and only gets ran once.
     @Override
     public void onStart(){
+        Walker.setup("/maps/ZeahRC.png"); // Setup the walker path!
+
         Map<String, String> configs = getConfigurations();
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
@@ -213,21 +215,21 @@ String mapString = "/maps/ZeahRC.png";
 
     private void walkVenerateToShortcut() {
         Logger.debugLog("Walking towards to agility shortcut.");
-        Walker.walkPathOnCustomMap(mapString, venerateBackToObstaclePath);
-        Condition.wait(() -> Player.withinCustom(mapString,beforeObstacleInArea), 750, 20);
+        Walker.walkPath(venerateBackToObstaclePath);
+        Condition.wait(() -> Player.within(beforeObstacleInArea), 750, 20);
         Condition.sleep(2000);
     }
     private void walkMineToShortcutOut() {
         Logger.debugLog("Walking towards the agility shortcut.");
-        Walker.walkPathOnCustomMap(mapString, mineToShortcutOutPath);
-        Condition.wait(() -> Player.withinCustom(mapString, beforeObstacleOutArea), 750, 20);
+        Walker.walkPath(mineToShortcutOutPath);
+        Condition.wait(() -> Player.within(beforeObstacleOutArea), 750, 20);
         Condition.sleep(2000);
     }
 
     private void walkShortcutIntoMine() {
         Logger.debugLog("Walking back to the mining area.");
-        Walker.walkPathOnCustomMap(mapString, obstacleInToMinePath);
-        Condition.wait(() -> Player.withinCustom(mapString, miningArea), 750, 20);
+        Walker.walkPath(obstacleInToMinePath);
+        Condition.wait(() -> Player.within(miningArea), 750, 20);
         Condition.sleep(1500);
     }
 
@@ -240,7 +242,7 @@ String mapString = "/maps/ZeahRC.png";
             Logger.debugLog("Could not locate the agility shortcut, stopping script.");
             Script.forceStop();
         }
-        Condition.wait(() -> Player.atTileCustom(mapString, obstacleOutsideTile), 500, 16);
+        Condition.wait(() -> Player.atTile(obstacleOutsideTile), 500, 16);
         Condition.sleep(1000);
     }
 
@@ -253,7 +255,7 @@ String mapString = "/maps/ZeahRC.png";
             Logger.debugLog("Could not locate the agility shortcut, stopping script.");
             Script.forceStop();
         }
-        Condition.wait(() -> Player.atTileCustom(mapString, obstacleBackToMineFromVenerateInTile), 500, 16);
+        Condition.wait(() -> Player.atTile(obstacleBackToMineFromVenerateInTile), 500, 16);
         Condition.sleep(1000);
     }
 
@@ -266,45 +268,45 @@ String mapString = "/maps/ZeahRC.png";
             Logger.debugLog("Could not locate the agility shortcut, stopping script.");
             Script.forceStop();
         }
-        Condition.wait(() -> Player.atTileCustom(mapString, obstacleBackToMineFromBloodInTile), 500, 16);
+        Condition.wait(() -> Player.atTile(obstacleBackToMineFromBloodInTile), 500, 16);
         Condition.sleep(2000);
     }
 
     private void walkShortcutOutToAltar() {
         Logger.debugLog("Moving from shortcut to Venerate Altar.");
-        Walker.walkPathOnCustomMap(mapString, shortcutOutToAltarPath);
+        Walker.walkPath(shortcutOutToAltarPath);
         Condition.sleep(1500);
-        Walker.stepCustomMap(altarTile, mapString);
-        Condition.wait(() -> Player.atTileCustom(mapString, altarTile), 250, 12);
+        Walker.step(altarTile);
+        Condition.wait(() -> Player.atTile(altarTile), 250, 12);
         Logger.debugLog("Player is now located at the Venerate Altar.");
         Condition.sleep(1500);
     }
 
     private void walkAltartoBloodAltar() {
         Logger.debugLog("Now walking from Venerate altar to Blood Altar.");
-        Walker.walkPathOnCustomMap(mapString, altarToAltarPath);
+        Walker.walkPath(altarToAltarPath);
         Condition.sleep(1750);
-        Walker.stepCustomMap(bloodAltarTile, mapString);
-        Condition.wait(() -> Player.atTileCustom(mapString, bloodAltarTile), 250, 20);
+        Walker.step(bloodAltarTile);
+        Condition.wait(() -> Player.atTile(bloodAltarTile), 250, 20);
         Logger.debugLog("Player is now at the Blood Altar.");
     }
 
     private void walkBloodToShortcut() {
         Logger.debugLog("Now walking from Blood Altar to the agility shortcut.");
-        Walker.walkPathOnCustomMap(mapString, bloodBackToObstaclePath);
+        Walker.walkPath(bloodBackToObstaclePath);
         Condition.sleep(2000);
     }
 
     private void stepToSouthRunestone(){
         Logger.debugLog("Moving to south dense runestone.");
-        Walker.stepCustomMap(southDenseRunestone, mapString);
-        Condition.wait(() -> Player.atTileCustom(mapString, southDenseRunestone), 250, 20);
+        Walker.step(southDenseRunestone);
+        Condition.wait(() -> Player.atTile(southDenseRunestone), 250, 20);
     }
 
     private void stepToNorthRunestone(){
         Logger.debugLog("Moving to north dense runestone.");
-        Walker.stepCustomMap(northDenseRunestone, mapString);
-        Condition.wait(() -> Player.atTileCustom(mapString, northDenseRunestone), 250, 20);
+        Walker.step(northDenseRunestone);
+        Condition.wait(() -> Player.atTile(northDenseRunestone), 250, 20);
     }
 
 }
