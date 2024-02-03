@@ -11,7 +11,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dAmethyst Cutter",
         description = "Cuts amethyst into usable supplies, supports dynamic banking and world hops.",
-        version = "1.01",
+        version = "1.02",
         guideLink = "https://wiki.mufasaclient.com/docs/damethyst-cutter/",
         categories = {ScriptCategory.Crafting}
 )
@@ -71,9 +71,7 @@ public class dAmethystCutter extends AbstractScript {
         initializeMakeOptions();
 
         // Initialize hop timer for this run if hopping is enabled
-        if(hopEnabled) {
-            hopActions();
-        }
+        hopActions();
 
         // One-time setup
         setupMakeOptions();
@@ -361,7 +359,11 @@ public class dAmethystCutter extends AbstractScript {
     }
 
     private void hopActions() {
-        Game.hop(hopProfile, useWDH, false);
+        if(hopEnabled) {
+            Game.hop(hopProfile, useWDH, false);
+        } else {
+            // We do nothing here, as hop is disabled.
+        }
     }
 
     private void readXP() {
