@@ -1,6 +1,5 @@
 package utils;
 
-import com.oracle.tools.packager.Log;
 import helpers.utils.Tile;
 
 import java.awt.*;
@@ -17,7 +16,7 @@ public class MiningHelper {
             Logger.log("Checking first vein");
             if (Client.isAnyColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation1(), 5)) {
                 clickPositions(locationInfo, 1, veinColors);
-                return true;   
+                return true;
             }
         }
 
