@@ -6,29 +6,29 @@ import java.awt.*;
 
 public enum LocationInfo {
     VARROCK_EAST_COPPER(
-            new Rectangle(393, 279, 10, 10), //Check1
-            new Rectangle(443, 226, 14, 22), //Check2
+            new Rectangle(381, 270, 31, 31), //Check1
+            new Rectangle(421, 227, 36, 30), //Check2
             new Rectangle(1, 1, 1, 1), //Check3 (only 2 ores)
-            new Rectangle(383, 272, 28, 31), //Click1
-            new Rectangle(428, 229, 30, 21), //Click2
+            new Rectangle(382, 269, 27, 33), //Click1
+            new Rectangle(429, 231, 30, 29), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
             new Tile(2847, 998) //Step
     ),
     VARROCK_EAST_IRON(
-            new Rectangle(390, 266, 12, 14), //Check1
-            new Rectangle(427, 224, 30, 20), //Check2
+            new Rectangle(380, 260, 39, 34), //Check1
+            new Rectangle(426, 220, 34, 30), //Check2
             new Rectangle(1, 1, 1, 1), //Check3 (only 2 ores)
-            new Rectangle(383, 260, 33, 33), //Click1
-            new Rectangle(428, 229, 30, 21), //Click2
+            new Rectangle(394, 261, 26, 25), //Click1
+            new Rectangle(440, 223, 25, 24), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
             new Tile(2846, 992) //Step
     ),
     VARROCK_EAST_TIN(
-            new Rectangle(382, 274, 21, 22), //Check1
-            new Rectangle(431, 227, 21, 19), //Check2
+            new Rectangle(375, 267, 40, 31), //Check1
+            new Rectangle(425, 228, 37, 29), //Check2
             new Rectangle(1, 1, 1, 1), //Check3 (only 2 ores)
-            new Rectangle(379, 271, 33, 27), //Click1
-            new Rectangle(427, 230, 32, 26), //Click2
+            new Rectangle(382, 269, 27, 33), //Click1
+            new Rectangle(431, 232, 25, 24), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
             new Tile(2840, 999) //Step
     ),

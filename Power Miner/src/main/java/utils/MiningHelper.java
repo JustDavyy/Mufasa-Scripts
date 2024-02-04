@@ -1,5 +1,6 @@
 package utils;
 
+import com.oracle.tools.packager.Log;
 import helpers.utils.Tile;
 
 import java.awt.*;
@@ -12,21 +13,30 @@ public class MiningHelper {
 
     public boolean checkPositionsAndPerformActions(LocationInfo locationInfo, VeinColors veinColors) {
         // Check location 1
-        if (isValidRect(locationInfo.getCheckLocation1()) && Client.isAnyColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation1(), 10)) {
-            clickPositions(locationInfo, 1, veinColors);
-            return true;
+        if (isValidRect(locationInfo.getCheckLocation1())) {
+            Logger.log("Checking first vein");
+            if (Client.isAnyColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation1(), 5)) {
+                clickPositions(locationInfo, 1, veinColors);
+                return true;   
+            }
         }
 
         // Check location 2
-        if (isValidRect(locationInfo.getCheckLocation2()) && Client.isAnyColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation2(), 10)) {
-            clickPositions(locationInfo, 2, veinColors);
-            return true;
+        if (isValidRect(locationInfo.getCheckLocation2())) {
+            Logger.log("Checking second vein");
+            if (Client.isAnyColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation2(), 5)) {
+                clickPositions(locationInfo, 2, veinColors);
+                return true;
+            }
         }
 
         // Check location 3
-        if (isValidRect(locationInfo.getCheckLocation3()) && Client.isAnyColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation3(), 10)) {
-            clickPositions(locationInfo, 3, veinColors);
-            return true;
+        if (isValidRect(locationInfo.getCheckLocation3())) {
+            Logger.log("Checking third vein");
+            if (Client.isAnyColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation3(), 5)) {
+                clickPositions(locationInfo, 3, veinColors);
+                return true;
+            }
         }
 
         return false;
@@ -39,7 +49,8 @@ public class MiningHelper {
                 if (isValidRect(locationInfo.getClickLocation1())) {
                     Logger.log("Tapping vein 1");
                     Client.tap(locationInfo.getClickLocation1());
-                    Condition.wait(() -> Client.isAnyColorInRect(veinColors.getInactiveColor(), locationInfo.getCheckLocation1(), 10), 50, 10);
+                    Condition.wait(() -> !Client.isAnyColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation1(), 5), 200, 30);
+                    Logger.debugLog("Succesfully mined vein 1");
                     XpBar.getXP();
                 }
                 break;
@@ -47,7 +58,8 @@ public class MiningHelper {
                 if (isValidRect(locationInfo.getClickLocation2())) {
                     Logger.log("Tapping vein 2");
                     Client.tap(locationInfo.getClickLocation2());
-                    Condition.wait(() -> Client.isAnyColorInRect(veinColors.getInactiveColor(), locationInfo.getCheckLocation2(), 10), 50, 10);
+                    Condition.wait(() -> !Client.isAnyColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation2(), 5), 200, 30);
+                    Logger.debugLog("Succesfully mined vein 2");
                     XpBar.getXP();
                 }
                 break;
@@ -55,7 +67,8 @@ public class MiningHelper {
                 if (isValidRect(locationInfo.getClickLocation3())) {
                     Logger.log("Tapping vein 3");
                     Client.tap(locationInfo.getClickLocation3());
-                    Condition.wait(() -> Client.isAnyColorInRect(veinColors.getInactiveColor(), locationInfo.getCheckLocation3(), 10), 50, 10);
+                    Condition.wait(() -> !Client.isAnyColorInRect(veinColors.getActiveColor(), locationInfo.getCheckLocation3(), 5), 200, 30);
+                    Logger.debugLog("Succesfully mined vein 3");
                     XpBar.getXP();
                 }
                 break;
