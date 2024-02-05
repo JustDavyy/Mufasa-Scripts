@@ -11,7 +11,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dGlass blower",
         description = "Blows molten glass into glass objects to train crafting. Supports all options and dynamic banking.",
-        version = "1.02",
+        version = "1.03",
         guideLink = "https://wiki.mufasaclient.com/docs/dglass-blower/",
         categories = {ScriptCategory.Crafting}
 )
@@ -38,12 +38,21 @@ import java.util.Random;
                         description = "What bank tab are your resources located in?",
                         defaultValue = "0",
                         optionType = OptionType.BANKTABS
+                ),
+                @ScriptConfiguration(
+                        name =  "Use world hopper?",
+                        description = "Would you like to hop worlds based on your hop profile settings?",
+                        defaultValue = "0",
+                        optionType = OptionType.WORLDHOPPER
                 )
         }
 )
 
 public class dGlassblower extends AbstractScript {
     // Creating the strings for later use
+    String hopProfile;
+    Boolean hopEnabled;
+    Boolean useWDH;
     String product;
     String bankloc;
     int banktab;
@@ -60,11 +69,15 @@ public class dGlassblower extends AbstractScript {
         Map<String, String> configs = getConfigurations();
         product = configs.get("Product");
         banktab = Integer.parseInt(configs.get("Bank Tab"));
+        hopProfile = (configs.get("Use world hopper?"));
+        hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
+        useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
 
         initializeMakeOptions();
 
         // One-time setup
         setupMakeOptions();
+        hopActions();
         setupBanking();
         initialSetup();
 
@@ -80,6 +93,7 @@ public class dGlassblower extends AbstractScript {
         checkInventGlassblowing();
         executeGlassblowingMethod();
         bank();
+        hopActions();
 
     }
 
@@ -281,6 +295,7 @@ public class dGlassblower extends AbstractScript {
         while (Inventory.contains(moltenglass, 0.75)) {
             readXP();
             Condition.sleep(randomDelay3);
+            hopActions();
 
             // Check if we have passed the timeout
             if (System.currentTimeMillis() - startTime > timeout) {
@@ -343,6 +358,14 @@ public class dGlassblower extends AbstractScript {
             Logger.log("2nd check failed for a glassblowing pipe and molten glass in our inventory, logging out and aborting script!");
             Logout.logout();
             Script.forceStop();
+        }
+    }
+
+    private void hopActions() {
+        if(hopEnabled) {
+            Game.hop(hopProfile, useWDH, false);
+        } else {
+            // We do nothing here, as hop is disabled.
         }
     }
 
