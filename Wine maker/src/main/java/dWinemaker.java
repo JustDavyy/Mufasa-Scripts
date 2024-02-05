@@ -10,7 +10,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dWinemaker",
         description = "Creates well fermented wine for those juicy cooking gains. Supports dynamic banking.",
-        version = "1.04",
+        version = "1.05",
         guideLink = "https://wiki.mufasaclient.com/docs/dwinemaker/",
         categories = {ScriptCategory.Cooking}
 )
@@ -21,12 +21,21 @@ import static helpers.Interfaces.*;
                         description = "What bank tab are your resources located in?",
                         defaultValue = "0",
                         optionType = OptionType.BANKTABS
+                ),
+                @ScriptConfiguration(
+                        name =  "Use world hopper?",
+                        description = "Would you like to hop worlds based on your hop profile settings?",
+                        defaultValue = "0",
+                        optionType = OptionType.WORLDHOPPER
                 )
         }
 )
 
 public class dWinemaker extends AbstractScript {
     // Creating the strings for later use
+    String hopProfile;
+    Boolean hopEnabled;
+    Boolean useWDH;
     String bankloc;
     int banktab;
     String grapes = "1987";
@@ -37,9 +46,13 @@ public class dWinemaker extends AbstractScript {
     public void onStart(){
         Map<String, String> configs = getConfigurations();
         banktab = Integer.parseInt(configs.get("Bank Tab"));
+        hopProfile = (configs.get("Use world hopper?"));
+        hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
+        useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
 
         Logger.log("Thank you for using the dWinemaker script!\nSetting up everything for your gains now...");
 
+        hopActions();
         setupBanking();
         initialSetup();
     }
@@ -52,6 +65,7 @@ public class dWinemaker extends AbstractScript {
         checkInventWineMaking();
         executeMakeWineMethod();
         bank();
+        hopActions();
 
     }
 
@@ -170,6 +184,7 @@ public class dWinemaker extends AbstractScript {
         long timeout = 25 * 1000; // 25 seconds in milliseconds as a full invent is about 17-20 seconds.
         while (Inventory.contains(grapes, 0.75)) {
             Condition.sleep(randomDelay3);
+            hopActions();
 
             // Check if we have passed the timeout
             if (System.currentTimeMillis() - startTime > timeout) {
@@ -237,6 +252,14 @@ public class dWinemaker extends AbstractScript {
             Logger.log("2nd check failed for jugs of water/grapes in our inventory, logging out and aborting script!");
             Logout.logout();
             Script.forceStop();
+        }
+    }
+
+    private void hopActions() {
+        if(hopEnabled) {
+            Game.hop(hopProfile, useWDH, false);
+        } else {
+            // We do nothing here, as hop is disabled.
         }
     }
 
