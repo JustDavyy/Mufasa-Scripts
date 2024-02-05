@@ -14,7 +14,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dKarambwanji Fisher",
         description = "Fishes Karambwanji at Karamja to use as bait for Karambwans. Has a safe option for low HP accounts (keep in mind, this slows down the catch rate).",
-        version = "1.02",
+        version = "1.03",
         guideLink = "https://wiki.mufasaclient.com/docs/dkarambwanji-fisher/",
         categories = {ScriptCategory.Fishing}
 )
@@ -25,11 +25,20 @@ import static helpers.Interfaces.*;
                         description = "Would you like to enable to low HP level safe mode? (this results in less karambwanjis an hour). This only uses the N/NE/E spots, and ignores the S and other spots.",
                         defaultValue = "false",
                         optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name =  "Use world hopper?",
+                        description = "Would you like to hop worlds based on your hop profile settings?",
+                        defaultValue = "0",
+                        optionType = OptionType.WORLDHOPPER
                 )
         }
 )
 
 public class dKarambwanjiFisher extends AbstractScript {
+String hopProfile;
+Boolean hopEnabled;
+Boolean useWDH;
 Area FishingArea = new Area(
         new Tile(1, 0),
         new Tile(97, 77)
@@ -49,10 +58,13 @@ private Instant lastActionTime = Instant.now();
     // This is the onStart, and only gets ran once.
     @Override
     public void onStart(){
-        Walker.setup("/maps/KarambwanjiArea.png"); //Setup the walker!
+        Walker.setup("/maps/KarambwanjiArea.png"); //Set up the walker!
 
         Map<String, String> configs = getConfigurations();
         SafeModeOn = Boolean.valueOf((configs.get("Use safe mode?")));
+        hopProfile = (configs.get("Use world hopper?"));
+        hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
+        useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
 
         Logger.log("Thank you for using the dKarambwanji Fisher script!");
         Logger.log("Setting up everything for your gains now...");
@@ -79,6 +91,7 @@ private Instant lastActionTime = Instant.now();
         } else {
             Logger.debugLog("Fishing net is present in the inventory, we're good to go!");
             GameTabs.closeInventoryTab();
+            hopActions();
         }
 
     }
@@ -92,10 +105,12 @@ private Instant lastActionTime = Instant.now();
         }
 
         readXP();
+        hopActions();
 
         // Check for inactivity
         if (Duration.between(lastActionTime, Instant.now()).toMinutes() >= 4) {
             performAntiAFKAction();
+            hopActions();
         }
     }
 
@@ -193,5 +208,13 @@ private Instant lastActionTime = Instant.now();
 
         // Reset the last action time
         lastActionTime = Instant.now();
+    }
+
+    private void hopActions() {
+        if(hopEnabled) {
+            Game.hop(hopProfile, useWDH, false);
+        } else {
+            // We do nothing here, as hop is disabled.
+        }
     }
 }
