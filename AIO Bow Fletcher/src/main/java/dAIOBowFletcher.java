@@ -11,7 +11,7 @@ import static helpers.Interfaces.Logout;
 @ScriptManifest(
         name = "dAIO Bow Fletcher",
         description = "Cuts or strings bows for you. Supports all log tiers, and both short and longbows with dynamic banking.",
-        version = "1.35",
+        version = "1.36",
         guideLink = "https://wiki.mufasaclient.com/docs/daio-bow-fletcher/",
         categories = {ScriptCategory.Fletching}
 )
@@ -56,12 +56,21 @@ import static helpers.Interfaces.Logout;
                         description = "What bank tab are your resources located in?",
                         defaultValue = "0",
                         optionType = OptionType.BANKTABS
+                ),
+                @ScriptConfiguration(
+                        name =  "Use world hopper?",
+                        description = "Would you like to hop worlds based on your hop profile settings?",
+                        defaultValue = "0",
+                        optionType = OptionType.WORLDHOPPER
                 )
         }
 )
 
 public class dAIOBowFletcher extends AbstractScript {
     // Creating the strings for later use
+    String hopProfile;
+    Boolean hopEnabled;
+    Boolean useWDH;
     String method;
     String tier;
     String product;
@@ -84,9 +93,13 @@ public class dAIOBowFletcher extends AbstractScript {
         tier = configs.get("Tier");
         product = configs.get("Product");
         banktab = Integer.parseInt(configs.get("Bank Tab"));
+        hopProfile = (configs.get("Use world hopper?"));
+        hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
+        useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
 
         // One-time setup
         initializeItemIDs();
+        hopActions();
         setupItemIds();
         setupBanking();
         initialSetup();
@@ -104,6 +117,7 @@ public class dAIOBowFletcher extends AbstractScript {
             checkInventCutMethod();
             executeCutMethod();
             bank();
+            hopActions();
         }
 
         else if (method.equals("String")) {
@@ -111,6 +125,7 @@ public class dAIOBowFletcher extends AbstractScript {
             checkInventStringMethod();
             executeStringMethod();
             bank();
+            hopActions();
         }
 
     }
@@ -378,6 +393,7 @@ public class dAIOBowFletcher extends AbstractScript {
         while (Inventory.contains(logs, 0.75)) {
             readXP();
             Condition.sleep(randomDelay3);
+            hopActions();
 
             // Check if we have passed the timeout
             if (System.currentTimeMillis() - startTime > timeout) {
@@ -428,6 +444,7 @@ public class dAIOBowFletcher extends AbstractScript {
         while (Inventory.contains(bowstring, 0.75)) {
             readXP();
             Condition.sleep(randomDelay3);
+            hopActions();
 
             // Check if we have passed the timeout
             if (System.currentTimeMillis() - startTime > timeout) {
@@ -563,6 +580,14 @@ public class dAIOBowFletcher extends AbstractScript {
                 Logout.logout();
                 Script.forceStop();
             }
+        }
+    }
+
+    private void hopActions() {
+        if(hopEnabled) {
+            Game.hop(hopProfile, useWDH, false);
+        } else {
+            // We do nothing here, as hop is disabled.
         }
     }
 
