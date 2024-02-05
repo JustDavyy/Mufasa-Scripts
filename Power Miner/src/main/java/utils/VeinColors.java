@@ -6,40 +6,46 @@ import java.util.List;
 
 public enum VeinColors {
     COPPER_VEIN(
-            Arrays.asList(new Color(0x865d3a)),
-            Arrays.asList(new Color(0x4c4646)) //not done yet
+            Arrays.asList(new Color(0x865d3a),
+                    new Color(0x9c6d44),
+                    new Color(0x805b39),
+                    new Color(0x875e3b),
+                    new Color(0x835d3a),
+                    new Color(0x62462c),
+                    new Color(0x8d623e))
     ),
     TIN_VEIN(
-            Arrays.asList(new Color(0x665d5d)),
-            Arrays.asList(new Color(0x585252)) //not done yet
+            Arrays.asList(new Color(0x665d5d),
+                    new Color(0x817777),
+                    new Color(0x8e8282),
+                    new Color(0x504a4a),
+                    new Color(0x948988),
+                    new Color(0x554f4f))
     ),
     IRON_VEIN(
-            Arrays.asList(new Color(0x8d8181)),
-            Arrays.asList(new Color(0x585252)) //not done yet
+            Arrays.asList(new Color(0x8d8181),
+                    new Color(0x543327),
+                    new Color(0x2c1e16),
+                    new Color(0x36221b),
+                    new Color(0x40271e),
+                    new Color(0x4c2e24),
+                    new Color(0x482c22))
     ),
     CLAY(
-            Arrays.asList(new Color(0x6f5932)),
-            Arrays.asList(new Color(0x6f5932)) //not done yet
+            Arrays.asList(new Color(0x6f5932))
     ),
     SILVER(
-            Arrays.asList(new Color(0x897e7d)), // Active color
-            Arrays.asList(new Color(0x897e7d))  // Inactive color (example, adjust as needed)
+            Arrays.asList(new Color(0x897e7d))
     );
 
     // Enum setup
     private final List<Color> activeColor;
-    private final List<Color> inactiveColor;
 
-    VeinColors(List<Color> activeColor, List<Color> inactiveColor) {
+    VeinColors(List<Color> activeColor) {
         this.activeColor = activeColor;
-        this.inactiveColor = inactiveColor;
     }
 
     public List<Color> getActiveColor() {
         return activeColor;
-    }
-
-    public List<Color> getInactiveColor() {
-        return inactiveColor;
     }
 }

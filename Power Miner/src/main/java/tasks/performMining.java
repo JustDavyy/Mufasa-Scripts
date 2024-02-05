@@ -12,15 +12,12 @@ public class performMining extends Task {
     Tile location;
 
     public boolean activate() {
-        Logger.debugLog("Checking if we should mine");
         location = Walker.getPlayerPosition(regionInfo.getWorldRegion()); // Cache our position so we only need to check once per loop
-        Logger.debugLog("We are at: " + location.x() + "," + location.y());
         return Player.isTileWithinArea(location, regionInfo.getMineArea());
     }
     @Override
     public boolean execute() {
         if (hopEnabled) {
-            Logger.debugLog("Checking if we should hop");
             hopActions();
         }
 
