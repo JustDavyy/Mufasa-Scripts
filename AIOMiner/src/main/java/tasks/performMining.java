@@ -41,6 +41,6 @@ public class performMining extends Task {
     }
 
     private void hopActions() {
-        Game.hop(hopProfile, true, false);
+        Game.hop(hopProfile, useWDH, false);
     }
 }
