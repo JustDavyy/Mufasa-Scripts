@@ -26,6 +26,7 @@ public class DropOres  extends Task {
             Client.tap(tapToDropRect);
             return true;
         }
+
         // Drop the items
         if (Inventory.contains(oreTypeInt, 10)) {
             Inventory.tapAllItems(oreTypeInt, 10);
