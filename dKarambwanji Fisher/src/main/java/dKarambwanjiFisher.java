@@ -76,7 +76,7 @@ private Instant lastActionTime = Instant.now();
         } else {
             Logger.log("Could not locate us in the Karambwanji fishing area. Please move there and start the script again.");
             Logout.logout();
-            Script.forceStop();
+            Script.stop();
         }
 
         // Checking if we have a net in our inventory
@@ -87,7 +87,7 @@ private Instant lastActionTime = Instant.now();
         if(!Inventory.contains("303", 0.90)) {
             Logger.log("No small fishing net was found in the inventory, please grab it and restart the script.");
             Logout.logout();
-            Script.forceStop();
+            Script.stop();
         } else {
             Logger.debugLog("Fishing net is present in the inventory, we're good to go!");
             GameTabs.closeInventoryTab();

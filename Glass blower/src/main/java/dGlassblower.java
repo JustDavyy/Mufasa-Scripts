@@ -146,7 +146,7 @@ public class dGlassblower extends AbstractScript {
             if (bankloc == null) {
                 Logger.debugLog("Could not find a dynamic bank location we are in, logging out and aborting script.");
                 Logout.logout();
-                Script.forceStop();
+                Script.stop();
             }
             Condition.sleep(5000);
             Logger.debugLog("Attempting to open the Bank of Gielinor.");
@@ -211,7 +211,7 @@ public class dGlassblower extends AbstractScript {
                 Bank.close();
             }
             Logout.logout();
-            Script.forceStop();
+            Script.stop();
         }
 
         // Grabbing the first molten glass to process
@@ -239,7 +239,7 @@ public class dGlassblower extends AbstractScript {
                     Bank.close();
                 }
                 Logout.logout();
-                Script.forceStop();
+                Script.stop();
             }
         } else {
             // Withdraw first set of items
@@ -255,7 +255,7 @@ public class dGlassblower extends AbstractScript {
                     Bank.close();
                 }
                 Logout.logout();
-                Script.forceStop();
+                Script.stop();
             }
 
             Logger.debugLog("Withdrew molten glass from the bank.");
@@ -357,7 +357,7 @@ public class dGlassblower extends AbstractScript {
         if (!Inventory.contains(items, 0.75)) {
             Logger.log("2nd check failed for a glassblowing pipe and molten glass in our inventory, logging out and aborting script!");
             Logout.logout();
-            Script.forceStop();
+            Script.stop();
         }
     }
 
