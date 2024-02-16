@@ -25,8 +25,8 @@ import static helpers.Interfaces.*;
         {
                 @ScriptConfiguration(
                         name =  "Use world hopper?",
-                        description = "Would you like to hop worlds based on your hop profile settings? WDH is disabled for this script, as there's users on every world mostly.",
-                        defaultValue = "1",
+                        description = "Would you like to hop worlds based on your hop profile settings?",
+                        defaultValue = "0",
                         optionType = OptionType.WORLDHOPPER
                 ),
                 @ScriptConfiguration(
@@ -82,6 +82,7 @@ public class AIOMiner extends AbstractScript {
     //public static int miningLevel;
     public static String hopProfile;
     public static Boolean hopEnabled;
+    public static Boolean useWDH;
 
     public static LocationInfo locationInfo;
     public static RegionInfo regionInfo;
@@ -97,6 +98,7 @@ public class AIOMiner extends AbstractScript {
         bankOres = Boolean.valueOf((configs.get("Bank ores")));
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
+        useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
 
         //Setup enum values
         setupRegionInfo();

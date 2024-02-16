@@ -37,6 +37,8 @@ public class Bank extends Task {
             if (dynamicBank == null) {
                 Logger.log("Finding bank");
                 dynamicBank = Bank.setupDynamicBank();
+            } else {
+                Bank.stepToBank();
             }
 
             if (!Bank.isOpen()) {
