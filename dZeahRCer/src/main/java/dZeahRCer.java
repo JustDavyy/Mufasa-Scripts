@@ -240,7 +240,7 @@ Boolean hopEnabled;
             Client.tap(obstacleOut);
         } else {
             Logger.debugLog("Could not locate the agility shortcut, stopping script.");
-            Script.forceStop();
+            Script.stop();
         }
         Condition.wait(() -> Player.atTile(obstacleOutsideTile), 500, 16);
         Condition.sleep(1000);
@@ -253,7 +253,7 @@ Boolean hopEnabled;
             Client.tap(obstacleOut);
         } else {
             Logger.debugLog("Could not locate the agility shortcut, stopping script.");
-            Script.forceStop();
+            Script.stop();
         }
         Condition.wait(() -> Player.atTile(obstacleBackToMineFromVenerateInTile), 500, 16);
         Condition.sleep(1000);
@@ -266,7 +266,7 @@ Boolean hopEnabled;
             Client.tap(obstacleOut);
         } else {
             Logger.debugLog("Could not locate the agility shortcut, stopping script.");
-            Script.forceStop();
+            Script.stop();
         }
         Condition.wait(() -> Player.atTile(obstacleBackToMineFromBloodInTile), 500, 16);
         Condition.sleep(2000);

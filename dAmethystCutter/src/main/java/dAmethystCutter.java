@@ -140,7 +140,7 @@ public class dAmethystCutter extends AbstractScript {
             if (bankloc == null) {
                 Logger.debugLog("Could not find a dynamic bank location we are in, logging out and aborting script.");
                 Logout.logout();
-                Script.forceStop();
+                Script.stop();
             }
             Condition.sleep(5000);
             Logger.debugLog("Attempting to open the Bank of Gielinor.");
@@ -205,7 +205,7 @@ public class dAmethystCutter extends AbstractScript {
                 Bank.close();
             }
             Logout.logout();
-            Script.forceStop();
+            Script.stop();
         }
 
         // Grabbing the first amethyst to process
@@ -233,7 +233,7 @@ public class dAmethystCutter extends AbstractScript {
                     Bank.close();
                 }
                 Logout.logout();
-                Script.forceStop();
+                Script.stop();
             }
         } else {
             // Withdraw first set of items
@@ -249,7 +249,7 @@ public class dAmethystCutter extends AbstractScript {
                     Bank.close();
                 }
                 Logout.logout();
-                Script.forceStop();
+                Script.stop();
             }
 
             Logger.debugLog("Withdrew amethyst from the bank.");
@@ -354,7 +354,7 @@ public class dAmethystCutter extends AbstractScript {
         if (!Inventory.contains(items, 0.75)) {
             Logger.log("2nd check failed for a chisel and amethyst in our inventory, logging out and aborting script!");
             Logout.logout();
-            Script.forceStop();
+            Script.stop();
         }
     }
 

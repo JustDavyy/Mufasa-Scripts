@@ -338,7 +338,7 @@ Tile playerPos;
     private void notInArea() {
         Logger.log("We are not within the " + location + " area. Please move there and restart the script.");
         Logout.logout();
-        Script.forceStop();
+        Script.stop();
     }
 
     public RectanglePair getRectanglePair(String bankName) {

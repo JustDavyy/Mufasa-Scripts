@@ -83,7 +83,7 @@ Random random = new Random();
         } else {
             Logger.log("Could not locate us at the Minnow platform. Please move there and start the script again.");
             Logout.logout();
-            Script.forceStop();
+            Script.stop();
         }
 
         // Checking if we have a net in our inventory
@@ -94,7 +94,7 @@ Random random = new Random();
         if(!Inventory.contains("303", 0.90)) {
             Logger.log("No small fishing net was found in the inventory, please grab it and restart the script.");
             Logout.logout();
-            Script.forceStop();
+            Script.stop();
         } else {
             Logger.debugLog("Fishing net is present in the inventory, we're good to go!");
             GameTabs.closeInventoryTab();
