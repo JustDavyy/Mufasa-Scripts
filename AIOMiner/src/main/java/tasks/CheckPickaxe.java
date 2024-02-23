@@ -11,7 +11,7 @@ public class CheckPickaxe extends Task {
     boolean checkedForPickaxe = false;
     boolean checkedInventory = false;
     boolean checkedEquipment = false;
-    int[] pickaxeIDs = {
+    int[] pickaxeIDs = { //Reversed order to check highest pickaxes first instead of lower ones.
             ItemList.DRAGON_PICKAXE_11920,
             ItemList.RUNE_PICKAXE_1275,
             ItemList.ADAMANT_PICKAXE_1271,
@@ -21,7 +21,7 @@ public class CheckPickaxe extends Task {
             ItemList.IRON_PICKAXE_1267,
             ItemList.BRONZE_PICKAXE_1265
     };
-    
+
     public boolean activate() {
         return !checkedForPickaxe;
     }
