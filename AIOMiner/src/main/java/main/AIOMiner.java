@@ -39,13 +39,12 @@ import static helpers.Interfaces.*;
                                 //@AllowedValue(optionName = "Soul isles"),
                                 //@AllowedValue(optionName = "Al kharid South"),
                                 //@AllowedValue(optionName = "Mining Guild"),
-
                         },
                         optionType = OptionType.STRING
                 ),
                 @ScriptConfiguration(
                         name =  "Bank ores",
-                        description = "Make sure you read the script guides if banking is supported in your location!",
+                        description = "Make sure you read the script guide if banking is supported in your location!",
                         defaultValue = "false",
                         optionType = OptionType.BOOLEAN
                 ),
