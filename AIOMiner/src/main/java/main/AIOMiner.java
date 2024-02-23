@@ -23,13 +23,7 @@ import static helpers.Interfaces.*;
 )
 @ScriptConfiguration.List(
         {
-                @ScriptConfiguration(
-                        name =  "Use world hopper?",
-                        description = "Would you like to hop worlds based on your hop profile settings?",
-                        defaultValue = "0",
-                        optionType = OptionType.WORLDHOPPER
-                ),
-                @ScriptConfiguration(
+                @ScriptConfiguration( // Location config
                         name =  "Location",
                         description = "Which location would you like to use? be sure to read the script guide for which ores are supported in specific locations",
                         defaultValue = "Varrock East",
@@ -42,13 +36,7 @@ import static helpers.Interfaces.*;
                         },
                         optionType = OptionType.STRING
                 ),
-                @ScriptConfiguration(
-                        name =  "Bank ores",
-                        description = "Make sure you read the script guide if banking is supported in your location!",
-                        defaultValue = "false",
-                        optionType = OptionType.BOOLEAN
-                ),
-                @ScriptConfiguration(
+                @ScriptConfiguration( // Ore type
                         name =  "Ore type",
                         description = "Which ore would you like to mine?",
                         defaultValue = "Iron ore",
@@ -62,7 +50,19 @@ import static helpers.Interfaces.*;
 
                         },
                         optionType = OptionType.STRING
-                )
+                ),
+                @ScriptConfiguration( // Bank config boolean
+                        name =  "Bank ores",
+                        description = "Make sure you read the script guide if banking is supported in your location!",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration( // Worldhopper config
+                        name =  "Use world hopper?",
+                        description = "Would you like to hop worlds based on your hop profile settings? The script will only worldhop during mining",
+                        defaultValue = "false",
+                        optionType = OptionType.WORLDHOPPER
+                ),
         }
 )
 
@@ -78,7 +78,7 @@ public class AIOMiner extends AbstractScript {
     public static String oreType;
     public static int oreTypeInt;
     public static Boolean bankOres;
-    //public static int miningLevel;
+    public static int miningLevel = 99; //Just setting it to 99 atm to pass checks ;)
     public static String hopProfile;
     public static Boolean hopEnabled;
     public static Boolean useWDH;
@@ -99,13 +99,6 @@ public class AIOMiner extends AbstractScript {
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
 
-        //Setup enum values
-        setupRegionInfo();
-        setupLocationInfo();
-        setupVeinColors();
-        setupPathsToBank();
-        setupOreTypeInts();
-
         //Check and cache STARTING mining level (just to make sure people dont fuck up)
         //if (!GameTabs.isStatsTabOpen()) {
         //    GameTabs.openStatsTab();
@@ -113,6 +106,13 @@ public class AIOMiner extends AbstractScript {
         //if (GameTabs.isStatsTabOpen()) {
         //    miningLevel = Stats.getRealLevel("Mining");
         //}
+
+        //Setup enum values
+        setupRegionInfo();
+        setupLocationInfo();
+        setupVeinColors();
+        setupPathsToBank();
+        setupOreTypeInts();
     }
 
     @Override
@@ -224,9 +224,17 @@ public class AIOMiner extends AbstractScript {
                 break;
             case "Silver ore":
                 oreTypeInt = 442;
+                if (miningLevel < 20) {
+                    Logger.log("You dont have the required mining level for silver");
+                    Script.stop();
+                }
                 break;
             case "Iron ore":
                 oreTypeInt = 440;
+                if (miningLevel < 15) {
+                    Logger.log("You dont have the required mining level for iron");
+                    Script.stop();
+                }
                 break;
         }
     }
