@@ -24,11 +24,12 @@ public class DropOres  extends Task {
 
         if (!isTapToDropEnabled) {
             Client.tap(tapToDropRect);
+            Condition.wait(() -> isTapToDropEnabled, 50, 10);
             return true;
         }
 
         // Drop the items
-        if (Inventory.contains(oreTypeInt, 10)) {
+        if (Inventory.contains(oreTypeInt, 10) && isTapToDropEnabled) {
             Inventory.tapAllItems(oreTypeInt, 10);
             return true;
         }
