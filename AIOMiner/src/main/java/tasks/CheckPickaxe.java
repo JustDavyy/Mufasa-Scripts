@@ -11,9 +11,17 @@ public class CheckPickaxe extends Task {
     boolean checkedForPickaxe = false;
     boolean checkedInventory = false;
     boolean checkedEquipment = false;
-    int[] pickaxeIDs = {ItemList.BRONZE_PICKAXE_1265, ItemList.IRON_PICKAXE_1267, ItemList.STEEL_PICKAXE_1269, ItemList.BLACK_PICKAXE_12297, ItemList.MITHRIL_PICKAXE_1273, ItemList.ADAMANT_PICKAXE_1271, ItemList.RUNE_PICKAXE_1275, ItemList.DRAGON_PICKAXE_11920};
-
-
+    int[] pickaxeIDs = {
+            ItemList.DRAGON_PICKAXE_11920,
+            ItemList.RUNE_PICKAXE_1275,
+            ItemList.ADAMANT_PICKAXE_1271,
+            ItemList.MITHRIL_PICKAXE_1273,
+            ItemList.BLACK_PICKAXE_12297,
+            ItemList.STEEL_PICKAXE_1269,
+            ItemList.IRON_PICKAXE_1267,
+            ItemList.BRONZE_PICKAXE_1265
+    };
+    
     public boolean activate() {
         return !checkedForPickaxe;
     }
