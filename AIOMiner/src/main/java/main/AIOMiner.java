@@ -17,7 +17,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "AIO Miner",
         description = "Mines ores in different places",
-        version = "1.0",
+        version = "0.1",
         guideLink = "",
         categories = {ScriptCategory.Mining}
 )
