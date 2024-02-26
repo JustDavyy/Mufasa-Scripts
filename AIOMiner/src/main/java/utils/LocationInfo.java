@@ -9,8 +9,8 @@ public enum LocationInfo {
             new Rectangle(381, 270, 31, 31), //Check1
             new Rectangle(421, 227, 36, 30), //Check2
             new Rectangle(1, 1, 1, 1), //Check3 (only 2 ores)
-            new Rectangle(382, 269, 27, 33), //Click1
-            new Rectangle(429, 231, 30, 29), //Click2
+            new Rectangle(399, 268, 16, 19), //Click1
+            new Rectangle(445, 223, 19, 22), //Click2
             new Rectangle(1, 1, 1, 1), //Click 3 (only 2 ores)
             new Tile(2847, 998) //Step
     ),

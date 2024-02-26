@@ -23,13 +23,19 @@ public class DropOres  extends Task {
         boolean isTapToDropEnabled = Client.isColorInRect(tapToDropActiveColor, tapToDropRect, 5);
 
         if (!isTapToDropEnabled) {
+            Logger.log("Enabling tap to drop");
             Client.tap(tapToDropRect);
             Condition.wait(() -> isTapToDropEnabled, 50, 10);
+            Logger.log("Tap to drop enabled");
             return true;
         }
 
+        boolean inventoryHasOres = Inventory.contains(oreTypeInt, 10);
+        Logger.log("Do we have the ores? " + inventoryHasOres);
+
         // Drop the items
-        if (Inventory.contains(oreTypeInt, 10) && isTapToDropEnabled) {
+        if (inventoryHasOres && isTapToDropEnabled) {
+            Logger.log("Dropping ores");
             Inventory.tapAllItems(oreTypeInt, 10);
             return true;
         }
