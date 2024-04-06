@@ -17,13 +17,13 @@ configurations.all {
 }
 
 dependencies {
-    implementation('com.github.Mufasa-SDK:SDKRepo:1.1.60') {
+    implementation('com.github.Mufasa-SDK:SDKRepo:1.1.64') {
         changing = true
     }
 }
 
 jar {
-    archiveFileName = 'RandomTestStuff.jar'
+    archiveFileName = 'dTeaYoinker.jar'
     destinationDirectory = file('jar/')
 
     manifest {
