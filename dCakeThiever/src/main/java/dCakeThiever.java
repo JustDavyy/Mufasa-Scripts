@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @ScriptManifest(
         name = "dCakeThiever",
-        description = "Steals from the cake stall at Kourend castle. Supports world hopping and banking.",
+        description = "Steals from the cake stall at Kourend castle. Supports world hopping and banking.\n MAKE SURE TO MONITOR THE SCRIPT FOR NOW, ATTACK DETECTION IS NOT ADDED YET! NOT SAFE FOR HCS!",
         version = "1.00",
         guideLink = "https://wiki.mufasaclient.com/docs/dcake-thiever/",
         categories = {ScriptCategory.Thieving}
