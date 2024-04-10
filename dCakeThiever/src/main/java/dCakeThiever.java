@@ -468,7 +468,6 @@ public class dCakeThiever extends AbstractScript {
         Condition.sleep(500);
 
         usedInvent = Inventory.usedSlots();
-        droppedChocSlice = true;
 
         Logger.debugLog("Ending the dropAll() method.");
     }
