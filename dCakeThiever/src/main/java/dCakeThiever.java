@@ -13,8 +13,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @ScriptManifest(
         name = "dCakeThiever",
-        description = "Steals from the cake stall at Kourend castle. Supports world hopping and banking. MAKE SURE TO MONITOR THE SCRIPT FOR NOW, ATTACK DETECTION IS NOT ADDED YET! NOT SAFE FOR HCS!",
-        version = "1.00",
+        description = "Steals from the cake stall at Kourend castle. Supports world hopping and banking. Detects being caught, runs away if needed.",
+        version = "1.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dcake-thiever/",
         categories = {ScriptCategory.Thieving}
 )
@@ -48,6 +48,7 @@ public class dCakeThiever extends AbstractScript {
     Tile groundStairsFromUp = new Tile(54, 45);
     Tile topLevelStairs = new Tile(310, 33);
     Tile floor1Stairs = new Tile(198, 29);
+    Tile outAttackRange = new Tile(69, 25);
     Rectangle backupStairTap = new Rectangle(313, 248, 80, 60);
     Rectangle stallTapWindow = new Rectangle(435, 296, 83, 54);
     Rectangle floor1InstantStairs = new Rectangle(537, 3, 27, 19);
@@ -72,9 +73,21 @@ public class dCakeThiever extends AbstractScript {
             new Tile(74, 47),
             stallTile
     };
+
+    Tile[] runAwayPath = new Tile[] {
+            new Tile(70, 43),
+            outAttackRange
+    };
+
+    Tile[] runBackPath = new Tile[] {
+            new Tile(69, 41),
+            new Tile(76, 42)
+    };
     int pollsSinceLastDrop = 0;
     boolean stolen = false;
+    boolean droppedChocSlice = false;
     int inventSpotsFree;
+    int usedInvent = 0;
 
     // This is the onStart, and only gets ran once.
     @Override
@@ -162,6 +175,7 @@ public class dCakeThiever extends AbstractScript {
 
             // Check the amount of inventory spots free (to know when to drop items)
             inventSpotsFree = Inventory.emptySlots();
+            usedInvent = Inventory.usedSlots();
 
             // Close the chat area
             Chatbox.closeChatbox();
@@ -415,14 +429,16 @@ public class dCakeThiever extends AbstractScript {
     private boolean stealFromStall() {
         java.awt.Rectangle foundObjects = Objects.getNearest("/images/cakePresent.png");
 
-        // Generate a random number between 2400 and 2800
+        // Generate a random number between 2600 and 3000
         Random random = new Random();
-        int delay = 2400 + random.nextInt(2800- 2400 + 1);
+        int delay = 2600 + random.nextInt(3000- 2600 + 1);
 
         if (foundObjects != null && !foundObjects.isEmpty()) {
             Client.tap(stallTapWindow);
             Condition.sleep(delay); // Use the random delay
-            return true; // Successfully stolen
+
+            // If not caught, return true (successful theft), else return false (caught)
+            return !checkCaught();
         } else {
             Logger.debugLog("No cake was found in the stall. Skipping attempt to steal.");
             return false; // Not stolen
@@ -432,7 +448,12 @@ public class dCakeThiever extends AbstractScript {
     private void dropChocSlice() {
         Logger.debugLog("Starting dropChocSlice() method.");
 
-        Inventory.tapAllItems(chocSlice, 0.75);
+        if (Inventory.contains(chocSlice, 0.75)) {
+            Inventory.tapAllItems(chocSlice, 0.75);
+            droppedChocSlice = true;
+        } else {
+            droppedChocSlice = false;
+        }
 
         Logger.debugLog("Ending the dropChocSlice() method.");
     }
@@ -445,6 +466,105 @@ public class dCakeThiever extends AbstractScript {
         Inventory.tapAllItems(chocSlice, 0.75);
 
         Logger.debugLog("Ending the dropAll() method.");
+    }
+
+    private boolean checkCaught() {
+
+        if (droppedChocSlice) {
+            usedInvent = Inventory.usedSlots();
+            return false;
+        }
+
+        int inventUsed = Inventory.usedSlots();
+
+        if (inventUsed == usedInvent) {
+            // Logging
+            Logger.debugLog("Inventory usage has not changed, assuming we are being caught.");
+
+            // Run away
+            Logger.log("Running away from guards!");
+            runAway();
+
+            // Run back
+            Logger.log("Moving back to the bakery stall.");
+            runBack();
+
+            // Disable tap to drop if enabled
+            if (Game.isTapToDropEnabled()) {
+                Game.disableTapToDrop();
+            }
+
+            // Eat a bread if we have it to heal up
+            if (Inventory.contains(2309, 0.75)){
+                Inventory.tapItem(2309, false, 0.75);
+
+                Condition.sleep(750);
+
+                // Update invent count
+                usedInvent = Inventory.usedSlots();
+                inventUsed = usedInvent;
+            }
+
+            // Enable tap to drop again
+            Game.enableTapToDrop();
+
+            // return true, we were caught
+            return true;
+        } else {
+            // Update invent slot use count for next check.
+            usedInvent = inventUsed;
+            return false;
+        }
+    }
+
+    private void runAway() {
+        // Enable running if it is not enabled
+        if (!Player.isRunEnabled()) {
+            Player.toggleRun();
+        }
+
+        // Generate a random number between 1500 and 2500
+        Random random = new Random();
+        int delay = 1500 + random.nextInt(2500- 1500 + 1);
+
+        // Walk out of attack range
+        Walker.walkPath(runAwayPath);
+        Condition.sleep(delay);
+    }
+
+    private void runBack() {
+        // Walk back
+        Walker.walkPath(runBackPath);
+        Condition.sleep(2000);
+
+        // Generate a random number between 3500 and 4000
+        Random random = new Random();
+        int delay = 3500 + random.nextInt(4000- 3500 + 1);
+
+        // Step to the actual stall tile
+        Walker.step(stallTile);
+        Condition.sleep(delay);
+
+        playerPos = Walker.getPlayerPosition();
+
+        if (!Player.atTile(stallTile)) {
+            Logger.debugLog("Player is not yet at the stall tile, trying to move there again.");
+            Walker.step(stallTile);
+            Condition.sleep(5000);
+        }
+
+        playerPos = Walker.getPlayerPosition();
+
+        if (!Player.atTile(stallTile)) {
+            Logger.debugLog("Player is still not at stall tile, stopping script!");
+            Logout.logout();
+            Script.stop();
+        }
+
+        // Enable run if not yet enabled for when we need to run/bank again.
+        if (!Player.isRunEnabled()) {
+            Player.toggleRun();
+        }
     }
 
     private void hopActions() {
