@@ -429,9 +429,9 @@ public class dCakeThiever extends AbstractScript {
     private boolean stealFromStall() {
         java.awt.Rectangle foundObjects = Objects.getNearest("/images/cakePresent.png");
 
-        // Generate a random number between 2600 and 3000
+        // Generate a random number between 2450 and 2850
         Random random = new Random();
-        int delay = 2600 + random.nextInt(3000- 2600 + 1);
+        int delay = 2450 + random.nextInt(2850- 2450 + 1);
 
         if (foundObjects != null && !foundObjects.isEmpty()) {
             Client.tap(stallTapWindow);
