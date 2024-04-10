@@ -450,6 +450,7 @@ public class dCakeThiever extends AbstractScript {
 
         if (Inventory.contains(chocSlice, 0.75)) {
             Inventory.tapAllItems(chocSlice, 0.75);
+            Condition.sleep(500);
             droppedChocSlice = true;
         } else {
             droppedChocSlice = false;
