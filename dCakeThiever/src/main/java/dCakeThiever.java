@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @ScriptManifest(
         name = "dCakeThiever",
         description = "Steals from the cake stall at Kourend castle. Supports world hopping and banking. Detects being caught, runs away if needed.",
-        version = "1.01",
+        version = "1.02",
         guideLink = "https://wiki.mufasaclient.com/docs/dcake-thiever/",
         categories = {ScriptCategory.Thieving}
 )
@@ -158,6 +158,11 @@ public class dCakeThiever extends AbstractScript {
         if (Player.isTileWithinArea(playerPos, scriptArea)) {
             Logger.debugLog("We are located in the Kourend castle outer area needed for the script to run. Continuing... ");
 
+            // Open inventory if not yet open
+            if (!GameTabs.isInventoryTabOpen()) {
+                GameTabs.openInventoryTab();
+            }
+
             // Check if inventory is full
             if (Inventory.isFull()) {
                 Logger.log("Inventory is full, emptying inventory before proceeding.");
@@ -166,11 +171,6 @@ public class dCakeThiever extends AbstractScript {
                 bank();
                 movetoStall();
 
-            }
-
-            // Open inventory if not yet open
-            if (!GameTabs.isInventoryTabOpen()) {
-                GameTabs.openInventoryTab();
             }
 
             // Check the amount of inventory spots free (to know when to drop items)
@@ -448,8 +448,8 @@ public class dCakeThiever extends AbstractScript {
     private void dropChocSlice() {
         Logger.debugLog("Starting dropChocSlice() method.");
 
-        if (Inventory.contains(chocSlice, 0.75)) {
-            Inventory.tapAllItems(chocSlice, 0.75);
+        if (Inventory.contains(chocSlice, 0.90)) {
+            Inventory.tapAllItems(chocSlice, 0.90);
             Condition.sleep(500);
             droppedChocSlice = true;
         } else {
@@ -462,9 +462,13 @@ public class dCakeThiever extends AbstractScript {
     private void dropAll() {
         Logger.debugLog("Starting dropAll() method.");
 
-        Inventory.tapAllItems(1891, 0.75);
-        Inventory.tapAllItems(2309, 0.75);
-        Inventory.tapAllItems(chocSlice, 0.75);
+        Inventory.tapAllItems(1891, 0.90);
+        Inventory.tapAllItems(2309, 0.90);
+        Inventory.tapAllItems(chocSlice, 0.90);
+        Condition.sleep(500);
+
+        usedInvent = Inventory.usedSlots();
+        droppedChocSlice = true;
 
         Logger.debugLog("Ending the dropAll() method.");
     }
@@ -496,8 +500,8 @@ public class dCakeThiever extends AbstractScript {
             }
 
             // Eat a bread if we have it to heal up
-            if (Inventory.contains(2309, 0.75)){
-                Inventory.tapItem(2309, false, 0.75);
+            if (Inventory.contains(2309, 0.90)){
+                Inventory.tapItem(2309, false, 0.90);
 
                 Condition.sleep(750);
 
