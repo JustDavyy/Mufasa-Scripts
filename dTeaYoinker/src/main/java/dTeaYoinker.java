@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @ScriptManifest(
         name = "dTeaYoinker",
         description = "Steals from the tea stall in east Varrock. Supports world hopping and banking the tea.",
-        version = "1.00",
+        version = "1.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dtea-yoinker/",
         categories = {ScriptCategory.Thieving}
 )
@@ -165,9 +165,11 @@ public class dTeaYoinker extends AbstractScript {
             // Close the chat area
             Chatbox.closeChatbox();
 
-            // Enable tap to drop if not yet enabled
-            if (!Game.isTapToDropEnabled()) {
-                Game.enableTapToDrop();
+            // Enable tap to drop if not yet enabled (but only if banking is not enabled)
+            if (!bankYN) {
+                if (!Game.isTapToDropEnabled()) {
+                    Game.enableTapToDrop();
+                }
             }
 
         } else {
@@ -213,7 +215,13 @@ public class dTeaYoinker extends AbstractScript {
         Walker.walkPath(pathsToBank[randomIndex]);
 
         // Adding a delay to allow the player to finish walking
-        Condition.sleep(1000);
+        Condition.sleep(4000);
+        Tile targetBankTile = bankTiles[ThreadLocalRandom.current().nextInt(bankTiles.length)];
+        Random random = new Random();
+        int delay = 2000 + random.nextInt(400); // 2000 to 2400 milliseconds
+
+        Walker.step(targetBankTile);
+        Condition.sleep(delay);
 
         Logger.debugLog("Checking if the player has reached the bank.");
         boolean atBank = false;
@@ -231,11 +239,8 @@ public class dTeaYoinker extends AbstractScript {
         if (!atBank) {
             Logger.debugLog("Player did not reach the bank.");
             // Pick one of the three bank tiles at random
-            Tile targetBankTile = bankTiles[ThreadLocalRandom.current().nextInt(bankTiles.length)];
-            Walker.walkTo(targetBankTile); // Attempt to walk to the randomly chosen bank tile
-            // Adding a delay to allow the player to finish walking
-            Random random = new Random();
-            int delay = 2000 + random.nextInt(400); // 2000 to 2400 milliseconds
+            Walker.step(targetBankTile); // Attempt to walk to the randomly chosen bank tile
+            Condition.sleep(delay);
             Logger.debugLog("Attempting to walk to a new randomly chosen bank tile.");
         }
 
@@ -250,13 +255,13 @@ public class dTeaYoinker extends AbstractScript {
 
         // Adding a delay to allow the player to finish walking
         Random random = new Random();
-        int delay = 2000 + random.nextInt(400); // 2000 to 2400 milliseconds
+        int delay = 4000 + random.nextInt(400); // 4000 to 4400 milliseconds
         Condition.sleep(delay);
 
         // Check if at the stall
         if (!Player.atTile(stallTile)) {
             Logger.debugLog("Player is not at the stall, attempting to move.");
-            Walker.walkTo(stallTile);
+            Walker.step(stallTile);
             // Additional delay after attempting to move
             Condition.sleep(delay);
         } else {
@@ -269,9 +274,9 @@ public class dTeaYoinker extends AbstractScript {
     private boolean stealFromStall() {
         java.awt.Rectangle foundObjects = Objects.getNearest("/images/TeaPresent.png");
 
-        // Generate a random number between 4500 and 4900
+        // Generate a random number between 4000 and 4400
         Random random = new Random();
-        int delay = 4500 + random.nextInt(4900- 4500 + 1);
+        int delay = 4000 + random.nextInt(4400- 4000 + 1);
 
         if (foundObjects != null && !foundObjects.isEmpty()) {
             Client.tap(stallTapWindow);
