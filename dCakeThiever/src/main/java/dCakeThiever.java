@@ -13,8 +13,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @ScriptManifest(
         name = "dCakeThiever",
-        description = "Steals from the cake stall at Kourend castle. Supports world hopping and banking. Detects being caught, runs away if needed.",
-        version = "1.04",
+        description = "Steals from the bakery stall at Ardougne market. Supports world hopping and banking. Detects being caught, runs away if needed.",
+        version = "1.05",
         guideLink = "https://wiki.mufasaclient.com/docs/dcake-thiever/",
         categories = {ScriptCategory.Thieving}
 )
@@ -43,61 +43,46 @@ public class dCakeThiever extends AbstractScript {
     Boolean bankYN;
     Tile playerPos;
     int chocSlice = 1901;
-    Tile stallTile = new Tile(81, 40);
-    Tile groundStairs = new Tile(54, 46);
-    Tile groundStairsFromUp = new Tile(54, 45);
-    Tile topLevelStairs = new Tile(310, 33);
-    Tile floor1Stairs = new Tile(198, 29);
-    Tile outAttackRange = new Tile(69, 25);
-    Rectangle backupStairTap = new Rectangle(313, 248, 80, 60);
-    Rectangle stallTapWindow = new Rectangle(435, 296, 83, 54);
-    Rectangle floor1InstantStairs = new Rectangle(537, 3, 27, 19);
-    Rectangle floor1StairsFromDoor = new Rectangle(438, 45, 59, 56);
-    Rectangle floor2InstantDepoBox = new Rectangle(136, 389, 34, 31);
-    Rectangle floor2DepoBoxFromDoor = new Rectangle(240, 248, 18, 32);
-    Rectangle floor2InstantStairsDown = new Rectangle(633, 113, 28, 17);
-    Rectangle floor2StairsDownFromDoor = new Rectangle(561, 84, 28, 18);
-    Rectangle floor1StairsDownStep1 = new Rectangle(437, 492, 30, 25);
-    Rectangle floor1StairsDownStep2 = new Rectangle(423, 327, 98, 53);
-    Rectangle floor1StairsDownFromDoor = new Rectangle(419, 412, 110, 67);
-    Rectangle groundFloorStairs = new Rectangle(307, 210, 79, 48);
-    Rectangle f1doorToBank = new Rectangle(521, 86, 24, 48);
-    Rectangle f2doorToBank = new Rectangle(316, 420, 13, 40);
-    Rectangle f2doorFromBank = new Rectangle(556, 292, 16, 31);
-    Rectangle f1doorFromBank = new Rectangle(471, 412, 39, 22);
-    Tile[] pathToGroundStairs = new Tile[] {
-            new Tile(74, 47),
-            groundStairs
-    };
+    Tile stallTile = new Tile(84, 45);
+    Tile outAttackRange = new Tile(92, 72);
+    Tile bankBoothTile = new Tile(65, 77);
     Tile[] pathToStall = new Tile[] {
-            new Tile(74, 47),
-            stallTile
+            new Tile(60, 80),
+            new Tile(51, 80),
+            new Tile(50, 70),
+            new Tile(50, 59),
+            new Tile(53, 50),
+            new Tile(61, 49),
+            new Tile(70, 49),
+            new Tile(79, 50),
+            new Tile(84, 48)
+    };
+    Rectangle stallTapWindow = new Rectangle(377, 270, 22, 23);
+    Rectangle bankBooth = new Rectangle(486, 246, 28, 30);
+    Tile[] pathToBank = new Tile[] {
+            new Tile(86, 54),
+            new Tile(81, 59),
+            new Tile(77, 68),
+            new Tile(68, 73),
+            new Tile(57, 73),
+            new Tile(54, 79),
+            new Tile(63, 78)
     };
 
     Tile[] runAwayPath = new Tile[] {
-            new Tile(70, 43),
+            new Tile(87, 55),
+            new Tile(87, 61),
+            new Tile(88, 67),
             outAttackRange
     };
 
     Tile[] runBackPath = new Tile[] {
-            new Tile(69, 41),
-            new Tile(76, 42)
+            new Tile(88, 67),
+            new Tile(86, 60),
+            new Tile(87, 54),
+            new Tile(87, 47)
     };
 
-    Area groundArea = new Area(
-            new Tile(34, 35),
-            new Tile(106, 76)
-    );
-
-    Area floor1Area = new Area(
-            new Tile(181, 20),
-            new Tile(217, 75)
-    );
-
-    Area topfloorArea = new Area(
-            new Tile(292, 23),
-            new Tile(324, 78)
-    );
     int pollsSinceLastDrop = 0;
     boolean stolen = false;
     boolean droppedChocSlice = false;
@@ -114,9 +99,10 @@ public class dCakeThiever extends AbstractScript {
         bankYN= Boolean.valueOf((configs.get("Banking")));
 
         Logger.log("Thank you for using the dCakeThiever script!\nSetting up everything for your gains now...");
+        Logger.debugLog("Selected hopProfile: " + hopProfile);
 
-        // Set the map we'll be using (Custom Kourend)
-        Walker.setup("/maps/Kourend.png");
+        // Set the map we'll be using (Custom Ardougne)
+        Walker.setup("/maps/ArdougneMarket2.png");
 
         hopActions();
         initialSetup();
@@ -130,13 +116,16 @@ public class dCakeThiever extends AbstractScript {
 
             if (!Inventory.isFull()) {
                 stealFromStall();
-                dropChocSlice();
                 hopActions();
                 readXP();
             } else {
-                movetoBank();
-                bank();
-                movetoStall();
+                if (Inventory.contains(chocSlice, 0.9)) {
+                    dropChocSlice();
+                } else {
+                    movetoBank();
+                    bank();
+                    movetoStall();
+                }
             }
 
         } else {
@@ -163,15 +152,16 @@ public class dCakeThiever extends AbstractScript {
 
         // Get the script area and current player position
         playerPos = Walker.getPlayerPosition();
+        Logger.debugLog(String.valueOf(playerPos));
         Area scriptArea = new Area(
-                new Tile(57, 35),
-                new Tile(107, 81)
+                new Tile(36, 20),
+                new Tile(100, 99)
         );
 
         // Check if we are within the script area, otherwise stop the script.
 
         if (Player.isTileWithinArea(playerPos, scriptArea)) {
-            Logger.debugLog("We are located in the Kourend castle outer area needed for the script to run. Continuing... ");
+            Logger.debugLog("We are located in the Ardougne market area needed for the script to run. Continuing... ");
 
             // Open inventory if not yet open
             if (!GameTabs.isInventoryTabOpen()) {
@@ -201,7 +191,7 @@ public class dCakeThiever extends AbstractScript {
             }
 
         } else {
-            Logger.log("Could not locate us to the script area in the Kourend castle outer area. Please move there and start the script again.");
+            Logger.log("Could not locate us to the script area in the Ardougne market area. Please move there and start the script again.");
             Logout.logout();
             Script.stop();
         }
@@ -212,21 +202,24 @@ public class dCakeThiever extends AbstractScript {
     private void bank() {
         Logger.debugLog("Starting bank() method.");
 
-        if (Bank.isBankPinNeeded()) {
-            Bank.enterBankPin();
-            Condition.sleep(500);
-        }
+        Client.tap(bankBooth);
+        Condition.sleep(750);
 
-        Rectangle depositAll = DepositBox.findDepositInventory();
-        if (depositAll != null) {
-            Client.tap(depositAll);
+        if (Bank.isOpen()) {
+            if (Bank.isBankPinNeeded()) {
+                Bank.enterBankPin();
+                Condition.sleep(750);
+            }
+            Bank.tapDepositInventoryButton();
+            Condition.sleep(500);
+            Bank.close();
+            Condition.sleep(500);
+
+            if (Bank.isOpen()) {
+                Bank.close();
+                Condition.sleep(300);
+            }
         }
-        Condition.sleep(500);
-        Rectangle closeDeposit = DepositBox.findCloseDepositBox();
-        if (closeDeposit != null) {
-            Client.tap(closeDeposit);
-        }
-        Condition.sleep(500);
 
         Logger.debugLog("Ending the bank() method.");
     }
@@ -234,126 +227,29 @@ public class dCakeThiever extends AbstractScript {
     private void movetoBank() {
         Logger.debugLog("Starting movetoBank() method.");
 
-        // Ground area part
-        Logger.debugLog("Walking to the ground level stairs");
-        Walker.walkPath(pathToGroundStairs);
+        Walker.walkPath(pathToBank);
+        Condition.sleep(2000);
 
-        // Adding a delay to allow the player to finish walking
-        Condition.sleep(5000);
-
-        Logger.debugLog("Checking if the player has reached the ground level stairs.");
-        boolean atStairs = false;
-        playerPos = Walker.getPlayerPosition();
-
-        if (Player.atTile(groundStairs)) {
-            atStairs = true;
-            Logger.debugLog("Player has reached the ground stairs.");
+        if (!Player.isRunEnabled()) {
+            Player.toggleRun();
         }
 
-        if (!atStairs) {
-            Logger.debugLog("Player did not reach the ground stairs.");
-            Walker.step(groundStairsFromUp);
-            // Adding a delay to allow the player to finish walking
-            Random random = new Random();
-            int delay = 2200 + random.nextInt(400); // 2200 to 2600 milliseconds
-            Condition.sleep(delay);
-            Logger.debugLog("Attempting to walk to the ground stairs.");
-        }
+        Walker.step(bankBoothTile);
+        Condition.sleep(2500);
 
-        // Check if we are now at the stairs
-        playerPos = Walker.getPlayerPosition();
-        if (Player.atTile(groundStairs)) {
-            atStairs = true;
-            Logger.debugLog("Player has reached the ground stairs.");
-            Logger.debugLog("Proceeding to floor 1.");
-            Client.tap(groundFloorStairs);
-            Condition.sleep(2500);
-        } else if (Player.atTile(groundStairsFromUp)) {
-            atStairs = true;
-            Logger.debugLog("Player has reached the ground stairs.");
-            Logger.debugLog("Proceeding to floor 1.");
-            Client.tap(backupStairTap);
-            Condition.sleep(2500);
-            if (Player.atTile(new Tile (196, 37))) {
-                Client.tap(new Rectangle(425, 303, 25, 24));
-                Condition.sleep(2500);
-            }
-        }
+        if (Player.atTile(bankBoothTile)) {
+            Logger.debugLog("We are now at the bank booth.");
+        } else {
+            Walker.step(bankBoothTile);
+            Condition.sleep(4000);
 
-        if (!atStairs) {
-
-            playerPos = Walker.getPlayerPosition();
-            if (Player.within(groundArea)) {
-                Logger.debugLog("Ground level movement failed, resetting!");
-                Logger.log("Ground level movement failed, resetting!");
-                resetGround();
+            if (Player.atTile(bankBoothTile)) {
+                Logger.debugLog("We are now at the bank booth.");
             } else {
-                Logger.debugLog("We still have not reached the ground stairs. Something must have gone wrong.");
-                Logger.log("Something went wrong walking to the bank, stopping script!");
+                Logger.log("Both attempts failed to move towards the bank booth., ending script.");
                 Logout.logout();
                 Script.stop();
             }
-        }
-
-        // Proceed to move to and through first floor
-        Logger.debugLog("Walking to the floor 1 stairs");
-
-        // Check if the door is open or not.
-        Random random = new Random();
-        int delay = 2200 + random.nextInt(400); // 2200 to 2600 milliseconds
-        java.awt.Rectangle floor1Door = Objects.getNearest("/images/toBank/doorFloor1.png");
-        if (floor1Door != null && !floor1Door.isEmpty()) {
-            // Door is shut, so we will use the alternate moving here.
-            Client.tap(f1doorToBank);
-            Condition.sleep(delay); // Use the random delay
-            Client.tap(floor1StairsFromDoor);
-            Condition.sleep(delay); // Use the random delay
-        } else {
-            // Door is open, we can instantly move.
-            Client.tap(floor1InstantStairs);
-            Condition.sleep(5000);
-        }
-
-        // Check if we have arrived at the top floor.
-        playerPos = Walker.getPlayerPosition();
-
-        if (!Player.within(topfloorArea)) {
-            if (Player.within(floor1Area)) {
-                Logger.debugLog("Floor 1 movement failed, resetting!");
-                Logger.log("Floor 1 movement failed, resetting!");
-                resetFloor1();
-            } else {
-                Logger.debugLog("Something went wrong while moving around floor 1.");
-                Logger.log("Something went wrong walking to the bank, stopping script!");
-                Logout.logout();
-                Script.stop();
-            }
-        }
-
-        if (Player.atTile(topLevelStairs)) {
-            Logger.debugLog("We have reached the top floor.");
-        }
-
-        // Proceed to move through the second floor
-        // Check if the door is open or not.
-        int delay2 = 2200 + random.nextInt(400); // 2200 to 2600 milliseconds
-        java.awt.Rectangle floor2Door = Objects.getNearest("/images/toBank/doorBank.png");
-        if (floor2Door != null && !floor2Door.isEmpty()) {
-            // Door is shut, so we will use the alternate moving here.
-            Client.tap(f2doorToBank);
-            Condition.sleep(delay2); // Use the random delay
-            Client.tap(floor2DepoBoxFromDoor);
-            Condition.sleep(delay2); // Use the random delay
-        } else {
-            // Door is open, we can instantly move.
-            Client.tap(floor2InstantDepoBox);
-            Condition.sleep(4500);
-        }
-
-        if (!Player.atTile(new Tile(303, 37))) {
-            Logger.debugLog("Top floor movement failed, resetting!");
-            Logger.log("Top floor movement failed, resetting!");
-            resetTopFloor();
         }
 
         Logger.debugLog("Ending the movetoBank() method.");
@@ -362,137 +258,78 @@ public class dCakeThiever extends AbstractScript {
     private void movetoStall() {
         Logger.debugLog("Starting movetoStall() method.");
 
-        // Walk through the top floor part
-        Logger.debugLog("Heading from the top floor down to the 1st floor.");
-
-        // Check if the door is open or not.
-        Random random = new Random();
-        int delay = 2000 + random.nextInt(400); // 2000 to 2400 milliseconds
-        java.awt.Rectangle topFloorDoor = Objects.getNearest("/images/fromBank/doorBank.png");
-        if (topFloorDoor != null && !topFloorDoor.isEmpty()) {
-            // Door is shut, so we will use the alternate moving here.
-            Client.tap(f2doorFromBank);
-            Condition.sleep(delay); // Use the random delay
-            Client.tap(floor2StairsDownFromDoor);
-            Condition.sleep(delay); // Use the random delay
-        } else {
-            // Door is open, we can instantly move.
-            Client.tap(floor2InstantStairsDown);
-            Condition.sleep(4500);
+        if (!Player.isRunEnabled()) {
+            Player.toggleRun();
         }
 
-        // Check if we have arrived at the 1st floor.
-        playerPos = Walker.getPlayerPosition();
-        if (!Player.atTile(floor1Stairs)) {
-            Logger.debugLog("Something went wrong while moving around the top floor.");
-            Logger.log("Something went wrong walking back from the bank, stopping script!");
-            Logout.logout();
-            Script.stop();
-        } else {
-            Logger.debugLog("We have reached the first floor.");
-        }
-
-        // Walk through the 1st floor part
-        Logger.debugLog("Heading from the 1st floor down to the ground floor.");
-
-        // Check if the door is open or not.
-        int delay2 = 2200 + random.nextInt(400); // 2200 to 2600 milliseconds
-        java.awt.Rectangle firstFloorDoor = Objects.getNearest("/images/fromBank/doorFloor1.png");
-        if (firstFloorDoor != null && !firstFloorDoor.isEmpty()) {
-            // Door is shut, so we will use the alternate moving here.
-            Client.tap(f1doorFromBank);
-            Condition.sleep(delay2); // Use the random delay
-            Client.tap(floor1StairsDownFromDoor);
-            Condition.sleep(4500); // Use the random delay
-        } else {
-            // Door is open, we can instantly move.
-            Client.tap(floor1StairsDownStep1);
-            Condition.sleep(4500);
-            Client.tap(floor1StairsDownStep2);
-            Condition.sleep(4500);
-        }
-
-        // Check if we have arrived at the ground floor.
-        playerPos = Walker.getPlayerPosition();
-        if (!Player.atTile(groundStairsFromUp)) {
-            Logger.debugLog("Something went wrong while moving around the first floor.");
-            Logger.log("Something went wrong walking back from the bank, stopping script!");
-            Logout.logout();
-            Script.stop();
-        } else {
-            Logger.debugLog("We have reached the ground floor.");
-        }
-
-        // Proceed to move towards the stall
-        Logger.debugLog("Heading from the ground floor stairs to the bakery stall.");
         Walker.walkPath(pathToStall);
+        Condition.sleep(2500);
 
-        // Adding a delay to allow the player to finish walking
-        Condition.sleep(3000);
-
-        Logger.debugLog("Checking if the player has reached the bakery stall tile.");
-        boolean atStall = false;
-        playerPos = Walker.getPlayerPosition();
-
-        if (Player.atTile(stallTile)) {
-            atStall = true;
-            Logger.debugLog("Player has reached the bakery stall tile.");
+        if (!Player.isRunEnabled()) {
+            Player.toggleRun();
         }
 
-        if (!atStall) {
-            Logger.debugLog("Player did not reach the bakery stall tile.");
+        Walker.step(stallTile);
+        Condition.sleep(2000);
+
+        if (Player.atTile(stallTile)) {
+            Logger.debugLog("We are now at the bakery stall tile.");
+        } else {
             Walker.step(stallTile);
-            // Adding a delay to allow the player to finish walking
-            Condition.sleep(5500);
-            Logger.debugLog("Attempting to walk to the bakery stall tile.");
-        }
+            Condition.sleep(4000);
 
-        // Check if we are now at the stairs
-        playerPos = Walker.getPlayerPosition();
-        if (Player.atTile(stallTile)) {
-            atStall = true;
-            Logger.debugLog("Player has reached the bakery stall tile.");
-        }
-
-        if (!atStall) {
-            Logger.debugLog("We still have not reached the bakery stall tile. Something must have gone wrong.");
-            Logger.log("Something went wrong walking to the bakery stall, stopping script!");
-            Logout.logout();
-            Script.stop();
+            if (Player.atTile(stallTile)) {
+                Logger.debugLog("We are now at the bakery stall tile");
+            } else {
+                Logger.log("Both attempts failed to move towards the bakery stall, ending script.");
+                Logout.logout();
+                Script.stop();
+            }
         }
 
         Logger.debugLog("Ending the movetoStall() method.");
     }
 
     private boolean stealFromStall() {
-        java.awt.Rectangle foundObjects = Objects.getNearest("/images/cakePresent.png");
-
-        // Generate a random number between 2450 and 2850
+        Client.tap(stallTapWindow);
+        // Generate a random number between 2600 and 2750
         Random random = new Random();
-        int delay = 2450 + random.nextInt(2850- 2450 + 1);
-
-        if (foundObjects != null && !foundObjects.isEmpty()) {
-            Client.tap(stallTapWindow);
-            Condition.sleep(delay); // Use the random delay
-
-            // If not caught, return true (successful theft), else return false (caught)
-            return !checkCaught();
+        int delay = 2600 + random.nextInt(2750- 2600 + 1);
+        Condition.sleep(delay);
+        return !checkCaught();
+    }
+    private boolean stealFromStallORIGINAL() {
+        if (Game.isPlayersUnderUs()) {
+            Logger.debugLog("A player is detected under us, hopping!");
+            Game.instantHop(hopProfile);
+            Condition.sleep(2500);
+            if (!Game.isPlayersUnderUs()) {
+                Client.tap(stallTapWindow);
+                // Generate a random number between 2200 and 2000
+                Random random = new Random();
+                int delay = 2000 + random.nextInt(2200- 2000 + 1);
+                Condition.sleep(delay);
+                return !checkCaught();
+            } else {
+                Logger.debugLog("A player is still under us after hopping, proceeding in poll logic.");
+                return false;
+            }
         } else {
-            Logger.debugLog("No cake was found in the stall. Skipping attempt to steal.");
-            return false; // Not stolen
+            Client.tap(stallTapWindow);
+            // Generate a random number between 2200 and 2000
+            Random random = new Random();
+            int delay = 2000 + random.nextInt(2200- 2000 + 1);
+            Condition.sleep(delay);
+            return !checkCaught();
         }
     }
 
     private void dropChocSlice() {
         Logger.debugLog("Starting dropChocSlice() method.");
 
-        if (Inventory.contains(chocSlice, 0.90)) {
-            Inventory.tapAllItems(chocSlice, 0.90);
-            Condition.sleep(500);
-            droppedChocSlice = true;
-        } else {
-            droppedChocSlice = false;
-        }
+        Inventory.tapAllItems(chocSlice, 0.90);
+        Condition.sleep(500);
+        droppedChocSlice = true;
 
         Logger.debugLog("Ending the dropChocSlice() method.");
     }
@@ -531,16 +368,15 @@ public class dCakeThiever extends AbstractScript {
             Logger.log("Moving back to the bakery stall.");
             runBack();
 
-            // Eat a bread if we have it to heal up
-            if (Inventory.contains(2309, 0.90)){
+            // Eat a bread or choc slice if we have it to heal up
+            if (Inventory.contains(2309, 0.9)){
                 // Disable tap to drop if enabled
                 if (Game.isTapToDropEnabled()) {
                     Game.disableTapToDrop();
                     Condition.sleep(250);
                 }
 
-                Inventory.tapItem(2309, false, 0.90);
-
+                Inventory.eat(2309, 0.9);
                 Condition.sleep(750);
 
                 // Update invent count
@@ -549,6 +385,19 @@ public class dCakeThiever extends AbstractScript {
 
                 // Enable tap to drop again
                 Game.enableTapToDrop();
+            } else if (Inventory.contains(chocSlice, 0.9)) {
+                // Disable tap to drop if enabled
+                if (Game.isTapToDropEnabled()) {
+                    Game.disableTapToDrop();
+                    Condition.sleep(250);
+                }
+
+                Inventory.eat(chocSlice, 0.9);
+                Condition.sleep(750);
+
+                // Update invent count
+                usedInvent = Inventory.usedSlots();
+                inventUsed = usedInvent;
             } else {
                 // Update invent count
                 usedInvent = Inventory.usedSlots();
@@ -558,7 +407,7 @@ public class dCakeThiever extends AbstractScript {
             // return true, we were caught
             return true;
         } else {
-            // Update invent slot use count for next check.
+            // Update invent slot use count for next check as we were not caught
             usedInvent = inventUsed;
             return false;
         }
@@ -570,12 +419,12 @@ public class dCakeThiever extends AbstractScript {
             Player.toggleRun();
         }
 
+        // Walk out of attack range
+        Walker.walkPath(runAwayPath);
+
         // Generate a random number between 1500 and 2500
         Random random = new Random();
         int delay = 1500 + random.nextInt(2500- 1500 + 1);
-
-        // Walk out of attack range
-        Walker.walkPath(runAwayPath);
         Condition.sleep(delay);
     }
 
@@ -611,47 +460,6 @@ public class dCakeThiever extends AbstractScript {
         // Enable run if not yet enabled for when we need to run/bank again.
         if (!Player.isRunEnabled()) {
             Player.toggleRun();
-        }
-    }
-
-    private void resetGround() {
-        movetoBank();
-    }
-
-    private void resetFloor1() {
-        Walker.step(new Tile(196, 38));
-        Condition.sleep(4000);
-
-        if (Player.atTile(new Tile(196, 38))) {
-            Rectangle stairs = new Rectangle(477, 242, 36, 45);
-            Client.tap(stairs);
-            Condition.sleep(750);
-            resetGround();
-        }
-    }
-
-    private void resetTopFloor() {
-        boolean invfull = Inventory.isFull();
-
-        if (invfull) {
-            Walker.step(new Tile(303, 37));
-            Condition.sleep(5000);
-            Rectangle depoBox = new Rectangle(381, 241, 25, 38);
-            Client.tap(depoBox);
-            Condition.sleep(1000);
-            Rectangle depoAll = new Rectangle(391, 446, 25, 23);
-            Client.tap(depoAll);
-            Condition.sleep(1000);
-            Rectangle closeDepo = new Rectangle(529, 206, 14, 13);
-            Client.tap(closeDepo);
-            movetoStall();
-        } else {
-            Walker.step(new Tile(303, 37));
-            Condition.sleep(5000);
-
-            if (!Player.atTile(new Tile(303, 37))) {
-                movetoStall();
-            }
         }
     }
 
