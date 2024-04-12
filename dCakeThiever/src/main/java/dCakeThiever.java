@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @ScriptManifest(
         name = "dCakeThiever",
         description = "Steals from the bakery stall at Ardougne market. Supports world hopping and banking. Detects being caught, runs away if needed.",
-        version = "1.06",
+        version = "1.07",
         guideLink = "https://wiki.mufasaclient.com/docs/dcake-thiever/",
         categories = {ScriptCategory.Thieving}
 )
@@ -57,7 +57,7 @@ public class dCakeThiever extends AbstractScript {
             new Tile(79, 50),
             new Tile(84, 48)
     };
-    Rectangle stallTapWindow = new Rectangle(377, 270, 22, 23);
+    Rectangle stallTapWindow = new Rectangle(381, 260, 15, 15);
     Rectangle bankBooth = new Rectangle(486, 246, 28, 30);
     Tile[] pathToBank = new Tile[] {
             new Tile(86, 54),
@@ -66,7 +66,7 @@ public class dCakeThiever extends AbstractScript {
             new Tile(68, 73),
             new Tile(57, 73),
             new Tile(54, 79),
-            new Tile(63, 78)
+            new Tile(63, 77)
     };
 
     Tile[] runAwayPath = new Tile[] {
@@ -88,6 +88,7 @@ public class dCakeThiever extends AbstractScript {
     boolean droppedChocSlice = false;
     int inventSpotsFree;
     int usedInvent = 0;
+    int inventUsed;
 
     // This is the onStart, and only gets ran once.
     @Override
@@ -115,6 +116,7 @@ public class dCakeThiever extends AbstractScript {
         if (bankYN) {
 
             if (!Inventory.isFull()) {
+                droppedChocSlice = false;
                 stealFromStall();
                 hopActions();
                 readXP();
@@ -178,6 +180,10 @@ public class dCakeThiever extends AbstractScript {
 
             }
 
+            if (!Player.atTile(stallTile)) {
+                movetoStall();
+            }
+
             // Check the amount of inventory spots free (to know when to drop items)
             inventSpotsFree = Inventory.emptySlots();
             usedInvent = Inventory.usedSlots();
@@ -203,13 +209,14 @@ public class dCakeThiever extends AbstractScript {
         Logger.debugLog("Starting bank() method.");
 
         Client.tap(bankBooth);
-        Condition.sleep(1100);
+        Condition.wait(() -> Bank.isOpen(), 250, 30);
 
         if (Bank.isOpen()) {
             if (Bank.isBankPinNeeded()) {
                 Bank.enterBankPin();
                 Condition.sleep(750);
             }
+            Bank.tapDepositInventoryButton();
             Bank.tapDepositInventoryButton();
             Condition.sleep(500);
             Bank.close();
@@ -228,20 +235,19 @@ public class dCakeThiever extends AbstractScript {
         Logger.debugLog("Starting movetoBank() method.");
 
         Walker.walkPath(pathToBank);
-        Condition.sleep(2000);
 
         if (!Player.isRunEnabled()) {
             Player.toggleRun();
         }
 
         Walker.step(bankBoothTile);
-        Condition.sleep(2500);
+        Condition.wait(() -> Player.atTile(bankBoothTile), 250, 20);
 
         if (Player.atTile(bankBoothTile)) {
             Logger.debugLog("We are now at the bank booth.");
         } else {
             Walker.step(bankBoothTile);
-            Condition.sleep(4000);
+            Condition.wait(() -> Player.atTile(bankBoothTile), 250, 20);
 
             if (Player.atTile(bankBoothTile)) {
                 Logger.debugLog("We are now at the bank booth.");
@@ -263,20 +269,19 @@ public class dCakeThiever extends AbstractScript {
         }
 
         Walker.walkPath(pathToStall);
-        Condition.sleep(2500);
 
         if (!Player.isRunEnabled()) {
             Player.toggleRun();
         }
 
         Walker.step(stallTile);
-        Condition.sleep(2000);
+        Condition.wait(() -> Player.atTile(stallTile), 250, 20);
 
         if (Player.atTile(stallTile)) {
             Logger.debugLog("We are now at the bakery stall tile.");
         } else {
             Walker.step(stallTile);
-            Condition.sleep(4000);
+            Condition.wait(() -> Player.atTile(stallTile), 250, 20);
 
             if (Player.atTile(stallTile)) {
                 Logger.debugLog("We are now at the bakery stall tile");
@@ -291,6 +296,8 @@ public class dCakeThiever extends AbstractScript {
     }
 
     private boolean stealFromStall() {
+        usedInvent = Inventory.usedSlots();
+        Logger.debugLog("Used invent slots: " + usedInvent);
         Client.tap(stallTapWindow);
         // Generate a random number between 2600 and 2750
         Random random = new Random();
@@ -328,8 +335,11 @@ public class dCakeThiever extends AbstractScript {
         Logger.debugLog("Starting dropChocSlice() method.");
 
         Inventory.tapAllItems(chocSlice, 0.90);
-        Condition.sleep(500);
+        Condition.sleep(1250);
         droppedChocSlice = true;
+
+        usedInvent = Inventory.usedSlots();
+        inventUsed = 1337;
 
         Logger.debugLog("Ending the dropChocSlice() method.");
     }
@@ -351,10 +361,12 @@ public class dCakeThiever extends AbstractScript {
 
         if (droppedChocSlice) {
             usedInvent = Inventory.usedSlots();
+            Logger.debugLog("checkCaught inside dropchocSlice usedInvent:" + usedInvent);
             return false;
         }
 
-        int inventUsed = Inventory.usedSlots();
+        inventUsed = Inventory.usedSlots();
+        Logger.debugLog("checkCaught inventUsed:" + inventUsed);
 
         if (inventUsed == usedInvent) {
             // Logging
@@ -377,11 +389,11 @@ public class dCakeThiever extends AbstractScript {
                 }
 
                 Inventory.eat(2309, 0.9);
-                Condition.sleep(750);
+                Condition.sleep(1500);
 
                 // Update invent count
                 usedInvent = Inventory.usedSlots();
-                inventUsed = usedInvent;
+                inventUsed = 1337;
 
                 // Enable tap to drop again
                 Game.enableTapToDrop();
@@ -393,11 +405,11 @@ public class dCakeThiever extends AbstractScript {
                 }
 
                 Inventory.eat(chocSlice, 0.9);
-                Condition.sleep(750);
+                Condition.sleep(1500);
 
                 // Update invent count
                 usedInvent = Inventory.usedSlots();
-                inventUsed = usedInvent;
+                inventUsed = 1337;
             } else {
                 // Update invent count
                 usedInvent = Inventory.usedSlots();
@@ -422,31 +434,27 @@ public class dCakeThiever extends AbstractScript {
         // Walk out of attack range
         Walker.walkPath(runAwayPath);
 
-        // Generate a random number between 1500 and 2500
+        // Generate a random number between 500 and 1500
         Random random = new Random();
-        int delay = 1500 + random.nextInt(2500- 1500 + 1);
+        int delay = 500 + random.nextInt(1500- 500 + 1);
         Condition.sleep(delay);
     }
 
     private void runBack() {
         // Walk back
         Walker.walkPath(runBackPath);
-        Condition.sleep(2000);
-
-        // Generate a random number between 3500 and 4000
-        Random random = new Random();
-        int delay = 3500 + random.nextInt(4000- 3500 + 1);
+        Condition.sleep(1250);
 
         // Step to the actual stall tile
         Walker.step(stallTile);
-        Condition.sleep(delay);
+        Condition.wait(() -> Player.atTile(stallTile), 250, 20);
 
         playerPos = Walker.getPlayerPosition();
 
         if (!Player.atTile(stallTile)) {
             Logger.debugLog("Player is not yet at the stall tile, trying to move there again.");
             Walker.step(stallTile);
-            Condition.sleep(5000);
+            Condition.wait(() -> Player.atTile(stallTile), 250, 20);
         }
 
         playerPos = Walker.getPlayerPosition();
