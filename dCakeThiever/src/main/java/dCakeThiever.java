@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @ScriptManifest(
         name = "dCakeThiever",
         description = "Steals from the bakery stall at Ardougne market. Supports world hopping and banking. Detects being caught, runs away if needed.",
-        version = "1.05",
+        version = "1.06",
         guideLink = "https://wiki.mufasaclient.com/docs/dcake-thiever/",
         categories = {ScriptCategory.Thieving}
 )
@@ -203,7 +203,7 @@ public class dCakeThiever extends AbstractScript {
         Logger.debugLog("Starting bank() method.");
 
         Client.tap(bankBooth);
-        Condition.sleep(750);
+        Condition.sleep(1100);
 
         if (Bank.isOpen()) {
             if (Bank.isBankPinNeeded()) {
