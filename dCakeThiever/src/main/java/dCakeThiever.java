@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @ScriptManifest(
         name = "dCakeThiever",
         description = "Steals from the bakery stall at Ardougne market. Supports world hopping and banking. Detects being caught, runs away if needed.",
-        version = "1.07",
+        version = "1.08",
         guideLink = "https://wiki.mufasaclient.com/docs/dcake-thiever/",
         categories = {ScriptCategory.Thieving}
 )
@@ -296,25 +296,16 @@ public class dCakeThiever extends AbstractScript {
     }
 
     private boolean stealFromStall() {
-        usedInvent = Inventory.usedSlots();
-        Logger.debugLog("Used invent slots: " + usedInvent);
-        Client.tap(stallTapWindow);
-        // Generate a random number between 2600 and 2750
-        Random random = new Random();
-        int delay = 2600 + random.nextInt(2750- 2600 + 1);
-        Condition.sleep(delay);
-        return !checkCaught();
-    }
-    private boolean stealFromStallORIGINAL() {
         if (Game.isPlayersUnderUs()) {
             Logger.debugLog("A player is detected under us, hopping!");
             Game.instantHop(hopProfile);
             Condition.sleep(2500);
             if (!Game.isPlayersUnderUs()) {
+                usedInvent = Inventory.usedSlots();
                 Client.tap(stallTapWindow);
-                // Generate a random number between 2200 and 2000
+                // Generate a random number between 2600 and 2750
                 Random random = new Random();
-                int delay = 2000 + random.nextInt(2200- 2000 + 1);
+                int delay = 2600 + random.nextInt(2750- 2600 + 1);
                 Condition.sleep(delay);
                 return !checkCaught();
             } else {
@@ -322,10 +313,11 @@ public class dCakeThiever extends AbstractScript {
                 return false;
             }
         } else {
+            usedInvent = Inventory.usedSlots();
             Client.tap(stallTapWindow);
-            // Generate a random number between 2200 and 2000
+            // Generate a random number between 2600 and 2750
             Random random = new Random();
-            int delay = 2000 + random.nextInt(2200- 2000 + 1);
+            int delay = 2600 + random.nextInt(2750- 2600 + 1);
             Condition.sleep(delay);
             return !checkCaught();
         }
@@ -361,12 +353,10 @@ public class dCakeThiever extends AbstractScript {
 
         if (droppedChocSlice) {
             usedInvent = Inventory.usedSlots();
-            Logger.debugLog("checkCaught inside dropchocSlice usedInvent:" + usedInvent);
             return false;
         }
 
         inventUsed = Inventory.usedSlots();
-        Logger.debugLog("checkCaught inventUsed:" + inventUsed);
 
         if (inventUsed == usedInvent) {
             // Logging
