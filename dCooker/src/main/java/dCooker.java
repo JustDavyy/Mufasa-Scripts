@@ -15,7 +15,7 @@ import static helpers.Interfaces.*;
         name = "dCooker",
         description = "The cooker script to cook all your raw fish (or seaweed) at various different places.",
         version = "1.00",
-        guideLink = "https://wiki.mufasaclient.com/docs/dcooker/",
+        guideLink = "",
         categories = {ScriptCategory.Cooking}
 )
 @ScriptConfiguration.List(
