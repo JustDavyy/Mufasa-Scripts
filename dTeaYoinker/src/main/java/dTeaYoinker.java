@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @ScriptManifest(
         name = "dTeaYoinker",
         description = "Steals from the tea stall in east Varrock. Supports world hopping and banking the tea.",
-        version = "1.01",
+        version = "1.02",
         guideLink = "https://wiki.mufasaclient.com/docs/dtea-yoinker/",
         categories = {ScriptCategory.Thieving}
 )
@@ -118,8 +118,8 @@ public class dTeaYoinker extends AbstractScript {
 
             // Check if tea was stolen before considering to drop
             if (stolen) {
-                // Randomly drop items with a 1/10 chance or force after max empty invent slots at script start
-                if (ThreadLocalRandom.current().nextInt(10) == 0 || pollsSinceLastDrop >= inventSpotsFree - 1) {
+                // Randomly drop items with a 1/20 chance or force after max empty invent slots at script start
+                if (ThreadLocalRandom.current().nextInt(20) == 0 || pollsSinceLastDrop >= inventSpotsFree - 1) {
                     dropTea();
                     pollsSinceLastDrop = 0; // Reset the counter after tapping
                 } else {
@@ -272,20 +272,23 @@ public class dTeaYoinker extends AbstractScript {
     }
 
     private boolean stealFromStall() {
-        java.awt.Rectangle foundObjects = Objects.getNearest("/images/TeaPresent.png");
+        if (Game.isPlayersUnderUs()) {
+            Logger.debugLog("There is a player under us, hopping worlds to prevent issues with clicks!");
+            Game.instantHop(hopProfile);
 
-        // Generate a random number between 4000 and 4400
-        Random random = new Random();
-        int delay = 4000 + random.nextInt(4400- 4000 + 1);
-
-        if (foundObjects != null && !foundObjects.isEmpty()) {
-            Client.tap(stallTapWindow);
-            Condition.sleep(delay); // Use the random delay
-            return true; // Successfully stolen
-        } else {
-            Logger.debugLog("No tea was found in the stall. Skipping attempt to steal.");
-            return false; // Not stolen
+            GameTabs.openInventoryTab();
+            if (Game.isPlayersUnderUs()) {
+                Logger.debugLog("A player is still under us in the new world, doing nothing...");
+                return false;
+            }
         }
+        Client.tap(stallTapWindow);
+
+        // Generate a random number between 5000 and 5400
+        Random random = new Random();
+        int delay = 5000 + random.nextInt(5400- 5000 + 1);
+        Condition.sleep(delay);
+        return true;
     }
 
     private void dropTea() {
