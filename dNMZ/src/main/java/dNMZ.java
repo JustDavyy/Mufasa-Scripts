@@ -16,7 +16,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.00",
+        version = "1.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -326,6 +326,16 @@ public class dNMZ extends AbstractScript {
 
                 Prayer.activateProtectfromMelee();
                 Condition.wait(() -> Prayer.isActiveProtectfromMelee(), 250, 20);
+                if (!Prayer.isActiveProtectfromMelee()) {
+                    Prayer.activateProtectfromMelee();
+                    Condition.wait(() -> Prayer.isActiveProtectfromMelee(), 250, 10);
+                    if (!Prayer.isActiveProtectfromMelee()) {
+                        Prayer.activateProtectfromMelee();
+                        Condition.wait(() -> Prayer.isActiveProtectfromMelee(), 250, 10);
+                    } if (!Prayer.isActiveProtectfromMelee()) {
+                        Logger.debugLog("Failed to activate protect from melee.");
+                    }
+                }
 
                 GameTabs.openInventoryTab();
                 Logger.log("Restored some prayer points and re-enabled prayer.");
@@ -1302,6 +1312,16 @@ public class dNMZ extends AbstractScript {
 
                 Prayer.activateProtectfromMelee();
                 Condition.wait(() -> Prayer.isActiveProtectfromMelee(), 250, 20);
+                if (!Prayer.isActiveProtectfromMelee()) {
+                    Prayer.activateProtectfromMelee();
+                    Condition.wait(() -> Prayer.isActiveProtectfromMelee(), 250, 10);
+                    if (!Prayer.isActiveProtectfromMelee()) {
+                        Prayer.activateProtectfromMelee();
+                        Condition.wait(() -> Prayer.isActiveProtectfromMelee(), 250, 10);
+                    } if (!Prayer.isActiveProtectfromMelee()) {
+                        Logger.debugLog("Failed to activate protect from melee.");
+                    }
+                }
 
                 GameTabs.openInventoryTab();
             }
