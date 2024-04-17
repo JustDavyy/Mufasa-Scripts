@@ -1,4 +1,6 @@
 import helpers.*;
+import helpers.annotations.ScriptConfiguration;
+import helpers.annotations.ScriptManifest;
 import helpers.utils.OptionType;
 import helpers.utils.RegionBox;
 import helpers.utils.Tile;

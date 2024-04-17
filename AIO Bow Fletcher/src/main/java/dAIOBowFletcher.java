@@ -1,4 +1,7 @@
 import helpers.*;
+import helpers.annotations.AllowedValue;
+import helpers.annotations.ScriptConfiguration;
+import helpers.annotations.ScriptManifest;
 import helpers.utils.OptionType;
 
 import java.awt.*;
