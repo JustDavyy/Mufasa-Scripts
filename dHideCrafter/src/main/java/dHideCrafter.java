@@ -14,7 +14,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dHide Crafter",
         description = "Crafts tanned dragon hides into any product. Supports all options and dynamic banking.",
-        version = "1.00",
+        version = "1.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dhide-crafter/",
         categories = {ScriptCategory.Crafting}
 )
@@ -357,7 +357,7 @@ public class dHideCrafter extends AbstractScript {
     private void executeCraftingMethod() {
         Logger.debugLog("Starting executeCraftingMethod() method.");
 
-        // Check if we have both a glassblowing pipe and molten glass in the inventory.
+        // Check if we have all items in the inventory.
         if (!Inventory.containsAll(new int[]{needle, thread, leather}, 0.8)) {
             Logger.log("We don't have all the crafting supplies in our inventory, going back to banking!");
             return;
@@ -428,6 +428,11 @@ public class dHideCrafter extends AbstractScript {
         Logger.debugLog("Attempting to open the bank.");
         Bank.open(bankloc);
         Logger.debugLog("Bank is open.");
+
+        // Check if bankpin is needed
+        if (Bank.isBankPinNeeded()) {
+            Bank.enterBankPin();
+        }
 
         // Select the right bank tab if needed.
         if (!Bank.isSelectedBankTab(banktab)) {
