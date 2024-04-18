@@ -1463,7 +1463,7 @@ public class dNMZ extends AbstractScript {
                 leaveNMZ();
             }
 
-            Condition.sleep(7000);
+            Condition.sleep(9000);
         }
 
         // Ranging
