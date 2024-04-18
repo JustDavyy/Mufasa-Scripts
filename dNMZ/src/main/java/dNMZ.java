@@ -18,7 +18,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.02",
+        version = "1.03",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -154,7 +154,7 @@ public class dNMZ extends AbstractScript {
             new Tile(43, 41),
             new Tile(46, 36),
             new Tile(52, 31),
-            new Tile(45, 19)
+            new Tile(53, 24)
     };
 
     // Rectangles
@@ -1217,7 +1217,7 @@ public class dNMZ extends AbstractScript {
             Condition.sleep(generateDelay(10000, 12000));
 
             // Move more to the center
-            Client.tap(781,36);
+            Client.tap(829,68);
 
             // Lower a bit of HP if using rock cakes
             if (java.util.Objects.equals(HPMethod, "Rock cake") && java.util.Objects.equals(NMZMethod, "Absorption")) {
@@ -1647,7 +1647,7 @@ public class dNMZ extends AbstractScript {
     }
 
     private void leaveNMZ() {
-        Client.tap(816,148);
+        Client.tap(776,99);
         Condition.sleep(generateDelay(4000,6000));
         Walker.step(vialInsideTile);
         Condition.wait(() -> Player.atTile(vialInsideTile), 250, 30);
