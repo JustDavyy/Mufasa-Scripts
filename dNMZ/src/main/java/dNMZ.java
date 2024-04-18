@@ -359,12 +359,12 @@ public class dNMZ extends AbstractScript {
 
                 if (currentPrayerPoints < 19) {  // If prayer points are between 6 and 18, inclusive
                     if (timeUntilNextDrinkOffensive > 60000) {  // More than a minute until the next offensive potion
-                        int randomSleepTime = new Random().nextInt((27000 - 10000) + 1) + 10000;  // Random time between 10 and 27 seconds
+                        int randomSleepTime = new Random().nextInt(8001) + 2000;  // Random time between 2 and 10 seconds
                         Condition.sleep(randomSleepTime);
                     }
                 } else {  // If prayer points are between 19 and 23, inclusive
                     if (timeUntilNextDrinkOffensive > 60000) {  // More than a minute until the next offensive potion
-                        int randomSleepTime = new Random().nextInt((42000 - 15000) + 1) + 15000;  // Random time between 15 and 42 seconds
+                        int randomSleepTime = new Random().nextInt(5001) + 10000;  // Random time between 10 and 15 seconds
                         Condition.sleep(randomSleepTime);
                     }
                 }
@@ -1567,7 +1567,7 @@ public class dNMZ extends AbstractScript {
             keepDrinking = false;  // Prevent the loop from running if we are already topped up.
         }
 
-        while (keepDrinking && drinkCount < 6) {  // Check both the boolean and if we've drunk less than 4 times
+        while (keepDrinking && drinkCount < 10) {  // Check both the boolean and if we've drunk less than 10 times
             if (Inventory.contains(11737, 0.9)) {
                 Inventory.eat(11737, 0.9);
             } else if (Inventory.contains(11736, 0.9)) {
