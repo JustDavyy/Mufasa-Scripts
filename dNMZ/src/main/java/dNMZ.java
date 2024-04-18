@@ -18,7 +18,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.03",
+        version = "1.04",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -1463,17 +1463,17 @@ public class dNMZ extends AbstractScript {
 
         // Ranging
         if (java.util.Objects.equals(potions, "Ranging")) {
-            if (Inventory.contains(173, 0.9)) {
-                Inventory.eat(173, 0.9);
+            if (Inventory.contains(173, 0.97)) {
+                Inventory.eat(173, 0.97);
                 lastOffensivePotionTime = System.currentTimeMillis();
-            } else if (Inventory.contains(171, 0.9)) {
-                Inventory.eat(171, 0.9);
+            } else if (Inventory.contains(171, 0.97)) {
+                Inventory.eat(171, 0.97);
                 lastOffensivePotionTime = System.currentTimeMillis();
-            } else if (Inventory.contains(169, 0.9)) {
-                Inventory.eat(169, 0.9);
+            } else if (Inventory.contains(169, 0.97)) {
+                Inventory.eat(169, 0.97);
                 lastOffensivePotionTime = System.currentTimeMillis();
-            } else if (Inventory.contains(2444, 0.9)) {
-                Inventory.eat(2444, 0.9);
+            } else if (Inventory.contains(2444, 0.97)) {
+                Inventory.eat(2444, 0.97);
                 lastOffensivePotionTime = System.currentTimeMillis();
             } else {
                 Logger.debugLog("We've ran out of Ranging potions, leaving NMZ instance.");
@@ -1624,20 +1624,20 @@ public class dNMZ extends AbstractScript {
     }
 
     private void drinkPrayer() {
-        if (Inventory.contains(143, 0.9)) {
-            Inventory.eat(143, 0.9);
+        if (Inventory.contains(143, 0.96)) {
+            Inventory.eat(143, 0.96);
             Condition.sleep(generateDelay(2000, 3000));
             Logger.debugLog("Drinking from a 1 dosed prayer potion.");
-        } else if (Inventory.contains(141, 0.9)) {
-            Inventory.eat(141, 0.9);
+        } else if (Inventory.contains(141, 0.96)) {
+            Inventory.eat(141, 0.96);
             Condition.sleep(generateDelay(2000, 3000));
             Logger.debugLog("Drinking from a 2 dosed prayer potion.");
-        } else if (Inventory.contains(139, 0.9)) {
-            Inventory.eat(139, 0.9);
+        } else if (Inventory.contains(139, 0.96)) {
+            Inventory.eat(139, 0.96);
             Condition.sleep(generateDelay(2000, 3000));
             Logger.debugLog("Drinking from a 1 dosed prayer potion.");
-        } else if (Inventory.contains(2434, 0.9)) {
-            Inventory.eat(2434, 0.9);
+        } else if (Inventory.contains(2434, 0.96)) {
+            Inventory.eat(2434, 0.96);
             Condition.sleep(generateDelay(2000, 3000));
             Logger.debugLog("Drinking from a 4 dosed prayer potion.");
         } else {
