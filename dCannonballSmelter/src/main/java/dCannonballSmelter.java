@@ -19,7 +19,7 @@ import java.util.Random;
         description = "Smelts steel bars into cannonballs at various locations. Supports hopping worlds.",
         version = "1.00",
         guideLink = "https://wiki.mufasaclient.com/docs/dcannonball-smelter/",
-        categories = {ScriptCategory.Smithing}
+        categories = {ScriptCategory.Smithing, ScriptCategory.Moneymaking}
 )
 @ScriptConfiguration.List(
         {
