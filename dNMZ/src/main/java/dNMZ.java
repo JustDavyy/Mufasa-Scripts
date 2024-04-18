@@ -7,6 +7,8 @@ import helpers.utils.OptionType;
 import helpers.utils.Tile;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static helpers.Interfaces.*;
@@ -16,7 +18,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.01",
+        version = "1.02",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -101,6 +103,10 @@ public class dNMZ extends AbstractScript {
     Boolean useWDH;
     Boolean bankYN;
     Boolean insideNMZ;
+    Boolean justLeftInstance = false;
+
+    // Lists
+    private List<Integer> notifiedTimes = new ArrayList<Integer>();
 
     // Integers
     int banktab;
@@ -115,6 +121,7 @@ public class dNMZ extends AbstractScript {
     long lastBreakTime;
     private long lastOffensivePotionTime;
     private long lastAbsorptionPotionTime;
+    private long nextQuickPrayerFlickTime = 0;
 
     // Tiles
     Tile bankTile = new Tile(50, 44);
@@ -153,6 +160,7 @@ public class dNMZ extends AbstractScript {
     Rectangle bankBooth = new Rectangle(479, 250, 29, 31);
     Rectangle vialInside = new Rectangle(438, 307, 19, 20);
     Rectangle rewardChest = new Rectangle(430, 210, 29, 36);
+    Rectangle quickPrayers = new Rectangle(699, 87, 20, 17);
 
     // Points
     Point lowerHPItem = new Point(69,69);
@@ -176,6 +184,9 @@ public class dNMZ extends AbstractScript {
 
         // Set the map we'll be using (Custom NMZ)
         Walker.setup("/maps/NMZ.png");
+
+        // Check if auto retaliate is on.
+        Player.enableAutoRetaliate();
 
         // Make sure the inventory is opened
         GameTabs.openInventoryTab();
@@ -239,17 +250,31 @@ public class dNMZ extends AbstractScript {
             if (timeSinceLastDrink >= offensivePotionInterval) {
                 drinkOffensivePot();  // This method updates lastOffensivePotionTime
                 Logger.log("Topped up our offensive stats using: " + potions + " potion(s).");
+                notifiedTimes.clear();  // Reset the notification times list
             } else {
                 int timeUntilNextDrink = (int) (offensivePotionInterval - timeSinceLastDrink); // Calculate the time until the next drink
                 int minutes = timeUntilNextDrink / 60000;
                 int seconds = (timeUntilNextDrink % 60000) / 1000;
+                int[] thresholds = {240, 180, 120, 60, 30};  // Time thresholds in seconds for logging
 
-                Logger.debugLog("Next offensive potion in: " + minutes + " minute(s) and " + seconds + " second(s).");
+                boolean shouldLog = false;
+                for (int threshold : thresholds) {
+                    if (timeUntilNextDrink <= threshold * 1000 && !notifiedTimes.contains(threshold)) {
+                        notifiedTimes.add(threshold);  // Add this threshold to the list to avoid repeated logs
+                        shouldLog = true;
+                        break;  // Only log once for the smallest applicable threshold
+                    }
+                }
+
+                if (shouldLog) {
+                    Logger.debugLog("Next offensive potion in: " + minutes + " minute(s) and " + seconds + " second(s).");
+                }
 
                 if (timeUntilNextDrink <= 20000) { // Check if it's time to drink within the next 20 seconds
-                    Condition.sleep(timeUntilNextDrink);  // Sleep for the calculated time in milliseconds as int
-                    drinkOffensivePot();  // This method updates lastOffensivePotionTime
+                    Condition.sleep(timeUntilNextDrink);  // Sleep until it's time for the next drink
+                    drinkOffensivePot();  // Drink the potion and update the time
                     Logger.log("Topped up our offensive stats using: " + potions + " potion(s).");
+                    notifiedTimes.clear();  // Reset the notification times list
                 }
             }
         }
@@ -287,13 +312,23 @@ public class dNMZ extends AbstractScript {
             }
         }
 
+        // Check if it's time to flick quick prayers
+        if (insideNMZ && java.util.Objects.equals(NMZMethod, "Absorption") && System.currentTimeMillis() >= nextQuickPrayerFlickTime) {
+            Client.tap(quickPrayers);
+            Client.tap(quickPrayers);
+            Logger.debugLog("Quick prayers flicked to reset HP timer.");
+
+            // Schedule the next flick time
+            nextQuickPrayerFlickTime = System.currentTimeMillis() + generateDelay(30000, 60000); // Set next flick time between 30 to 60 seconds
+        }
+
         // Check for absorption potion time
         if (insideNMZ && java.util.Objects.equals(NMZMethod, "Absorption")) {
             if (System.currentTimeMillis() - lastAbsorptionPotionTime >= absorptionPotionInterval) {
                 drinkAbsorptions();
                 Logger.debugLog("Topped up the absorption potions.");
                 lastAbsorptionPotionTime = System.currentTimeMillis();
-                absorptionPotionInterval = generateDelay(240000, 300000); // Reset to a new random time between 4 and 5 minutes
+                absorptionPotionInterval = generateDelay(30000, 120000); // Reset to a new random time between 4 and 5 minutes
             }
         }
 
@@ -896,25 +931,37 @@ public class dNMZ extends AbstractScript {
     }
 
     private void moveToDominic() {
-        if (!Player.atTile(dominicOnionTile)) {
-            Logger.debugLog("Moving towards Dominic Onion.");
-            Walker.step(dominicOnionTile);
-            Condition.wait(() -> Player.atTile(dominicOnionTile), 250,20);
 
+        if (justLeftInstance) {
+            Logger.debugLog("We just left a NMZ instance, so we're already located at the tile. Skipping check!");
+            justLeftInstance = false;
+        } else {
             if (!Player.atTile(dominicOnionTile)) {
-                Logger.debugLog("Failed to move towards Dominic Onion, retrying...");
+                Logger.debugLog("Moving towards Dominic Onion.");
                 Walker.step(dominicOnionTile);
                 Condition.wait(() -> Player.atTile(dominicOnionTile), 250,20);
 
                 if (!Player.atTile(dominicOnionTile)) {
-                    Logger.debugLog("Failed to move towards Dominic Onion for the third time, retrying...");
+                    Logger.debugLog("Failed to move towards Dominic Onion, retrying...");
                     Walker.step(dominicOnionTile);
                     Condition.wait(() -> Player.atTile(dominicOnionTile), 250,20);
 
                     if (!Player.atTile(dominicOnionTile)) {
-                        Logger.debugLog("Multiple attempts failed to move towards Dominic Onion. Logging out");
-                        Logout.logout();
-                        Script.stop();
+                        Logger.debugLog("Failed to move towards Dominic Onion for the fourth time, retrying...");
+                        Walker.step(dominicOnionTile);
+                        Condition.wait(() -> Player.atTile(dominicOnionTile), 250,20);
+
+                        if (!Player.atTile(dominicOnionTile)) {
+                            Logger.debugLog("Failed to move towards Dominic Onion for the fifth time, retrying...");
+                            Walker.step(dominicOnionTile);
+                            Condition.wait(() -> Player.atTile(dominicOnionTile), 250,20);
+
+                            if (!Player.atTile(dominicOnionTile)) {
+                                Logger.debugLog("Multiple attempts failed to move towards Dominic Onion. Logging out");
+                                Logout.logout();
+                                Script.stop();
+                            }
+                        }
                     }
                 }
             }
@@ -952,27 +999,6 @@ public class dNMZ extends AbstractScript {
     }
 
     private void startNMZDream() {
-        // Make sure we are at Dominic Onion, otherwise move there with a failsafe
-        if (!Player.atTile(dominicOnionTile)) {
-            Logger.debugLog("We are not located at the NMZ NPC yet, moving there.");
-            Walker.step(dominicOnionTile);
-            Condition.wait(() -> Player.atTile(dominicOnionTile), 250, 25);
-            Condition.sleep(1000);
-
-            if (!Player.atTile(dominicOnionTile)) {
-                Logger.debugLog("Movement failed, retrying...");
-                Walker.step(dominicOnionTile);
-                Condition.wait(() -> Player.atTile(dominicOnionTile), 250, 25);
-                Condition.sleep(1000);
-            }
-        }
-
-        if (!Player.atTile(dominicOnionTile)) {
-            Logger.log("Could not locate us at the NMZ NPC, stopping script.");
-            Logout.logout();
-            Script.stop();
-        }
-
         // Before proceeding, check if we have the necessary items, if not, stop the script and log out.
         Logger.log("Checking our supplies before starting our NMZ dream.");
         if (java.util.Objects.equals(NMZMethod, "Absorption")) {
@@ -1523,6 +1549,7 @@ public class dNMZ extends AbstractScript {
 
     private void drinkAbsorptions() {
         boolean keepDrinking = true;
+        int drinkCount = 0;  // Counter for the number of drinks
 
         // Read the last line from the chat box to determine if "any", "more", or "moment" is mentioned
         String currentChat = Chatbox.readLastLine(new Rectangle(35, 36, 490, 86));
@@ -1530,7 +1557,7 @@ public class dNMZ extends AbstractScript {
             keepDrinking = false;  // Prevent the loop from running if we are already topped up.
         }
 
-        while (keepDrinking) {
+        while (keepDrinking && drinkCount < 6) {  // Check both the boolean and if we've drunk less than 4 times
             if (Inventory.contains(11737, 0.9)) {
                 Inventory.eat(11737, 0.9);
             } else if (Inventory.contains(11736, 0.9)) {
@@ -1545,7 +1572,9 @@ public class dNMZ extends AbstractScript {
                 break;  // Exit the while loop if no potions are found
             }
 
-            // Read the last line from the chat box to determine if "any", "more", or "moment" is mentioned
+            drinkCount++;  // Increment the drink counter after a drink attempt
+
+            // Read the last line from the chat box again to determine if "any", "more", or "moment" is mentioned
             String OCRresults = Chatbox.readLastLine(new Rectangle(35, 36, 490, 86));
             if (OCRresults.contains("any") || OCRresults.contains("more") || OCRresults.contains("moment")) {
                 keepDrinking = false;  // Stop the loop if any specified words are found
@@ -1628,6 +1657,7 @@ public class dNMZ extends AbstractScript {
 
         insideNMZ = false;
         lowerHPItem = new Point(69,69);
+        justLeftInstance = true;
         Logger.log("Left NMZ arena.");
     }
 
