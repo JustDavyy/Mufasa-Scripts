@@ -949,35 +949,30 @@ public class dNMZ extends AbstractScript {
 
     private void moveToDominic() {
 
-        if (justLeftInstance) {
-            Logger.debugLog("We just left a NMZ instance, so we're already located at the tile. Skipping check!");
-            justLeftInstance = false;
-        } else {
+        if (!Player.atTile(dominicOnionTile)) {
+            Logger.debugLog("Moving towards Dominic Onion.");
+            Walker.step(dominicOnionTile);
+            Condition.wait(() -> Player.atTile(dominicOnionTile), 250,20);
+
             if (!Player.atTile(dominicOnionTile)) {
-                Logger.debugLog("Moving towards Dominic Onion.");
+                Logger.debugLog("Failed to move towards Dominic Onion, retrying...");
                 Walker.step(dominicOnionTile);
                 Condition.wait(() -> Player.atTile(dominicOnionTile), 250,20);
 
                 if (!Player.atTile(dominicOnionTile)) {
-                    Logger.debugLog("Failed to move towards Dominic Onion, retrying...");
+                    Logger.debugLog("Failed to move towards Dominic Onion for the fourth time, retrying...");
                     Walker.step(dominicOnionTile);
                     Condition.wait(() -> Player.atTile(dominicOnionTile), 250,20);
 
                     if (!Player.atTile(dominicOnionTile)) {
-                        Logger.debugLog("Failed to move towards Dominic Onion for the fourth time, retrying...");
+                        Logger.debugLog("Failed to move towards Dominic Onion for the fifth time, retrying...");
                         Walker.step(dominicOnionTile);
                         Condition.wait(() -> Player.atTile(dominicOnionTile), 250,20);
 
                         if (!Player.atTile(dominicOnionTile)) {
-                            Logger.debugLog("Failed to move towards Dominic Onion for the fifth time, retrying...");
-                            Walker.step(dominicOnionTile);
-                            Condition.wait(() -> Player.atTile(dominicOnionTile), 250,20);
-
-                            if (!Player.atTile(dominicOnionTile)) {
-                                Logger.debugLog("Multiple attempts failed to move towards Dominic Onion. Logging out");
-                                Logout.logout();
-                                Script.stop();
-                            }
+                            Logger.debugLog("Multiple attempts failed to move towards Dominic Onion. Logging out");
+                            Logout.logout();
+                            Script.stop();
                         }
                     }
                 }
