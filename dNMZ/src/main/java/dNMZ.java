@@ -18,7 +18,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.04",
+        version = "1.051",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -151,9 +151,7 @@ public class dNMZ extends AbstractScript {
     };
     Tile[] pathToNMZ = new Tile[] {
             new Tile(45, 46),
-            new Tile(43, 41),
             new Tile(46, 36),
-            new Tile(52, 31),
             new Tile(53, 24)
     };
 
