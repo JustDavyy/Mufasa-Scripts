@@ -288,11 +288,8 @@ public class dNMZ extends AbstractScript {
             // Immediately lower HP if it's above 3, regardless of the current target
             if (currentHP > 3) {
                 Logger.debugLog("Current HP is above 3 (" + currentHP + "). Lowering HP immediately.");
-                do {
-                    lowerHP();  // Method to reduce HP to 1
-                    Condition.sleep(generateDelay(1000, 1500));  // Random sleep between 1 to 1.5 seconds
-                    currentHP = Player.getHP();  // Re-check HP after action
-                } while (currentHP > 3);  // Continue if HP is still above 3
+                lowerHP();  // Method to reduce HP to 1
+                currentHP = Player.getHP();  // Re-check HP after action
                 targetHPForAction = getRandomTargetHP();  // Set new random target after lowering HP
                 Logger.debugLog("New targetHPForAction set to: " + targetHPForAction + " after lowering HP.");
                 lastTimeHPWasTwo = 0;  // Reset the timer since HP is no longer 2
@@ -306,7 +303,7 @@ public class dNMZ extends AbstractScript {
                 } else if (System.currentTimeMillis() - lastTimeHPWasTwo > 40000) {  // Check if 40 seconds have passed
                     Logger.debugLog("HP has been 2 for over 40 seconds with target 3. Forcing reduction to 1.");
                     lowerHP();  // Force reduce HP to 1
-                    Condition.sleep(generateDelay(1000, 1500));  // Random sleep between 1 to 1.5 seconds
+                    currentHP = Player.getHP();  // Re-check HP after action
                     targetHPForAction = getRandomTargetHP();  // Set new random target after lowering HP
                     Logger.debugLog("New targetHPForAction set to: " + targetHPForAction + " after forced action.");
                     lastTimeHPWasTwo = 0;  // Reset the timer
@@ -326,7 +323,7 @@ public class dNMZ extends AbstractScript {
             if (currentHP == targetHPForAction && currentHP > 1) {
                 Logger.debugLog("Current HP (" + currentHP + ") is at target (" + targetHPForAction + "), lowering HP.");
                 lowerHP();  // Method to reduce HP to 1
-                Condition.sleep(generateDelay(1000, 1500));  // Random sleep between 1 to 1.5 seconds
+                currentHP = Player.getHP();  // Re-check HP after action
                 targetHPForAction = getRandomTargetHP();  // Randomly set target to 2 or 3 for next action with specific probabilities
                 Logger.debugLog("New targetHPForAction set to: " + targetHPForAction + " after action.");
             }
@@ -1390,19 +1387,12 @@ public class dNMZ extends AbstractScript {
         }
 
         if (java.util.Objects.equals(HPMethod, "Rock cake")) {
-            // Calculate the number of guzzles needed to reduce HP to 1 with a rock cake
-            int guzzlesNeeded = calculateGuzzlesNeeded(initialHP);
-            for (int i = 0; i < guzzlesNeeded; i++) {
+            while (Player.getHP() > 1) {
                 handleLowerHPItem(); // Simulate the rock cake guzzle
                 Condition.sleep(generateDelay(200, 400)); // Short delay between uses
             }
         } else if (java.util.Objects.equals(HPMethod, "Locator orb")) {
-            // Calculate the number of taps needed with the locator orb to reduce HP to 1
-            int tapsNeeded = (initialHP - 1) / 10; // Each tap with the locator orb reduces HP by 10
-            if (initialHP > 10) {
-                tapsNeeded += 1; // Add one more tap if HP above 10 to reach HP <= 10
-            }
-            for (int i = 0; i < tapsNeeded; i++) {
+            while (Player.getHP() > 1) {
                 Inventory.tapItem(22081, true, 0.9);
                 Condition.sleep(generateDelay(200, 400)); // Short delay between uses
             }
