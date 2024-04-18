@@ -122,6 +122,7 @@ public class dNMZ extends AbstractScript {
     private long lastOffensivePotionTime;
     private long lastAbsorptionPotionTime;
     private long nextQuickPrayerFlickTime = 0;
+    private long lastTimeHPWasTwo = 0;
 
     // Tiles
     Tile bankTile = new Tile(50, 44);
@@ -279,6 +280,7 @@ public class dNMZ extends AbstractScript {
             }
         }
 
+
         // Check for HP level, but only if using absorptions
         if (insideNMZ && java.util.Objects.equals(NMZMethod, "Absorption")) {
             int currentHP = Player.getHP();
@@ -293,7 +295,25 @@ public class dNMZ extends AbstractScript {
                 } while (currentHP > 3);  // Continue if HP is still above 3
                 targetHPForAction = getRandomTargetHP();  // Set new random target after lowering HP
                 Logger.debugLog("New targetHPForAction set to: " + targetHPForAction + " after lowering HP.");
+                lastTimeHPWasTwo = 0;  // Reset the timer since HP is no longer 2
                 return;  // Exit the method to avoid any further action within this cycle
+            }
+
+            // Check if HP has been 2 for more than 40 seconds and target is 3
+            if (currentHP == 2 && targetHPForAction == 3) {
+                if (lastTimeHPWasTwo == 0) {  // If timer not set, start it
+                    lastTimeHPWasTwo = System.currentTimeMillis();
+                } else if (System.currentTimeMillis() - lastTimeHPWasTwo > 40000) {  // Check if 40 seconds have passed
+                    Logger.debugLog("HP has been 2 for over 40 seconds with target 3. Forcing reduction to 1.");
+                    lowerHP();  // Force reduce HP to 1
+                    Condition.sleep(generateDelay(1000, 1500));  // Random sleep between 1 to 1.5 seconds
+                    targetHPForAction = getRandomTargetHP();  // Set new random target after lowering HP
+                    Logger.debugLog("New targetHPForAction set to: " + targetHPForAction + " after forced action.");
+                    lastTimeHPWasTwo = 0;  // Reset the timer
+                    return;  // Exit the method to avoid any further action within this cycle
+                }
+            } else {
+                lastTimeHPWasTwo = 0;  // Reset the timer if conditions don't match
             }
 
             // Set initial target HP for action if not already set and HP is within range
