@@ -18,7 +18,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.051",
+        version = "1.052",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -1108,49 +1108,27 @@ public class dNMZ extends AbstractScript {
 
         // Tap the NPC
         Client.tap(404,255);
-        Condition.sleep(generateDelay(700,1000));
+        Condition.sleep(generateDelay(1000,1300));
         Client.sendKeystroke("KEYCODE_SPACE");
-        Condition.sleep(generateDelay(700,1000));
+        Condition.sleep(generateDelay(1000,1300));
         Client.sendKeystroke("KEYCODE_4");
-        Condition.sleep(generateDelay(700,1000));
+        Condition.sleep(generateDelay(1000,1300));
         Client.sendKeystroke("KEYCODE_SPACE");
-        Condition.sleep(generateDelay(700,1000));
+        Condition.sleep(generateDelay(1000,1300));
         Client.sendKeystroke("KEYCODE_SPACE");
-        Condition.sleep(generateDelay(700,1000));
-
-        // Check for the chat options
-        java.awt.Rectangle foundObjects3 = Objects.getNearest("/images/Rumble.png");
-
-        // Based on outcome, tap or not
-        if (foundObjects3 != null && !foundObjects3.isEmpty()) {
-            Client.sendKeystroke("KEYCODE_3");
-            Condition.sleep(generateDelay(800,1200));
-            Client.sendKeystroke("KEYCODE_4");
-            Condition.sleep(generateDelay(800,1200));
-            Client.sendKeystroke("KEYCODE_SPACE");
-            Condition.sleep(generateDelay(800,1200));
-            Client.sendKeystroke("KEYCODE_1");
-            Condition.sleep(generateDelay(800,1200));
-            Client.sendKeystroke("KEYCODE_SPACE");
-            Condition.sleep(generateDelay(800,1200));
-        }
-
-        // Failsafe in case tap hasn't registered
-        java.awt.Rectangle foundObjects4 = Objects.getNearest("/images/Rumble.png");
-
-        // Based on outcome, tap or not
-        if (foundObjects4 != null && !foundObjects4.isEmpty()) {
-            Client.sendKeystroke("KEYCODE_3");
-            Condition.sleep(generateDelay(800,1200));
-            Client.sendKeystroke("KEYCODE_4");
-            Condition.sleep(generateDelay(800,1200));
-            Client.sendKeystroke("KEYCODE_SPACE");
-            Condition.sleep(generateDelay(800,1200));
-            Client.sendKeystroke("KEYCODE_1");
-            Condition.sleep(generateDelay(800,1200));
-            Client.sendKeystroke("KEYCODE_SPACE");
-            Condition.sleep(generateDelay(800,1200));
-        }
+        Condition.sleep(generateDelay(1000,1300));
+        Client.sendKeystroke("KEYCODE_3");
+        Condition.sleep(generateDelay(1000,1300));
+        Client.sendKeystroke("KEYCODE_4");
+        Condition.sleep(generateDelay(1000,1300));
+        Client.sendKeystroke("KEYCODE_SPACE");
+        Condition.sleep(generateDelay(1000,1300));
+        Client.sendKeystroke("KEYCODE_SPACE");
+        Condition.sleep(generateDelay(1000,1300));
+        Client.sendKeystroke("KEYCODE_1");
+        Condition.sleep(generateDelay(1000,1300));
+        Client.sendKeystroke("KEYCODE_SPACE");
+        Condition.sleep(generateDelay(1000,1300));
     }
 
     private void unlockCoffer() {
