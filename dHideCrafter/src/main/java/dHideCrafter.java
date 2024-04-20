@@ -91,7 +91,7 @@ public class dHideCrafter extends AbstractScript {
         initialSetup();
 
         //Logs for debugging purposes
-        Logger.log("Thank you for using the dGlass blower script!");
+        Logger.log("Thank you for using the dHide Crafter script!");
     }
 
     // This is the main part of the script, poll gets looped constantly
