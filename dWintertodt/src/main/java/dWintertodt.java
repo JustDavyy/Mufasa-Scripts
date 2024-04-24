@@ -33,6 +33,8 @@ import java.util.Map;
 )
 
 public class dWintertodt extends AbstractScript {
+
+    // These tasks are executed in this order
     List<Task> WTTasks = Arrays.asList(
             new Eat(),
             new Bank(),
@@ -42,12 +44,13 @@ public class dWintertodt extends AbstractScript {
             new GetBranches()
     );
 
+    // Variables
     public static String hopProfile;
     public static Boolean hopEnabled;
     public static Boolean useWDH;
     StateUpdater stateUpdater = new StateUpdater();
 
-    // STATES
+    // State creation (we might not need all 4, but just the bottom ones?)
     public static WTStates[] states = {
             new WTStates("Upper Left", new Rectangle(65, 57, 25, 23), false, false, false, false),
             new WTStates("Upper Right", new Rectangle(122, 56, 23, 23), false, false, false, false),
@@ -61,6 +64,7 @@ public class dWintertodt extends AbstractScript {
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
+
     }
 
     @Override
