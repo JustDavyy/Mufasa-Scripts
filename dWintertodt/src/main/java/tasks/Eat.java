@@ -2,8 +2,8 @@ package tasks;
 
 import utils.Task;
 
-public class StateUpdater extends Task {
-
+public class Eat extends Task {
+    @Override
     public boolean activate() {
         return false;
     }

@@ -4,7 +4,8 @@ import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.OptionType;
 import helpers.utils.Tile;
-import tasks.StateUpdater;
+import tasks.*;
+import utils.StateUpdater;
 import utils.Task;
 import utils.WTStates;
 
@@ -33,14 +34,18 @@ import java.util.Map;
 
 public class dWintertodt extends AbstractScript {
     List<Task> WTTasks = Arrays.asList(
-            new StateUpdater()
+            new Eat(),
+            new Bank(),
+            new SwitchSide(),
+            new BurnBranches(),
+            new FletchBranches(),
+            new GetBranches()
     );
 
     public static String hopProfile;
     public static Boolean hopEnabled;
     public static Boolean useWDH;
-
-
+    StateUpdater stateUpdater = new StateUpdater();
 
     // STATES
     public static WTStates[] states = {
@@ -60,6 +65,9 @@ public class dWintertodt extends AbstractScript {
 
     @Override
     public void poll() {
+
+        // Keep track of the states on each loop
+        stateUpdater.updateStates(states);
 
         //Run tasks
         for (Task task : WTTasks) {

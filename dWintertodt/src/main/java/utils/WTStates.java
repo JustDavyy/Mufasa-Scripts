@@ -24,7 +24,7 @@ public class WTStates {
         return name;
     }
 
-    // Getters and Setters
+    // Getters
     public Rectangle getRectangle() {
         return rectangle;
     }
@@ -43,5 +43,22 @@ public class WTStates {
 
     public boolean isMageDead() {
         return mageDead;
+    }
+
+    // Setters
+    public void setFireAlive(boolean fireAlive) {
+        this.fireAlive = fireAlive;
+    }
+
+    public void setNeedsReburning(boolean needsReburning) {
+        this.needsReburning = needsReburning;
+    }
+
+    public void setNeedsFixing(boolean needsFixing) {
+        this.needsFixing = needsFixing;
+    }
+
+    public void setMageDead(boolean mageDead) {
+        this.mageDead = mageDead;
     }
 }
