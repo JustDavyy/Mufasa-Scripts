@@ -3,6 +3,7 @@ import helpers.ScriptCategory;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.OptionType;
+import helpers.utils.Tile;
 import tasks.StateUpdater;
 import utils.Task;
 import utils.WTStates;
@@ -40,6 +41,7 @@ public class dWintertodt extends AbstractScript {
     public static Boolean useWDH;
 
 
+
     // STATES
     public static WTStates[] states = {
             new WTStates("Upper Left", new Rectangle(65, 57, 25, 23), false, false, false, false),
@@ -66,5 +68,23 @@ public class dWintertodt extends AbstractScript {
                 return;
             }
         }
+    }
+
+
+    // Just leaving these down here so we can figure out where they belong
+    Tile[] LowerRightToLeft = new Tile[] {
+            new Tile(648, 165),
+            new Tile(638, 165),
+            new Tile(626, 165)
+    };
+
+    // For when we need to go LeftToRight instead ;)
+    public Tile[] getReversedTiles(Tile[] array) {
+        if (array == null) return null;
+        Tile[] reversed = new Tile[array.length];
+        for (int i = 0; i < array.length; i++) {
+            reversed[i] = array[array.length - 1 - i];
+        }
+        return reversed;
     }
 }
