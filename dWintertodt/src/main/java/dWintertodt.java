@@ -41,7 +41,7 @@ public class dWintertodt extends AbstractScript {
 
 
     // STATES
-    WTStates[] states = {
+    public static WTStates[] states = {
             new WTStates("Upper Left", new Rectangle(65, 57, 25, 23), false, false, false, false),
             new WTStates("Upper Right", new Rectangle(122, 56, 23, 23), false, false, false, false),
             new WTStates("Lower Left", new Rectangle(122, 56, 23, 23), false, false, false, false),
