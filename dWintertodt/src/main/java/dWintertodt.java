@@ -77,8 +77,34 @@ public class dWintertodt extends AbstractScript {
             new Tile(638, 165),
             new Tile(626, 165)
     };
+    Tile[] returnToWTDoor = new Tile[] {
+            new Tile(638, 167),
+            new Tile(637, 175),
+            new Tile(637, 185),
+            new Tile(637, 195)
+    };
+    Tile[] wtDoorToBank = new Tile[] {
+            new Tile(637, 204),
+            new Tile(639, 217),
+            new Tile(645, 228),
+            new Tile(650, 228)
+    };
+    Tile[] wtDoorToRightSide = new Tile[] {
+            new Tile(638, 185),
+            new Tile(639, 175),
+            new Tile(650, 165)
+    };
+    Tile[] wtDoorToLeftSide = new Tile[] {
+            new Tile(637, 186),
+            new Tile(637, 173),
+            new Tile(625, 165)
+    };
+    Tile[] fromEitherSideToSafeSpot = new Tile[] {
+            new Tile(637, 166),
+            new Tile(637, 177)
+    };
 
-    // For when we need to go LeftToRight instead ;)
+    // For when we need reverse the paths when going back/forth
     public Tile[] getReversedTiles(Tile[] array) {
         if (array == null) return null;
         Tile[] reversed = new Tile[array.length];
