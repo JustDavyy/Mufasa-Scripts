@@ -82,8 +82,9 @@ public class dWintertodt extends AbstractScript {
 
     // These tasks are executed in this order
     List<Task> WTTasks = Arrays.asList(
-            new Eat(),
+            new CheckGear(),
             new Bank(),
+            new Eat(),
             new SwitchSide(),
             new BurnBranches(),
             new FletchBranches(),
@@ -105,8 +106,8 @@ public class dWintertodt extends AbstractScript {
 
     // State creation (we might not need all 4, but just the bottom ones?)
     public static WTStates[] states = {
-            new WTStates("Lower Left", new Rectangle(122, 56, 23, 23), false, false, false, false),
-            new WTStates("Lower Right", new Rectangle(120, 110, 25, 27), false, false, false, false)
+            new WTStates("Lower Left", new Rectangle(60, 112, 31, 31), false, false, false, false),
+            new WTStates("Lower Right", new Rectangle(120, 113, 27, 31), false, false, false, false)
     };
 
     @Override
@@ -129,13 +130,13 @@ public class dWintertodt extends AbstractScript {
         // Keep track of the states on each loop
         stateUpdater.updateStates(states);
 
-        //Run tasks
-        for (Task task : WTTasks) {
-            if (task.activate()) {
-                task.execute();
-                return;
-            }
-        }
+//        //Run tasks
+//        for (Task task : WTTasks) {
+//            if (task.activate()) {
+//                task.execute();
+//                return;
+//            }
+//        }
     }
 
     private void setupFoodIDs() {

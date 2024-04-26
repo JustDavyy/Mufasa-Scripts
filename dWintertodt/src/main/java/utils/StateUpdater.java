@@ -12,6 +12,7 @@ public class StateUpdater {
     Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
 
     public void updateStates(WTStates[] states) {
+        Logger.debugLog("Updating current states..");
         for (WTStates state : states) {
             // Update each boolean based on some conditions or actions
             state.setFireAlive(updateFireAlive(state));
@@ -36,7 +37,7 @@ public class StateUpdater {
     private boolean updateNeedsReburning(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.NEEDS_REBURNING.getColor();
-        boolean check = Client.isColorInRect(checkColor, checkRect, 10);
+        boolean check = !Client.isColorInRect(checkColor, checkRect, 5);
         Logger.debugLog("updateNeedsReburning for: " + state.getName() + " : " + check);
 
         return check;
@@ -45,7 +46,7 @@ public class StateUpdater {
     private boolean updateNeedsFixing(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.NEEDS_FIXING.getColor();
-        boolean check = Client.isColorInRect(checkColor, checkRect, 5);
+        boolean check = Client.isColorInRect(checkColor, checkRect, 2);
         Logger.debugLog("updateNeedsFixing for: " + state.getName() + " : " + check);
 
         return check;
