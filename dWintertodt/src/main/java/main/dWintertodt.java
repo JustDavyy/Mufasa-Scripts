@@ -105,8 +105,6 @@ public class dWintertodt extends AbstractScript {
 
     // State creation (we might not need all 4, but just the bottom ones?)
     public static WTStates[] states = {
-            new WTStates("Upper Left", new Rectangle(65, 57, 25, 23), false, false, false, false),
-            new WTStates("Upper Right", new Rectangle(122, 56, 23, 23), false, false, false, false),
             new WTStates("Lower Left", new Rectangle(122, 56, 23, 23), false, false, false, false),
             new WTStates("Lower Right", new Rectangle(120, 110, 25, 27), false, false, false, false)
     };
@@ -212,7 +210,7 @@ public class dWintertodt extends AbstractScript {
             new Tile(637, 173),
             new Tile(625, 165)
     };
-    Tile[] fromEitherSideToSafeSpot = new Tile[] {
+    Tile[] fromEitherSideToGameLobby = new Tile[] {
             new Tile(637, 166),
             new Tile(637, 177)
     };
