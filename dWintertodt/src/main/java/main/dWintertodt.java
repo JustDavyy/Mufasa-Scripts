@@ -99,6 +99,8 @@ public class dWintertodt extends AbstractScript {
     public static int foodID;
     public static int foodAmount;
     public static int foodAmountLeftToBank;
+
+    public static boolean gameNearingEnd;
     StateUpdater stateUpdater = new StateUpdater();
 
     // State creation (we might not need all 4, but just the bottom ones?)
