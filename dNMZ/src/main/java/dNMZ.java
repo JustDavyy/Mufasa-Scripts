@@ -126,13 +126,13 @@ public class dNMZ extends AbstractScript {
 
     // Tiles
     Tile bankTile = new Tile(85, 95);
-    Tile rewardChestTile = new Tile(80, 64);
+    Tile rewardChestTile = new Tile(80, 63);
     Tile vialOutsideTile = new Tile(74, 66);
-    Tile absorptionBarrelTile = new Tile(69, 66);
-    Tile overloadBarrelTile = new Tile(69, 67);
-    Tile vialInsideTile = new Tile(74, 66);
-    Tile dominicOnionTile = new Tile(78, 68);
-    Tile respawnTile = new Tile(77, 68);
+    Tile absorptionBarrelTile = new Tile(69, 64);
+    Tile overloadBarrelTile = new Tile(69, 66);
+    Tile vialInsideTile = new Tile(195, 93);
+    Tile dominicOnionTile = new Tile(80, 66);
+    Tile respawnTile = new Tile(78, 67);
 
     // Areas
     Area NMZArea = new Area(
