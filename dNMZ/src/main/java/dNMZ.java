@@ -18,7 +18,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.053",
+        version = "1.054",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -125,36 +125,36 @@ public class dNMZ extends AbstractScript {
     private long lastTimeHPWasTwo = 0;
 
     // Tiles
-    Tile bankTile = new Tile(50, 44);
-    Tile rewardChestTile = new Tile(45, 12);
-    Tile vialOutsideTile = new Tile(39, 15);
-    Tile absorptionBarrelTile = new Tile(34, 14);
-    Tile overloadBarrelTile = new Tile(34, 15);
-    Tile vialInsideTile = new Tile(132, 58);
-    Tile dominicOnionTile = new Tile(45, 15);
-    Tile respawnTile = new Tile(43, 16);
+    Tile bankTile = new Tile(85, 95);
+    Tile rewardChestTile = new Tile(80, 63);
+    Tile vialOutsideTile = new Tile(74, 66);
+    Tile absorptionBarrelTile = new Tile(69, 64);
+    Tile overloadBarrelTile = new Tile(69, 66);
+    Tile vialInsideTile = new Tile(195, 93);
+    Tile dominicOnionTile = new Tile(80, 66);
+    Tile respawnTile = new Tile(78, 67);
 
     // Areas
     Area NMZArea = new Area(
-            new Tile(30, 9),
-            new Tile(48, 23)
+            new Tile(60, 36),
+            new Tile(112, 73)
     );
 
     // Paths
     Tile[] pathToBank = new Tile[] {
-            new Tile(45, 19),
-            new Tile(50, 26),
-            new Tile(45, 33),
-            new Tile(44, 41),
-            new Tile(46, 44),
-            new Tile(50, 44)
+            new Tile(81, 70),
+            new Tile(85, 76),
+            new Tile(80, 83),
+            new Tile(77, 90),
+            new Tile(82, 95)
     };
     Tile[] pathToNMZ = new Tile[] {
-            new Tile(45, 46),
-            new Tile(46, 36),
-            new Tile(53, 24)
+            new Tile(77, 89),
+            new Tile(82, 84),
+            new Tile(86, 76),
+            new Tile(81, 70)
     };
-
+    
     // Rectangles
     Rectangle bankBooth = new Rectangle(479, 250, 29, 31);
     Rectangle vialInside = new Rectangle(438, 307, 19, 20);
