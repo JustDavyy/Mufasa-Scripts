@@ -130,7 +130,7 @@ public class dNMZ extends AbstractScript {
     Tile vialOutsideTile = new Tile(74, 66);
     Tile absorptionBarrelTile = new Tile(69, 66);
     Tile overloadBarrelTile = new Tile(69, 67);
-    Tile vialInsideTile = new Tile(74, 67);
+    Tile vialInsideTile = new Tile(74, 66);
     Tile dominicOnionTile = new Tile(78, 68);
     Tile respawnTile = new Tile(77, 68);
 
