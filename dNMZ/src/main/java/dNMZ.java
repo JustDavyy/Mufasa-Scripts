@@ -136,8 +136,8 @@ public class dNMZ extends AbstractScript {
 
     // Areas
     Area NMZArea = new Area(
-            new Tile(60, 36),
-            new Tile(112, 73)
+            new Tile(63, 58),
+            new Tile(85, 78)
     );
 
     // Paths
