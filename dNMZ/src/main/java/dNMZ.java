@@ -131,7 +131,7 @@ public class dNMZ extends AbstractScript {
     Tile absorptionBarrelTile = new Tile(69, 64);
     Tile overloadBarrelTile = new Tile(69, 66);
     Tile vialInsideTile = new Tile(195, 93);
-    Tile dominicOnionTile = new Tile(80, 66);
+    Tile dominicOnionTile = new Tile(78, 67);
     Tile respawnTile = new Tile(78, 67);
 
     // Areas
@@ -1107,7 +1107,7 @@ public class dNMZ extends AbstractScript {
         }
 
         // Tap the NPC
-        Client.tap(404,255);
+        Client.tap(new Rectangle(438, 221, 6, 10));
         Condition.sleep(generateDelay(1000,1300));
         Client.sendKeystroke("KEYCODE_SPACE");
         Condition.sleep(generateDelay(1000,1300));
