@@ -126,7 +126,7 @@ public class dNMZ extends AbstractScript {
 
     // Tiles
     Tile bankTile = new Tile(85, 95);
-    Tile rewardChestTile = new Tile(80, 63);
+    Tile rewardChestTile = new Tile(80, 64);
     Tile vialOutsideTile = new Tile(74, 66);
     Tile absorptionBarrelTile = new Tile(69, 64);
     Tile overloadBarrelTile = new Tile(69, 66);
@@ -406,7 +406,7 @@ public class dNMZ extends AbstractScript {
             // Move to Dominic Onion (start tile)
             moveToDominic();
             // Move towards the chest, and wait for us to arrive
-            Client.tap(450,184);
+            Client.tap(new Rectangle(482, 136, 22, 18));
             Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
             // Restock (buy) the pots we need
             restockNMZPotionsCHEST();
@@ -435,7 +435,7 @@ public class dNMZ extends AbstractScript {
             // Move to Dominic Onion (start tile)
             moveToDominic();
             // Move towards the chest, and wait for us to arrive
-            Client.tap(450,184);
+            Client.tap(new Rectangle(482, 136, 22, 18));
             Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
             // Restock (buy) the pots we need
             restockNMZPotionsCHEST();
@@ -464,7 +464,7 @@ public class dNMZ extends AbstractScript {
             // Move to Dominic Onion (start tile)
             moveToDominic();
             // Move towards the chest, and wait for us to arrive
-            Client.tap(450,184);
+            Client.tap(new Rectangle(482, 136, 22, 18));
             Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
             // Restock (buy) the pots we need
             restockNMZPotionsCHEST();
@@ -488,7 +488,7 @@ public class dNMZ extends AbstractScript {
             // Move to Dominic Onion (start tile)
             moveToDominic();
             // Move towards the chest, and wait for us to arrive
-            Client.tap(450,184);
+            Client.tap(new Rectangle(482, 136, 22, 18));
             Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
             // Move back to Dominic
             moveToDominic();
@@ -510,7 +510,7 @@ public class dNMZ extends AbstractScript {
         Logger.debugLog("Moving towards the bank!");
         // Walk the path
         Walker.walkPath(pathToBank);
-        Condition.sleep(750);
+        Condition.sleep(1780);
 
         // Walk to the specific bank tile
         Walker.step(bankTile);
@@ -540,7 +540,7 @@ public class dNMZ extends AbstractScript {
 
         // Walk the path
         Walker.walkPath(pathToNMZ);
-        Condition.sleep(1500);
+        Condition.sleep(2500);
     }
 
     private void bank() {
@@ -717,12 +717,16 @@ public class dNMZ extends AbstractScript {
         // Check if we are at the reward chest, if not move there.
         if (!Player.atTile(rewardChestTile)) {
             Logger.debugLog("We are not yet at the NMZ Reward chest, moving there!");
-            Walker.step(rewardChestTile);
+            Walker.step(dominicOnionTile);
+            Condition.wait(() -> Player.atTile(dominicOnionTile), 250, 20);
+            Client.tap(new Rectangle(482, 136, 22, 18));
             Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
 
             if (!Player.atTile(rewardChestTile)) {
                 Logger.debugLog("We are still not at the NMZ reward chest, retrying...");
-                Walker.step(rewardChestTile);
+                Walker.step(dominicOnionTile);
+                Condition.wait(() -> Player.atTile(dominicOnionTile), 250, 20);
+                Client.tap(new Rectangle(482, 136, 22, 18));
                 Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
 
                 if (!Player.atTile(rewardChestTile)) {
@@ -976,6 +980,8 @@ public class dNMZ extends AbstractScript {
                 }
             }
         }
+
+        Condition.sleep(1000);
     }
 
     private void takeBreak() {
