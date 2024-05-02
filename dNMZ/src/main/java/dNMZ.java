@@ -18,7 +18,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.054",
+        version = "1.06",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -129,6 +129,7 @@ public class dNMZ extends AbstractScript {
     Tile rewardChestTile = new Tile(80, 64);
     Tile vialOutsideTile = new Tile(74, 66);
     Tile absorptionBarrelTile = new Tile(69, 64);
+    Tile absorptionBarrelTileWALKCALL = new Tile(69, 65);
     Tile overloadBarrelTile = new Tile(69, 66);
     Tile vialInsideTile = new Tile(195, 93);
     Tile dominicOnionTile = new Tile(78, 67);
@@ -812,13 +813,13 @@ public class dNMZ extends AbstractScript {
 
             if (!Player.atTile(absorptionBarrelTile)) {
                 Logger.debugLog("Player not at absorption barrel, moving there!");
-                Walker.step(absorptionBarrelTile);
+                Walker.step(absorptionBarrelTileWALKCALL);
                 Condition.wait(() -> Player.atTile(absorptionBarrelTile), 250, 20);
 
                 // failsafe
                 if (!Player.atTile(absorptionBarrelTile)) {
                     Logger.debugLog("Player is still not at the absorption barrel, retrying...");
-                    Walker.step(absorptionBarrelTile);
+                    Walker.step(absorptionBarrelTileWALKCALL);
                     Condition.wait(() -> Player.atTile(absorptionBarrelTile), 250, 20);
 
                     if (!Player.atTile(absorptionBarrelTile)) {
@@ -925,17 +926,17 @@ public class dNMZ extends AbstractScript {
         if (java.util.Objects.equals(barrel, "Absorption")) {
             if (!Player.atTile(absorptionBarrelTile)) {
                 Logger.debugLog("Moving towards the absorption barrel.");
-                Walker.step(absorptionBarrelTile);
+                Walker.step(absorptionBarrelTileWALKCALL);
                 Condition.wait(() -> Player.atTile(absorptionBarrelTile), 250,20);
 
                 if (!Player.atTile(absorptionBarrelTile)) {
                     Logger.debugLog("Failed to move towards the absorption barrel, retrying...");
-                    Walker.step(absorptionBarrelTile);
+                    Walker.step(absorptionBarrelTileWALKCALL);
                     Condition.wait(() -> Player.atTile(absorptionBarrelTile), 250,20);
 
                     if (!Player.atTile(absorptionBarrelTile)) {
                         Logger.debugLog("Failed to move towards the absorption barrel for the third time, retrying...");
-                        Walker.step(absorptionBarrelTile);
+                        Walker.step(absorptionBarrelTileWALKCALL);
                         Condition.wait(() -> Player.atTile(absorptionBarrelTile), 250,20);
 
                         if (!Player.atTile(absorptionBarrelTile)) {
