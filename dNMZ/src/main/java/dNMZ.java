@@ -19,7 +19,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.061",
+        version = "1.062",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -927,9 +927,23 @@ public class dNMZ extends AbstractScript {
                         Condition.wait(() -> Player.atTile(overloadBarrelTile), 250,20);
 
                         if (!Player.atTile(overloadBarrelTile)) {
-                            Logger.debugLog("Multiple attempts failed to move towards the overload barrel. Logging out");
-                            Logout.logout();
-                            Script.stop();
+                            Logger.debugLog("Failed to move towards the overload barrel for the fourth time, retrying...");
+                            moveToDominic();
+                            Client.tap(136,240);
+                            Condition.wait(() -> Player.atTile(overloadBarrelTile), 250,20);
+
+                            if (!Player.atTile(overloadBarrelTile)) {
+                                Logger.debugLog("Failed to move towards the overload barrel for the fifth time, retrying...");
+                                moveToDominic();
+                                Client.tap(136,240);
+                                Condition.wait(() -> Player.atTile(overloadBarrelTile), 250,20);
+
+                                if (!Player.atTile(overloadBarrelTile)) {
+                                    Logger.debugLog("Multiple attempts failed to move towards the overload barrel. Logging out");
+                                    Logout.logout();
+                                    Script.stop();
+                                }
+                            }
                         }
                     }
                 }
@@ -953,9 +967,23 @@ public class dNMZ extends AbstractScript {
                         Condition.wait(() -> Player.atTile(absorptionBarrelTile), 250,20);
 
                         if (!Player.atTile(absorptionBarrelTile)) {
-                            Logger.debugLog("Multiple attempts failed to move towards the absorption barrel. Logging out");
-                            Logout.logout();
-                            Script.stop();
+                            Logger.debugLog("Failed to move towards the absorption barrel for the fourth time, retrying...");
+                            moveToDominic();
+                            Client.tap(142,200);
+                            Condition.wait(() -> Player.atTile(absorptionBarrelTile), 250,20);
+
+                            if (!Player.atTile(absorptionBarrelTile)) {
+                                Logger.debugLog("Failed to move towards the absorption barrel for the fifth time, retrying...");
+                                moveToDominic();
+                                Client.tap(142,200);
+                                Condition.wait(() -> Player.atTile(absorptionBarrelTile), 250,20);
+
+                                if (!Player.atTile(absorptionBarrelTile)) {
+                                    Logger.debugLog("Multiple attempts failed to move towards the absorption barrel. Logging out");
+                                    Logout.logout();
+                                    Script.stop();
+                                }
+                            }
                         }
                     }
                 }
@@ -1162,6 +1190,25 @@ public class dNMZ extends AbstractScript {
                 Walker.step(vialOutsideTile);
                 Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
             }
+
+            if (!Player.atTile(vialOutsideTile)) {
+                moveToDominic();
+                Condition.wait(() -> Player.atTile(dominicOnionTile), 250, 20);
+                Client.tap(316,228);
+                Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
+            }
+
+            if (!Player.atTile(vialOutsideTile)) {
+                moveToDominic();
+                Condition.wait(() -> Player.atTile(dominicOnionTile), 250, 20);
+                Client.tap(316,228);
+                Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
+            }
+
+            if (!Player.atTile(vialOutsideTile)) {
+                Walker.step(vialOutsideTile);
+                Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
+            }
         }
 
         if (Player.atTile(vialOutsideTile)) {
@@ -1193,9 +1240,21 @@ public class dNMZ extends AbstractScript {
                 Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
 
                 if (!Player.atTile(vialOutsideTile)) {
-                    Logger.debugLog("Could not path to the NMZ vial. Stopping script");
-                    Logout.logout();
-                    Script.stop();
+                    moveToDominic();
+                    Client.tap(316,228);
+                    Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
+
+                    if (!Player.atTile(vialOutsideTile)) {
+                        moveToDominic();
+                        Client.tap(316,228);
+                        Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
+
+                        if (!Player.atTile(vialOutsideTile)) {
+                            Logger.debugLog("Could not path to the NMZ vial. Stopping script");
+                            Logout.logout();
+                            Script.stop();
+                        }
+                    }
                 }
             }
         }

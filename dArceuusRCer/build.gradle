@@ -17,13 +17,13 @@ configurations.all {
 }
 
 dependencies {
-    implementation('com.github.Mufasa-SDK:SDKRepo:1.1.55') {
+    implementation('com.github.Mufasa-SDK:SDKRepo:1.+') {
         changing = true
     }
 }
 
 jar {
-    archiveFileName = 'dZeahRCer.jar'
+    archiveFileName = 'dArceuusRCer.jar'
     destinationDirectory = file('jar/')
 
     manifest {

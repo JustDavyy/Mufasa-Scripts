@@ -30,7 +30,7 @@ import static helpers.Interfaces.*;
         }
 )
 
-public class dZeahRCer extends AbstractScript {
+public class dArceuusRCer extends AbstractScript {
 
 Tile[] mineToShortcutOutPath = new Tile[] {
         new Tile(199, 132),
@@ -118,7 +118,7 @@ Boolean hopEnabled;
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
 
-        Logger.log("Thank you for using the dZeahRCer script!");
+        Logger.log("Thank you for using the dArceuusRCer script!");
         Logger.log("Setting up everything for your gains now...");
 
         if (hopEnabled) {
