@@ -3,6 +3,7 @@ import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.Area;
+import helpers.utils.EquipmentSlot;
 import helpers.utils.OptionType;
 import helpers.utils.Tile;
 
@@ -18,7 +19,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.06",
+        version = "1.061",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -104,6 +105,7 @@ public class dNMZ extends AbstractScript {
     Boolean bankYN;
     Boolean insideNMZ;
     Boolean justLeftInstance = false;
+    Boolean usingVenatorBow = false;
 
     // Lists
     private List<Integer> notifiedTimes = new ArrayList<Integer>();
@@ -114,7 +116,7 @@ public class dNMZ extends AbstractScript {
     int higherBreak;
     int breakAfterMinutes;
     int absorptionPotionInterval;
-    int offensivePotionInterval = 300000;
+    int offensivePotionInterval = 300500;
     int targetHPForAction = 0;
 
     // Longs
@@ -127,6 +129,7 @@ public class dNMZ extends AbstractScript {
     // Tiles
     Tile bankTile = new Tile(85, 95);
     Tile rewardChestTile = new Tile(80, 64);
+    Tile rewardChestTile2 = new Tile(80, 63);
     Tile vialOutsideTile = new Tile(74, 66);
     Tile absorptionBarrelTile = new Tile(69, 64);
     Tile absorptionBarrelTileWALKCALL = new Tile(69, 65);
@@ -188,6 +191,14 @@ public class dNMZ extends AbstractScript {
         // Check if auto retaliate is on.
         Player.enableAutoRetaliate();
 
+        // Check if we are using a venator bow or not
+        GameTabs.openEquipTab();
+        usingVenatorBow = Equipment.itemAt(EquipmentSlot.WEAPON, 27610);
+
+        if (usingVenatorBow) {
+            Logger.debugLog("Venator bow detected, adjusting NMZ logic for optimal XP potential!");
+        }
+
         // Make sure the inventory is opened
         GameTabs.openInventoryTab();
 
@@ -222,6 +233,10 @@ public class dNMZ extends AbstractScript {
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
+
+        if (Player.within(NMZArea)) {
+            insideNMZ = false;
+        }
 
         // Check for break time
         if (insideNMZ) {
@@ -335,7 +350,7 @@ public class dNMZ extends AbstractScript {
             Logger.debugLog("Quick prayers flicked to reset HP timer.");
 
             // Schedule the next flick time
-            nextQuickPrayerFlickTime = System.currentTimeMillis() + generateDelay(30000, 60000); // Set next flick time between 30 to 60 seconds
+            nextQuickPrayerFlickTime = System.currentTimeMillis() + generateDelay(15000, 45000); // Set next flick time between 15 to 45 seconds
         }
 
         // Check for absorption potion time
@@ -408,7 +423,7 @@ public class dNMZ extends AbstractScript {
             moveToDominic();
             // Move towards the chest, and wait for us to arrive
             Client.tap(new Rectangle(482, 136, 22, 18));
-            Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
+            Condition.wait(() -> check2Tiles(rewardChestTile, rewardChestTile2), 250, 20);
             // Restock (buy) the pots we need
             restockNMZPotionsCHEST();
             // Proceed to restock them in the inventory
@@ -437,7 +452,7 @@ public class dNMZ extends AbstractScript {
             moveToDominic();
             // Move towards the chest, and wait for us to arrive
             Client.tap(new Rectangle(482, 136, 22, 18));
-            Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
+            Condition.wait(() -> check2Tiles(rewardChestTile, rewardChestTile2), 250, 20);
             // Restock (buy) the pots we need
             restockNMZPotionsCHEST();
             // Proceed to restock them in the inventory
@@ -466,7 +481,7 @@ public class dNMZ extends AbstractScript {
             moveToDominic();
             // Move towards the chest, and wait for us to arrive
             Client.tap(new Rectangle(482, 136, 22, 18));
-            Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
+            Condition.wait(() -> check2Tiles(rewardChestTile, rewardChestTile2), 250, 20);
             // Restock (buy) the pots we need
             restockNMZPotionsCHEST();
             // Proceed to restock them in the inventory
@@ -490,7 +505,7 @@ public class dNMZ extends AbstractScript {
             moveToDominic();
             // Move towards the chest, and wait for us to arrive
             Client.tap(new Rectangle(482, 136, 22, 18));
-            Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
+            Condition.wait(() -> check2Tiles(rewardChestTile, rewardChestTile2), 250, 20);
             // Move back to Dominic
             moveToDominic();
             // Start a dream
@@ -499,10 +514,8 @@ public class dNMZ extends AbstractScript {
             enterNMZDream();
         }
 
-        // Update the XP counter but only when inside NMZ
-        if (insideNMZ) {
-            readXP();
-        }
+        // Update XP counter
+        readXP();
     }
 
 
@@ -716,21 +729,21 @@ public class dNMZ extends AbstractScript {
     private void restockNMZPotionsCHEST() {
         Logger.log("Restocking NMZ potions.");
         // Check if we are at the reward chest, if not move there.
-        if (!Player.atTile(rewardChestTile)) {
+        if (!check2Tiles(rewardChestTile, rewardChestTile2)) {
             Logger.debugLog("We are not yet at the NMZ Reward chest, moving there!");
             Walker.step(dominicOnionTile);
             Condition.wait(() -> Player.atTile(dominicOnionTile), 250, 20);
             Client.tap(new Rectangle(482, 136, 22, 18));
-            Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
+            Condition.wait(() -> check2Tiles(rewardChestTile, rewardChestTile2), 250, 20);
 
-            if (!Player.atTile(rewardChestTile)) {
+            if (!check2Tiles(rewardChestTile, rewardChestTile2)) {
                 Logger.debugLog("We are still not at the NMZ reward chest, retrying...");
                 Walker.step(dominicOnionTile);
                 Condition.wait(() -> Player.atTile(dominicOnionTile), 250, 20);
                 Client.tap(new Rectangle(482, 136, 22, 18));
-                Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
+                Condition.wait(() -> check2Tiles(rewardChestTile, rewardChestTile2), 250, 20);
 
-                if (!Player.atTile(rewardChestTile)) {
+                if (!check2Tiles(rewardChestTile, rewardChestTile2)) {
                     Logger.log("Failed to restock, stopping script!");
                     Logout.logout();
                     Script.stop();
@@ -1199,8 +1212,12 @@ public class dNMZ extends AbstractScript {
             Client.tap(486,373);
             Condition.sleep(generateDelay(10000, 12000));
 
-            // Move more to the center
-            Client.tap(829,68);
+            // Move more to the center or the corner, depending if using venator bow
+            if (usingVenatorBow) {
+                Client.tap(776,21);
+            } else {
+                Client.tap(829,68);
+            }
 
             // Lower a bit of HP if using rock cakes
             if (java.util.Objects.equals(HPMethod, "Rock cake") && java.util.Objects.equals(NMZMethod, "Absorption")) {
@@ -1222,7 +1239,12 @@ public class dNMZ extends AbstractScript {
                 Inventory.eat(11730, 0.9);
                 lastOffensivePotionTime = System.currentTimeMillis();
                 // Wait for the effects of the overload to apply
-                Condition.sleep(7000);
+                if (!java.util.Objects.equals(NMZMethod, "Absorption")) {
+                    Condition.sleep(7000);
+                } else {
+                    Client.tap(quickPrayers);
+                    Client.tap(quickPrayers);
+                }
             }
 
             // Drink the non-overload potion if needed
@@ -1250,31 +1272,57 @@ public class dNMZ extends AbstractScript {
 
             // Stock up on absorption level if needed
             if (java.util.Objects.equals(NMZMethod, "Absorption")) {
-                // Tap a total of 19 times on an absorption pot
 
-                // 2 times on 4 dosed potions
-                Inventory.eat(11734, 0.9);
-                Condition.sleep(generateDelay(450,700));
-                Inventory.eat(11734, 0.9);
-                Condition.sleep(generateDelay(450,700));
+                // Drink first potion
+                Point absorbCenter = Inventory.getItemCenterPoint(11734, 0.9);
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
 
-                // 2 times on 3 dosed potions
-                Inventory.eat(11735, 0.9);
-                Condition.sleep(generateDelay(450,700));
-                Inventory.eat(11735, 0.9);
-                Condition.sleep(generateDelay(450,700));
+                // Drink second potion
+                absorbCenter = Inventory.getItemCenterPoint(11734, 0.9);
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
 
-                // 2 times on 2 dosed potions
-                Inventory.eat(11736, 0.9);
-                Condition.sleep(generateDelay(450,700));
-                Inventory.eat(11736, 0.9);
-                Condition.sleep(generateDelay(450,700));
+                // Drink third potion
+                absorbCenter = Inventory.getItemCenterPoint(11734, 0.9);
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
 
-                // 2 times on 1 dosed potions
-                Inventory.eat(11737, 0.9);
-                Condition.sleep(generateDelay(450,700));
-                Inventory.eat(11737, 0.9);
-                Condition.sleep(generateDelay(450,700));
+                // Drink fourth potion
+                absorbCenter = Inventory.getItemCenterPoint(11734, 0.9);
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+
+                // Drink the fifth potion
+                absorbCenter = Inventory.getItemCenterPoint(11734, 0.9);
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
             }
 
             // If using Absorption and Overloads, we need to drink Overloads and then manage HP using either Rock Cake or Locator Orb.
@@ -1381,6 +1429,12 @@ public class dNMZ extends AbstractScript {
         } else {
             Logger.log("Invalid HP reduction method specified.");
         }
+
+        if (java.util.Objects.equals(NMZMethod, "Absorption")) {
+            // Toggle quick pray to reset the HP regen timer
+            Client.tap(quickPrayers);
+            Client.tap(quickPrayers);
+        }
     }
 
     private void drinkOffensivePot() {
@@ -1431,15 +1485,23 @@ public class dNMZ extends AbstractScript {
             if (Inventory.contains(11733, 0.9)) {
                 Inventory.eat(11733, 0.9);
                 lastOffensivePotionTime = System.currentTimeMillis();
+                Client.tap(quickPrayers);
+                Client.tap(quickPrayers);
             } else if (Inventory.contains(11732, 0.9)) {
                 Inventory.eat(11732, 0.9);
                 lastOffensivePotionTime = System.currentTimeMillis();
+                Client.tap(quickPrayers);
+                Client.tap(quickPrayers);
             } else if (Inventory.contains(11731, 0.9)) {
                 Inventory.eat(11731, 0.9);
                 lastOffensivePotionTime = System.currentTimeMillis();
+                Client.tap(quickPrayers);
+                Client.tap(quickPrayers);
             } else if (Inventory.contains(11730, 0.9)) {
                 Inventory.eat(11730, 0.9);
                 lastOffensivePotionTime = System.currentTimeMillis();
+                Client.tap(quickPrayers);
+                Client.tap(quickPrayers);
             } else {
                 Logger.debugLog("We've ran out of Overload potions, leaving NMZ instance.");
                 leaveNMZ();
@@ -1550,14 +1612,37 @@ public class dNMZ extends AbstractScript {
         }
 
         while (keepDrinking && drinkCount < 10) {  // Check both the boolean and if we've drunk less than 10 times
+
+            // Check if it's time to drink the offensive potion
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastOffensivePotionTime >= offensivePotionInterval) {
+                Logger.debugLog("Time to drink offensive potion, stopping absorption drinks.");
+                break;  // Exit the loop early
+            }
+
             if (Inventory.contains(11737, 0.9)) {
                 Inventory.eat(11737, 0.9);
             } else if (Inventory.contains(11736, 0.9)) {
-                Inventory.eat(11736, 0.9);
+                Point absorbCenter = Inventory.getItemCenterPoint(11736, 0.9);
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
             } else if (Inventory.contains(11735, 0.9)) {
-                Inventory.eat(11735, 0.9);
+                Point absorbCenter = Inventory.getItemCenterPoint(11735, 0.9);
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
             } else if (Inventory.contains(11734, 0.9)) {
-                Inventory.eat(11734, 0.9);
+                Point absorbCenter = Inventory.getItemCenterPoint(11734, 0.9);
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
+                Condition.sleep(generateDelay(200,400));
+                Client.tap(getRandomTapPoint(absorbCenter, 7));
             } else {
                 Logger.debugLog("No absorption potions found in inventory, leaving the instance!");
                 leaveNMZ();
@@ -1634,7 +1719,11 @@ public class dNMZ extends AbstractScript {
     }
 
     private void leaveNMZ() {
-        Client.tap(776,99);
+        if (usingVenatorBow) {
+            Client.tap(823,147);
+        } else {
+            Client.tap(776,99);
+        }
         Condition.sleep(generateDelay(4000,6000));
         Walker.step(vialInsideTile);
         Condition.wait(() -> Player.atTile(vialInsideTile), 250, 30);
@@ -1683,6 +1772,32 @@ public class dNMZ extends AbstractScript {
             guzzles++;
         }
         return guzzles;
+    }
+
+    public static Point getRandomTapPoint(Point center, int range) {
+        Random random = new Random();
+
+        // Generate random offsets within the range [-range, range]
+        int dx = random.nextInt(2 * range + 1) - range;
+        int dy = random.nextInt(2 * range + 1) - range;
+
+        // Create a new point with the random offsets applied
+        return new Point(center.x + dx, center.y + dy);
+    }
+
+    public boolean check2Tiles(Tile tile1, Tile tile2) {
+        Tile playerPos = Walker.getPlayerPosition();
+
+        if (java.util.Objects.equals(playerPos.x(), tile1.x()) && java.util.Objects.equals(playerPos.y(), tile1.y())) {
+            Logger.debugLog("playerpos equals tile1 (x:" + tile1.x() + "|y:" + tile1.y() + ")");
+            return true;
+        } else if (java.util.Objects.equals(playerPos.x(), tile2.x()) && java.util.Objects.equals(playerPos.y(), tile2.y())) {
+            Logger.debugLog("playerpos equals tile2 (x:" + tile2.x() + "|y:" + tile2.y() + ")");
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     private void hopActions() {
