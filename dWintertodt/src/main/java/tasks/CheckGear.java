@@ -4,8 +4,6 @@ import helpers.utils.EquipmentSlot;
 import helpers.utils.ItemList;
 import utils.Task;
 
-import java.awt.*;
-
 import static helpers.Interfaces.*;
 
 public class CheckGear extends Task {
@@ -38,11 +36,22 @@ public class CheckGear extends Task {
 
     @Override
     public boolean execute() {
-        ensureInventoryOpen();
         checkForItem(knife, "Knife");
+
         checkForAxe();
-        ensureInventoryOpen();
+        if (!checkedForAxe) {
+            Logger.log("You are missing an axe!");
+        }
+
         checkForTinderboxOrBruma();
+        if (!checkedForTinderboxOrBruma) {
+            Logger.log("You are missing a tinderbox or Bruma torch!");
+        }
+
+        if (checkedForKnife && checkedForAxe && checkedForTinderboxOrBruma) {
+            gearChecked = true;
+        }
+
         return gearChecked;
     }
 
@@ -54,6 +63,8 @@ public class CheckGear extends Task {
     }
 
     private void checkForItem(int itemID, String itemName) {
+        ensureInventoryOpen();
+
         if (!checkedForKnife && Inventory.contains(itemID, INVENTORY_THRESHOLD)) {
             Logger.debugLog(itemName + " in inventory, continuing");
             checkedForKnife = true;
@@ -64,6 +75,8 @@ public class CheckGear extends Task {
     }
 
     private void checkForAxe() {
+        ensureInventoryOpen();
+
         if (!checkedForAxe) {
             if (Inventory.containsAny(axeIDs, INVENTORY_THRESHOLD)) {
                 Logger.debugLog("Axe in inventory, continuing");
@@ -85,8 +98,11 @@ public class CheckGear extends Task {
     }
 
     private void checkForTinderboxOrBruma() {
+        ensureInventoryOpen();
+
         if (!checkedForTinderboxOrBruma) {
             if (Inventory.containsAny(lightIDs, INVENTORY_THRESHOLD)) {
+                Logger.log("Tinderbox or Bruma in inventory, continuing");
                 checkedForTinderboxOrBruma = true;
             } else {
                 if (!GameTabs.isEquipTabOpen()) {
