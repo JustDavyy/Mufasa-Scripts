@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @ScriptManifest(
         name = "dTeaYoinker",
         description = "Steals from the tea stall in east Varrock. Supports world hopping and banking the tea.",
-        version = "1.02",
+        version = "1.03",
         guideLink = "https://wiki.mufasaclient.com/docs/dtea-yoinker/",
         categories = {ScriptCategory.Thieving}
 )
@@ -286,9 +286,9 @@ public class dTeaYoinker extends AbstractScript {
         }
         Client.tap(stallTapWindow);
 
-        // Generate a random number between 5000 and 5400
+        // Generate a random number between 4000 and 4400
         Random random = new Random();
-        int delay = 5000 + random.nextInt(5400- 5000 + 1);
+        int delay = 4000 + random.nextInt(4400- 4000 + 1);
         Condition.sleep(delay);
         return true;
     }
