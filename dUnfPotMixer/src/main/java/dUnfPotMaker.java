@@ -15,7 +15,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dUnfPotMixer",
         description = "Mixes all your herbs to unfinished potions, supports dynamic banking and world hops.",
-        version = "1.00",
+        version = "1.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dunfinished-potion-maker/",
         categories = {ScriptCategory.Herblore, ScriptCategory.Moneymaking}
 )
@@ -358,7 +358,7 @@ public class dUnfPotMaker extends AbstractScript {
 
         // Closing the bank, as banking should be done now
         Bank.close();
-        Condition.sleep(generateDelay(200, 400));
+        Condition.sleep(generateDelay(350, 450));
         if(Bank.isOpen()) {
             Bank.close();
         }
