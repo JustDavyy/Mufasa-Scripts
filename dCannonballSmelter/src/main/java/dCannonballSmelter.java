@@ -17,7 +17,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dCannonball Smelter",
         description = "Smelts steel bars into cannonballs at various locations. Supports hopping worlds.",
-        version = "1.00",
+        version = "1.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dcannonball-smelter/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Moneymaking}
 )
@@ -318,6 +318,8 @@ public class dCannonballSmelter extends AbstractScript {
             Condition.sleep(500);
         }
 
+        Condition.sleep(1000);
+
         Logger.debugLog("Ending the bank() method.");
     }
 
@@ -329,8 +331,16 @@ public class dCannonballSmelter extends AbstractScript {
 
         if (!Inventory.contains(steelbar, 0.9)) {
             Logger.debugLog("No steel bars found in inventory, did we run out?");
-            Logout.logout();
-            Script.stop();
+            bank();
+            if (!Inventory.contains(steelbar, 0.9)) {
+                Logger.debugLog("No steel bars found in inventory, did we run out? Doing one more check before stopping the script.");
+                bank();
+                if (!Inventory.contains(steelbar, 0.9)) {
+                    Logger.debugLog("No steel bars found in inventory, we ran out. Stopping script.");
+                    Logout.logout();
+                    Script.stop();
+                }
+            }
         }
 
         if (java.util.Objects.equals(location, "Edgeville")) {
