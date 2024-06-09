@@ -1,12 +1,17 @@
 package utils;
 
 import helpers.utils.Area;
+import helpers.utils.ItemList;
 import helpers.utils.RegionBox;
 import helpers.utils.Tile;
 
 import java.awt.*;
 
 public class Constants {
+    public static final int brumaRoot = ItemList.BRUMA_ROOT_20695;
+    public static final int brumaKindling = ItemList.BRUMA_KINDLING_20696;
+    public static int foodAmountInInventory;
+
     public static boolean gameNearingEnd;
     public static RegionBox WTRegion = new RegionBox("WTRegion", 1701, 264, 2157, 846);
     public static Area lobby = new Area(new Tile(632, 173), new Tile(644, 184));

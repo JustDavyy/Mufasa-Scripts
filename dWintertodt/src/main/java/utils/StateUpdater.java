@@ -1,12 +1,10 @@
 package utils;
 
 
-import main.dWintertodt;
-
 import java.awt.*;
 
-import static helpers.Interfaces.Client;
-import static helpers.Interfaces.Logger;
+import static helpers.Interfaces.*;
+import static main.dWintertodt.currentLocation;
 
 public class StateUpdater {
     Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
@@ -23,6 +21,9 @@ public class StateUpdater {
 
         // Update the game state boolean (true if wt game is 15% or less left.
         updateGameState();
+
+        //Update our position
+        currentLocation = Walker.getPlayerPosition(Constants.WTRegion);
     }
 
     private boolean updateFireAlive(WTStates state) {
@@ -62,6 +63,6 @@ public class StateUpdater {
     }
 
     private void updateGameState() {
-        dWintertodt.gameNearingEnd = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameCheckRect, 10);
+        Constants.gameNearingEnd = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameCheckRect, 10);
     }
 }

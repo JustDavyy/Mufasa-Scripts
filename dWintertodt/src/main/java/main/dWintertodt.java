@@ -6,6 +6,7 @@ import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.OptionType;
+import helpers.utils.Tile;
 import tasks.*;
 import utils.StateUpdater;
 import utils.Task;
@@ -67,12 +68,6 @@ import static helpers.Interfaces.Script;
                         defaultValue = "0",
                         minMaxIntValues = {0, 100},
                         optionType = OptionType.INTEGER_SLIDER
-                ),
-                @ScriptConfiguration(
-                        name =  "Use world hopper?",
-                        description = "Would you like to hop worlds based on your hop profile settings?",
-                        defaultValue = "0",
-                        optionType = OptionType.WORLDHOPPER
                 )
         }
 )
@@ -84,7 +79,7 @@ public class dWintertodt extends AbstractScript {
             new CheckGear(),
             new Bank(),
             new Eat(),
-            new SwitchSide(),
+            //new SwitchSide(),
             new BurnBranches(),
             new FletchBranches(),
             new GetBranches()
@@ -99,6 +94,9 @@ public class dWintertodt extends AbstractScript {
     public static int foodID;
     public static int foodAmount;
     public static int foodAmountLeftToBank;
+
+    // Location static
+    public static Tile currentLocation;
 
     // State creation (we might not need all 4, but just the bottom ones?)
     StateUpdater stateUpdater = new StateUpdater();
@@ -127,13 +125,13 @@ public class dWintertodt extends AbstractScript {
         // Keep track of the states on each loop
         stateUpdater.updateStates(states);
 
-//        //Run tasks
-//        for (Task task : WTTasks) {
-//            if (task.activate()) {
-//                task.execute();
-//                return;
-//            }
-//        }
+        //Run tasks
+        for (Task task : WTTasks) {
+            if (task.activate()) {
+                task.execute();
+                return;
+            }
+        }
     }
 
     private void setupFoodIDs() {

@@ -1,6 +1,6 @@
 package utils;
 
-import java.awt.Color;
+import java.awt.*;
 
 public enum StateColor {
     FIRE_ALIVE("#dd4f01"),
