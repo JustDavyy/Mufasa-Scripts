@@ -19,7 +19,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.062",
+        version = "1.07",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -31,7 +31,14 @@ import java.util.Random;
                         defaultValue = "Absorption",
                         allowedValues = {
                                 @AllowedValue(optionIcon = "11734", optionName = "Absorption"),
-                                @AllowedValue(optionIcon = "2434", optionName = "Prayer")
+                                @AllowedValue(optionIcon = "2434", optionName = "Prayer"),
+                                @AllowedValue(optionIcon = "2434", optionName = "Prayer - Ultimate Strength"),
+                                @AllowedValue(optionIcon = "2434", optionName = "Prayer - Eagle Eye"),
+                                @AllowedValue(optionIcon = "2434", optionName = "Prayer - Mystic Might"),
+                                @AllowedValue(optionIcon = "2434", optionName = "Prayer - Chivalry"),
+                                @AllowedValue(optionIcon = "2434", optionName = "Prayer - Piety"),
+                                @AllowedValue(optionIcon = "2434", optionName = "Prayer - Rigour"),
+                                @AllowedValue(optionIcon = "2434", optionName = "Prayer - Augury")
                         },
                         optionType = OptionType.STRING
                 ),
@@ -364,7 +371,7 @@ public class dNMZ extends AbstractScript {
         }
 
         // Check for prayer points
-        if (insideNMZ && java.util.Objects.equals(NMZMethod, "Prayer")) {
+        if (insideNMZ && NMZMethod.startsWith("Prayer")) {
             int currentPrayerPoints = Player.getPray();
             if (currentPrayerPoints < 24 && currentPrayerPoints > 5) {
                 long currentTime = System.currentTimeMillis();
@@ -373,13 +380,17 @@ public class dNMZ extends AbstractScript {
 
                 if (currentPrayerPoints < 19) {  // If prayer points are between 6 and 18, inclusive
                     if (timeUntilNextDrinkOffensive > 60000) {  // More than a minute until the next offensive potion
-                        int randomSleepTime = new Random().nextInt(8001) + 2000;  // Random time between 2 and 10 seconds
-                        Condition.sleep(randomSleepTime);
+                        if (NMZMethod.equals("Prayer")) {
+                            int randomSleepTime = new Random().nextInt(8001) + 2000;  // Random time between 2 and 10 seconds
+                            Condition.sleep(randomSleepTime);
+                        }
                     }
                 } else {  // If prayer points are between 19 and 23, inclusive
                     if (timeUntilNextDrinkOffensive > 60000) {  // More than a minute until the next offensive potion
-                        int randomSleepTime = new Random().nextInt(5001) + 10000;  // Random time between 10 and 15 seconds
-                        Condition.sleep(randomSleepTime);
+                        if (NMZMethod.equals("Prayer")) {
+                            int randomSleepTime = new Random().nextInt(5001) + 10000;  // Random time between 10 and 15 seconds
+                            Condition.sleep(randomSleepTime);
+                        }
                     }
                 }
 
@@ -400,6 +411,107 @@ public class dNMZ extends AbstractScript {
                         Condition.wait(() -> Prayer.isActiveProtectfromMelee(), 250, 10);
                     } if (!Prayer.isActiveProtectfromMelee()) {
                         Logger.debugLog("Failed to activate protect from melee.");
+                    }
+                }
+
+                // Activate offensive prayers if chosen
+                if (NMZMethod.equals("Prayer - Ultimate Strength")) {
+                    Prayer.activateUltimateStrength();
+                    Condition.wait(() -> Prayer.isActiveUltimateStrength(), 250, 20);
+                    if (!Prayer.isActiveUltimateStrength()) {
+                        Prayer.activateUltimateStrength();
+                        Condition.wait(() -> Prayer.isActiveUltimateStrength(), 250, 10);
+                        if (!Prayer.isActiveUltimateStrength()) {
+                            Prayer.activateUltimateStrength();
+                            Condition.wait(() -> Prayer.isActiveUltimateStrength(), 250, 10);
+                        }
+                        if (!Prayer.isActiveUltimateStrength()) {
+                            Logger.debugLog("Failed to activate Ultimate Strength.");
+                        }
+                    }
+                } else if (NMZMethod.equals("Prayer - Eagle Eye")) {
+                    Prayer.activateEagleEye();
+                    Condition.wait(() -> Prayer.isActiveEagleEye(), 250, 20);
+                    if (!Prayer.isActiveEagleEye()) {
+                        Prayer.activateEagleEye();
+                        Condition.wait(() -> Prayer.isActiveEagleEye(), 250, 10);
+                        if (!Prayer.isActiveEagleEye()) {
+                            Prayer.activateEagleEye();
+                            Condition.wait(() -> Prayer.isActiveEagleEye(), 250, 10);
+                        }
+                        if (!Prayer.isActiveEagleEye()) {
+                            Logger.debugLog("Failed to activate Eagle Eye.");
+                        }
+                    }
+                } else if (NMZMethod.equals("Prayer - Mystic Might")) {
+                    Prayer.activateMysticMight();
+                    Condition.wait(() -> Prayer.isActiveMysticMight(), 250, 20);
+                    if (!Prayer.isActiveMysticMight()) {
+                        Prayer.activateMysticMight();
+                        Condition.wait(() -> Prayer.isActiveMysticMight(), 250, 10);
+                        if (!Prayer.isActiveMysticMight()) {
+                            Prayer.activateMysticMight();
+                            Condition.wait(() -> Prayer.isActiveMysticMight(), 250, 10);
+                        }
+                        if (!Prayer.isActiveMysticMight()) {
+                            Logger.debugLog("Failed to activate Mystic Might.");
+                        }
+                    }
+                } else if (NMZMethod.equals("Prayer - Chivalry")) {
+                    Prayer.activateChivalry();
+                    Condition.wait(() -> Prayer.isActiveChivalry(), 250, 20);
+                    if (!Prayer.isActiveChivalry()) {
+                        Prayer.activateChivalry();
+                        Condition.wait(() -> Prayer.isActiveChivalry(), 250, 10);
+                        if (!Prayer.isActiveChivalry()) {
+                            Prayer.activateChivalry();
+                            Condition.wait(() -> Prayer.isActiveChivalry(), 250, 10);
+                        }
+                        if (!Prayer.isActiveChivalry()) {
+                            Logger.debugLog("Failed to activate Chivalry.");
+                        }
+                    }
+                } else if (NMZMethod.equals("Prayer - Piety")) {
+                    Prayer.activatePiety();
+                    Condition.wait(() -> Prayer.isActivePiety(), 250, 20);
+                    if (!Prayer.isActivePiety()) {
+                        Prayer.activatePiety();
+                        Condition.wait(() -> Prayer.isActivePiety(), 250, 10);
+                        if (!Prayer.isActivePiety()) {
+                            Prayer.activatePiety();
+                            Condition.wait(() -> Prayer.isActivePiety(), 250, 10);
+                        }
+                        if (!Prayer.isActivePiety()) {
+                            Logger.debugLog("Failed to activate Piety.");
+                        }
+                    }
+                } else if (NMZMethod.equals("Prayer - Rigour")) {
+                    Prayer.activateRigour();
+                    Condition.wait(() -> Prayer.isActiveRigour(), 250, 20);
+                    if (!Prayer.isActiveRigour()) {
+                        Prayer.activateRigour();
+                        Condition.wait(() -> Prayer.isActiveRigour(), 250, 10);
+                        if (!Prayer.isActiveRigour()) {
+                            Prayer.activateRigour();
+                            Condition.wait(() -> Prayer.isActiveRigour(), 250, 10);
+                        }
+                        if (!Prayer.isActiveRigour()) {
+                            Logger.debugLog("Failed to activate Rigour.");
+                        }
+                    }
+                } else if (NMZMethod.equals("Prayer - Augury")) {
+                    Prayer.activateAugury();
+                    Condition.wait(() -> Prayer.isActiveAugury(), 250, 20);
+                    if (!Prayer.isActiveAugury()) {
+                        Prayer.activateAugury();
+                        Condition.wait(() -> Prayer.isActiveAugury(), 250, 10);
+                        if (!Prayer.isActiveAugury()) {
+                            Prayer.activateAugury();
+                            Condition.wait(() -> Prayer.isActiveAugury(), 250, 10);
+                        }
+                        if (!Prayer.isActiveAugury()) {
+                            Logger.debugLog("Failed to activate Augury.");
+                        }
                     }
                 }
 
@@ -465,7 +577,7 @@ public class dNMZ extends AbstractScript {
             enterNMZDream();
         }
 
-        if (!insideNMZ && java.util.Objects.equals(NMZMethod, "Prayer") && java.util.Objects.equals(potions, "Overload")) {
+        if (!insideNMZ && NMZMethod.startsWith("Prayer") && java.util.Objects.equals(potions, "Overload")) {
             // Store all the leftover overloads we have
             if (Inventory.containsAny(new int[]{11733, 11732, 11731, 11730}, 0.9)) {
                 moveToBarrel("Overload");
@@ -494,7 +606,7 @@ public class dNMZ extends AbstractScript {
             enterNMZDream();
         }
 
-        if (!insideNMZ && java.util.Objects.equals(NMZMethod, "Prayer") && !java.util.Objects.equals(potions, "Overload")) {
+        if (!insideNMZ && NMZMethod.startsWith("Prayer") && !java.util.Objects.equals(potions, "Overload")) {
             // Move to the bank
             moveToBank();
             // Do the banking
@@ -708,7 +820,7 @@ public class dNMZ extends AbstractScript {
         }
 
         // If using prayer, fill the rest of the inventory with prayer
-        if (java.util.Objects.equals(NMZMethod, "Prayer")) {
+        if (NMZMethod.startsWith("Prayer")) {
             if (!Bank.isSelectedQuantity10Button()) {
                 Bank.tapQuantity10Button();
                 Condition.wait(() -> Bank.isSelectedQuantity10Button(), 250, 12);
@@ -1079,7 +1191,7 @@ public class dNMZ extends AbstractScript {
             }
         }
 
-        if (java.util.Objects.equals(NMZMethod, "Prayer")) {
+        if (NMZMethod.startsWith("Prayer")) {
             if (!Inventory.contains(2434, 0.9)) {
                 Logger.log("We don't have any prayer potions, stopping script!");
                 Logout.logout();
@@ -1434,7 +1546,7 @@ public class dNMZ extends AbstractScript {
             }
 
             // Enable prayer if using the prayer method
-            if (java.util.Objects.equals(NMZMethod, "Prayer")) {
+            if (NMZMethod.startsWith("Prayer")) {
                 // Check for the tab, if not open, open it
                 GameTabs.openPrayerTab();
 
@@ -1450,6 +1562,108 @@ public class dNMZ extends AbstractScript {
                         Logger.debugLog("Failed to activate protect from melee.");
                     }
                 }
+
+                // Activate offensive prayers if chosen
+                if (NMZMethod.equals("Prayer - Ultimate Strength")) {
+                    Prayer.activateUltimateStrength();
+                    Condition.wait(() -> Prayer.isActiveUltimateStrength(), 250, 20);
+                    if (!Prayer.isActiveUltimateStrength()) {
+                        Prayer.activateUltimateStrength();
+                        Condition.wait(() -> Prayer.isActiveUltimateStrength(), 250, 10);
+                        if (!Prayer.isActiveUltimateStrength()) {
+                            Prayer.activateUltimateStrength();
+                            Condition.wait(() -> Prayer.isActiveUltimateStrength(), 250, 10);
+                        }
+                        if (!Prayer.isActiveUltimateStrength()) {
+                            Logger.debugLog("Failed to activate Ultimate Strength.");
+                        }
+                    }
+                } else if (NMZMethod.equals("Prayer - Eagle Eye")) {
+                    Prayer.activateEagleEye();
+                    Condition.wait(() -> Prayer.isActiveEagleEye(), 250, 20);
+                    if (!Prayer.isActiveEagleEye()) {
+                        Prayer.activateEagleEye();
+                        Condition.wait(() -> Prayer.isActiveEagleEye(), 250, 10);
+                        if (!Prayer.isActiveEagleEye()) {
+                            Prayer.activateEagleEye();
+                            Condition.wait(() -> Prayer.isActiveEagleEye(), 250, 10);
+                        }
+                        if (!Prayer.isActiveEagleEye()) {
+                            Logger.debugLog("Failed to activate Eagle Eye.");
+                        }
+                    }
+                } else if (NMZMethod.equals("Prayer - Mystic Might")) {
+                    Prayer.activateMysticMight();
+                    Condition.wait(() -> Prayer.isActiveMysticMight(), 250, 20);
+                    if (!Prayer.isActiveMysticMight()) {
+                        Prayer.activateMysticMight();
+                        Condition.wait(() -> Prayer.isActiveMysticMight(), 250, 10);
+                        if (!Prayer.isActiveMysticMight()) {
+                            Prayer.activateMysticMight();
+                            Condition.wait(() -> Prayer.isActiveMysticMight(), 250, 10);
+                        }
+                        if (!Prayer.isActiveMysticMight()) {
+                            Logger.debugLog("Failed to activate Mystic Might.");
+                        }
+                    }
+                } else if (NMZMethod.equals("Prayer - Chivalry")) {
+                    Prayer.activateChivalry();
+                    Condition.wait(() -> Prayer.isActiveChivalry(), 250, 20);
+                    if (!Prayer.isActiveChivalry()) {
+                        Prayer.activateChivalry();
+                        Condition.wait(() -> Prayer.isActiveChivalry(), 250, 10);
+                        if (!Prayer.isActiveChivalry()) {
+                            Prayer.activateChivalry();
+                            Condition.wait(() -> Prayer.isActiveChivalry(), 250, 10);
+                        }
+                        if (!Prayer.isActiveChivalry()) {
+                            Logger.debugLog("Failed to activate Chivalry.");
+                        }
+                    }
+                } else if (NMZMethod.equals("Prayer - Piety")) {
+                    Prayer.activatePiety();
+                    Condition.wait(() -> Prayer.isActivePiety(), 250, 20);
+                    if (!Prayer.isActivePiety()) {
+                        Prayer.activatePiety();
+                        Condition.wait(() -> Prayer.isActivePiety(), 250, 10);
+                        if (!Prayer.isActivePiety()) {
+                            Prayer.activatePiety();
+                            Condition.wait(() -> Prayer.isActivePiety(), 250, 10);
+                        }
+                        if (!Prayer.isActivePiety()) {
+                            Logger.debugLog("Failed to activate Piety.");
+                        }
+                    }
+                } else if (NMZMethod.equals("Prayer - Rigour")) {
+                    Prayer.activateRigour();
+                    Condition.wait(() -> Prayer.isActiveRigour(), 250, 20);
+                    if (!Prayer.isActiveRigour()) {
+                        Prayer.activateRigour();
+                        Condition.wait(() -> Prayer.isActiveRigour(), 250, 10);
+                        if (!Prayer.isActiveRigour()) {
+                            Prayer.activateRigour();
+                            Condition.wait(() -> Prayer.isActiveRigour(), 250, 10);
+                        }
+                        if (!Prayer.isActiveRigour()) {
+                            Logger.debugLog("Failed to activate Rigour.");
+                        }
+                    }
+                } else if (NMZMethod.equals("Prayer - Augury")) {
+                    Prayer.activateAugury();
+                    Condition.wait(() -> Prayer.isActiveAugury(), 250, 20);
+                    if (!Prayer.isActiveAugury()) {
+                        Prayer.activateAugury();
+                        Condition.wait(() -> Prayer.isActiveAugury(), 250, 10);
+                        if (!Prayer.isActiveAugury()) {
+                            Prayer.activateAugury();
+                            Condition.wait(() -> Prayer.isActiveAugury(), 250, 10);
+                        }
+                        if (!Prayer.isActiveAugury()) {
+                            Logger.debugLog("Failed to activate Augury.");
+                        }
+                    }
+                }
+
 
                 GameTabs.openInventoryTab();
 
