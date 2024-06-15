@@ -23,7 +23,7 @@ dependencies {
 }
 
 jar {
-    archiveFileName = 'dCooker.jar'
+    archiveFileName = 'dAIOCooker.jar'
     destinationDirectory = file('jar/')
 
     manifest {

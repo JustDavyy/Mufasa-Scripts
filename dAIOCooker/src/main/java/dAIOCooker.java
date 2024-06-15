@@ -3,7 +3,6 @@ import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.*;
-import org.w3c.dom.css.Rect;
 
 import java.awt.*;
 import java.util.Map;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 import static helpers.Interfaces.*;
 
 @ScriptManifest(
-        name = "dCooker",
+        name = "dAIOCooker",
         description = "The cooker script to cook all your raw fish (or seaweed) at various different places.",
         version = "1.00",
         guideLink = "https://wiki.mufasaclient.com/docs/dcooker/",
@@ -76,7 +75,7 @@ import static helpers.Interfaces.*;
         }
 )
 
-public class dCooker extends AbstractScript {
+public class dAIOCooker extends AbstractScript {
 
 // Script config variables
 String hopProfile;
@@ -145,7 +144,7 @@ Tile playerPos;
         product = configs.get("Product");
         location = configs.get("Location");
 
-        Logger.log("Thank you for using the dCooker script!");
+        Logger.log("Thank you for using the dAIOCooker script!");
         Logger.log("Setting up everything for your gains now...");
 
         if (hopEnabled) {
