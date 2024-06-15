@@ -18,7 +18,7 @@ import static helpers.Interfaces.*;
         name = "dCooker",
         description = "The cooker script to cook all your raw fish (or seaweed) at various different places.",
         version = "1.00",
-        guideLink = "",
+        guideLink = "https://wiki.mufasaclient.com/docs/dcooker/",
         categories = {ScriptCategory.Cooking}
 )
 @ScriptConfiguration.List(
@@ -55,12 +55,9 @@ import static helpers.Interfaces.*;
                         description = "What location would you like to cook at?",
                         defaultValue = "Hosidius kitchen",
                         allowedValues = {
-                                @AllowedValue(optionName = "Cooks' Guild"),
+                                @AllowedValue(optionName = "Catherby range"),
                                 @AllowedValue(optionName = "Hosidius kitchen"),
-                                @AllowedValue(optionName = "Mor Ul Rek"),
-                                @AllowedValue(optionName = "Myths' Guild"),
                                 @AllowedValue(optionName = "Nardah oven"),
-                                @AllowedValue(optionName = "Rogues' Den")
                         },
                         optionType = OptionType.STRING
                 ),
@@ -86,54 +83,23 @@ String hopProfile;
 Boolean hopEnabled;
 Boolean useWDH;
 int banktab;
+String productID;
 String product;
 String location;
 
 // Area, regions and tiles
-Area cookingGuildArea = new Area(
-        new Tile(2655, 877),
-        new Tile(2664, 889)
-);
-RegionBox cookingGuildRegion = new RegionBox(
-        "CookingGuild",
-        7743, 2460,
-        8190, 2901
-);
-Tile cookingGuildTile = new Tile(2660, 883);
 
+RegionBox hosidiusRegion = new RegionBox(
+        "Hosidius",
+        2016, 1896,
+        2205, 2118
+);
 Area hosidiusKitchenArea = new Area(
-        new Tile(690, 650),
-        new Tile(716, 680)
+        new Tile(695, 656),
+        new Tile(712, 670)
 );
-Tile hosidiusTile = new Tile(698, 666);
-
-Tile morulrekTile = new Tile(1692, 191);
-RegionBox morulrekRegion = new RegionBox(
-        "MorUlRek",
-        4803, 363,
-        5310, 822
-);
-Area morulrekArea = new Area(
-        new Tile(1682, 184),
-        new Tile(1697, 201)
-);
-Tile mythsguildTile = new Tile(3490, 1904);
-RegionBox mythsguildRegion = new RegionBox(
-        "MythsGuild",
-        10092, 5466,
-        10554, 5826
-);
-
-RegionBox roguesRegion = new RegionBox(
-        "RoguesDen",
-        10251, 762,
-        10551, 1086
-);
-Area roguesArea = new Area(
-        new Tile(3458, 310),
-        new Tile(3465, 316)
-);
-Tile roguesTile = new Tile(3463, 313);
+Tile hosidiusStartTile = new Tile(699, 667);
+Rectangle hosidiusStartRangeRect = new Rectangle(462, 102, 13, 19);
 
 RegionBox nardahRegion = new RegionBox(
         "Nardah",
@@ -144,12 +110,25 @@ Area nardahArea = new Area(
         new Tile(3026, 1621),
         new Tile(3050, 1641)
 );
-Tile nardahTile = new Tile(3034, 1628);
+Tile nardahStartTile = new Tile(3034, 1628);
+Rectangle nardahStartOvenRect = new Rectangle(560, 363, 20, 21);
+
+Area catherbyArea = new Area(
+        new Tile(2202, 885),
+        new Tile(2225, 904)
+);
+
+RegionBox catherbyRegion = new RegionBox(
+        "Catherby",
+        6549, 2613,
+        6726, 2760
+);
+Tile catherbyStartTile = new Tile(2210, 895);
+Rectangle catherbyStartRangeRect = new Rectangle(663, 181, 32, 22);
 
 // Banks and range rectangles
 private Map<String, List<RectanglePair>> bankRectangles = new HashMap<>();
 private Random random = new Random();
-Rectangle nardahSetupRect = new Rectangle(558, 360, 23, 24);
 
 
 // Script logic variables
@@ -186,47 +165,86 @@ Tile playerPos;
         // Initialize all the banking locations and other stuff
         initializeBankRects();
 
+        // Initialize itemIDs
+        initializeItemIDS();
+
         // Initialize hop timer for this run
         hopActions();
 
         // Setting the correct zoom level
         setZoom();
 
+        // Open the inventory if not already the case
+        if (!GameTabs.isInventoryTabOpen()) {
+            GameTabs.openInventoryTab();
+        }
+
         // Check if we are in the area we need to be in.
         checkArea();
 
+        // Set up the banking process
+        setupBanking();
+
+        // Tap the furnace for the first time
+        switch (location) {
+            case "Catherby range":
+                Client.tap(catherbyStartRangeRect);
+                break;
+            case "Hosidius kitchen":
+                Client.tap(hosidiusStartRangeRect);
+                break;
+            case "Nardah oven":
+                Client.tap(nardahStartOvenRect);
+                break;
+        }
+
+        // Process first inventory
+        cook();
     }
 
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
 
-        //Logger.debugLog("Temp log statement.");
+        // Get the rectangle pairs for the chosen location
+        List<RectanglePair> rectanglePairs = bankRectangles.get(location);
 
+        // Pick a random rectangle pair from the list
+        RectanglePair rectanglePair = rectanglePairs.get(new Random().nextInt(rectanglePairs.size()));
+
+        Rectangle rangeRectangle = rectanglePair.getRange();
+        Rectangle bankRectangle = rectanglePair.getBank();
+
+        Logger.debugLog("Tapping the bank");
+        Client.tap(bankRectangle);
+        Condition.wait(() -> Bank.isOpen(), 200, 75);
+
+        bank();
+
+        // Check if we do have the required items, if not reset and check again.
+        resetAndRecheck();
+
+        Logger.debugLog("Tapping the range/oven");
+        Client.tap(rangeRectangle);
+
+        cook();
+
+        hopActions();
     }
 
 
     // Methods and stuff here
     private void checkArea() {
-        Logger.debugLog("Checking which area we are in.");
+        Logger.debugLog("Checking which area we are in, and moving to the start tile.");
         switch (location) {
-            case "Cooks' Guild":
-                checkLocation(cookingGuildRegion, cookingGuildArea, cookingGuildTile);
+            case "Catherby range":
+                checkLocation(catherbyRegion, catherbyArea, catherbyStartTile);
                 break;
             case "Hosidius kitchen":
-                playerPos = Walker.getPlayerPosition();
-                break;
-            case "Mor Ul Rek":
-                checkLocation(morulrekRegion, morulrekArea, morulrekTile);
-                break;
-            case "Myths' Guild":
-                checkLocation(mythsguildRegion, myt, mythsguildTile);
+                checkLocation(hosidiusRegion, hosidiusKitchenArea, hosidiusStartTile);
                 break;
             case "Nardah oven":
-                playerPos = Walker.getPlayerPosition(nardahRegion);
-                break;
-            case "Rogues' Den":
-                playerPos = Walker.getPlayerPosition(roguesRegion);
+                checkLocation(nardahRegion, nardahArea, nardahStartTile);
                 break;
         }
     }
@@ -234,32 +252,18 @@ Tile playerPos;
     private void setZoom() {
         Logger.debugLog("Setting correct zoom level based on location.");
         switch (location) {
-            case "Cooks' Guild":
-                Game.setZoom("4");
-                break;
+            case "Catherby range":
             case "Hosidius kitchen":
                 Game.setZoom("2");
                 break;
             case "Nardah oven":
                 Game.setZoom("1");
                 break;
-            case "Myths' Guild":
-            case "Rogues' Den":
-            case "Mor Ul Rek":
-                Game.setZoom("5");
-                break;
         }
     }
 
     private void initializeBankRects() {
-        Logger.debugLog("Initializing all the bank and furnace/oven areas.");
-        // Myths Guild
-        List<RectanglePair> mythsGuildRects = new ArrayList<>();
-        mythsGuildRects.add(new RectanglePair(
-                new Rectangle(409, 101, 104, 124),   // Bank Rectangle
-                new Rectangle(550, 200, 84, 127)    // Range Rectangle
-        ));
-        bankRectangles.put("Myths' Guild", mythsGuildRects);
+        Logger.debugLog("Initializing all the bank and range/oven areas.");
 
         // Nardah
         List<RectanglePair> nardahRects = new ArrayList<>();
@@ -279,19 +283,7 @@ Tile playerPos;
                 new Rectangle(335, 158, 7, 6),      // Bank Rectangle
                 new Rectangle(567, 420, 24, 26)     // Range Rectangle
         ));
-        bankRectangles.put("Nardah", nardahRects);
-
-        // Cooking Guild
-        List<RectanglePair> cookGuildRects = new ArrayList<>();
-        cookGuildRects.add(new RectanglePair(
-                new Rectangle(484, 466, 72, 67),   // Bank Rectangle
-                new Rectangle(359, 58, 46, 54)   // Range Rectangle
-        ));
-        cookGuildRects.add(new RectanglePair(
-                new Rectangle(578, 464, 51, 64),   // Bank Rectangle
-                new Rectangle(284, 56, 46, 56)   // Range Rectangle
-        ));
-        bankRectangles.put("Cooks' Guild", cookGuildRects);
+        bankRectangles.put("Nardah oven", nardahRects);
 
         // Hosidius Kitchen
         List<RectanglePair> hosidiusRects = new ArrayList<>();
@@ -301,26 +293,94 @@ Tile playerPos;
         ));
         bankRectangles.put("Hosidius kitchen", hosidiusRects);
 
-        // Mor Ul Rek
-        List<RectanglePair> morulrekRects = new ArrayList<>();
-        morulrekRects.add(new RectanglePair(
-                new Rectangle(535, 264, 74, 103),   // Bank Rectangle
-                new Rectangle(438, 164, 45, 14)    // Range Rectangle
+        // Catherby range
+        List<RectanglePair> catherbyRects = new ArrayList<>();
+        catherbyRects.add(new RectanglePair(
+                new Rectangle(232, 287, 15, 20),   // Bank Rectangle
+                new Rectangle(635, 184, 32, 21)    // Range Rectangle
         ));
-        bankRectangles.put("Mor Ul Rek", morulrekRects);
-
-        // Rogues' Den
-        List<RectanglePair> roguesRects = new ArrayList<>();
-        roguesRects.add(new RectanglePair(
-                new Rectangle(284, 271, 24, 40),   // Bank Rectangle
-                new Rectangle(405, 187, 49, 37)    // Range Rectangle
+        catherbyRects.add(new RectanglePair(
+                new Rectangle(200, 290, 16, 14),   // Bank Rectangle
+                new Rectangle(656, 181, 29, 23)    // Range Rectangle
         ));
-        bankRectangles.put("Rogues' Den", roguesRects);
+        catherbyRects.add(new RectanglePair(
+                new Rectangle(141, 290, 21, 17),   // Bank Rectangle
+                new Rectangle(704, 188, 16, 14)    // Range Rectangle
+        ));
+        bankRectangles.put("Catherby range", catherbyRects);
 
     }
 
+    private void initializeItemIDS() {
+        switch (product) {
+            case "Seaweed":
+                productID = "401";
+                break;
+            case "Giant seaweed":
+                productID = "21504";
+                break;
+            case "Raw shrimps":
+                productID = "317";
+                break;
+            case "Raw sardine":
+                productID = "327";
+                break;
+            case "Raw herring":
+                productID = "345";
+                break;
+            case "Raw mackerel":
+                productID = "353";
+                break;
+            case "Raw trout":
+                productID = "335";
+                break;
+            case "Raw cod":
+                productID = "341";
+                break;
+            case "Raw pike":
+                productID = "349";
+                break;
+            case "Raw salmon":
+                productID = "331";
+                break;
+            case "Raw karambwan":
+                productID = "3142";
+                break;
+            case "Raw tuna":
+                productID = "359";
+                break;
+            case "Raw lobster":
+                productID = "377";
+                break;
+            case "Raw swordfish":
+                productID = "371";
+                break;
+            case "Raw monkfish":
+                productID = "7944";
+                break;
+            case "Raw shark":
+                productID = "383";
+                break;
+            case "Raw sea turtle":
+                productID = "395";
+                break;
+            case "Raw anglerfish":
+                productID = "13439";
+                break;
+            case "Raw manta ray":
+                productID = "389";
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown product: " + product);
+        }
+    }
+
     private void hopActions() {
-        Game.hop(hopProfile, useWDH, false);
+        if(hopEnabled) {
+            Game.hop(hopProfile, useWDH, false);
+        } else {
+            // We do nothing here, as hop is disabled.
+        }
     }
 
     private void checkLocation(RegionBox region, Area area, Tile tile) {
@@ -330,11 +390,226 @@ Tile playerPos;
                 Logger.debugLog("Walking to the " + location + " start tile.");
                 Walker.step(tile, region);
                 Condition.wait(() -> Player.atTile(tile, region), 200, 20);
+                if (!Player.atTile(tile, region)) {
+                    Logger.debugLog("Walking to the " + location + " start tile.");
+                    Walker.step(tile, region);
+                    Condition.wait(() -> Player.atTile(tile, region), 200, 20);
+                    if (!Player.atTile(tile, region)) {
+                        Logger.debugLog("Walking to the " + location + " start tile.");
+                        Walker.step(tile, region);
+                        Condition.wait(() -> Player.atTile(tile, region), 200, 20);
+                        if (!Player.atTile(tile, region)) {
+                            Logger.debugLog("Walking to the " + location + " start tile.");
+                            Walker.step(tile, region);
+                            Condition.wait(() -> Player.atTile(tile, region), 200, 20);
+                            if (!Player.atTile(tile, region)) {
+                                Logger.debugLog("Walking to the " + location + " start tile.");
+                                Walker.step(tile, region);
+                                Condition.wait(() -> Player.atTile(tile, region), 200, 20);
+                                if (!Player.atTile(tile, region)) {
+                                    Logger.debugLog("Walking to the " + location + " start tile.");
+                                    Walker.step(tile, region);
+                                    Condition.wait(() -> Player.atTile(tile, region), 200, 20);
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
                 Logger.debugLog("We are located at the " + location + " start tile.");
             }
         } else {
             notInArea();
+        }
+    }
+
+    private void setupBanking() {
+        Logger.debugLog("Starting setupBanking() method.");
+
+        Logger.debugLog("Opening the bank of Gielinor");
+        // Open the bank based on the selected location (we already checked our location and moved to start tile)
+        switch (location) {
+            case "Catherby range":
+                Client.tap(new Rectangle(442, 232, 17, 21));
+                Condition.wait(() -> Bank.isOpen(), 200, 20);
+
+                // Check for pin, as we don't use Bank.open here (which already processes the pin)
+                if (Bank.isBankPinNeeded()) {
+                    Bank.enterBankPin();
+                }
+                break;
+            case "Hosidius kitchen":
+                Client.tap(new Rectangle(412, 267, 13, 17));
+                Condition.wait(() -> Bank.isOpen(), 200, 20);
+
+                // Check for pin, as we don't use Bank.open here (which already processes the pin)
+                if (Bank.isBankPinNeeded()) {
+                    Bank.enterBankPin();
+                }
+                break;
+            case "Nardah oven":
+                Client.tap(new Rectangle(422, 261, 12, 14));
+                Condition.wait(() -> Bank.isOpen(), 200, 20);
+
+                // Check for pin, as we don't use Bank.open here (which already processes the pin)
+                if (Bank.isBankPinNeeded()) {
+                    Bank.enterBankPin();
+                }
+                break;
+        }
+
+        // Wait till bank is open to be double sure
+        Condition.wait(() -> Bank.isOpen(), 200, 20);
+
+        // Deposit the entire inventory
+        Bank.tapDepositInventoryButton();
+
+        // Set the correct quantities based on config choices
+
+        if (product.equals("Giant seaweed")) {
+            // Set to custom quantity 4, as it cooks into 6 soda ashes each
+            Bank.tapQuantity1Button();
+            Condition.sleep(generateRandomDelay(400, 800));
+            Rectangle customQty = Bank.findQuantityCustomButton();
+            Client.longPress(customQty);
+            Condition.sleep(generateRandomDelay(400, 800));
+            Client.tap(393, 499);
+            Condition.sleep(generateRandomDelay(800, 1200));
+            Client.sendKeystroke("KEYCODE_4");
+            Client.sendKeystroke("KEYCODE_ENTER");
+            Logger.debugLog("Set custom quantity 4 for items in the bank.");
+            Condition.wait(() -> Bank.isSelectedQuantityCustomButton(), 200, 20);
+        } else {
+            // Set to all, as all others is just using 28.
+            if (!Bank.isSelectedQuantityAllButton()) {
+                Bank.tapQuantityAllButton();
+                Condition.wait(() -> Bank.isSelectedQuantityAllButton(), 200, 20);
+            }
+        }
+
+        // Select the right bank tab if needed.
+        if (!Bank.isSelectedBankTab(banktab)) {
+            Bank.openTab(banktab);
+            Logger.log("Selecting bank tab " + banktab);
+        }
+
+        // Withdraw the first set of items
+        Bank.withdrawItem(productID, 0.88);
+
+        // Close the bank after, twice just in case.
+        Bank.close();
+
+        if (Bank.isOpen()) {
+            Bank.close();
+        }
+
+        Condition.wait(() -> !Bank.isOpen(), 200, 20);
+
+        Logger.debugLog("Ending the setupBanking() method.");
+    }
+
+    private void bank() {
+        Logger.log("Banking.");
+
+        // Select the right bank tab if needed.
+        if (!Bank.isSelectedBankTab(banktab)) {
+            Bank.openTab(banktab);
+            Logger.log("Selecting bank tab " + banktab);
+        }
+
+        // Deposit everything
+        Bank.tapDepositInventoryButton();
+        Condition.sleep(generateRandomDelay(300, 500));
+
+        // Withdraw new items
+        Bank.withdrawItem(productID, 0.88);
+        Condition.sleep(generateRandomDelay(400, 800));
+
+        // Close the bank after, twice just in case.
+        Bank.close();
+
+        if (Bank.isOpen()) {
+            Bank.close();
+        }
+
+        Condition.wait(() -> !Bank.isOpen(), 200, 20);
+    }
+
+    private void cook() {
+        Logger.log("Cooking.");
+        Condition.wait(() -> Chatbox.isMakeMenuVisible(), 200, 75);
+        Chatbox.makeOption(1);
+        Logger.log("Waiting for cooking to finish...");
+
+        if (!GameTabs.isInventoryTabOpen()) {
+            GameTabs.openInventoryTab();
+        }
+
+        long startTime = System.currentTimeMillis();
+        long timeout = 65 * 1000; // 1 minute and 5 seconds in milliseconds
+
+        Condition.wait(() -> {
+            boolean inventoryCheck = !Inventory.contains(productID, 0.88);
+            boolean levelUpCheck = Player.leveledUp();
+            boolean timeCheck = (System.currentTimeMillis() - startTime) >= timeout;
+            return inventoryCheck || levelUpCheck || timeCheck;
+        }, 200, 325);
+
+        Logger.debugLog("Cooking finished, player leveled up, or timeout reached.");
+    }
+
+    public void resetAndRecheck() {
+        if (!Inventory.contains(productID, 0.88)) {
+            Logger.debugLog("Our inventory does not contain any " + product + " resetting and retrying... (2nd attempt)");
+            switch (location) {
+                case "Catherby range":
+                    Bank.open("Catherby_bank");
+                    break;
+                case "Hosidius kitchen":
+                    Bank.open("Hosidius_bank");
+                    break;
+                case "Nardah oven":
+                    Client.tap(new Rectangle(422, 261, 12, 14));
+                    Condition.wait(() -> Bank.isOpen(), 200, 20);
+
+                    // Check for pin, as we don't use Bank.open here (which already processes the pin)
+                    if (Bank.isBankPinNeeded()) {
+                        Bank.enterBankPin();
+                    }
+                    break;
+            }
+
+            bank();
+            if (!Inventory.contains(productID, 0.88)) {
+                Logger.debugLog("Our inventory does not contain any " + product + " resetting and retrying... (3rd and last attempt)");
+                switch (location) {
+                    case "Catherby range":
+                        Bank.open("Catherby_bank");
+                        break;
+                    case "Hosidius kitchen":
+                        Bank.open("Hosidius_bank");
+                        break;
+                    case "Nardah oven":
+                        Client.tap(new Rectangle(422, 261, 12, 14));
+                        Condition.wait(() -> Bank.isOpen(), 200, 20);
+
+                        // Check for pin, as we don't use Bank.open here (which already processes the pin)
+                        if (Bank.isBankPinNeeded()) {
+                            Bank.enterBankPin();
+                        }
+                        break;
+                }
+
+                bank();
+                if (!Inventory.contains(productID, 0.88)) {
+                    Logger.log("Could not withdraw any " + product + " from the bank after 3 attempts, assuming we are out of products.");
+                    Logger.log("Logging out and stopping script!");
+                    Logout.logout();
+                    Script.stop();
+                }
+            }
+        } else {
+            Logger.debugLog("Our inventory contains " + product + ".");
         }
     }
 
@@ -350,6 +625,17 @@ Tile playerPos;
             return pairs.get(random.nextInt(pairs.size()));
         }
         return null;
+    }
+
+    public int generateRandomDelay(int lowerBound, int upperBound) {
+        // Swap if lowerBound is greater than upperBound
+        if (lowerBound > upperBound) {
+            int temp = lowerBound;
+            lowerBound = upperBound;
+            upperBound = temp;
+        }
+        int delay = lowerBound + random.nextInt(upperBound - lowerBound + 1);
+        return delay;
     }
 
 }
