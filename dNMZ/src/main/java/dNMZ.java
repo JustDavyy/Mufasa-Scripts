@@ -19,7 +19,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.07",
+        version = "1.071",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -373,6 +373,54 @@ public class dNMZ extends AbstractScript {
         // Check for prayer points
         if (insideNMZ && NMZMethod.startsWith("Prayer")) {
             int currentPrayerPoints = Player.getPray();
+
+            // Drink sooner for active prayer methods
+            if (!NMZMethod.equals("Prayer")) {
+                long currentTime = System.currentTimeMillis();
+                long timeSinceLastDrinkOffensive = currentTime - lastOffensivePotionTime;
+                int timeUntilNextDrinkOffensive = (int) (offensivePotionInterval - timeSinceLastDrinkOffensive);
+
+                if (NMZMethod.equals("Prayer - Chivalry")) {
+                    if (currentPrayerPoints < 37 && currentPrayerPoints > 5) {
+                        if (timeUntilNextDrinkOffensive > 15000) { // More than 15 seconds until the next offensive potion
+                            Condition.sleep(generateDelay(2000, 5000));
+                            drinkPrayer();
+                            Logger.log("Restored some prayer points.");
+                        }
+                    }
+                }
+
+                if (NMZMethod.equals("Prayer - Piety")) {
+                    if (currentPrayerPoints < 45 && currentPrayerPoints > 5) {
+                        if (timeUntilNextDrinkOffensive > 15000) { // More than 15 seconds until the next offensive potion
+                            Condition.sleep(generateDelay(2000, 5000));
+                            drinkPrayer();
+                            Logger.log("Restored some prayer points.");
+                        }
+                    }
+                }
+
+                if (NMZMethod.equals("Prayer - Rigour")) {
+                    if (currentPrayerPoints < 48 && currentPrayerPoints > 5) {
+                        if (timeUntilNextDrinkOffensive > 15000) { // More than 15 seconds until the next offensive potion
+                            Condition.sleep(generateDelay(2000, 5000));
+                            drinkPrayer();
+                            Logger.log("Restored some prayer points.");
+                        }
+                    }
+                }
+
+                if (NMZMethod.equals("Prayer - Augury")) {
+                    if (currentPrayerPoints < 50 && currentPrayerPoints > 5) {
+                        if (timeUntilNextDrinkOffensive > 15000) { // More than 15 seconds until the next offensive potion
+                            Condition.sleep(generateDelay(2000, 5000));
+                            drinkPrayer();
+                            Logger.log("Restored some prayer points.");
+                        }
+                    }
+                }
+            }
+
             if (currentPrayerPoints < 24 && currentPrayerPoints > 5) {
                 long currentTime = System.currentTimeMillis();
                 long timeSinceLastDrinkOffensive = currentTime - lastOffensivePotionTime;
