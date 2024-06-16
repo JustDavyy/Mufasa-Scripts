@@ -555,6 +555,7 @@ Tile playerPos;
         }, 200, 325);
 
         Logger.debugLog("Cooking finished, player leveled up, or timeout reached.");
+        readXP();
     }
 
     public void resetAndRecheck() {
@@ -635,6 +636,10 @@ Tile playerPos;
         }
         int delay = lowerBound + random.nextInt(upperBound - lowerBound + 1);
         return delay;
+    }
+
+    private void readXP() {
+        XpBar.getXP();
     }
 
 }
