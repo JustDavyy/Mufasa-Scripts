@@ -6,16 +6,16 @@ import java.awt.*;
 
 public enum BranchDetails {
     LEFT_BRANCH(
-            new Tile(627, 170),
-            new Rectangle(360, 253, 25, 31),
-            new Tile(627, 159),
-            new Rectangle(360, 253, 25, 31)
+            new Tile(627, 170), //branch tile
+            new Rectangle(350, 258, 62, 32), //branch click rect
+            new Tile(627, 159), // burn tile
+            new Rectangle(361, 151, 71, 54) //burn click rect
     ),
     RIGHT_BRANCH(
             new Tile(648, 170), //branch tile
-            new Rectangle(501, 245, 40, 33), //branch click rect
+            new Rectangle(481, 254, 63, 23), //branch click rect
             new Tile(648, 159), //burn tile
-            new Rectangle(501, 245, 40, 33) //burn click rect
+            new Rectangle(451, 148, 76, 58) //burn click rect
     );
 
     private final Tile branchTile;

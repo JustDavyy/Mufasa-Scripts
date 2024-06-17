@@ -68,6 +68,16 @@ import static helpers.Interfaces.Script;
                         defaultValue = "0",
                         minMaxIntValues = {0, 100},
                         optionType = OptionType.INTEGER_SLIDER
+                ),
+                @ScriptConfiguration(
+                        name = "Side",
+                        description = "Which side would you like to start on?",
+                        defaultValue = "Right",
+                        allowedValues = {
+                                @AllowedValue(optionName = "Right"),
+                                @AllowedValue(optionName = "Left")
+                        },
+                        optionType = OptionType.STRING
                 )
         }
 )
@@ -97,6 +107,8 @@ public class dWintertodt extends AbstractScript {
 
     // Location static
     public static Tile currentLocation;
+    // Side static
+    public static String currentSide;
 
     // State creation (we might not need all 4, but just the bottom ones?)
     StateUpdater stateUpdater = new StateUpdater();
@@ -115,6 +127,7 @@ public class dWintertodt extends AbstractScript {
         selectedFood = configs.get("Food");
         foodAmount = Integer.parseInt(configs.get("Food amount"));
         foodAmountLeftToBank = Integer.parseInt(configs.get("Food amount left to bank at"));
+        currentSide = configs.get("Side");
 
         setupFoodIDs();
     }

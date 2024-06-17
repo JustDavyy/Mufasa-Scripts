@@ -5,6 +5,7 @@ import java.awt.*;
 
 import static helpers.Interfaces.*;
 import static main.dWintertodt.currentLocation;
+import static main.dWintertodt.currentSide;
 
 public class StateUpdater {
     Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
@@ -24,6 +25,13 @@ public class StateUpdater {
 
         //Update our position
         currentLocation = Walker.getPlayerPosition(Constants.WTRegion);
+
+        // Update which side we are on
+        if (Player.isTileWithinArea(currentLocation, Constants.leftWTArea)) {
+            currentSide = "Left";
+        } else if (Player.isTileWithinArea(currentLocation, Constants.rightWTArea)) {
+            currentSide = "Right";
+        }
     }
 
     private boolean updateFireAlive(WTStates state) {
