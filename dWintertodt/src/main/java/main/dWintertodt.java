@@ -7,6 +7,7 @@ import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.*;
 import tasks.*;
+import utils.SideManager;
 import utils.StateUpdater;
 import utils.Task;
 import utils.WTStates;
@@ -174,7 +175,6 @@ public class dWintertodt extends AbstractScript {
     public static String currentSide;
 
     // State creation (we might not need all 4, but just the bottom ones?)
-    StateUpdater stateUpdater = new StateUpdater();
     public static WTStates[] states = {
             new WTStates("Lower Left", new Rectangle(60, 112, 31, 31), false, false, false, false),
             new WTStates("Lower Right", new Rectangle(120, 113, 27, 31), false, false, false, false)
@@ -197,9 +197,7 @@ public class dWintertodt extends AbstractScript {
 
     @Override
     public void poll() {
-
-        // Keep track of the states on each loop
-        stateUpdater.updateStates(states);
+        SideManager.updateStates();
 
         //Run tasks
         for (Task task : WTTasks) {

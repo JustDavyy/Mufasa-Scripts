@@ -9,12 +9,10 @@ import static helpers.Interfaces.*;
 import static main.dWintertodt.currentLocation;
 import static main.dWintertodt.currentSide;
 
-import static utils.Constants.*;
-
 public class StateUpdater {
-    Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
+    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
 
-    public void updateStates(WTStates[] states) {
+    public static void updateStates(WTStates[] states) {
         Logger.debugLog("Updating current states..");
         for (WTStates state : states) {
             // Update each boolean based on some conditions or actions
@@ -38,7 +36,7 @@ public class StateUpdater {
         }
     }
 
-    private boolean updateFireAlive(WTStates state) {
+    private static boolean updateFireAlive(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.FIRE_ALIVE.getColor();
         boolean check = Client.isColorInRect(checkColor, checkRect, 5);
@@ -47,7 +45,7 @@ public class StateUpdater {
         return check;
     }
 
-    private boolean updateNeedsReburning(WTStates state) {
+    private static boolean updateNeedsReburning(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.NEEDS_REBURNING.getColor();
         boolean check = !Client.isColorInRect(checkColor, checkRect, 5);
@@ -56,7 +54,7 @@ public class StateUpdater {
         return check;
     }
 
-    private boolean updateNeedsFixing(WTStates state) {
+    private static boolean updateNeedsFixing(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.NEEDS_FIXING.getColor();
         boolean check = Client.isColorInRect(checkColor, checkRect, 2);
@@ -65,7 +63,7 @@ public class StateUpdater {
         return check;
     }
 
-    private boolean updateMageDead(WTStates state) {
+    private static boolean updateMageDead(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.MAGE_DEAD.getColor();
         boolean check = Client.isColorInRect(checkColor, checkRect, 5);
@@ -74,7 +72,7 @@ public class StateUpdater {
         return check;
     }
 
-    private void updateGameState() {
+    private static void updateGameState() {
         dWintertodt.gameNearingEnd = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameCheckRect, 10);
     }
 }
