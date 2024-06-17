@@ -8,7 +8,6 @@ import helpers.annotations.ScriptManifest;
 import helpers.utils.*;
 import tasks.*;
 import utils.SideManager;
-import utils.StateUpdater;
 import utils.Task;
 import utils.WTStates;
 
@@ -18,8 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static helpers.Interfaces.Logger;
-import static helpers.Interfaces.Script;
+import static helpers.Interfaces.*;
 
 @ScriptManifest(
         name = "dWintertodt",
@@ -48,6 +46,12 @@ import static helpers.Interfaces.Script;
                                 @AllowedValue(optionIcon = "13441", optionName = "Anglerfish")
                         },
                         optionType = OptionType.STRING
+                ),
+                @ScriptConfiguration(
+                        name =  "BankTab",
+                        description = "What bank tab are your food located in?",
+                        defaultValue = "0",
+                        optionType = OptionType.BANKTABS
                 ),
                 @ScriptConfiguration(
                         name = "Food amount",
@@ -105,6 +109,7 @@ public class dWintertodt extends AbstractScript {
     public static int foodID;
     public static int foodAmount;
     public static int foodAmountLeftToBank;
+    public static int bankTab;
     private static Random random = new Random();
 
     // EVERYTHING FROM CONSTANTS FILE BELOW HERE
@@ -116,6 +121,19 @@ public class dWintertodt extends AbstractScript {
     public static boolean gameNearingEnd;
     public static RegionBox WTRegion = new RegionBox("WTRegion", 1701, 264, 2157, 846);
     public static Area lobby = new Area(new Tile(632, 173), new Tile(644, 184));
+    public static Tile bankTile = new Tile(650, 228);
+    public static Area insideArea = new Area(
+            new Tile(605, 152),
+            new Tile(666, 199)
+    );
+    public static Area outsideArea = new Area(
+            new Tile(620, 202),
+            new Tile(665, 242)
+    );
+    public static Area atDoor = new Area( //this one is both at door from inside & outside
+            new Tile(624, 193),
+            new Tile(652, 209)
+    );
 
     // <--
     public static Area leftWTArea = new Area(new Tile(609, 150), new Tile(630, 172));
@@ -191,8 +209,10 @@ public class dWintertodt extends AbstractScript {
         foodAmount = Integer.parseInt(configs.get("Food amount"));
         foodAmountLeftToBank = Integer.parseInt(configs.get("Food amount left to bank at"));
         currentSide = configs.get("Side");
+        bankTab = Integer.parseInt(configs.get("BankTab"));
 
         setupFoodIDs();
+        initialFoodCount();
     }
 
     @Override
@@ -260,5 +280,27 @@ public class dWintertodt extends AbstractScript {
         }
         int delay = lowerBound + random.nextInt(upperBound - lowerBound + 1);
         return delay;
+    }
+
+    // Method to count total food items in the inventory
+    private void initialFoodCount() {
+        foodAmountInInventory = 0; // Reset before counting
+
+        if (selectedFood.equals("Cakes")) {
+            int[] foodIds = {1891, 1893, 1895};
+            for (int id : foodIds) {
+                int countMultiplier = 1; // Default count multiplier
+                if (id == 1891) {
+                    countMultiplier = 3; // A full cake counts as 3
+                } else if (id == 1893) {
+                    countMultiplier = 2; // half cake counts as 2
+                }
+
+                // Assume Inventory.count(id, 0.60) returns the number of items that are at least 60% intact
+                foodAmountInInventory += Inventory.count(id, 0.60) * countMultiplier;
+            }
+        } else {
+            foodAmountInInventory = Inventory.count(foodID, 0.60);
+        }
     }
 }

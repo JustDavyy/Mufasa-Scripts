@@ -1,39 +1,114 @@
 package tasks;
 
 import helpers.utils.ItemList;
-import utils.Constants;
+import main.dWintertodt;
 import utils.Task;
 
-import java.util.Objects;
+import java.awt.*;
 
-import static helpers.Interfaces.Inventory;
-import static helpers.Interfaces.Logger;
+import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
 public class Bank extends Task {
     private boolean checkFood = true;
+    private String dynamicBank;
 
     @Override
     public boolean activate() {
         Logger.debugLog("Inside Bank activate()");
-        countFoodInInventory(); //Gotta do this after a bank run.
-
-        return main.dWintertodt.foodAmountInInventory < foodAmountLeftToBank || (Inventory.emptySlots() > 8 && Inventory.contains(ItemList.SUPPLY_CRATE_20703, 0.8));
+        return main.dWintertodt.foodAmountInInventory < foodAmountLeftToBank; //|| (Inventory.emptySlots() > 8 && Inventory.contains(ItemList.SUPPLY_CRATE_20703, 0.8));
     }
 
     @Override
     public boolean execute() {
         Logger.debugLog("Inside Bank execute()");
+        checkFood = true;
+
+        if (walkToBankFromGame()) {
+            return true;
+        } else if (walkToBankFromOutsideArea()) {
+            return true;
+        }
+
+        if (Player.tileEquals(currentLocation, bankTile)) {
+            handleBanking();
+            return true;
+        }
+
+        countFoodInInventory();
         return false;
     }
 
+    private void handleBanking() {
+        setupOrStepToBank();
+        if (ensureBankIsOpen()) {
+            ensureCorrectBankTab();
+            
+            int foodNeeded = CalculateAmountOfFoodNeeded();
+            withdrawFoodIfNeeded(foodNeeded);
+            depositExcessSupplyCrates();
+        }
+    }
+
+    private void setupOrStepToBank() {
+        if (dynamicBank == null) {
+            Bank.setupDynamicBank();
+        } else {
+            Bank.stepToBank(dynamicBank);
+        }
+    }
+
+    private boolean ensureBankIsOpen() {
+        if (!Bank.isOpen()) {
+            Bank.open(dynamicBank);
+            Condition.wait(() -> Bank.isOpen(), 100, 10);
+            return true;
+        }
+        return true;
+    }
+
+    private void withdrawFoodIfNeeded(int foodNeeded) {
+        if (foodNeeded > 0) {
+
+            if (!Bank.isSelectedQuantity1Button()) {
+                Bank.tapQuantity1Button();
+            }            for (int i = 0; i < foodNeeded; i++) {
+                Bank.withdrawItem(foodID, 1);
+            }
+        }
+    }
+
+    private void ensureCorrectBankTab() {
+        if (Bank.getCurrentTab(true) != bankTab) {
+            Bank.openTab(bankTab);
+            Condition.wait(() -> Bank.getCurrentTab(true) == bankTab, 100, 20);
+        }
+    }
+
+    private void depositExcessSupplyCrates() {
+        if (Inventory.contains(ItemList.SUPPLY_CRATE_20703, 0.80)) {
+            if (!Bank.isSelectedQuantityAllButton()) {
+                Bank.tapQuantityAllButton();
+            }
+            Inventory.tapItem(ItemList.SUPPLY_CRATE_20703, 0.80);
+            Condition.wait(() -> !Inventory.contains(ItemList.SUPPLY_CRATE_20703, 0.80), 100, 20);
+        }
+    }
+
+    private int CalculateAmountOfFoodNeeded() {
+        // Calculate the amount of food needed to withdraw from the bank
+        int foodNeeded = dWintertodt.foodAmountLeftToBank - dWintertodt.foodAmountInInventory;
+
+        // If more food is needed, return that amount; otherwise, return 0
+        return Math.max(foodNeeded, 0);
+    }
 
     // Method to count total food items in the inventory
-    public void countFoodInInventory() {
+    private void countFoodInInventory() {
         if (checkFood) {
-            main.dWintertodt.foodAmountInInventory = 0; // Reset before counting
+            dWintertodt.foodAmountInInventory = 0; // Reset before counting
 
-            if (Objects.equals(selectedFood, "Cakes")) {
+            if (selectedFood.equals("Cakes")) {
                 int[] foodIds = {1891, 1893, 1895};
                 for (int id : foodIds) {
                     int countMultiplier = 1; // Default count multiplier
@@ -44,13 +119,33 @@ public class Bank extends Task {
                     }
 
                     // Assume Inventory.count(id, 0.60) returns the number of items that are at least 60% intact
-                    main.dWintertodt.foodAmountInInventory += Inventory.count(id, 0.60) * countMultiplier;
+                    dWintertodt.foodAmountInInventory += Inventory.count(id, 0.60) * countMultiplier;
                     checkFood = false;
                 }
             } else {
-                main.dWintertodt.foodAmountInInventory = Inventory.count(foodID, 0.60);
+                dWintertodt.foodAmountInInventory = Inventory.count(foodID, 0.60);
                 checkFood = false;
             }
         }
+    }
+
+    private boolean walkToBankFromGame() {
+        if (Player.isTileWithinArea(currentLocation, insideArea)) {
+            Walker.walkPath(dWintertodt.gameToWTDoor);
+            Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20); //need an area right in front of door?
+            Client.tap(new Rectangle(0, 0, 0, 0)); //Need a door tap rect (bottom of screen should do?)
+            Walker.step(bankTile); //Step to bank tile.
+            return true;
+        }
+        return false;
+    }
+
+    private boolean walkToBankFromOutsideArea() {
+        if (Player.isTileWithinArea(currentLocation, outsideArea)) {
+            Walker.step(bankTile); //Step to bank tile.
+            Condition.wait(() -> Player.atTile(bankTile), 100, 20);
+            return true;
+        }
+        return false;
     }
 }
