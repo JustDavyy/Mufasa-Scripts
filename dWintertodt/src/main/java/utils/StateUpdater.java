@@ -7,6 +7,8 @@ import static helpers.Interfaces.*;
 import static main.dWintertodt.currentLocation;
 import static main.dWintertodt.currentSide;
 
+import static utils.Constants.*;
+
 public class StateUpdater {
     Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
 
@@ -71,6 +73,6 @@ public class StateUpdater {
     }
 
     private void updateGameState() {
-        Constants.gameNearingEnd = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameCheckRect, 10);
+        gameNearingEnd = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameCheckRect, 10);
     }
 }
