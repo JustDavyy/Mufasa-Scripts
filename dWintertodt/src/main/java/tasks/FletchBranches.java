@@ -29,6 +29,7 @@ public class FletchBranches extends Task {
             boolean healthCheck = startHP > Player.getHP();
             boolean levelUpCheck = Player.leveledUp();
             return inventoryCheck || healthCheck || levelUpCheck;
+            XpBar.getXP();
         }, 200, 150);
         return true;
     }
