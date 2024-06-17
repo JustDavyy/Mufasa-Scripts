@@ -22,14 +22,17 @@ public class Eat extends Task {
             if (Inventory.contains(1895, 0.60)) { // slice of cake
                 Inventory.eat(1895, 0.60);
                 main.dWintertodt.foodAmountInInventory--;
+                Condition.wait(() -> hpToEat < Player.getHP(), 200, 20);
                 return true;
             } else if (Inventory.contains(1893, 0.60)) { // 2/3 cake
                 Inventory.eat(1893, 0.60);
                 main.dWintertodt.foodAmountInInventory--;
+                Condition.wait(() -> hpToEat < Player.getHP(), 200, 20);
                 return true;
             } else if (Inventory.contains(1891, 0.60)) { // full cake
                 Inventory.eat(1891, 0.60);
                 main.dWintertodt.foodAmountInInventory--;
+                Condition.wait(() -> hpToEat < Player.getHP(), 200, 20);
                 return true;
             }
             return false;
