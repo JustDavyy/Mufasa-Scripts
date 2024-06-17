@@ -10,7 +10,7 @@ public class BurnBranches extends Task {
 
     @Override
     public boolean activate() {
-        return Inventory.isFull() && Inventory.contains(brumaKindling, 0.60) && !Inventory.contains(brumaRoot, 0.60);
+        return Inventory.contains(brumaKindling, 0.60) && !Inventory.contains(brumaRoot, 0.60);
     }
 
     @Override
