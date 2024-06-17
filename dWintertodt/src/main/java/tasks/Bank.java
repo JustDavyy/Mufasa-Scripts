@@ -16,7 +16,7 @@ public class Bank extends Task {
     public boolean activate() {
         countFoodInInventory(); //Gotta do this after a bank run.
 
-        return Constants.foodAmountInInventory > foodAmountLeftToBank || (Inventory.emptySlots() > 8 && Inventory.contains(ItemList.SUPPLY_CRATE_20703, 0.60));
+        return Constants.foodAmountInInventory < foodAmountLeftToBank || (Inventory.emptySlots() > 8 && Inventory.contains(ItemList.SUPPLY_CRATE_20703, 0.60));
     }
 
     @Override
