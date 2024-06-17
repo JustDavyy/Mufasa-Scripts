@@ -9,20 +9,20 @@ import static main.dWintertodt.currentSide;
 import java.awt.*;
 
 public class Constants {
-    public static final int brumaRoot = ItemList.BRUMA_ROOT_20695;
-    public static final int brumaKindling = ItemList.BRUMA_KINDLING_20696;
-    public static final int knife = 946;
-    public static int foodAmountInInventory;
+    //public static final int brumaRoot = ItemList.BRUMA_ROOT_20695;
+    //public static final int brumaKindling = ItemList.BRUMA_KINDLING_20696;
+    //public static final int knife = 946;
+    //public static int foodAmountInInventory;
 
-    public static boolean gameNearingEnd;
-    public static RegionBox WTRegion = new RegionBox("WTRegion", 1701, 264, 2157, 846);
-    public static Area lobby = new Area(new Tile(632, 173), new Tile(644, 184));
+    //public static boolean gameNearingEnd;
+    //public static RegionBox WTRegion = new RegionBox("WTRegion", 1701, 264, 2157, 846);
+    //public static Area lobby = new Area(new Tile(632, 173), new Tile(644, 184));
 
     // <--
-    public static Area leftWTArea = new Area(new Tile(609, 150), new Tile(630, 172));
+    //public static Area leftWTArea = new Area(new Tile(609, 150), new Tile(630, 172));
 
     // -->
-    public static Area rightWTArea = new Area(new Tile(645, 150), new Tile(669, 176));
+    //public static Area rightWTArea = new Area(new Tile(645, 150), new Tile(669, 176));
 
     // Paths
     public static Tile[] wtDoorToBank = new Tile[] {

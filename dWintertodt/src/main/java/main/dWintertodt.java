@@ -5,8 +5,7 @@ import helpers.ScriptCategory;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
-import helpers.utils.OptionType;
-import helpers.utils.Tile;
+import helpers.utils.*;
 import tasks.*;
 import utils.StateUpdater;
 import utils.Task;
@@ -32,7 +31,7 @@ import static helpers.Interfaces.Script;
                 @ScriptConfiguration(
                         name = "Food",
                         description = "Select which food to use",
-                        defaultValue = "Cakes",
+                        defaultValue = "Shark",
                         allowedValues = {
                                 @AllowedValue(optionIcon = "1891", optionName = "Cakes"),
                                 @AllowedValue(optionIcon = "379", optionName = "Lobster"),
@@ -65,7 +64,7 @@ import static helpers.Interfaces.Script;
                 @ScriptConfiguration(
                         name = "HP to eat at",
                         description = "Select the HP amount you'd like to eat at",
-                        defaultValue = "0",
+                        defaultValue = "20",
                         minMaxIntValues = {0, 100},
                         optionType = OptionType.INTEGER_SLIDER
                 ),
@@ -87,7 +86,7 @@ public class dWintertodt extends AbstractScript {
     // These tasks are executed in this order
     List<Task> WTTasks = Arrays.asList(
             new CheckGear(),
-            new Bank(),
+            //new Bank(),
             new Eat(),
             //new SwitchSide(),
             new BurnBranches(),
@@ -104,6 +103,68 @@ public class dWintertodt extends AbstractScript {
     public static int foodID;
     public static int foodAmount;
     public static int foodAmountLeftToBank;
+
+    // EVERYTHING FROM CONSTANTS FILE BELOW HERE
+    public static final int brumaRoot = ItemList.BRUMA_ROOT_20695;
+    public static final int brumaKindling = ItemList.BRUMA_KINDLING_20696;
+    public static final int knife = 946;
+    public static int foodAmountInInventory;
+
+    public static boolean gameNearingEnd;
+    public static RegionBox WTRegion = new RegionBox("WTRegion", 1701, 264, 2157, 846);
+    public static Area lobby = new Area(new Tile(632, 173), new Tile(644, 184));
+
+    // <--
+    public static Area leftWTArea = new Area(new Tile(609, 150), new Tile(630, 172));
+
+    // -->
+    public static Area rightWTArea = new Area(new Tile(645, 150), new Tile(669, 176));
+
+    // Paths
+    public static Tile[] wtDoorToBank = new Tile[] {
+            new Tile(637, 204),
+            new Tile(639, 217),
+            new Tile(645, 228),
+            new Tile(650, 228)
+    };
+    public static Tile[] gameToWTDoor = new Tile[] {
+            new Tile(638, 167),
+            new Tile(637, 175),
+            new Tile(637, 185),
+            new Tile(637, 195)
+    };
+
+    public static Tile[] wtDoorToRightSide = new Tile[] {
+            new Tile(638, 185),
+            new Tile(639, 175),
+            new Tile(650, 165)
+    };
+    public static Tile[] wtDoorToLeftSide = new Tile[] {
+            new Tile(637, 186),
+            new Tile(637, 173),
+            new Tile(625, 165)
+    };
+    public static Tile[] LowerRightToLeft = new Tile[] {
+            new Tile(648, 165),
+            new Tile(638, 165),
+            new Tile(626, 165)
+    };
+    public static Tile[] fromEitherSideToGameLobby = new Tile[] {
+            new Tile(637, 166),
+            new Tile(637, 177)
+    };
+
+    // Just leaving these down here so we can figure out where they belong
+    public Tile[] getReversedTiles(Tile[] array) {
+        if (array == null) return null;
+        Tile[] reversed = new Tile[array.length];
+        for (int i = 0; i < array.length; i++) {
+            reversed[i] = array[array.length - 1 - i];
+        }
+        return reversed;
+    }
+
+    // EVERYTHING FROM CONSTANTS FILE ABOVE
 
     // Location static
     public static Tile currentLocation;

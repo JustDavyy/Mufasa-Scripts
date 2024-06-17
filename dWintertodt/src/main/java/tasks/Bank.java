@@ -7,6 +7,7 @@ import utils.Task;
 import java.util.Objects;
 
 import static helpers.Interfaces.Inventory;
+import static helpers.Interfaces.Logger;
 import static main.dWintertodt.*;
 
 public class Bank extends Task {
@@ -14,20 +15,23 @@ public class Bank extends Task {
 
     @Override
     public boolean activate() {
+        Logger.debugLog("Inside Bank activate()");
         countFoodInInventory(); //Gotta do this after a bank run.
 
-        return Constants.foodAmountInInventory > foodAmountLeftToBank || (Inventory.emptySlots() > 8 && Inventory.contains(ItemList.SUPPLY_CRATE_20703, 0.60));
+        return main.dWintertodt.foodAmountInInventory < foodAmountLeftToBank || (Inventory.emptySlots() > 8 && Inventory.contains(ItemList.SUPPLY_CRATE_20703, 0.8));
     }
 
     @Override
     public boolean execute() {
+        Logger.debugLog("Inside Bank execute()");
         return false;
     }
+
 
     // Method to count total food items in the inventory
     public void countFoodInInventory() {
         if (checkFood) {
-            Constants.foodAmountInInventory = 0; // Reset before counting
+            main.dWintertodt.foodAmountInInventory = 0; // Reset before counting
 
             if (Objects.equals(selectedFood, "Cakes")) {
                 int[] foodIds = {1891, 1893, 1895};
@@ -40,11 +44,11 @@ public class Bank extends Task {
                     }
 
                     // Assume Inventory.count(id, 0.60) returns the number of items that are at least 60% intact
-                    Constants.foodAmountInInventory += Inventory.count(id, 0.60) * countMultiplier;
+                    main.dWintertodt.foodAmountInInventory += Inventory.count(id, 0.60) * countMultiplier;
                     checkFood = false;
                 }
             } else {
-                Constants.foodAmountInInventory = Inventory.count(foodID, 0.60);
+                main.dWintertodt.foodAmountInInventory = Inventory.count(foodID, 0.60);
                 checkFood = false;
             }
         }

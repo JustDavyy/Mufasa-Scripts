@@ -31,12 +31,14 @@ public class CheckGear extends Task {
 
     @Override
     public boolean activate() {
+        Logger.debugLog("Inside Eat activate()");
         return !gearChecked;
     }
 
     @Override
     public boolean execute() {
-        checkForItem(Constants.knife, "Knife");
+        Logger.debugLog("Inside Eat execute()");
+        checkForItem(main.dWintertodt.knife, "Knife");
 
         checkForAxe();
         if (!checkedForAxe) {

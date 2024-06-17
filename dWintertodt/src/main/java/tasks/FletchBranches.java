@@ -4,22 +4,31 @@ import utils.Constants;
 import utils.Task;
 
 import static helpers.Interfaces.*;
+import static main.dWintertodt.hpToEat;
 
 public class FletchBranches extends Task {
 
     @Override
     public boolean activate() {
-        return Inventory.isFull() && Inventory.contains(Constants.brumaRoot, 0.60);
+        Logger.debugLog("Inside FletchBranches activate()");
+        return Inventory.isFull() && Inventory.contains(main.dWintertodt.brumaRoot, 0.60);
     }
 
     @Override
     public boolean execute() {
+        Logger.debugLog("Inside FletchBranches execute()");
         Integer startHP = Player.getHP();
-        Inventory.tapItem(Constants.knife, 0.60);
-        Inventory.tapItem(Constants.brumaRoot, 0.60);
+        Inventory.tapItem(main.dWintertodt.knife, 0.60);
+        Inventory.tapItem(main.dWintertodt.brumaRoot, 0.60);
         Condition.wait(() -> Chatbox.isMakeMenuVisible(), 100, 30);
         Chatbox.makeOption(1);
-        Condition.wait(() -> startHP < Player.getHP() || !Inventory.contains(Constants.brumaRoot, 0.60), 200, 30);
+
+        Logger.debugLog("Heading to FletchBranches conditional wait.");
+        Condition.wait(() -> {
+            boolean inventoryCheck = !Inventory.contains(main.dWintertodt.brumaRoot, 0.60);
+            boolean healthCheck = startHP > Player.getHP();
+            return inventoryCheck || healthCheck;
+        }, 200, 150);
         return true;
     }
 }

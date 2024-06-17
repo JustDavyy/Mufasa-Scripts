@@ -1,6 +1,8 @@
 package utils;
 
 
+import main.dWintertodt;
+
 import java.awt.*;
 
 import static helpers.Interfaces.*;
@@ -26,12 +28,12 @@ public class StateUpdater {
         updateGameState();
 
         //Update our position
-        currentLocation = Walker.getPlayerPosition(Constants.WTRegion);
+        currentLocation = Walker.getPlayerPosition(main.dWintertodt.WTRegion);
 
         // Update which side we are on
-        if (Player.isTileWithinArea(currentLocation, Constants.leftWTArea)) {
+        if (Player.isTileWithinArea(currentLocation, main.dWintertodt.leftWTArea)) {
             currentSide = "Left";
-        } else if (Player.isTileWithinArea(currentLocation, Constants.rightWTArea)) {
+        } else if (Player.isTileWithinArea(currentLocation, main.dWintertodt.rightWTArea)) {
             currentSide = "Right";
         }
     }
@@ -40,7 +42,7 @@ public class StateUpdater {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.FIRE_ALIVE.getColor();
         boolean check = Client.isColorInRect(checkColor, checkRect, 5);
-        Logger.debugLog("updateFireAlive for: " + state.getName() + " : " + check);
+        //Logger.debugLog("updateFireAlive for: " + state.getName() + " : " + check);
 
         return check;
     }
@@ -49,7 +51,7 @@ public class StateUpdater {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.NEEDS_REBURNING.getColor();
         boolean check = !Client.isColorInRect(checkColor, checkRect, 5);
-        Logger.debugLog("updateNeedsReburning for: " + state.getName() + " : " + check);
+        //Logger.debugLog("updateNeedsReburning for: " + state.getName() + " : " + check);
 
         return check;
     }
@@ -58,7 +60,7 @@ public class StateUpdater {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.NEEDS_FIXING.getColor();
         boolean check = Client.isColorInRect(checkColor, checkRect, 2);
-        Logger.debugLog("updateNeedsFixing for: " + state.getName() + " : " + check);
+        //Logger.debugLog("updateNeedsFixing for: " + state.getName() + " : " + check);
 
         return check;
     }
@@ -67,12 +69,12 @@ public class StateUpdater {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.MAGE_DEAD.getColor();
         boolean check = Client.isColorInRect(checkColor, checkRect, 5);
-        Logger.debugLog("updateMageDead for: " + state.getName() + " : " + check);
+        //Logger.debugLog("updateMageDead for: " + state.getName() + " : " + check);
 
         return check;
     }
 
     private void updateGameState() {
-        gameNearingEnd = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameCheckRect, 10);
+        dWintertodt.gameNearingEnd = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameCheckRect, 10);
     }
 }
