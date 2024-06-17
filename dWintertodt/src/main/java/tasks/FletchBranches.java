@@ -1,10 +1,8 @@
 package tasks;
 
-import utils.Constants;
 import utils.Task;
 
 import static helpers.Interfaces.*;
-import static main.dWintertodt.hpToEat;
 
 public class FletchBranches extends Task {
 

@@ -1,12 +1,6 @@
 package utils;
 
-import helpers.utils.Area;
-import helpers.utils.ItemList;
-import helpers.utils.RegionBox;
 import helpers.utils.Tile;
-import static main.dWintertodt.currentSide;
-
-import java.awt.*;
 
 public class Constants {
     //public static final int brumaRoot = ItemList.BRUMA_ROOT_20695;
@@ -25,35 +19,35 @@ public class Constants {
     //public static Area rightWTArea = new Area(new Tile(645, 150), new Tile(669, 176));
 
     // Paths
-    public static Tile[] wtDoorToBank = new Tile[] {
+    public static Tile[] wtDoorToBank = new Tile[]{
             new Tile(637, 204),
             new Tile(639, 217),
             new Tile(645, 228),
             new Tile(650, 228)
     };
-    public static Tile[] gameToWTDoor = new Tile[] {
+    public static Tile[] gameToWTDoor = new Tile[]{
             new Tile(638, 167),
             new Tile(637, 175),
             new Tile(637, 185),
             new Tile(637, 195)
     };
 
-    public static Tile[] wtDoorToRightSide = new Tile[] {
+    public static Tile[] wtDoorToRightSide = new Tile[]{
             new Tile(638, 185),
             new Tile(639, 175),
             new Tile(650, 165)
     };
-    public static Tile[] wtDoorToLeftSide = new Tile[] {
+    public static Tile[] wtDoorToLeftSide = new Tile[]{
             new Tile(637, 186),
             new Tile(637, 173),
             new Tile(625, 165)
     };
-    public static Tile[] LowerRightToLeft = new Tile[] {
+    public static Tile[] LowerRightToLeft = new Tile[]{
             new Tile(648, 165),
             new Tile(638, 165),
             new Tile(626, 165)
     };
-    public static Tile[] fromEitherSideToGameLobby = new Tile[] {
+    public static Tile[] fromEitherSideToGameLobby = new Tile[]{
             new Tile(637, 166),
             new Tile(637, 177)
     };

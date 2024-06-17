@@ -3,8 +3,8 @@ package utils;
 import java.awt.*;
 
 public class WTStates {
-    private String name;
-    private Rectangle rectangle;
+    private final String name;
+    private final Rectangle rectangle;
     private boolean fireAlive;
     private boolean needsReburning;
     private boolean needsFixing;
@@ -33,29 +33,29 @@ public class WTStates {
         return fireAlive;
     }
 
-    public boolean isNeedsReburning() {
-        return needsReburning;
-    }
-
-    public boolean isNeedsFixing() {
-        return needsFixing;
-    }
-
-    public boolean isMageDead() {
-        return mageDead;
-    }
-
     // Setters
     public void setFireAlive(boolean fireAlive) {
         this.fireAlive = fireAlive;
+    }
+
+    public boolean isNeedsReburning() {
+        return needsReburning;
     }
 
     public void setNeedsReburning(boolean needsReburning) {
         this.needsReburning = needsReburning;
     }
 
+    public boolean isNeedsFixing() {
+        return needsFixing;
+    }
+
     public void setNeedsFixing(boolean needsFixing) {
         this.needsFixing = needsFixing;
+    }
+
+    public boolean isMageDead() {
+        return mageDead;
     }
 
     public void setMageDead(boolean mageDead) {

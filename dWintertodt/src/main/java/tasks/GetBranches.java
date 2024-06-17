@@ -5,7 +5,6 @@ import utils.Task;
 
 import static helpers.Interfaces.*;
 import static main.dWintertodt.hpToEat;
-import static utils.Constants.*;
 
 public class GetBranches extends Task {
     @Override

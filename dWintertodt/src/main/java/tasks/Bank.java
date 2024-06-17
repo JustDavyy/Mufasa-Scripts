@@ -43,7 +43,7 @@ public class Bank extends Task {
         setupOrStepToBank();
         if (ensureBankIsOpen()) {
             ensureCorrectBankTab();
-            
+
             int foodNeeded = CalculateAmountOfFoodNeeded();
             withdrawFoodIfNeeded(foodNeeded);
             depositExcessSupplyCrates();
