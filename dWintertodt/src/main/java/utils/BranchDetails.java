@@ -9,13 +9,13 @@ public enum BranchDetails {
             new Tile(627, 170),
             new Rectangle(360, 253, 25, 31),
             new Tile(627, 159),
-            new Rectangle(360, 253, 25, 31) // Assuming it uses the same rectangle as leftBranchClickRect
+            new Rectangle(360, 253, 25, 31)
     ),
     RIGHT_BRANCH(
             new Tile(648, 170), //branch tile
             new Rectangle(501, 245, 40, 33), //branch click rect
             new Tile(648, 159), //burn tile
-            new Rectangle(501, 245, 40, 33) // Assuming it uses the same rectangle as rightBranchClickRect //burn click rect
+            new Rectangle(501, 245, 40, 33) //burn click rect
     );
 
     private final Tile branchTile;
