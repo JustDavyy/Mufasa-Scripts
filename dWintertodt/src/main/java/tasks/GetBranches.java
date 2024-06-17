@@ -30,8 +30,8 @@ public class GetBranches extends Task {
                 boolean inventoryCheck = Inventory.isFull();
                 boolean healthCheck = hpToEat > Player.getHP();
                 boolean levelUpCheck = Player.leveledUp();
-                return inventoryCheck || healthCheck || levelUpCheck;
                 XpBar.getXP();
+                return inventoryCheck || healthCheck || levelUpCheck;
             }, 200, 150);
             return true;
         }

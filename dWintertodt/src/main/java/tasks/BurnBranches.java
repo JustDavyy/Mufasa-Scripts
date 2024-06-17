@@ -32,8 +32,8 @@ public class BurnBranches extends Task {
                 boolean inventoryCheck = !Inventory.contains(main.dWintertodt.brumaKindling, 0.8);
                 boolean healthCheck = startHP > Player.getHP();
                 boolean levelUpCheck = Player.leveledUp();
-                return inventoryCheck || healthCheck || levelUpCheck;
                 XpBar.getXP();
+                return inventoryCheck || healthCheck || levelUpCheck;
             }, 200, 150);
             return true;
         }
