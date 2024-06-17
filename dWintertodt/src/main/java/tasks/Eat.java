@@ -36,7 +36,7 @@ public class Eat extends Task {
         } else {
             Inventory.eat(foodID, 0.60);
             main.dWintertodt.foodAmountInInventory--;
-            Condition.sleep(main.dWintertodt.generateRandomDelay(500,1000));
+            Condition.sleep(main.dWintertodt.generateRandomDelay(900,1300));
             return true;
         }
     }
