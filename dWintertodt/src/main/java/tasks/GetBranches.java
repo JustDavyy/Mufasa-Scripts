@@ -29,6 +29,7 @@ public class GetBranches extends Task {
             Condition.wait(() -> {
                 boolean inventoryCheck = Inventory.isFull();
                 boolean healthCheck = hpToEat > Player.getHP();
+                XpBar.getXP();
                 return inventoryCheck || healthCheck;
             }, 200, 150);
             return true;

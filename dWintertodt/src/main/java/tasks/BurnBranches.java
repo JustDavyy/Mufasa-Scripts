@@ -31,6 +31,7 @@ public class BurnBranches extends Task {
             Condition.wait(() -> {
                 boolean inventoryCheck = !Inventory.contains(main.dWintertodt.brumaKindling, 0.60);
                 boolean healthCheck = startHP > Player.getHP();
+                XpBar.getXP();
                 return inventoryCheck || healthCheck;
             }, 200, 150);
             return true;
