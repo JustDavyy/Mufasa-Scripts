@@ -10,6 +10,7 @@ import java.awt.*;
 public class Constants {
     public static final int brumaRoot = ItemList.BRUMA_ROOT_20695;
     public static final int brumaKindling = ItemList.BRUMA_KINDLING_20696;
+    public static final int knife = 946;
     public static int foodAmountInInventory;
 
     public static boolean gameNearingEnd;

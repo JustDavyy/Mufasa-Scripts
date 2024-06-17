@@ -2,6 +2,7 @@ package tasks;
 
 import helpers.utils.EquipmentSlot;
 import helpers.utils.ItemList;
+import utils.Constants;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -13,7 +14,6 @@ public class CheckGear extends Task {
     boolean checkedForKnife = false;
     private final double INVENTORY_THRESHOLD = 0.60;
 
-    private final Integer knife = 946;
     int[] axeIDs = { //Reversed order to check highest axe first instead of lower ones.
             ItemList.DRAGON_AXE_6739,
             ItemList.STEEL_AXE_1353, // Steel axe higher in prio, since a lot would be using that
@@ -36,7 +36,7 @@ public class CheckGear extends Task {
 
     @Override
     public boolean execute() {
-        checkForItem(knife, "Knife");
+        checkForItem(Constants.knife, "Knife");
 
         checkForAxe();
         if (!checkedForAxe) {
