@@ -15,6 +15,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static helpers.Interfaces.Logger;
 import static helpers.Interfaces.Script;
@@ -103,6 +104,7 @@ public class dWintertodt extends AbstractScript {
     public static int foodID;
     public static int foodAmount;
     public static int foodAmountLeftToBank;
+    private static Random random = new Random();
 
     // EVERYTHING FROM CONSTANTS FILE BELOW HERE
     public static final int brumaRoot = ItemList.BRUMA_ROOT_20695;
@@ -249,5 +251,16 @@ public class dWintertodt extends AbstractScript {
                 Script.stop();
                 break;
         }
+    }
+
+    public static int generateRandomDelay(int lowerBound, int upperBound) {
+        // Swap if lowerBound is greater than upperBound
+        if (lowerBound > upperBound) {
+            int temp = lowerBound;
+            lowerBound = upperBound;
+            upperBound = temp;
+        }
+        int delay = lowerBound + random.nextInt(upperBound - lowerBound + 1);
+        return delay;
     }
 }

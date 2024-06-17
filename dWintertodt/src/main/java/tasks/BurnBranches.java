@@ -12,7 +12,7 @@ public class BurnBranches extends Task {
     @Override
     public boolean activate() {
         Logger.debugLog("Inside BurnBranches activate()");
-        return Inventory.contains(main.dWintertodt.brumaKindling, 0.60) && !Inventory.contains(main.dWintertodt.brumaRoot, 0.60);
+        return Inventory.contains(main.dWintertodt.brumaKindling, 0.8) && !Inventory.contains(main.dWintertodt.brumaRoot, 0.8);
     }
 
     @Override
@@ -29,9 +29,10 @@ public class BurnBranches extends Task {
             Client.tap(SideManager.getBurnRect());
             Logger.debugLog("Heading to BurnBranches conditional wait.");
             Condition.wait(() -> {
-                boolean inventoryCheck = !Inventory.contains(main.dWintertodt.brumaKindling, 0.60);
+                boolean inventoryCheck = !Inventory.contains(main.dWintertodt.brumaKindling, 0.8);
                 boolean healthCheck = startHP > Player.getHP();
-                return inventoryCheck || healthCheck;
+                boolean levelUpCheck = Player.leveledUp();
+                return inventoryCheck || healthCheck || levelUpCheck;
             }, 200, 150);
             return true;
         }

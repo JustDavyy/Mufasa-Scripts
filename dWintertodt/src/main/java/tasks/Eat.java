@@ -4,9 +4,7 @@ import utils.Task;
 
 import java.util.Objects;
 
-import static helpers.Interfaces.Inventory;
-import static helpers.Interfaces.Player;
-import static helpers.Interfaces.Logger;
+import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
 public class Eat extends Task {
@@ -19,7 +17,7 @@ public class Eat extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Inside Eat execute()");
-        if (Objects.equals(selectedFood, "Cakes")) {
+        if (java.util.Objects.equals(selectedFood, "Cakes")) {
             // cake IDs; 1891, 1893, 1895
             if (Inventory.contains(1895, 0.60)) { // slice of cake
                 Inventory.eat(1895, 0.60);
@@ -38,7 +36,9 @@ public class Eat extends Task {
         } else {
             Inventory.eat(foodID, 0.60);
             main.dWintertodt.foodAmountInInventory--;
+            Condition.sleep(main.dWintertodt.generateRandomDelay(500,1000));
             return true;
         }
     }
+
 }

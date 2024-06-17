@@ -27,7 +27,8 @@ public class FletchBranches extends Task {
         Condition.wait(() -> {
             boolean inventoryCheck = !Inventory.contains(main.dWintertodt.brumaRoot, 0.60);
             boolean healthCheck = startHP > Player.getHP();
-            return inventoryCheck || healthCheck;
+            boolean levelUpCheck = Player.leveledUp();
+            return inventoryCheck || healthCheck || levelUpCheck;
         }, 200, 150);
         return true;
     }
