@@ -4,6 +4,7 @@ import helpers.utils.Area;
 import helpers.utils.ItemList;
 import helpers.utils.RegionBox;
 import helpers.utils.Tile;
+import static main.dWintertodt.currentSide;
 
 import java.awt.*;
 
@@ -18,15 +19,9 @@ public class Constants {
     public static Area lobby = new Area(new Tile(632, 173), new Tile(644, 184));
 
     // <--
-    public static Tile leftBranchTile = new Tile(627,170);
-    public static Rectangle leftBranchClickRect = new Rectangle(360, 253, 25, 31);
-    public static Tile leftBurnTile = new Tile(627,159);
     public static Area leftWTArea = new Area(new Tile(609, 150), new Tile(630, 172));
 
     // -->
-    public static Tile rightBranchTile = new Tile(648,170);
-    public static Rectangle rightBranchClickRect = new Rectangle(501, 245, 40, 33);
-    public static Tile rightBurnTile = new Tile(648,159);
     public static Area rightWTArea = new Area(new Tile(645, 150), new Tile(669, 176));
 
     // Paths

@@ -1,5 +1,6 @@
 package tasks;
 
+import utils.SideManager;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -13,13 +14,13 @@ public class GetBranches extends Task {
 
     @Override
     public boolean execute() {
-        if (!Player.atTile(leftBranchTile, WTRegion)) {
-            Walker.step(leftBranchTile, WTRegion);
+        if (!Player.atTile(SideManager.getBranchTile(), WTRegion)) {
+            Walker.step(SideManager.getBranchTile(), WTRegion);
             return true;
         }
 
-        if (Player.atTile(leftBranchTile, WTRegion)) {
-            Client.tap(leftBranchClickRect);
+        if (Player.atTile(SideManager.getBranchTile(), WTRegion)) {
+            Client.tap(SideManager.getBranchRect());
             return true;
         }
         Game.antiAFK();

@@ -1,14 +1,10 @@
 package tasks;
 
-import utils.BranchDetails;
-import utils.Constants;
+import utils.SideManager;
 import utils.Task;
 
 import static helpers.Interfaces.*;
-import static utils.Constants.brumaKindling;
-import static utils.Constants.brumaRoot;
-import static main.dWintertodt.currentSide;
-import static main.dWintertodt.currentLocation;
+import static utils.Constants.*;
 
 public class BurnBranches extends Task {
 
@@ -21,18 +17,14 @@ public class BurnBranches extends Task {
     public boolean execute() {
         Integer startHP = Player.getHP();
 
-        if (currentSide.equals("Right")) {
-            if (Player.atTile(BranchDetails.RIGHT_BRANCH.getBurnTile(), Constants.WTRegion)) {
-                Client.tap(BranchDetails.RIGHT_BRANCH.getBurnClickRect());
-            } else {
-                Walker.step(BranchDetails.RIGHT_BRANCH.getBurnTile(), Constants.WTRegion);
-            }
-        } else if (currentSide.equals("Left")) {
-            if (Player.atTile(BranchDetails.LEFT_BRANCH.getBurnTile(), Constants.WTRegion)) {
-                Client.tap(BranchDetails.LEFT_BRANCH.getBurnClickRect());
-            } else {
-                Walker.step(BranchDetails.LEFT_BRANCH.getBurnTile(), Constants.WTRegion);
-            }
+        if (!Player.atTile(SideManager.getBurnTile(), WTRegion)) {
+            Walker.step(SideManager.getBurnTile(), WTRegion);
+            return true;
+        }
+
+        if (Player.atTile(SideManager.getBurnTile(), WTRegion)) {
+            Client.tap(SideManager.getBurnRect());
+            return true;
         }
 
         Condition.wait(() -> startHP < Player.getHP() || !Inventory.contains(brumaKindling, 0.60), 200, 80);
