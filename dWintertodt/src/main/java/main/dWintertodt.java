@@ -37,7 +37,7 @@ import static helpers.Interfaces.Script;
                                 @AllowedValue(optionIcon = "1891", optionName = "Cakes"),
                                 @AllowedValue(optionIcon = "379", optionName = "Lobster"),
                                 @AllowedValue(optionIcon = "373", optionName = "Swordfish"),
-                                @AllowedValue(optionIcon = "383", optionName = "Sharks"),
+                                @AllowedValue(optionIcon = "385", optionName = "Shark"),
                                 @AllowedValue(optionIcon = "359", optionName = "Tuna"),
                                 @AllowedValue(optionIcon = "333", optionName = "Trout"),
                                 @AllowedValue(optionIcon = "329", optionName = "Salmon"),
@@ -159,8 +159,8 @@ public class dWintertodt extends AbstractScript {
             case "Swordfish":
                 foodID = 373;
                 break;
-            case "Sharks":
-                foodID = 383;
+            case "Shark":
+                foodID = 385;
                 break;
             case "Tuna":
                 foodID = 359;
