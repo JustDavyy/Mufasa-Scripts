@@ -13,11 +13,13 @@ public class GoBackToGame extends Task {
 
     @Override
     public boolean activate() {
+        Logger.debugLog("Inside GoBackToGame activate()");
         return !gameNearingEnd && ((Player.within(outsideArea, WTRegion) || Player.within(insideArea, WTRegion)) && !SideManager.isWithinGameArea());
     }
 
     @Override
     public boolean execute() {
+        Logger.debugLog("Inside GoBackToGame execute()");
         if (walkToDoorFromOutside()) {
             walkToGameFromDoor();
             return true;
