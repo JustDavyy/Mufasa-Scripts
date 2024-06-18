@@ -228,6 +228,8 @@ public class dWintertodt extends AbstractScript {
 
         if (pickedSide == "Random")  {
             currentSide = pickRandomSide();
+        } else {
+            currentSide = pickedSide;
         }
     }
 
