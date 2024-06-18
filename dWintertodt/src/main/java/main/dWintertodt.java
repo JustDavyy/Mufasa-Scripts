@@ -168,6 +168,7 @@ public class dWintertodt extends AbstractScript {
     public static Tile currentLocation;
     // Side static
     public static String currentSide;
+    public static String pickedSide;
     // State creation (we might not need all 4, but just the bottom ones?)
     public static WTStates[] states = {
             new WTStates("Lower Left", new Rectangle(60, 112, 31, 31), false, false, false, false),
@@ -219,14 +220,14 @@ public class dWintertodt extends AbstractScript {
         selectedFood = configs.get("Food");
         foodAmount = Integer.parseInt(configs.get("Food amount"));
         foodAmountLeftToBank = Integer.parseInt(configs.get("Food amount left to bank at"));
-        currentSide = configs.get("Side");
+        pickedSide = configs.get("Side");
         bankTab = Integer.parseInt(configs.get("BankTab"));
 
         setupFoodIDs();
         initialFoodCount();
 
-        if (currentSide == "Random")  {
-            pickRandomSide();
+        if (pickedSide == "Random")  {
+            currentSide = pickRandomSide();
         }
     }
 

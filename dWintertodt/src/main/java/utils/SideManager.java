@@ -83,11 +83,11 @@ public class SideManager {
     }
 
     // Method to pick a random side
-    public static void pickRandomSide() {
+    public static String pickRandomSide() {
         boolean pick = random.nextBoolean(); // Generate a random boolean
 
         // Set currentSide based on the random boolean value
-        currentSide = pick ? "Lower Right" : "Lower Left";
+        return pick ? "Lower Right" : "Lower Left";
     }
 
     // Helper method to get a WTStates object by its name
