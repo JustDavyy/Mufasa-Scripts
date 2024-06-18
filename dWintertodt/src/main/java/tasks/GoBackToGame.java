@@ -20,6 +20,10 @@ public class GoBackToGame extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Inside GoBackToGame execute()");
+        if (pickedSide == "Random") {
+            currentSide = SideManager.pickRandomSide();
+        }
+
         if (walkToDoorFromOutside()) {
             walkToGameFromDoor();
             return true;
