@@ -32,7 +32,7 @@ public class GetBranches extends Task {
                 boolean healthCheck = hpToEat > Player.getHP();
                 boolean levelUpCheck = Player.leveledUp();
                 XpBar.getXP();
-                return inventoryCheck || healthCheck || levelUpCheck;
+                return inventoryCheck || healthCheck || levelUpCheck || gameAt20Percent;
             }, 200, 150);
             return true;
         }
