@@ -228,6 +228,9 @@ public class dWintertodt extends AbstractScript {
         } else {
             currentSide = pickedSide;
         }
+
+        // Make sure our Chatbox is closed
+        Chatbox.closeChatbox();
     }
 
     @Override
