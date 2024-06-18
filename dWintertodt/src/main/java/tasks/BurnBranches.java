@@ -45,16 +45,17 @@ public class BurnBranches extends Task {
                 boolean healthCheck = startHP > Player.getHP();
                 boolean levelUpCheck = Player.leveledUp();
 
-                needsFixing.set(SideManager.getNeedsFixing());
-                needsReburn.set(SideManager.getNeedsReburning());
+                // Handle reburning/fixing
+                SideManager.updateStates();
+                if (SideManager.getNeedsFixing() || SideManager.getNeedsReburning()) {
+                    Client.tap(SideManager.getBurnRect());
+                }
+
                 XpBar.getXP();
 
-                return inventoryCheck || healthCheck || levelUpCheck || needsFixing.get() || needsReburn.get();
+                return inventoryCheck || healthCheck || levelUpCheck;
             }, 200, 150);
 
-            if (needsReburn.get() || needsFixing.get()) {
-                Client.tap(SideManager.getBurnRect());
-            }
 
             return true;
         }
