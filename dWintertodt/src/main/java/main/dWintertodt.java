@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Random;
 
 import static helpers.Interfaces.*;
+import static utils.SideManager.pickRandomSide;
 
 @ScriptManifest(
         name = "dWintertodt",
@@ -77,10 +78,11 @@ import static helpers.Interfaces.*;
                 @ScriptConfiguration(
                         name = "Side",
                         description = "Which side would you like to start on?",
-                        defaultValue = "Right",
+                        defaultValue = "Random",
                         allowedValues = {
                                 @AllowedValue(optionName = "Right"),
-                                @AllowedValue(optionName = "Left")
+                                @AllowedValue(optionName = "Left"),
+                                @AllowedValue(optionName = "Random")
                         },
                         optionType = OptionType.STRING
                 )
@@ -222,6 +224,10 @@ public class dWintertodt extends AbstractScript {
 
         setupFoodIDs();
         initialFoodCount();
+
+        if (currentSide == "Random")  {
+            pickRandomSide();
+        }
     }
 
     @Override

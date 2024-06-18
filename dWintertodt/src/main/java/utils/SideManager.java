@@ -4,11 +4,14 @@ import helpers.utils.Tile;
 import main.dWintertodt;
 
 import java.awt.*;
+import java.util.Random;
 
 import static helpers.Interfaces.Player;
 import static main.dWintertodt.*;
 
 public class SideManager {
+    static Random random = new Random();
+
     public static Tile getBurnTile() {
         if (currentSide.equals("Right")) {
             return BranchDetails.RIGHT_BRANCH.getBurnTile();
@@ -77,6 +80,14 @@ public class SideManager {
     public static boolean getNeedsReburning() {
         WTStates state = getState(currentSide.equals("Right") ? "Lower Right" : "Lower Left");
         return state != null && state.isNeedsReburning();
+    }
+
+    // Method to pick a random side
+    public static void pickRandomSide() {
+        boolean pick = random.nextBoolean(); // Generate a random boolean
+
+        // Set currentSide based on the random boolean value
+        currentSide = pick ? "Lower Right" : "Lower Left";
     }
 
     // Helper method to get a WTStates object by its name
