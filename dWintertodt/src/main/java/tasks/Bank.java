@@ -25,11 +25,15 @@ public class Bank extends Task {
         checkFood = true;
 
         if (walkToBankFromGame()) {
-            return true;
+            currentLocation = Walker.getPlayerPosition(WTRegion);
         } else if (walkToBankFromOutsideArea()) {
-            return true;
+            currentLocation = Walker.getPlayerPosition(WTRegion);
         }
 
+        if (!Player.tileEquals(currentLocation, bankTile)) {
+            Walker.step(bankTile, WTRegion);
+            currentLocation = Walker.getPlayerPosition(WTRegion);
+        }
         if (Player.tileEquals(currentLocation, bankTile)) {
             handleBanking();
             return true;
