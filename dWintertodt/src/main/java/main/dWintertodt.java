@@ -171,12 +171,13 @@ public class dWintertodt extends AbstractScript {
     // These tasks are executed in this order
     List<Task> WTTasks = Arrays.asList(
             new CheckGear(),
-            //new Bank(),
+            new Bank(),
             new Eat(),
             //new SwitchSide(),
             new BurnBranches(),
             new FletchBranches(),
-            new GetBranches()
+            new GetBranches(),
+            new GoBackToGame()
     );
 
     public static int generateRandomDelay(int lowerBound, int upperBound) {
