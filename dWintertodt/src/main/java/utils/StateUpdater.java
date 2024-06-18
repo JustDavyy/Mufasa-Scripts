@@ -10,8 +10,8 @@ import static main.dWintertodt.*;
 
 public class StateUpdater {
     static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
-    static Rectangle gameAt20CheckRect = new Rectangle(253,41,1,1);
-    static Rectangle waitingForGameToStartRect = new Rectangle(93,37,1,1);
+    static Rectangle gameAt20CheckRect = new Rectangle(253, 41, 1, 1);
+    static Rectangle waitingForGameToStartRect = new Rectangle(93, 37, 1, 1);
 
     public static void updateStates(WTStates[] states) {
         Logger.debugLog("Updating current states..");

@@ -1,10 +1,7 @@
 package tasks;
 
-import main.dWintertodt;
 import utils.SideManager;
 import utils.Task;
-
-import java.awt.*;
 
 import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
@@ -29,11 +26,7 @@ public class GoBackToGame extends Task {
         if (walkToDoorFromOutside()) {
             walkToGameFromDoor();
             return true;
-        } else if (walkToBranchTileFromLobby()) {
-            return true;
-        }
-
-        return false;
+        } else return walkToBranchTileFromLobby();
     }
 
     private boolean walkToBranchTileFromLobby() {

@@ -4,9 +4,6 @@ import main.dWintertodt;
 import utils.SideManager;
 import utils.Task;
 
-import java.awt.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 

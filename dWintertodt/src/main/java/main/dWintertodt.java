@@ -95,6 +95,8 @@ public class dWintertodt extends AbstractScript {
     public static final int brumaRoot = ItemList.BRUMA_ROOT_20695;
     public static final int brumaKindling = ItemList.BRUMA_KINDLING_20696;
     public static final int knife = 946;
+    // EVERYTHING FROM CONSTANTS FILE ABOVE
+    private static final Random random = new Random();
     // Variables
     public static String hopProfile;
     public static Boolean hopEnabled;
@@ -106,8 +108,6 @@ public class dWintertodt extends AbstractScript {
     public static int foodAmountLeftToBank;
     public static int bankTab;
     public static int foodAmountInInventory;
-
-
     public static boolean gameNearingEnd;
     public static boolean gameAt20Percent;
     public static boolean waitingForGameToStart;
@@ -174,9 +174,6 @@ public class dWintertodt extends AbstractScript {
             new WTStates("Lower Left", new Rectangle(60, 112, 31, 31), false, false, false, false),
             new WTStates("Lower Right", new Rectangle(120, 113, 27, 31), false, false, false, false)
     };
-
-    // EVERYTHING FROM CONSTANTS FILE ABOVE
-    private static final Random random = new Random();
     // These tasks are executed in this order
     List<Task> WTTasks = Arrays.asList(
             new CheckGear(),
@@ -226,7 +223,7 @@ public class dWintertodt extends AbstractScript {
         setupFoodIDs();
         initialFoodCount();
 
-        if (pickedSide == "Random")  {
+        if (pickedSide == "Random") {
             currentSide = pickRandomSide();
         } else {
             currentSide = pickedSide;
