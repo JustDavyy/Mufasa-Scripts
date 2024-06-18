@@ -77,7 +77,7 @@ import static utils.SideManager.pickRandomSide;
                 ),
                 @ScriptConfiguration(
                         name = "Side",
-                        description = "Which side would you like to start on?",
+                        description = "Which side would you like to start on? Random will also randomize it each time it goes back from bank.",
                         defaultValue = "Random",
                         allowedValues = {
                                 @AllowedValue(optionName = "Right"),
