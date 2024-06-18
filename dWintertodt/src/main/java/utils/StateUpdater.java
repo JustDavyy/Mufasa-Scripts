@@ -14,27 +14,29 @@ public class StateUpdater {
     static Rectangle waitingForGameToStartRect = new Rectangle(93, 37, 1, 1);
 
     public static void updateStates(WTStates[] states) {
-        Logger.debugLog("Updating current states..");
-        for (WTStates state : states) {
-            // Update each boolean based on some conditions or actions
-            state.setFireAlive(updateFireAlive(state));
-            state.setNeedsReburning(updateNeedsReburning(state));
-            state.setNeedsFixing(updateNeedsFixing(state));
-            state.setMageDead(updateMageDead(state));
-        }
-
-        // Update the game state boolean (true if wt game is 15% or less left.
-        updateGameState();
-        updateGameAt20();
-        updateWaitingForGameToStart();
-
-        if (GameTabs.isInventoryTabOpen()) {
-            updateKindlingState();
-            updateShouldBurn();
-        }
-
         //Update our position
         currentLocation = Walker.getPlayerPosition(main.dWintertodt.WTRegion);
+
+        if (Player.isTileWithinArea(currentLocation, insideArea)) {
+            Logger.debugLog("Updating current states..");
+            for (WTStates state : states) {
+                // Update each boolean based on some conditions or actions
+                state.setFireAlive(updateFireAlive(state));
+                state.setNeedsReburning(updateNeedsReburning(state));
+                state.setNeedsFixing(updateNeedsFixing(state));
+                state.setMageDead(updateMageDead(state));
+            }
+
+            // Update the game state boolean (true if wt game is 15% or less left.
+            updateGameState();
+            updateGameAt20();
+            updateWaitingForGameToStart();
+
+            if (GameTabs.isInventoryTabOpen()) {
+                updateKindlingState();
+                updateShouldBurn();
+            }
+        }
 
         // Update which side we are on
         if (Player.isTileWithinArea(currentLocation, main.dWintertodt.leftWTArea)) {
