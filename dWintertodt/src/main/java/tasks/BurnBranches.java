@@ -32,7 +32,6 @@ public class BurnBranches extends Task {
 
         if (!Player.atTile(SideManager.getBurnTile(), WTRegion)) {
             Walker.step(SideManager.getBurnTile(), WTRegion);
-            Player.waitTillNotMoving(10, WTRegion);
             currentLocation = Walker.getPlayerPosition(WTRegion);
         }
 
