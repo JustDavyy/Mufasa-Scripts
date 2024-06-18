@@ -42,37 +42,33 @@ public class StateUpdater {
     private static boolean updateFireAlive(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.FIRE_ALIVE.getColor();
-        boolean check = Client.isColorInRect(checkColor, checkRect, 5);
         //Logger.debugLog("updateFireAlive for: " + state.getName() + " : " + check);
 
-        return check;
+        return Client.isColorInRect(checkColor, checkRect, 5);
     }
 
     private static boolean updateNeedsReburning(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.NEEDS_REBURNING.getColor();
-        boolean check = !Client.isColorInRect(checkColor, checkRect, 5);
         //Logger.debugLog("updateNeedsReburning for: " + state.getName() + " : " + check);
 
-        return check;
+        return !Client.isColorInRect(checkColor, checkRect, 5);
     }
 
     private static boolean updateNeedsFixing(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.NEEDS_FIXING.getColor();
-        boolean check = Client.isColorInRect(checkColor, checkRect, 2);
         //Logger.debugLog("updateNeedsFixing for: " + state.getName() + " : " + check);
 
-        return check;
+        return Client.isColorInRect(checkColor, checkRect, 2);
     }
 
     private static boolean updateMageDead(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.MAGE_DEAD.getColor();
-        boolean check = Client.isColorInRect(checkColor, checkRect, 5);
         //Logger.debugLog("updateMageDead for: " + state.getName() + " : " + check);
 
-        return check;
+        return Client.isColorInRect(checkColor, checkRect, 5);
     }
 
     private static void updateGameState() {
