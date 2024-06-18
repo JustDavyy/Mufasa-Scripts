@@ -138,7 +138,8 @@ public class Bank extends Task {
             Walker.walkPath(dWintertodt.gameToWTDoor);
             Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
             Client.tap(exitDoorRect);
-            Walker.step(bankTile); //Step to bank tile.
+            Condition.sleep(generateRandomDelay(1000, 1500));
+            currentLocation = Walker.getPlayerPosition(WTRegion);
             return true;
         }
         return false;
@@ -148,6 +149,7 @@ public class Bank extends Task {
         if (Player.isTileWithinArea(currentLocation, outsideArea)) {
             Walker.step(bankTile); //Step to bank tile.
             Condition.wait(() -> Player.atTile(bankTile), 100, 20);
+            currentLocation = Walker.getPlayerPosition(WTRegion);
             return true;
         }
         return false;
