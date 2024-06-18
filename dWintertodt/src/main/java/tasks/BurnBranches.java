@@ -4,6 +4,8 @@ import main.dWintertodt;
 import utils.SideManager;
 import utils.Task;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static helpers.Interfaces.*;
 
 public class BurnBranches extends Task {
@@ -26,6 +28,10 @@ public class BurnBranches extends Task {
         Logger.debugLog("Inside BurnBranches execute()");
         Integer startHP = Player.getHP();
 
+        // Bools so we are able to check them after the conditional wait also
+        AtomicBoolean needsFixing = new AtomicBoolean(false);
+        AtomicBoolean needsReburn = new AtomicBoolean(false);
+
         if (!Player.atTile(SideManager.getBurnTile(), main.dWintertodt.WTRegion)) {
             Walker.step(SideManager.getBurnTile(), main.dWintertodt.WTRegion);
             return true;
@@ -38,9 +44,18 @@ public class BurnBranches extends Task {
                 boolean inventoryCheck = !Inventory.contains(main.dWintertodt.brumaKindling, 0.8);
                 boolean healthCheck = startHP > Player.getHP();
                 boolean levelUpCheck = Player.leveledUp();
+
+                needsFixing.set(SideManager.getNeedsFixing());
+                needsReburn.set(SideManager.getNeedsReburning());
                 XpBar.getXP();
-                return inventoryCheck || healthCheck || levelUpCheck;
+
+                return inventoryCheck || healthCheck || levelUpCheck || needsFixing.get() || needsReburn.get();
             }, 200, 150);
+
+            if (needsReburn.get() || needsFixing.get()) {
+                Client.tap(SideManager.getBurnRect());
+            }
+
             return true;
         }
 
