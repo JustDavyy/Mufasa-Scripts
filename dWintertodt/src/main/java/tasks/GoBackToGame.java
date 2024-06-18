@@ -31,7 +31,7 @@ public class GoBackToGame extends Task {
         if (Player.isTileWithinArea(currentLocation, outsideArea)) {
             Walker.walkPath(getReversedTiles(wtDoorToBank));
             Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
-            Client.tap(new Rectangle(0, 0, 0, 0)); //Need a door tap rect (bottom of screen should do?)
+            Client.tap(enterDoorRect); //Need a door tap rect (bottom of screen should do?)
             Condition.sleep(generateRandomDelay(1000, 2500));
             return true;
         }

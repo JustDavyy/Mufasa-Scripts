@@ -104,10 +104,14 @@ public class dWintertodt extends AbstractScript {
     public static int foodAmountLeftToBank;
     public static int bankTab;
     public static int foodAmountInInventory;
+
+
     public static boolean gameNearingEnd;
     public static RegionBox WTRegion = new RegionBox("WTRegion", 1701, 264, 2157, 846);
     public static Area lobby = new Area(new Tile(632, 173), new Tile(644, 184));
     public static Tile bankTile = new Tile(650, 228);
+    public static Rectangle enterDoorRect = new Rectangle(323, 75, 307, 122);
+    public static Rectangle exitDoorRect = new Rectangle(138, 248, 459, 173);
     public static Area insideArea = new Area(
             new Tile(605, 152),
             new Tile(666, 199)
