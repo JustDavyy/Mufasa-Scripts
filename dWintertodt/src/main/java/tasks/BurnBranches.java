@@ -4,23 +4,25 @@ import main.dWintertodt;
 import utils.SideManager;
 import utils.Task;
 
+import java.awt.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static helpers.Interfaces.*;
+import static main.dWintertodt.*;
 
 public class BurnBranches extends Task {
 
     @Override
     public boolean activate() {
         Logger.debugLog("Inside BurnBranches activate()");
-        boolean inventoryHasKindlings = Inventory.contains(dWintertodt.brumaKindling, 0.8);
+        boolean inventoryHasKindlings = Inventory.contains(brumaKindling, 0.8);
         // Regular check condition
-        if (inventoryHasKindlings && !Inventory.contains(dWintertodt.brumaRoot, 0.8)) {
+        if (inventoryHasKindlings && !Inventory.contains(brumaRoot, 0.8)) {
             return true;
         }
 
         // check if we have brumakindlings & we are at the burn tile
-        return inventoryHasKindlings && Player.tileEquals(dWintertodt.currentLocation, SideManager.getBurnTile());
+        return inventoryHasKindlings && Player.tileEquals(currentLocation, SideManager.getBurnTile());
     }
 
     @Override
@@ -28,20 +30,18 @@ public class BurnBranches extends Task {
         Logger.debugLog("Inside BurnBranches execute()");
         Integer startHP = Player.getHP();
 
-        // Bools so we are able to check them after the conditional wait also
-        AtomicBoolean needsFixing = new AtomicBoolean(false);
-        AtomicBoolean needsReburn = new AtomicBoolean(false);
+        if (!Player.atTile(SideManager.getBurnTile(), WTRegion)) {
+            Walker.step(SideManager.getBurnTile(), WTRegion);
+            Player.waitTillNotMoving(10, WTRegion);
+            currentLocation = Walker.getPlayerPosition(WTRegion);
 
-        if (!Player.atTile(SideManager.getBurnTile(), main.dWintertodt.WTRegion)) {
-            Walker.step(SideManager.getBurnTile(), main.dWintertodt.WTRegion);
-            return true;
         }
 
-        if (Player.atTile(SideManager.getBurnTile(), main.dWintertodt.WTRegion)) {
+        if (Player.atTile(SideManager.getBurnTile(), dWintertodt.WTRegion)) {
             Client.tap(SideManager.getBurnRect());
             Logger.debugLog("Heading to BurnBranches conditional wait.");
             Condition.wait(() -> {
-                boolean inventoryCheck = !Inventory.contains(main.dWintertodt.brumaKindling, 0.8);
+                boolean inventoryCheck = !Inventory.contains(dWintertodt.brumaKindling, 0.8);
                 boolean healthCheck = startHP > Player.getHP();
                 boolean levelUpCheck = Player.leveledUp();
 
