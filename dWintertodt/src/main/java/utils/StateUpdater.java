@@ -27,8 +27,11 @@ public class StateUpdater {
         updateGameState();
         updateGameAt20();
         updateWaitingForGameToStart();
-        updateKindlingState();
-        updateShouldBurn();
+
+        if (GameTabs.isInventoryTabOpen()) {
+            updateKindlingState();
+            updateShouldBurn();
+        }
 
         //Update our position
         currentLocation = Walker.getPlayerPosition(main.dWintertodt.WTRegion);
