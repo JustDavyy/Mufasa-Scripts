@@ -20,6 +20,8 @@ public class GoBackToGame extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Inside GoBackToGame execute()");
+
+        //Choose a new random side if the initial picked side was random.
         if (pickedSide == "Random") {
             currentSide = SideManager.pickRandomSide();
         }
