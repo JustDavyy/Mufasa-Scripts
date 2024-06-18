@@ -185,6 +185,7 @@ public class dWintertodt extends AbstractScript {
             //new SwitchSide(),
             new BurnBranches(),
             new FletchBranches(),
+            new PreGame(),
             new GetBranches(),
             new GoBackToGame()
     );
