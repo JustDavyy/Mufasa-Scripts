@@ -31,14 +31,16 @@ public class BurnBranches extends Task {
         Integer startHP = Player.getHP();
 
         if (!Player.atTile(SideManager.getBurnTile(), WTRegion)) {
+            Logger.log("Stepping to burn tile!");
             Walker.step(SideManager.getBurnTile(), WTRegion);
             currentLocation = Walker.getPlayerPosition(WTRegion);
         }
 
         if (Player.atTile(SideManager.getBurnTile(), dWintertodt.WTRegion)) {
+            Logger.log("Tapping burn rect!");
             Client.tap(SideManager.getBurnRect());
-            Logger.debugLog("Heading to BurnBranches conditional wait.");
             Condition.wait(() -> {
+                Logger.debugLog("Waiting for next actions..");
                 boolean inventoryCheck = !Inventory.contains(dWintertodt.brumaKindling, 0.8);
                 boolean healthCheck = startHP > Player.getHP();
                 boolean levelUpCheck = Player.leveledUp();
@@ -46,7 +48,14 @@ public class BurnBranches extends Task {
                 // Handle reburning/fixing
                 SideManager.updateStates();
                 if (SideManager.getNeedsFixing() || SideManager.getNeedsReburning()) {
-                    Client.tap(SideManager.getBurnRect());
+                    Logger.log("Brazier needs fixing or re-lighting!");
+                    if (SideManager.getNeedsFixing()) {
+                        Logger.log("Fixing & Relighting!");
+                        tapAndSleep(3, startHP); // Fixing and relighting requires three repetitions
+                    } else {
+                        Logger.log("Relighting!");
+                        tapAndSleep(2, startHP); // Relighting requires two repetitions
+                    }
                 }
 
                 XpBar.getXP();
@@ -54,10 +63,19 @@ public class BurnBranches extends Task {
                 return inventoryCheck || healthCheck || levelUpCheck;
             }, 200, 150);
 
-
             return true;
         }
 
         return false;
+    }
+
+    private void tapAndSleep(int repeatCount, int startHP) {
+        for (int i = 0; i < repeatCount; i++) {
+            if (startHP > Player.getHP()) {
+                break; // Exit the loop if the player's health drops
+            }
+            Client.tap(SideManager.getBurnRect());
+            Condition.sleep(generateRandomDelay(1000, 1500));
+        }
     }
 }
