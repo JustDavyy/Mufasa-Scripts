@@ -4,8 +4,6 @@ import helpers.utils.ItemList;
 import main.dWintertodt;
 import utils.Task;
 
-import java.awt.*;
-
 import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
@@ -76,7 +74,8 @@ public class Bank extends Task {
 
             if (!Bank.isSelectedQuantity1Button()) {
                 Bank.tapQuantity1Button();
-            }            for (int i = 0; i < foodNeeded; i++) {
+            }
+            for (int i = 0; i < foodNeeded; i++) {
                 Bank.withdrawItem(foodID, 1);
             }
         }
