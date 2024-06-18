@@ -27,6 +27,8 @@ public class StateUpdater {
         updateGameState();
         updateGameAt20();
         updateWaitingForGameToStart();
+        updateKindlingState();
+        updateShouldBurn();
 
         //Update our position
         currentLocation = Walker.getPlayerPosition(main.dWintertodt.WTRegion);
@@ -77,6 +79,15 @@ public class StateUpdater {
 
     private static void updateGameAt20() {
         gameAt20Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt20CheckRect, 10);
+    }
+
+    private static void updateShouldBurn() {
+        shouldBurn = (gameAt20Percent && (inventoryHasKindlings || inventoryHasBruma && Inventory.usedSlots() >= 18));
+    }
+
+    private static void updateKindlingState() {
+        inventoryHasKindlings = Inventory.contains(brumaKindling, 0.8);
+        inventoryHasBruma = Inventory.contains(brumaRoot, 0.8);
     }
 
     private static void updateWaitingForGameToStart() {

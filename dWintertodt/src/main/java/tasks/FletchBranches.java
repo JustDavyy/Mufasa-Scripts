@@ -28,7 +28,7 @@ public class FletchBranches extends Task {
             boolean healthCheck = startHP > Player.getHP();
             boolean levelUpCheck = Player.leveledUp();
             XpBar.getXP();
-            return inventoryCheck || healthCheck || levelUpCheck || dWintertodt.gameAt20Percent;
+            return inventoryCheck || healthCheck || levelUpCheck || dWintertodt.shouldBurn;
         }, 200, 150);
         return true;
     }
