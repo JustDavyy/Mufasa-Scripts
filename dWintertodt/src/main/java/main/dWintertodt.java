@@ -293,6 +293,12 @@ public class dWintertodt extends AbstractScript {
     private void initialFoodCount() {
         foodAmountInInventory = 0; // Reset before counting
 
+        Logger.debugLog("Counting initial food in inventory");
+        if (!GameTabs.isInventoryTabOpen()) {
+            GameTabs.openInventoryTab();
+            Condition.wait(() -> GameTabs.isInventoryTabOpen(), 100, 10);
+        }
+
         if (selectedFood.equals("Cakes")) {
             int[] foodIds = {1891, 1893, 1895};
             for (int id : foodIds) {
