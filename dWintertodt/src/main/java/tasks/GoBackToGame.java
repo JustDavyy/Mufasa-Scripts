@@ -21,11 +21,20 @@ public class GoBackToGame extends Task {
         if (walkToDoorFromOutside()) {
             walkToGameFromDoor();
             return true;
+        } else if (walkToBranchTileFromLobby()) {
+            return true;
         }
 
         return false;
     }
 
+    private boolean walkToBranchTileFromLobby() {
+        if (Player.isTileWithinArea(currentLocation, lobby)) {
+            Walker.step(SideManager.getBranchTile());
+            return true;
+        }
+        return false;
+    }
 
     private boolean walkToDoorFromOutside() {
         if (Player.isTileWithinArea(currentLocation, outsideArea)) {
