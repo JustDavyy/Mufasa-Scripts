@@ -11,6 +11,7 @@ import static main.dWintertodt.*;
 public class StateUpdater {
     static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
     static Rectangle gameAt20CheckRect = new Rectangle(0,0,0,0);
+    static Rectangle waitingForGameToStart = new Rectangle(0,0,0,0);
 
     public static void updateStates(WTStates[] states) {
         Logger.debugLog("Updating current states..");
@@ -25,6 +26,7 @@ public class StateUpdater {
         // Update the game state boolean (true if wt game is 15% or less left.
         updateGameState();
         updateGameAt20();
+        updateWaitingForGameToStart();
 
         //Update our position
         currentLocation = Walker.getPlayerPosition(main.dWintertodt.WTRegion);
@@ -74,10 +76,15 @@ public class StateUpdater {
     }
 
     private static void updateGameState() {
-        dWintertodt.gameNearingEnd = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameCheckRect, 10);
+        gameNearingEnd = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameCheckRect, 10);
     }
 
     private static void updateGameAt20() {
         gameAt20Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt20CheckRect, 10);
     }
+
+    private static void updateWaitingForGameToStart() {
+        dWintertodt.waitingForGameToStart = Client.isColorInRect(StateColor.GAME_GREEN_COLOR.getColor(), waitingForGameToStart, 10);
+    }
+
 }

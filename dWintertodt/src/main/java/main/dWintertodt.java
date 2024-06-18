@@ -108,6 +108,7 @@ public class dWintertodt extends AbstractScript {
 
     public static boolean gameNearingEnd;
     public static boolean gameAt20Percent;
+    public static boolean waitingForGameToStart;
     public static RegionBox WTRegion = new RegionBox("WTRegion", 1701, 264, 2157, 846);
     public static Area lobby = new Area(new Tile(632, 173), new Tile(644, 184));
     public static Tile bankTile = new Tile(650, 228);
