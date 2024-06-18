@@ -10,7 +10,7 @@ public class GetBranches extends Task {
     @Override
     public boolean activate() {
         Logger.debugLog("Inside GetBranches activate()");
-        return !Inventory.isFull();
+        return !Inventory.isFull() && SideManager.isWithinGameArea();
     }
 
     @Override

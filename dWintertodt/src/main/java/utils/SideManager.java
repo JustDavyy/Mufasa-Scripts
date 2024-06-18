@@ -5,7 +5,8 @@ import main.dWintertodt;
 
 import java.awt.*;
 
-import static main.dWintertodt.currentSide;
+import static helpers.Interfaces.Player;
+import static main.dWintertodt.*;
 
 public class SideManager {
     public static Tile getBurnTile() {
@@ -21,6 +22,22 @@ public class SideManager {
             return BranchDetails.RIGHT_BRANCH.getBranchTile();
         } else {
             return BranchDetails.LEFT_BRANCH.getBranchTile();
+        }
+    }
+
+    public static boolean isWithinGameArea() {
+        if (currentSide.equals("Right")) {
+            return Player.within(rightWTArea, WTRegion);
+        } else {
+            return Player.within(leftWTArea, WTRegion);
+        }
+    }
+
+    public static Tile[] getDoorToGamePath() {
+        if (currentSide.equals("Right")) {
+            return wtDoorToRightSide;
+        } else {
+            return wtDoorToLeftSide;
         }
     }
 

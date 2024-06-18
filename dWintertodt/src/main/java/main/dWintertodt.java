@@ -191,7 +191,7 @@ public class dWintertodt extends AbstractScript {
     }
 
     // Just leaving these down here so we can figure out where they belong
-    public Tile[] getReversedTiles(Tile[] array) {
+    public static Tile[] getReversedTiles(Tile[] array) {
         if (array == null) return null;
         Tile[] reversed = new Tile[array.length];
         for (int i = 0; i < array.length; i++) {

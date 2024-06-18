@@ -132,7 +132,7 @@ public class Bank extends Task {
     private boolean walkToBankFromGame() {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
             Walker.walkPath(dWintertodt.gameToWTDoor);
-            Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20); //need an area right in front of door?
+            Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
             Client.tap(new Rectangle(0, 0, 0, 0)); //Need a door tap rect (bottom of screen should do?)
             Walker.step(bankTile); //Step to bank tile.
             return true;
