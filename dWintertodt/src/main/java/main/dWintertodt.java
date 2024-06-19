@@ -248,6 +248,11 @@ public class dWintertodt extends AbstractScript {
 
     @Override
     public void poll() {
+        if (!GameTabs.isInventoryTabOpen()) {
+            GameTabs.openInventoryTab();
+            Condition.wait(() -> GameTabs.isInventoryTabOpen(), 100, 10);
+        }
+
         SideManager.updateStates();
 
         //Run tasks

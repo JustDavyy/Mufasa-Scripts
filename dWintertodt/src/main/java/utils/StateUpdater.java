@@ -41,10 +41,9 @@ public class StateUpdater {
             updateWaitingForGameEnded();
             updateCurrentHP();
 
-            if (GameTabs.isInventoryTabOpen()) {
-                updateKindlingState();
-                updateShouldBurn();
-            }
+            updateKindlingState();
+            updateShouldBurn();
+
         }
 
         // Update which side we are on
