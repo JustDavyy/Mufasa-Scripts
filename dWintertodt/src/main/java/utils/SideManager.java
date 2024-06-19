@@ -98,6 +98,12 @@ public class SideManager {
         return state != null && state.isNeedsReburning();
     }
 
+    // Method to check if the current side mage is dead
+    public static boolean getMageDead() {
+        WTStates state = getState(currentSide.equals("Right") ? "Right" : "Left");
+        return state != null && state.isMageDead();
+    }
+
     // Method to pick a random side
     public static String pickRandomSide() {
         boolean pick = random.nextBoolean(); // Generate a random boolean

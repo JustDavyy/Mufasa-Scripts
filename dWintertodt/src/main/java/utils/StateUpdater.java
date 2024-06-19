@@ -75,6 +75,10 @@ public class StateUpdater {
         Color checkColor = StateColor.MAGE_DEAD.getColor();
         //Logger.debugLog("updateMageDead for: " + state.getName() + " : " + check);
 
+        if (Client.isColorInRect(checkColor, checkRect, 5)) {
+            Logger.debugLog("Changed updateMageDead to TRUE");
+        }
+
         return Client.isColorInRect(checkColor, checkRect, 5);
     }
 
