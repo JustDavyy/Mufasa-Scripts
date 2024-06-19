@@ -7,15 +7,23 @@ import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
 public class FletchBranches extends Task {
+    private boolean isFletching = false;
 
     @Override
     public boolean activate() {
-        //Logger.debugLog("Inside FletchBranches activate()");
-        return Inventory.isFull() && Inventory.contains(brumaRoot, 0.60);
+        if (Inventory.isFull() && inventoryHasBruma && !shouldBurn) {
+            isFletching = true;
+        }
+
+        return isFletching;
     }
 
     @Override
     public boolean execute() {
+        if (isFletching && !inventoryHasBruma || shouldBurn) {
+            isFletching = false;
+        }
+
         Logger.debugLog("Inside FletchBranches execute()");
         Logger.log("Starting to fletch.");
         Integer startHP = Player.getHP();
@@ -31,6 +39,7 @@ public class FletchBranches extends Task {
             XpBar.getXP();
             return !inventoryHasBruma || startHP > currentHp || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
         }, 200, 150);
+
         return true;
     }
 }

@@ -7,14 +7,24 @@ import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
 public class GetBranches extends Task {
+    private boolean gettingBranches = false;
+
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside GetBranches activate()");
-        return !Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing && !gameAt13Percent && !(Inventory.emptySlots() <= 2);
+        if (!Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing && !gameAt13Percent) {
+            gettingBranches = true;
+        }
+
+        return gettingBranches || !Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing && !gameAt13Percent;
     }
 
     @Override
     public boolean execute() {
+        if (gettingBranches && Inventory.isFull() || shouldBurn) {
+            gettingBranches = false;
+        }
+
         Logger.debugLog("Inside GetBranches execute()");
         if (!Player.atTile(SideManager.getBranchTile(), WTRegion)) {
             Logger.log("Stepping to branch tile!");
