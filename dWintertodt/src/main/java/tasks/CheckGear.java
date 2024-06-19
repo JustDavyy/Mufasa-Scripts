@@ -36,7 +36,7 @@ public class CheckGear extends Task {
 
     @Override
     public boolean execute() {
-        Logger.debugLog("Inside CheckGear execute()");
+        Logger.log("Checking gear..");
         checkForItem();
 
         checkForAxe();

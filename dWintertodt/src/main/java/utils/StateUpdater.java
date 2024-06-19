@@ -22,7 +22,6 @@ public class StateUpdater {
         currentLocation = Walker.getPlayerPosition(WTRegion);
 
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
-            Logger.debugLog("Updating current states..");
             for (WTStates state : states) {
                 // Update each boolean based on some conditions or actions
                 state.setFireAlive(updateFireAlive(state));
