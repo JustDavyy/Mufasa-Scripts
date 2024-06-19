@@ -26,6 +26,7 @@ public class SwitchSide extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Inside SwitchSide execute()");
+        Logger.log("Mage is dead, switching side.");
 
         // Logic if we're currently on the left side
         if (currentSide.equals("Left")) {

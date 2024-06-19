@@ -16,6 +16,7 @@ public class FletchBranches extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Inside FletchBranches execute()");
+        Logger.log("Starting to fletch.");
         Integer startHP = Player.getHP();
         Inventory.tapItem(knife, true,0.60);
         Inventory.tapItem(brumaRoot, 0.60);

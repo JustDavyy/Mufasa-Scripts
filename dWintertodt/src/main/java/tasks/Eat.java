@@ -15,6 +15,7 @@ public class Eat extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Inside Eat execute()");
+        Logger.log("Eating food.");
         if (java.util.Objects.equals(selectedFood, "Cakes")) {
             // cake IDs; 1891, 1893, 1895
             if (Inventory.contains(1895, 0.60)) { // slice of cake

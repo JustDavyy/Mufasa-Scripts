@@ -18,6 +18,7 @@ public class PreGame extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Inside PreGame execute()");
+        Logger.log("Getting ready for game start.");
 
         // Check if we are at the burn tile, otherwise move there
         if (!Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
