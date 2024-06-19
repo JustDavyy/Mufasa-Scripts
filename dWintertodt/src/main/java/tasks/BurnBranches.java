@@ -39,7 +39,6 @@ public class BurnBranches extends Task {
             Client.tap(SideManager.getBurnRect());
             Condition.wait(() -> {
                 Logger.debugLog("Waiting for next actions..");
-                boolean inventoryCheck = !Inventory.contains(brumaKindling, 0.8);
                 boolean healthCheck = startHP > Player.getHP();
                 boolean levelUpCheck = Player.leveledUp();
 
@@ -58,7 +57,7 @@ public class BurnBranches extends Task {
 
                 XpBar.getXP();
 
-                return inventoryCheck || healthCheck || levelUpCheck;
+                return !inventoryHasKindlings || healthCheck || levelUpCheck;
             }, 200, 150);
 
             return true;
