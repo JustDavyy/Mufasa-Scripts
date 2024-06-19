@@ -58,6 +58,7 @@ public class PreGame extends Task {
 
         // Move to the branch tile
         Walker.step(SideManager.getBranchTile(), WTRegion);
+        currentLocation = SideManager.getBranchTile();
 
         // Start chopping branches
         Client.tap(SideManager.getBranchRect());

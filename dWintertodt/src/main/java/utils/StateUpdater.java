@@ -8,8 +8,8 @@ import static main.dWintertodt.*;
 
 public class StateUpdater {
 //    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
-    static Rectangle gameAt20CheckRect = new Rectangle(253, 41, 1, 1);
-    static Rectangle waitingForGameToStartRect = new Rectangle(93, 37, 1, 1);
+    static Rectangle gameAt20CheckRect = new Rectangle(93, 37, 1, 1);
+    static Rectangle waitingForGameToStartRect = new Rectangle(253, 41, 1, 1);
     static Rectangle waitingForGameEndedRect = new Rectangle(56, 38, 1, 1);
 
     public static void updateStates(WTStates[] states) {
@@ -88,6 +88,11 @@ public class StateUpdater {
 
     private static void updateShouldBurn() {
         shouldBurn = (gameAt20Percent && (inventoryHasKindlings || inventoryHasBruma) && Inventory.usedSlots() >= 18);
+        Logger.debugLog("shouldBurn is: " + shouldBurn);
+        Logger.debugLog("gameAt20Percent is: " + gameAt20Percent);
+        Logger.debugLog("inventoryHasKindlings is: " + inventoryHasKindlings);
+        Logger.debugLog("inventoryHasBruma is: " + inventoryHasBruma);
+        Logger.debugLog("inventory used slots above or equal to 18 is: " + (Inventory.usedSlots() >= 18));
     }
 
     private static void updateKindlingState() {
