@@ -42,8 +42,8 @@ public class GoBackToGame extends Task {
         if (Player.isTileWithinArea(currentLocation, outsideArea)) {
             Walker.walkPath(WTRegion, getReversedTiles(wtDoorToBank));
             Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
-            Client.tap(enterDoorRect); //Need a door tap rect (bottom of screen should do?)
-            Condition.sleep(generateRandomDelay(1000, 2500));
+            Client.tap(enterDoorRect);
+            Condition.sleep(generateRandomDelay(3500, 5000));
             currentLocation = Walker.getPlayerPosition(WTRegion);
             return true;
         }
