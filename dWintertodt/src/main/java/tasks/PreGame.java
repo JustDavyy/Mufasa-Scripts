@@ -44,8 +44,7 @@ public class PreGame extends Task {
             // Check if we can light
             if (waitingForGameToStart) {
                 if (SideManager.getNeedsReburning()) {
-                    Logger.log("Brazier needs initial lighting!");
-                    Logger.log("Lighting brazier!");
+                    Logger.log("Tapping Brazier for initial lighting");
                     Client.tap(SideManager.getBurnRect());
                     Condition.sleep(generateRandomDelay(1000, 1500));
                     return true;
