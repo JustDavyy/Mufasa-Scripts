@@ -21,6 +21,7 @@ public class GoBackToGame extends Task {
         //Choose a new random side if the initial picked side was random.
         if (pickedSide.equals("Random")) {
             currentSide = SideManager.pickRandomSide();
+            Logger.debugLog("Picked the " + currentSide + " side.");
         }
 
         if (walkToDoorFromOutside()) {

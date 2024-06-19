@@ -234,6 +234,7 @@ public class dWintertodt extends AbstractScript {
 
         if (pickedSide.equals("Random")) {
             currentSide = pickRandomSide();
+            Logger.debugLog("Picked the " + currentSide + " side.");
         } else {
             currentSide = pickedSide;
         }
