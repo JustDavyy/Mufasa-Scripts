@@ -15,9 +15,7 @@ public class BurnBranches extends Task {
         // Regular check condition
         if (inventoryHasKindlings && !inventoryHasBruma) {
             return true;
-        }
-
-        if (shouldBurn && isGameGoing) {
+        } else if (shouldBurn && isGameGoing) {
             isBurning = true;
         }
 
