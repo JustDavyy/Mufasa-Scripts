@@ -1,6 +1,5 @@
 package tasks;
 
-import main.dWintertodt;
 import utils.Task;
 
 import static helpers.Interfaces.*;

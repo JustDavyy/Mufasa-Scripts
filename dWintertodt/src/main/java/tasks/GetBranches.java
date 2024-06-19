@@ -1,6 +1,5 @@
 package tasks;
 
-import main.dWintertodt;
 import utils.SideManager;
 import utils.Task;
 

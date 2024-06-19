@@ -11,7 +11,7 @@ public class GoBackToGame extends Task {
     @Override
     public boolean activate() {
         Logger.debugLog("Inside GoBackToGame activate()");
-        return !gameNearingEnd && ((Player.within(outsideArea, WTRegion) || Player.within(insideArea, WTRegion)) && !SideManager.isWithinGameArea());
+        return (Player.within(outsideArea, WTRegion) || Player.within(insideArea, WTRegion)) && !SideManager.isWithinGameArea();
     }
 
     @Override
@@ -19,13 +19,12 @@ public class GoBackToGame extends Task {
         Logger.debugLog("Inside GoBackToGame execute()");
 
         //Choose a new random side if the initial picked side was random.
-        if (pickedSide == "Random") {
+        if (pickedSide.equals("Random")) {
             currentSide = SideManager.pickRandomSide();
         }
 
         if (walkToDoorFromOutside()) {
-            walkToGameFromDoor();
-            return true;
+            return walkToGameFromDoor();
         } else return walkToBranchTileFromLobby();
     }
 
@@ -53,7 +52,7 @@ public class GoBackToGame extends Task {
     private boolean walkToGameFromDoor() {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
             Walker.walkPath(WTRegion, SideManager.getDoorToGamePath());
-            Condition.wait(() -> SideManager.isWithinGameArea(), 100, 20);
+            Condition.wait(SideManager::isWithinGameArea, 100, 20);
             return true;
         }
         return false;

@@ -1,8 +1,6 @@
 package utils;
 
 
-import main.dWintertodt;
-
 import java.awt.*;
 
 import static helpers.Interfaces.*;
@@ -29,7 +27,7 @@ public class StateUpdater {
             }
 
             // Update the game state boolean (true if wt game is 15% or less left.
-            updateGameState();
+//            updateGameState();
             updateGameAt20();
             updateWaitingForGameToStart();
             updateWaitingForGameEnded();
@@ -80,9 +78,9 @@ public class StateUpdater {
         return Client.isColorInRect(checkColor, checkRect, 5);
     }
 
-    private static void updateGameState() {
-        gameNearingEnd = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameCheckRect, 10);
-    }
+//    private static void updateGameState() {
+//        gameNearingEnd = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameCheckRect, 10);
+//    }
 
     private static void updateGameAt20() {
         gameAt20Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt20CheckRect, 10);

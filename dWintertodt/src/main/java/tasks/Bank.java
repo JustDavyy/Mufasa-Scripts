@@ -54,7 +54,7 @@ public class Bank extends Task {
 
     private void setupOrStepToBank() {
         if (dynamicBank == null) {
-            Bank.setupDynamicBank();
+            dynamicBank = Bank.setupDynamicBank();
         } else {
             Bank.stepToBank(dynamicBank);
         }
@@ -66,7 +66,7 @@ public class Bank extends Task {
             Condition.wait(() -> Bank.isOpen(), 100, 10);
             return true;
         }
-        return true;
+        return false;
     }
 
     private void withdrawFoodIfNeeded(int foodNeeded) {

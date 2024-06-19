@@ -108,7 +108,7 @@ public class dWintertodt extends AbstractScript {
     public static int foodAmountLeftToBank;
     public static int bankTab;
     public static int foodAmountInInventory;
-    public static boolean gameNearingEnd;
+//    public static boolean gameNearingEnd;
     public static boolean gameAt20Percent;
     public static boolean shouldBurn;
     public static boolean inventoryHasKindlings;
@@ -199,8 +199,7 @@ public class dWintertodt extends AbstractScript {
             lowerBound = upperBound;
             upperBound = temp;
         }
-        int delay = lowerBound + random.nextInt(upperBound - lowerBound + 1);
-        return delay;
+        return lowerBound + random.nextInt(upperBound - lowerBound + 1);
     }
 
     // Just leaving these down here so we can figure out where they belong
@@ -229,7 +228,7 @@ public class dWintertodt extends AbstractScript {
         setupFoodIDs();
         initialFoodCount();
 
-        if (pickedSide == "Random") {
+        if (pickedSide.equals("Random")) {
             currentSide = pickRandomSide();
         } else {
             currentSide = pickedSide;

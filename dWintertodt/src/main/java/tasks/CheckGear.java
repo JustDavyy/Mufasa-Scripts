@@ -2,6 +2,7 @@ package tasks;
 
 import helpers.utils.EquipmentSlot;
 import helpers.utils.ItemList;
+import main.dWintertodt;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -36,7 +37,7 @@ public class CheckGear extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Inside Eat execute()");
-        checkForItem(main.dWintertodt.knife, "Knife");
+        checkForItem();
 
         checkForAxe();
         if (!checkedForAxe) {
@@ -62,14 +63,14 @@ public class CheckGear extends Task {
         }
     }
 
-    private void checkForItem(int itemID, String itemName) {
+    private void checkForItem() {
         ensureInventoryOpen();
 
-        if (!checkedForKnife && Inventory.contains(itemID, INVENTORY_THRESHOLD)) {
-            Logger.debugLog(itemName + " in inventory, continuing");
+        if (!checkedForKnife && Inventory.contains(dWintertodt.knife, INVENTORY_THRESHOLD)) {
+            Logger.debugLog("Knife" + " in inventory, continuing");
             checkedForKnife = true;
         } else if (!checkedForKnife) {
-            Logger.log("You don't have a " + itemName + " in inventory");
+            Logger.log("You don't have a " + "Knife" + " in inventory");
             Script.stop();
         }
     }
