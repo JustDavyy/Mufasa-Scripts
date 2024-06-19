@@ -134,7 +134,7 @@ public class Bank extends Task {
 
     private boolean walkToBankFromGame() {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
-            Walker.walkPath(dWintertodt.gameToWTDoor);
+            Walker.walkPath(WTRegion, dWintertodt.gameToWTDoor);
             Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
             Client.tap(exitDoorRect);
             Condition.sleep(generateRandomDelay(1000, 1500));
