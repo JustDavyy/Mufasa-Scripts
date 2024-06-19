@@ -12,10 +12,11 @@ public class StateUpdater {
     static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
     static Rectangle gameAt20CheckRect = new Rectangle(253, 41, 1, 1);
     static Rectangle waitingForGameToStartRect = new Rectangle(93, 37, 1, 1);
+    static Rectangle waitingForGameEndedRect = new Rectangle(56, 38, 1, 1);
 
     public static void updateStates(WTStates[] states) {
         //Update our position
-        currentLocation = Walker.getPlayerPosition(main.dWintertodt.WTRegion);
+        currentLocation = Walker.getPlayerPosition(WTRegion);
 
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
             Logger.debugLog("Updating current states..");
@@ -31,6 +32,7 @@ public class StateUpdater {
             updateGameState();
             updateGameAt20();
             updateWaitingForGameToStart();
+            updateWaitingForGameEnded();
 
             if (GameTabs.isInventoryTabOpen()) {
                 updateKindlingState();
@@ -39,9 +41,9 @@ public class StateUpdater {
         }
 
         // Update which side we are on
-        if (Player.isTileWithinArea(currentLocation, main.dWintertodt.leftWTArea)) {
+        if (Player.isTileWithinArea(currentLocation, leftWTArea)) {
             currentSide = "Left";
-        } else if (Player.isTileWithinArea(currentLocation, main.dWintertodt.rightWTArea)) {
+        } else if (Player.isTileWithinArea(currentLocation, rightWTArea)) {
             currentSide = "Right";
         }
     }
@@ -96,7 +98,11 @@ public class StateUpdater {
     }
 
     private static void updateWaitingForGameToStart() {
-        dWintertodt.waitingForGameToStart = Client.isColorInRect(StateColor.GAME_GREEN_COLOR.getColor(), waitingForGameToStartRect, 10);
+        waitingForGameToStart = Client.isColorInRect(StateColor.GAME_GREEN_COLOR.getColor(), waitingForGameToStartRect, 10);
+    }
+
+    private static void updateWaitingForGameEnded() {
+        waitingForGameEnded = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), waitingForGameEndedRect, 10);
     }
 
 }

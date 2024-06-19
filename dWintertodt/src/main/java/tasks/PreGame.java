@@ -10,7 +10,7 @@ public class PreGame extends Task {
     @Override
     public boolean activate() {
         Logger.debugLog("Inside PreGame activate()");
-        return waitingForGameToStart || shouldStartWithBurn;
+        return waitingForGameEnded || shouldStartWithBurn;
     }
 
     @Override
@@ -42,12 +42,16 @@ public class PreGame extends Task {
             boolean healthCheck = startHP > Player.getHP();
 
             // Check if we can light
-            if (SideManager.getNeedsReburning()) {
-                Logger.log("Brazier needs initial lighting!");
-                Logger.log("Lighting brazier!");
-                Client.tap(SideManager.getBurnRect());
-                Condition.sleep(generateRandomDelay(1000, 1500));
-                return true;
+            if (waitingForGameToStart) {
+                if (SideManager.getNeedsReburning()) {
+                    Logger.log("Brazier needs initial lighting!");
+                    Logger.log("Lighting brazier!");
+                    Client.tap(SideManager.getBurnRect());
+                    Condition.sleep(generateRandomDelay(1000, 1500));
+                    return true;
+                } else {
+                    return healthCheck;
+                }
             } else {
                 return healthCheck;
             }
