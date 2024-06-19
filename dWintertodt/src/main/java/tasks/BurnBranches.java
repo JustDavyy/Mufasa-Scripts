@@ -58,12 +58,6 @@ public class BurnBranches extends Task {
                 }
 
                 XpBar.getXP();
-
-                Logger.debugLog("!inventoryHasKindlings: " + !inventoryHasKindlings);
-                Logger.debugLog("!inventoryHasBruma: " + !inventoryHasBruma);
-                Logger.debugLog("StartHP: " + startHP + " currentHP: " + currentHp);
-                Logger.debugLog("HP Check is: " + (startHP > currentHp));
-                Logger.debugLog("Player.leveledUp is: " + Player.leveledUp());
                 return !inventoryHasKindlings && !inventoryHasBruma || startHP > currentHp || Player.leveledUp();
             }, 200, 150);
 
