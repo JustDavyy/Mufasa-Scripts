@@ -1,5 +1,6 @@
 package tasks;
 
+import utils.StateUpdater;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -8,6 +9,7 @@ import static main.dWintertodt.*;
 public class GoToSafety extends Task {
     @Override
     public boolean activate() {
+        StateUpdater.updateIsGameGoing();
         Logger.debugLog("Inside GoToSafety activate()");
         return foodAmountInInventory == 0 && isGameGoing && Player.isTileWithinArea(currentLocation, insideArea) && !Player.isTileWithinArea(currentLocation, lobby);
     }
