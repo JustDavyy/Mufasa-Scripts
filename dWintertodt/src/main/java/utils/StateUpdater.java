@@ -2,6 +2,7 @@ package utils;
 
 
 import java.awt.*;
+import java.util.Date;
 
 import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
@@ -12,6 +13,7 @@ public class StateUpdater {
     static Rectangle waitingForGameToStartRect = new Rectangle(253, 41, 1, 1);
     static Rectangle waitingForGameEndedRect = new Rectangle(56, 38, 1, 1);
     static long mageDeadTimestamp = -1;
+    static Date date = new Date();
 
     public static void updateStates(WTStates[] states) {
         //Update our position
@@ -82,7 +84,14 @@ public class StateUpdater {
             if (mageDeadTimestamp == -1) {
                 // Set the timestamp when the mage first becomes dead
                 mageDeadTimestamp = System.currentTimeMillis();
-                Logger.debugLog("Mage became dead at: " + mageDeadTimestamp);
+
+                // Set the timestamp to a date object
+                date = new Date(mageDeadTimestamp);
+
+                // Format the time as HH:MM:SS
+                String formattedTime = String.format("%02d:%02d:%02d", date.getHours(), date.getMinutes(), date.getSeconds());
+
+                Logger.debugLog("Mage became dead at: " + formattedTime);
             }
         } else {
             // Reset the timestamp if the mage is not dead

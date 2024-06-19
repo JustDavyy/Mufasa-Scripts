@@ -17,7 +17,7 @@ public class FletchBranches extends Task {
     public boolean execute() {
         Logger.debugLog("Inside FletchBranches execute()");
         Integer startHP = Player.getHP();
-        Inventory.tapItem(knife, 0.60);
+        Inventory.tapItem(knife, true,0.60);
         Inventory.tapItem(brumaRoot, 0.60);
         Condition.wait(() -> Chatbox.isMakeMenuVisible(), 100, 30);
         Chatbox.makeOption(1);

@@ -35,20 +35,19 @@ public class PreGame extends Task {
 
         // Read the timer on the WT bar
         String results = Chatbox.readLastLine(new Rectangle(209, 33, 25, 12));
-        Logger.debugLog("OCR Result: " + results);
 
         // Check if results are not empty
         if (results != null && !results.trim().isEmpty()) {
             try {
                 // Extract the seconds from the results (assuming the format is "0:10")
                 int seconds = Integer.parseInt(results.split(":")[1].trim());
-                Logger.debugLog("Seconds till WT game starts: " + seconds);
+                Logger.log("Wintertodt starting in: 0:" + seconds);
 
                 // Check if the time is 10 seconds or below
                 if (seconds <= 10) {
                     // Wait for 2 seconds less than the number of seconds read
                     int waitTime = Math.max(0, seconds - 2) * 1000; // Convert to milliseconds
-                    Logger.debugLog("Waiting for " + waitTime + " milliseconds");
+                    Condition.sleep(waitTime);
 
                     // Start a 3-second while loop with an action every 200-300ms
                     long startTime = System.currentTimeMillis();
