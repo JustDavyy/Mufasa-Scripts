@@ -18,12 +18,12 @@ public class PreGame extends Task {
         Logger.debugLog("Inside PreGame execute()");
 
         // Check if we are at the burn tile, otherwise move there
-        if (!Player.atTile(SideManager.getBurnTile(), WTRegion)) {
+        if (!Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
             Walker.step(SideManager.getBurnTile(), WTRegion);
         }
 
         // If at burn tile, update current location and lock ourselves to this task
-        if (Player.atTile(SideManager.getBurnTile(), WTRegion)) {
+        if (Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
             // Set shouldStartWithBurn to true, so we lock ourselves in this task.
             shouldStartWithBurn = true;
 
