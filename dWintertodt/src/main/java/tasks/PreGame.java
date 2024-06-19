@@ -48,10 +48,13 @@ public class PreGame extends Task {
                 if (matcher.find()) {
                     String time = matcher.group();
                     int seconds = Integer.parseInt(time.split(":")[1].trim());
-                    Logger.log("Wintertodt starting in: 0:" + seconds);
+                    if (seconds <= 5) {
+                        Logger.log("Wintertodt starting in: 0:" + seconds);
+                    }
 
-                    // Check if the time is 10 seconds or below
-                    if (seconds <= 10) {
+
+                    // Check if the time is between 5 and 10 seconds (inclusive)
+                    if (seconds >= 5 && seconds <= 10) {
                         // Wait for 2 seconds less than the number of seconds read
                         int waitTime = Math.max(0, seconds - 2) * 1000; // Convert to milliseconds
                         Condition.sleep(waitTime);
