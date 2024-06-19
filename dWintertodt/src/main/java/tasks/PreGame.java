@@ -14,7 +14,7 @@ public class PreGame extends Task {
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside PreGame activate()");
-        return waitingForGameEnded || shouldStartWithBurn;
+        return waitingForGameEnded && !isGameGoing || shouldStartWithBurn && !isGameGoing;
     }
 
     @Override
