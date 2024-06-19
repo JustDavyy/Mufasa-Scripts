@@ -11,6 +11,7 @@ public class StateUpdater {
     static Rectangle gameAt20CheckRect = new Rectangle(93, 37, 1, 1);
     static Rectangle waitingForGameToStartRect = new Rectangle(253, 41, 1, 1);
     static Rectangle waitingForGameEndedRect = new Rectangle(56, 38, 1, 1);
+    static long mageDeadTimestamp = -1;
 
     public static void updateStates(WTStates[] states) {
         //Update our position
@@ -74,13 +75,21 @@ public class StateUpdater {
     private static boolean updateMageDead(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.MAGE_DEAD.getColor();
-        //Logger.debugLog("updateMageDead for: " + state.getName() + " : " + check);
 
-        if (Client.isColorInRect(checkColor, checkRect, 5)) {
-            Logger.debugLog("Changed updateMageDead to TRUE");
+        boolean isMageDead = Client.isColorInRect(checkColor, checkRect, 5);
+
+        if (isMageDead) {
+            if (mageDeadTimestamp == -1) {
+                // Set the timestamp when the mage first becomes dead
+                mageDeadTimestamp = System.currentTimeMillis();
+                Logger.debugLog("Mage became dead at: " + mageDeadTimestamp);
+            }
+        } else {
+            // Reset the timestamp if the mage is not dead
+            mageDeadTimestamp = -1;
         }
 
-        return Client.isColorInRect(checkColor, checkRect, 5);
+        return isMageDead;
     }
 
     private static void updateCurrentHP() {

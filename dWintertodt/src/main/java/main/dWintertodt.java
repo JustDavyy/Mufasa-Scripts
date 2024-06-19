@@ -185,7 +185,7 @@ public class dWintertodt extends AbstractScript {
             new CheckGear(),
             //new Bank(),
             new Eat(),
-            //new SwitchSide(),
+            new SwitchSide(),
             new BurnBranches(),
             new FletchBranches(),
             new PreGame(),
@@ -237,6 +237,10 @@ public class dWintertodt extends AbstractScript {
 
         // Make sure our Chatbox is closed
         Chatbox.closeChatbox();
+
+        // Disable break and AFK handlers, as we use custom breaks
+        Client.disableBreakHandler();
+        Client.disableAFKHandler();
     }
 
     @Override

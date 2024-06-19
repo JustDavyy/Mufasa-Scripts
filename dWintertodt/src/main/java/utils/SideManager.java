@@ -104,6 +104,15 @@ public class SideManager {
         return state != null && state.isMageDead();
     }
 
+    public static boolean isMageDeadForAtLeast(int seconds) {
+        if (StateUpdater.mageDeadTimestamp == -1) {
+            return false; // Mage is not dead
+        }
+
+        long currentTime = System.currentTimeMillis();
+        return (currentTime - StateUpdater.mageDeadTimestamp) >= (seconds * 1000L);
+    }
+
     // Method to pick a random side
     public static String pickRandomSide() {
         boolean pick = random.nextBoolean(); // Generate a random boolean
