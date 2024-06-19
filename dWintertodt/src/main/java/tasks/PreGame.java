@@ -48,7 +48,7 @@ public class PreGame extends Task {
                 if (matcher.find()) {
                     String time = matcher.group();
                     int seconds = Integer.parseInt(time.split(":")[1].trim());
-                    if (seconds <= 5) {
+                    if (seconds >= 5) {
                         Logger.log("Wintertodt starting in: 0:" + seconds);
                     }
 
