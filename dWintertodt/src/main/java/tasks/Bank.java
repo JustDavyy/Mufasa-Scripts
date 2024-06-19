@@ -14,7 +14,7 @@ public class Bank extends Task {
     @Override
     public boolean activate() {
         Logger.debugLog("Inside Bank activate()");
-        return main.dWintertodt.foodAmountInInventory < foodAmountLeftToBank && !isGameGoing; //|| (Inventory.emptySlots() > 8 && Inventory.contains(ItemList.SUPPLY_CRATE_20703, 0.8));
+        return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing; //|| (Inventory.emptySlots() > 8 && Inventory.contains(ItemList.SUPPLY_CRATE_20703, 0.8));
     }
 
     @Override
@@ -22,7 +22,9 @@ public class Bank extends Task {
         Logger.debugLog("Inside Bank execute()");
         checkFood = true;
 
-        if (walkToBankFromGame()) {
+        if (walkToBankFromDoorInside()) {
+            currentLocation = Walker.getPlayerPosition(WTRegion);
+        } else if (walkToBankFromGame()) {
             currentLocation = Walker.getPlayerPosition(WTRegion);
         } else if (walkToBankFromOutsideArea()) {
             currentLocation = Walker.getPlayerPosition(WTRegion);
@@ -134,10 +136,20 @@ public class Bank extends Task {
 
     private boolean walkToBankFromGame() {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
-            Walker.walkPath(WTRegion, dWintertodt.gameToWTDoor);
+            Walker.walkPath(WTRegion, gameToWTDoor);
             Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
             Client.tap(exitDoorRect);
-            Condition.sleep(generateRandomDelay(1000, 1500));
+            Condition.sleep(generateRandomDelay(3500, 5000));
+            currentLocation = Walker.getPlayerPosition(WTRegion);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean walkToBankFromDoorInside() {
+        if (Player.isTileWithinArea(currentLocation, atDoor)) {
+            Client.tap(exitDoorRect);
+            Condition.sleep(generateRandomDelay(3500, 5000));
             currentLocation = Walker.getPlayerPosition(WTRegion);
             return true;
         }

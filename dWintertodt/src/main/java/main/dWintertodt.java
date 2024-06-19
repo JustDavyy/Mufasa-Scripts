@@ -186,6 +186,7 @@ public class dWintertodt extends AbstractScript {
     // These tasks are executed in this order
     List<Task> WTTasks = Arrays.asList(
             new CheckGear(),
+            new GoToSafety(),
             new Bank(),
             new Eat(),
             new SwitchSide(),
