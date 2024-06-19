@@ -3,6 +3,8 @@ package tasks;
 import utils.SideManager;
 import utils.Task;
 
+import java.awt.*;
+
 import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
@@ -31,32 +33,42 @@ public class PreGame extends Task {
             currentLocation = SideManager.getBurnTile();
         }
 
-        // Wait for the game to start
-        Condition.wait(() -> {
-            // Update states during our conditional wait
-            SideManager.updateStates();
+        // Read the timer on the WT bar
+        String results = Chatbox.readLastLine(new Rectangle(209, 33, 25, 12));
+        Logger.debugLog("OCR Result: " + results);
 
-            // Check if we can light
-            if (waitingForGameToStart) {
-                if (SideManager.getNeedsReburning()) {
-                    Logger.log("Tapping Brazier for initial lighting");
-                    Client.tap(SideManager.getBurnRect());
-                    Condition.sleep(generateRandomDelay(1000, 1500));
-                    return true;
-                } else {
-                    return false;
+        // Check if results are not empty
+        if (results != null && !results.trim().isEmpty()) {
+            try {
+                // Extract the seconds from the results (assuming the format is "0:10")
+                int seconds = Integer.parseInt(results.split(":")[1].trim());
+                Logger.debugLog("Seconds till WT game starts: " + seconds);
+
+                // Check if the time is 10 seconds or below
+                if (seconds <= 10) {
+                    // Wait for 2 seconds less than the number of seconds read
+                    int waitTime = Math.max(0, seconds - 2) * 1000; // Convert to milliseconds
+                    Logger.debugLog("Waiting for " + waitTime + " milliseconds");
+
+                    // Start a 3-second while loop with an action every 200-300ms
+                    long startTime = System.currentTimeMillis();
+                    while (System.currentTimeMillis() - startTime < 3000) {
+                        Client.tap(SideManager.getBurnRect());
+
+                        Condition.sleep(generateRandomDelay(200, 300));
+                    }
+
+                    // Move to the branch tile
+                    Walker.step(SideManager.getBranchTile(), WTRegion);
+                    currentLocation = SideManager.getBranchTile();
+
+                    // Reset our booleans before exiting the task
+                    shouldStartWithBurn = false;
                 }
-            } else {
-                return false;
+            } catch (NumberFormatException e) {
+                Logger.debugLog("Failed to parse seconds from OCR result: " + results);
             }
-        }, 50, 1200);
-
-        // Move to the branch tile
-        Walker.step(SideManager.getBranchTile(), WTRegion);
-        currentLocation = SideManager.getBranchTile();
-
-        // Reset our booleans before exiting the task
-        shouldStartWithBurn = false;
+        }
 
         return false;
     }
