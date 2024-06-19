@@ -94,7 +94,7 @@ public class StateUpdater {
                 // Format the time as HH:MM:SS
                 String formattedTime = String.format("%02d:%02d:%02d", date.getHours(), date.getMinutes(), date.getSeconds());
 
-                Logger.debugLog("Mage died at: " + formattedTime);
+                Logger.debugLog("Mage died at " + formattedTime);
             }
         } else {
             // Reset the timestamp if the mage is not dead
