@@ -31,7 +31,7 @@ public class GoBackToGame extends Task {
 
     private boolean walkToBranchTileFromLobby() {
         if (Player.isTileWithinArea(currentLocation, lobby)) {
-            Walker.step(SideManager.getBranchTile());
+            Walker.step(SideManager.getBranchTile(), WTRegion);
             currentLocation = Walker.getPlayerPosition(WTRegion);
             return true;
         }
@@ -40,7 +40,7 @@ public class GoBackToGame extends Task {
 
     private boolean walkToDoorFromOutside() {
         if (Player.isTileWithinArea(currentLocation, outsideArea)) {
-            Walker.walkPath(getReversedTiles(wtDoorToBank));
+            Walker.walkPath(WTRegion, getReversedTiles(wtDoorToBank));
             Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
             Client.tap(enterDoorRect); //Need a door tap rect (bottom of screen should do?)
             Condition.sleep(generateRandomDelay(1000, 2500));
@@ -52,7 +52,7 @@ public class GoBackToGame extends Task {
 
     private boolean walkToGameFromDoor() {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
-            Walker.walkPath(SideManager.getDoorToGamePath());
+            Walker.walkPath(WTRegion, SideManager.getDoorToGamePath());
             Condition.wait(() -> SideManager.isWithinGameArea(), 100, 20);
             return true;
         }

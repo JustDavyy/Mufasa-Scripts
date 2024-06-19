@@ -17,13 +17,13 @@ public class GetBranches extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Inside GetBranches execute()");
-        if (!Player.atTile(SideManager.getBranchTile(), dWintertodt.WTRegion)) {
-            Walker.step(SideManager.getBranchTile(), dWintertodt.WTRegion);
+        if (!Player.atTile(SideManager.getBranchTile(), WTRegion)) {
+            Walker.step(SideManager.getBranchTile(), WTRegion);
             currentLocation = Walker.getPlayerPosition(WTRegion);
             return true;
         }
 
-        if (Player.atTile(SideManager.getBranchTile(), dWintertodt.WTRegion)) {
+        if (Player.atTile(SideManager.getBranchTile(), WTRegion)) {
             Client.tap(SideManager.getBranchRect());
 
             Logger.debugLog("Heading to GetBranches conditional wait.");

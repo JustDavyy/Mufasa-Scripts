@@ -34,12 +34,12 @@ public class BurnBranches extends Task {
             currentLocation = Walker.getPlayerPosition(WTRegion);
         }
 
-        if (Player.atTile(SideManager.getBurnTile(), dWintertodt.WTRegion)) {
+        if (Player.atTile(SideManager.getBurnTile(), WTRegion)) {
             Logger.log("Tapping burn rect!");
             Client.tap(SideManager.getBurnRect());
             Condition.wait(() -> {
                 Logger.debugLog("Waiting for next actions..");
-                boolean inventoryCheck = !Inventory.contains(dWintertodt.brumaKindling, 0.8);
+                boolean inventoryCheck = !Inventory.contains(brumaKindling, 0.8);
                 boolean healthCheck = startHP > Player.getHP();
                 boolean levelUpCheck = Player.leveledUp();
 

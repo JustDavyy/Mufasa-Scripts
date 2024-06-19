@@ -146,8 +146,8 @@ public class Bank extends Task {
 
     private boolean walkToBankFromOutsideArea() {
         if (Player.isTileWithinArea(currentLocation, outsideArea)) {
-            Walker.step(bankTile); //Step to bank tile.
-            Condition.wait(() -> Player.atTile(bankTile), 100, 20);
+            Walker.step(bankTile, WTRegion); //Step to bank tile.
+            Condition.wait(() -> Player.atTile(bankTile, WTRegion), 100, 20);
             currentLocation = Walker.getPlayerPosition(WTRegion);
             return true;
         }
