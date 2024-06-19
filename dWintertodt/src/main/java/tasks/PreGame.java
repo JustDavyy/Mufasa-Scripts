@@ -4,6 +4,8 @@ import utils.SideManager;
 import utils.Task;
 
 import java.awt.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
@@ -11,7 +13,7 @@ import static main.dWintertodt.*;
 public class PreGame extends Task {
     @Override
     public boolean activate() {
-        Logger.debugLog("Inside PreGame activate()");
+        //Logger.debugLog("Inside PreGame activate()");
         return waitingForGameEnded || shouldStartWithBurn;
     }
 
@@ -40,32 +42,39 @@ public class PreGame extends Task {
         // Check if results are not empty
         if (results != null && !results.trim().isEmpty()) {
             try {
-                // Extract the seconds from the results (assuming the format is "0:10")
-                int seconds = Integer.parseInt(results.split(":")[1].trim());
-                Logger.log("Wintertodt starting in: 0:" + seconds);
+                // Extract the seconds from the results using a regular expression
+                Pattern pattern = Pattern.compile("\\d+:\\d+");
+                Matcher matcher = pattern.matcher(results);
+                if (matcher.find()) {
+                    String time = matcher.group();
+                    int seconds = Integer.parseInt(time.split(":")[1].trim());
+                    Logger.log("Wintertodt starting in: 0:" + seconds);
 
-                // Check if the time is 10 seconds or below
-                if (seconds <= 10) {
-                    // Wait for 2 seconds less than the number of seconds read
-                    int waitTime = Math.max(0, seconds - 2) * 1000; // Convert to milliseconds
-                    Condition.sleep(waitTime);
+                    // Check if the time is 10 seconds or below
+                    if (seconds <= 10) {
+                        // Wait for 2 seconds less than the number of seconds read
+                        int waitTime = Math.max(0, seconds - 2) * 1000; // Convert to milliseconds
+                        Condition.sleep(waitTime);
 
-                    // Start a 3-second while loop with an action every 200-300ms
-                    long startTime = System.currentTimeMillis();
-                    while (System.currentTimeMillis() - startTime < 3000) {
-                        Client.tap(SideManager.getBurnRect());
+                        // Start a 3-second while loop with an action every 200-300ms
+                        long startTime = System.currentTimeMillis();
+                        while (System.currentTimeMillis() - startTime < 3000) {
+                            Client.tap(SideManager.getBurnRect());
 
-                        Condition.sleep(generateRandomDelay(200, 300));
+                            Condition.sleep(generateRandomDelay(200, 300));
+                        }
+
+                        Condition.sleep(generateRandomDelay(500, 800));
+
+                        // Move to the branch tile
+                        Walker.step(SideManager.getBranchTile(), WTRegion);
+                        currentLocation = SideManager.getBranchTile();
+
+                        // Reset our booleans before exiting the task
+                        shouldStartWithBurn = false;
                     }
-
-                    Condition.sleep(generateRandomDelay(500, 800));
-
-                    // Move to the branch tile
-                    Walker.step(SideManager.getBranchTile(), WTRegion);
-                    currentLocation = SideManager.getBranchTile();
-
-                    // Reset our booleans before exiting the task
-                    shouldStartWithBurn = false;
+                } else {
+                    Logger.debugLog("No valid time format found in OCR result: " + results);
                 }
             } catch (NumberFormatException e) {
                 Logger.debugLog("Failed to parse seconds from OCR result: " + results);

@@ -8,7 +8,7 @@ import static main.dWintertodt.*;
 public class Eat extends Task {
     @Override
     public boolean activate() {
-        Logger.debugLog("Inside Eat activate()");
+        //Logger.debugLog("Inside Eat activate()");
         return hpToEat > Player.getHP();
     }
 

@@ -10,7 +10,7 @@ public class FletchBranches extends Task {
 
     @Override
     public boolean activate() {
-        Logger.debugLog("Inside FletchBranches activate()");
+        //Logger.debugLog("Inside FletchBranches activate()");
         return Inventory.isFull() && Inventory.contains(brumaRoot, 0.60);
     }
 

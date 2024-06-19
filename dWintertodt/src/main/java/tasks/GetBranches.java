@@ -9,7 +9,7 @@ import static main.dWintertodt.*;
 public class GetBranches extends Task {
     @Override
     public boolean activate() {
-        Logger.debugLog("Inside GetBranches activate()");
+        //Logger.debugLog("Inside GetBranches activate()");
         return !Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing;
     }
 

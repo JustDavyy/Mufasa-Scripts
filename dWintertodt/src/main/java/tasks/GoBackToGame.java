@@ -10,7 +10,7 @@ public class GoBackToGame extends Task {
 
     @Override
     public boolean activate() {
-        Logger.debugLog("Inside GoBackToGame activate()");
+        //Logger.debugLog("Inside GoBackToGame activate()");
         return (Player.within(outsideArea, WTRegion) || Player.within(insideArea, WTRegion)) && !SideManager.isWithinGameArea() && !waitingForGameEnded && !isGameGoing;
     }
 

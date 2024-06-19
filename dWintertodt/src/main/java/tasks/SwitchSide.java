@@ -10,7 +10,7 @@ import static main.dWintertodt.*;
 public class SwitchSide extends Task {
     @Override
     public boolean activate() {
-        Logger.debugLog("Inside SwitchSide activate()");
+        //Logger.debugLog("Inside SwitchSide activate()");
 
         if (SideManager.getMageDead() && Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
 
