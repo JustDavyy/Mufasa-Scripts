@@ -1,6 +1,7 @@
 package tasks;
 
 import utils.SideManager;
+import utils.StateUpdater;
 import utils.Task;
 
 import java.awt.*;
@@ -14,6 +15,7 @@ public class PreGame extends Task {
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside PreGame activate()");
+        StateUpdater.updateIsGameGoing();
         return waitingForGameEnded && !isGameGoing || shouldStartWithBurn && !isGameGoing;
     }
 

@@ -1,6 +1,7 @@
 package tasks;
 
 import utils.SideManager;
+import utils.StateUpdater;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -11,6 +12,8 @@ public class BurnBranches extends Task {
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside BurnBranches activate()");
+
+        StateUpdater.updateIsGameGoing();
 
         // Regular check condition
         if (inventoryHasKindlings && !inventoryHasBruma) {

@@ -142,7 +142,7 @@ public class StateUpdater {
         waitingForGameEnded = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), waitingForGameEndedRect, 10);
     }
 
-    private static void updateIsGameGoing() {
+    public static void updateIsGameGoing() {
         isGameGoing = Client.isColorInRect(StateColor.GAME_GREEN_COLOR.getColor(), waitingForGameEndedRect, 10);
     }
 
