@@ -7,7 +7,7 @@ import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
 public class BurnBranches extends Task {
-
+    private boolean isBurning = false;
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside BurnBranches activate()");
@@ -17,12 +17,20 @@ public class BurnBranches extends Task {
             return true;
         }
 
+        if (shouldBurn && isGameGoing) {
+            isBurning = true;
+        }
+
         // check if we have brumakindlings & we are at the burn tile
-        return (inventoryHasKindlings && Player.tileEquals(currentLocation, SideManager.getBurnTile())) && isGameGoing || shouldBurn && isGameGoing;
+        return (inventoryHasKindlings && Player.tileEquals(currentLocation, SideManager.getBurnTile())) && isGameGoing || isBurning;
     }
 
     @Override
     public boolean execute() {
+        if (!inventoryHasBruma && !inventoryHasKindlings && isBurning) {
+            isBurning = false;
+        }
+
         Logger.debugLog("Inside BurnBranches execute()");
         Integer startHP = Player.getHP();
 
