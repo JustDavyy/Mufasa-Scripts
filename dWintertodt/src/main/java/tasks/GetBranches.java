@@ -10,7 +10,7 @@ public class GetBranches extends Task {
     @Override
     public boolean activate() {
         Logger.debugLog("Inside GetBranches activate()");
-        return !Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded;
+        return !Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class GetBranches extends Task {
             Logger.debugLog("Heading to GetBranches conditional wait.");
             Condition.wait(() -> {
                 XpBar.getXP();
-                return Inventory.isFull() || hpToEat > currentHp || Player.leveledUp() || shouldBurn;
+                return Inventory.isFull() || hpToEat > currentHp || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
             }, 200, 150);
             return true;
         }

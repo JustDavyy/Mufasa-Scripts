@@ -26,7 +26,7 @@ public class FletchBranches extends Task {
         Logger.debugLog("Heading to FletchBranches conditional wait.");
         Condition.wait(() -> {
             XpBar.getXP();
-            return !inventoryHasBruma || startHP > currentHp || Player.leveledUp() || shouldBurn;
+            return !inventoryHasBruma || startHP > currentHp || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
         }, 200, 150);
         return true;
     }

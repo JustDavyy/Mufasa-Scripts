@@ -20,7 +20,7 @@ public class BurnBranches extends Task {
         }
 
         // check if we have brumakindlings & we are at the burn tile
-        return (inventoryHasKindlings && Player.tileEquals(currentLocation, SideManager.getBurnTile())) || shouldBurn;
+        return (inventoryHasKindlings && Player.tileEquals(currentLocation, SideManager.getBurnTile())) && isGameGoing || shouldBurn && isGameGoing;
     }
 
     @Override
