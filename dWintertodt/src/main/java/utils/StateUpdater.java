@@ -9,7 +9,9 @@ import static main.dWintertodt.*;
 
 public class StateUpdater {
 //    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
+    static Rectangle gameAt13CheckRect = new Rectangle(83, 38, 1, 1);
     static Rectangle gameAt20CheckRect = new Rectangle(93, 37, 1, 1);
+    static Rectangle gameAt70CheckRect = new Rectangle(196, 39, 1, 1);
     static Rectangle waitingForGameToStartRect = new Rectangle(253, 41, 1, 1);
     static Rectangle waitingForGameEndedRect = new Rectangle(56, 38, 1, 1);
     static long mageDeadTimestamp = -1;
@@ -31,7 +33,10 @@ public class StateUpdater {
 
             // Update the game state boolean (true if wt game is 15% or less left.
 //            updateGameState();
+            updateGameAt13();
             updateGameAt20();
+            updateGameAt70();
+            updateIsGameGoing();
             updateWaitingForGameToStart();
             updateWaitingForGameEnded();
             updateCurrentHP();
@@ -109,8 +114,16 @@ public class StateUpdater {
 //        gameNearingEnd = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameCheckRect, 10);
 //    }
 
+    private static void updateGameAt13() {
+        gameAt13Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt13CheckRect, 10);
+    }
+
     private static void updateGameAt20() {
         gameAt20Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt20CheckRect, 10);
+    }
+
+    private static void updateGameAt70() {
+        gameAt70Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt70CheckRect, 10);
     }
 
     private static void updateShouldBurn() {
@@ -128,6 +141,10 @@ public class StateUpdater {
 
     private static void updateWaitingForGameEnded() {
         waitingForGameEnded = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), waitingForGameEndedRect, 10);
+    }
+
+    private static void updateIsGameGoing() {
+        isGameGoing = Client.isColorInRect(StateColor.GAME_GREEN_COLOR.getColor(), waitingForGameEndedRect, 10);
     }
 
 }
