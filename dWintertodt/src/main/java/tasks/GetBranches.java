@@ -29,6 +29,7 @@ public class GetBranches extends Task {
 
             Logger.debugLog("Heading to GetBranches conditional wait.");
             Condition.wait(() -> {
+                SideManager.updateStates();
                 XpBar.getXP();
                 return Inventory.isFull() || hpToEat > currentHp || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
             }, 200, 150);

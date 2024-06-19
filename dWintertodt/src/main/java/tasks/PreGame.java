@@ -58,6 +58,8 @@ public class PreGame extends Task {
                         Condition.sleep(generateRandomDelay(200, 300));
                     }
 
+                    Condition.sleep(generateRandomDelay(500, 800));
+
                     // Move to the branch tile
                     Walker.step(SideManager.getBranchTile(), WTRegion);
                     currentLocation = SideManager.getBranchTile();

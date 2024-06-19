@@ -105,7 +105,7 @@ public class SideManager {
     }
 
     public static boolean isMageDeadForAtLeast(int seconds) {
-        if (StateUpdater.mageDeadTimestamp == -1) {
+        if (StateUpdater.mageDeadTimestamp == -1 || !getMageDead()) {
             return false; // Mage is not dead
         }
 
