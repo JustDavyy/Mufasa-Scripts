@@ -55,9 +55,6 @@ public class PreGame extends Task {
         Walker.step(SideManager.getBranchTile(), WTRegion);
         currentLocation = SideManager.getBranchTile();
 
-        // Start chopping branches
-        Client.tap(SideManager.getBranchRect());
-
         // Reset our booleans before exiting the task
         shouldStartWithBurn = false;
 

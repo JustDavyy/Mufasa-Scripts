@@ -11,7 +11,16 @@ public class SwitchSide extends Task {
     @Override
     public boolean activate() {
         Logger.debugLog("Inside SwitchSide activate()");
-        return false;
+
+        if (SideManager.getMageDead() && Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
+
+            // Check for 5 seconds if the mage is dead for at least 5 seconds
+            Condition.wait(() -> SideManager.isMageDeadForAtLeast(5), 250, 20);
+
+            return SideManager.isMageDeadForAtLeast(5);
+        } else {
+            return false;
+        }
     }
 
     @Override
