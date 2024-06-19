@@ -108,6 +108,7 @@ public class dWintertodt extends AbstractScript {
     public static int foodAmountLeftToBank;
     public static int bankTab;
     public static int foodAmountInInventory;
+    public static int currentHp;
 //    public static boolean gameNearingEnd;
     public static boolean gameAt20Percent;
     public static boolean shouldBurn;

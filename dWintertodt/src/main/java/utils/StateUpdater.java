@@ -31,6 +31,7 @@ public class StateUpdater {
             updateGameAt20();
             updateWaitingForGameToStart();
             updateWaitingForGameEnded();
+            updateCurrentHP();
 
             if (GameTabs.isInventoryTabOpen()) {
                 updateKindlingState();
@@ -80,6 +81,10 @@ public class StateUpdater {
         }
 
         return Client.isColorInRect(checkColor, checkRect, 5);
+    }
+
+    private static void updateCurrentHP() {
+        currentHp = Player.getHP();
     }
 
 //    private static void updateGameState() {

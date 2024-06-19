@@ -27,11 +27,8 @@ public class GetBranches extends Task {
 
             Logger.debugLog("Heading to GetBranches conditional wait.");
             Condition.wait(() -> {
-                boolean inventoryCheck = Inventory.isFull();
-                boolean healthCheck = hpToEat > Player.getHP();
-                boolean levelUpCheck = Player.leveledUp();
                 XpBar.getXP();
-                return inventoryCheck || healthCheck || levelUpCheck || shouldBurn;
+                return Inventory.isFull() || hpToEat > currentHp || Player.leveledUp() || shouldBurn;
             }, 200, 150);
             return true;
         }

@@ -39,9 +39,6 @@ public class BurnBranches extends Task {
             Client.tap(SideManager.getBurnRect());
             Condition.wait(() -> {
                 Logger.debugLog("Waiting for next actions..");
-                boolean inventoryCheck = !Inventory.contains(brumaKindling, 0.8);
-                boolean healthCheck = startHP > Player.getHP();
-                boolean levelUpCheck = Player.leveledUp();
 
                 // Handle reburning/fixing
                 SideManager.updateStates();
@@ -58,7 +55,7 @@ public class BurnBranches extends Task {
 
                 XpBar.getXP();
 
-                return inventoryCheck || healthCheck || levelUpCheck;
+                return !inventoryHasKindlings || startHP > currentHp || Player.leveledUp();
             }, 200, 150);
 
             return true;
@@ -69,7 +66,7 @@ public class BurnBranches extends Task {
 
     private void tapAndSleep(int repeatCount, int startHP) {
         for (int i = 0; i < repeatCount; i++) {
-            if (startHP > Player.getHP()) {
+            if (startHP > currentHp) {
                 break; // Exit the loop if the player's health drops
             }
             Client.tap(SideManager.getBurnRect());
