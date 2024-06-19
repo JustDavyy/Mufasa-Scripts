@@ -64,7 +64,7 @@ import static utils.SideManager.pickRandomSide;
                 @ScriptConfiguration(
                         name = "Food amount left to bank at",
                         description = "Select the amount of food required to have for each game",
-                        defaultValue = "5",
+                        defaultValue = "4",
                         minMaxIntValues = {1, 28},
                         optionType = OptionType.INTEGER_SLIDER
                 ),
