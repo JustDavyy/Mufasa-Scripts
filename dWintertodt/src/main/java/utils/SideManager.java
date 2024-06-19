@@ -82,19 +82,19 @@ public class SideManager {
 
     // Method to get the burning state for the current side
     public static boolean getBurningState() {
-        WTStates state = getState(currentSide.equals("Right") ? "Lower Right" : "Lower Left");
+        WTStates state = getState(currentSide.equals("Right") ? "Right" : "Left");
         return state != null && state.isFireAlive();
     }
 
     // Method to check if the current side needs fixing
     public static boolean getNeedsFixing() {
-        WTStates state = getState(currentSide.equals("Right") ? "Lower Right" : "Lower Left");
+        WTStates state = getState(currentSide.equals("Right") ? "Right" : "Left");
         return state != null && state.isNeedsFixing();
     }
 
     // Method to check if the current side needs reburning
     public static boolean getNeedsReburning() {
-        WTStates state = getState(currentSide.equals("Right") ? "Lower Right" : "Lower Left");
+        WTStates state = getState(currentSide.equals("Right") ? "Right" : "Left");
         return state != null && state.isNeedsReburning();
     }
 
@@ -103,7 +103,7 @@ public class SideManager {
         boolean pick = random.nextBoolean(); // Generate a random boolean
 
         // Set currentSide based on the random boolean value
-        return pick ? "Lower Right" : "Lower Left";
+        return pick ? "Right" : "Left";
     }
 
     // Helper method to get a WTStates object by its name

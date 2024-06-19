@@ -176,8 +176,8 @@ public class dWintertodt extends AbstractScript {
     public static String pickedSide;
     // State creation (we might not need all 4, but just the bottom ones?)
     public static WTStates[] states = {
-            new WTStates("Lower Left", new Rectangle(60, 112, 31, 31), false, false, false, false),
-            new WTStates("Lower Right", new Rectangle(120, 113, 27, 31), false, false, false, false)
+            new WTStates("Left", new Rectangle(60, 112, 31, 31), false, false, false, false),
+            new WTStates("Right", new Rectangle(120, 113, 27, 31), false, false, false, false)
     };
     // These tasks are executed in this order
     List<Task> WTTasks = Arrays.asList(

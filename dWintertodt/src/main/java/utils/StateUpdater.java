@@ -88,11 +88,6 @@ public class StateUpdater {
 
     private static void updateShouldBurn() {
         shouldBurn = (gameAt20Percent && (inventoryHasKindlings || inventoryHasBruma) && Inventory.usedSlots() >= 18);
-        Logger.debugLog("shouldBurn is: " + shouldBurn);
-        Logger.debugLog("gameAt20Percent is: " + gameAt20Percent);
-        Logger.debugLog("inventoryHasKindlings is: " + inventoryHasKindlings);
-        Logger.debugLog("inventoryHasBruma is: " + inventoryHasBruma);
-        Logger.debugLog("inventory used slots above or equal to 18 is: " + (Inventory.usedSlots() >= 18));
     }
 
     private static void updateKindlingState() {

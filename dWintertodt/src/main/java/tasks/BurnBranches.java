@@ -14,17 +14,12 @@ public class BurnBranches extends Task {
         boolean inventoryHasKindlings = Inventory.contains(brumaKindling, 0.8);
         boolean inventoryHasBruma = Inventory.contains(brumaRoot, 0.8);
 
-        Logger.debugLog("inventoryHasKindlings is " + inventoryHasKindlings);
-        Logger.debugLog("inventoryHasBruma is " + inventoryHasKindlings);
         // Regular check condition
         if (inventoryHasKindlings && !inventoryHasBruma) {
-            Logger.debugLog("if (inventoryHasKindlings && !inventoryHasBruma) is true");
             return true;
         }
 
         // check if we have brumakindlings & we are at the burn tile
-        Logger.debugLog("Player.tileEquals burntile is: " + Player.tileEquals(currentLocation, SideManager.getBurnTile()));
-        Logger.debugLog("shouldBurn is: " + shouldBurn);
         return (inventoryHasKindlings && Player.tileEquals(currentLocation, SideManager.getBurnTile())) || shouldBurn;
     }
 

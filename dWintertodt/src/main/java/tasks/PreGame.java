@@ -31,15 +31,10 @@ public class PreGame extends Task {
             currentLocation = SideManager.getBurnTile();
         }
 
-        Integer startHP = Player.getHP();
-
         // Wait for the game to start
         Condition.wait(() -> {
             // Update states during our conditional wait
             SideManager.updateStates();
-
-            // Check if our HP has dropped
-            boolean healthCheck = startHP > Player.getHP();
 
             // Check if we can light
             if (waitingForGameToStart) {
@@ -49,12 +44,12 @@ public class PreGame extends Task {
                     Condition.sleep(generateRandomDelay(1000, 1500));
                     return true;
                 } else {
-                    return healthCheck;
+                    return false;
                 }
             } else {
-                return healthCheck;
+                return false;
             }
-        }, 200, 300);
+        }, 50, 1200);
 
         // Move to the branch tile
         Walker.step(SideManager.getBranchTile(), WTRegion);
