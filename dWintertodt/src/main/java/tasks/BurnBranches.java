@@ -60,7 +60,7 @@ public class BurnBranches extends Task {
                 }
 
                 XpBar.getXP();
-                return !inventoryHasKindlings || startHP > currentHp || Player.leveledUp();
+                return (!inventoryHasKindlings || !inventoryHasBruma) || startHP > currentHp || Player.leveledUp();
             }, 200, 150);
 
             return true;
