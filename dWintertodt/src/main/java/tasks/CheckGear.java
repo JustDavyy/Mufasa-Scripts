@@ -30,13 +30,13 @@ public class CheckGear extends Task {
 
     @Override
     public boolean activate() {
-        Logger.debugLog("Inside Eat activate()");
+        //Logger.debugLog("Inside CheckGear activate()");
         return !gearChecked;
     }
 
     @Override
     public boolean execute() {
-        Logger.debugLog("Inside Eat execute()");
+        Logger.debugLog("Inside CheckGear execute()");
         checkForItem();
 
         checkForAxe();
