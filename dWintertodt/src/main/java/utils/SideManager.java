@@ -60,6 +60,22 @@ public class SideManager {
         }
     }
 
+    public static Rectangle getBurnSwitchSideRect() {
+        if (currentSide.equals("Right")) {
+            return BranchDetails.RIGHT_BRANCH.getSwitchSideBurnRect();
+        } else {
+            return BranchDetails.LEFT_BRANCH.getSwitchSideBurnRect();
+        }
+    }
+
+    public static Rectangle getBranchSwitchSideRect() {
+        if (currentSide.equals("Right")) {
+            return BranchDetails.RIGHT_BRANCH.getSwitchSideBranchRect();
+        } else {
+            return BranchDetails.LEFT_BRANCH.getSwitchSideBranchRect();
+        }
+    }
+
     public static void updateStates() {
         StateUpdater.updateStates(dWintertodt.states);
     }
