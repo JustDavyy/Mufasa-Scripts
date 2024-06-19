@@ -11,8 +11,6 @@ public class BurnBranches extends Task {
     @Override
     public boolean activate() {
         Logger.debugLog("Inside BurnBranches activate()");
-        boolean inventoryHasKindlings = Inventory.contains(brumaKindling, 0.8);
-        boolean inventoryHasBruma = Inventory.contains(brumaRoot, 0.8);
         // Regular check condition
         if (inventoryHasKindlings && !inventoryHasBruma) {
             return true;
