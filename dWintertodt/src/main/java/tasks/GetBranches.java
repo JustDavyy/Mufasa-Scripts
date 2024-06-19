@@ -7,7 +7,7 @@ import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
 public class GetBranches extends Task {
-    private boolean gettingBranches = false;
+    public static boolean gettingBranches = false;
 
     @Override
     public boolean activate() {

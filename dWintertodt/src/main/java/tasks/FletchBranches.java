@@ -7,7 +7,7 @@ import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
 public class FletchBranches extends Task {
-    private boolean isFletching = false;
+    public static boolean isFletching = false;
 
     @Override
     public boolean activate() {

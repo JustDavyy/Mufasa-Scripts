@@ -25,6 +25,9 @@ public class BurnBranches extends Task {
 
     @Override
     public boolean execute() {
+        FletchBranches.isFletching = false;
+        GetBranches.gettingBranches = false;
+
         if (!shouldBurn && isBurning) {
             isBurning = false;
         }
