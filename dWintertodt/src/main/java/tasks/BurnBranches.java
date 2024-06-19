@@ -25,7 +25,7 @@ public class BurnBranches extends Task {
 
     @Override
     public boolean execute() {
-        if (!inventoryHasBruma && !inventoryHasKindlings && isBurning) {
+        if (!shouldBurn && isBurning) {
             isBurning = false;
         }
 
