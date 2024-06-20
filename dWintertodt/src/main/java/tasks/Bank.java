@@ -59,8 +59,10 @@ public class Bank extends Task {
     private void setupOrStepToBank() {
         if (dynamicBank == null) {
             dynamicBank = Bank.setupDynamicBank();
+            currentLocation = Walker.getPlayerPosition(WTRegion);
         } else {
             Bank.stepToBank(dynamicBank);
+            currentLocation = Walker.getPlayerPosition(WTRegion);
         }
     }
 
