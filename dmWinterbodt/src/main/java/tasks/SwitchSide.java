@@ -2,6 +2,7 @@ package tasks;
 
 import helpers.utils.Tile;
 import utils.SideManager;
+import utils.StateUpdater;
 import utils.Task;
 
 import java.awt.*;
@@ -18,29 +19,11 @@ public class SwitchSide extends Task {
 
         if (SideManager.getMageDead() && Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
             Logger.debugLog("Mage is dead and player is at burn tile. Checking if mage has been dead for at least 5 seconds.");
-
-            // Check for 5 seconds if the mage is dead for at least 5 seconds
-            Condition.wait(() -> {
-                SideManager.updateMageDeadState();
-
-                if (!SideManager.getMageDead()) {
-                    Logger.debugLog("Mage is alive again. Exiting early.");
-                    isMageDead = false;
-                    return true;
-                }
-
-                if (SideManager.isMageDeadForAtLeast(5)) {
-                    Logger.debugLog("Mage has been dead for at least 5 seconds.");
-                    isMageDead = true;
-                    return true;
-                }
-
-                Logger.debugLog("Mage has not been dead for 5 seconds yet.");
-                return isMageDead;
-            }, 250, 20);
+            return SideManager.isMageDeadForAtLeast(5);
+        } else {
+            // Mage has not been dead yet for 5 seconds.
+            return false;
         }
-
-        return isMageDead;
     }
 
     @Override
