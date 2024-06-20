@@ -8,7 +8,7 @@ import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
 public class BreakManager extends Task {
-    private static Random random = new Random();
+    private static Random random = new Random(System.nanoTime());
     public static int currentGameCount = 0;
     public static int shouldBreakAt = 0;
     public static boolean shouldBreakNow = false;
@@ -27,13 +27,9 @@ public class BreakManager extends Task {
     }
 
     @Override
-    //I took the execute from ur nmz ;)
     public boolean execute() {
-        // Generate random break time between 1 and 6 minutes
-        int breakMinutes = new Random().nextInt(6) + 4;  // Generates a number from 4 to 9
-
-        // Randomize the seconds from 0 to 59
-        int breakSeconds = new Random().nextInt(60);
+        int breakMinutes = random.nextInt(6) + 4;  // Generates a number from 4 to 9
+        int breakSeconds = random.nextInt(60);     // Use the same random instance here as well
         int breakMillis = breakMinutes * 60000 + breakSeconds * 1000;  // Convert minutes and seconds to milliseconds
 
         // Log the precise break duration
