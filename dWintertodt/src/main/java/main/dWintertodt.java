@@ -107,6 +107,10 @@ public class dWintertodt extends AbstractScript {
     public static int foodAmount;
     public static int foodAmountLeftToBank;
     public static int bankTab;
+    public static Rectangle bankSearchArea = new Rectangle(410, 144, 429, 358);
+    public static List<Color> bankChest = Arrays.asList(
+            Color.decode("#2c3737")
+    );
     public static int foodAmountInInventory;
     public static int currentHp;
 //    public static boolean gameNearingEnd;
@@ -123,6 +127,14 @@ public class dWintertodt extends AbstractScript {
     public static RegionBox WTRegion = new RegionBox("WTRegion", 1701, 264, 2157, 846);
     public static Area lobby = new Area(new Tile(632, 173), new Tile(644, 184));
     public static Tile bankTile = new Tile(651, 230);
+    public static Area bankTentArea = new Area(
+            new Tile(647, 224),
+            new Tile(654, 232)
+    );
+    public static Tile[] outsideToBankPath = new Tile[] {
+            new Tile(638, 212),
+            new Tile(645, 225)
+    };
     public static Rectangle enterDoorRect = new Rectangle(323, 75, 307, 122);
     public static Rectangle exitDoorRect = new Rectangle(138, 248, 459, 173);
     public static Area insideArea = new Area(
@@ -232,6 +244,10 @@ public class dWintertodt extends AbstractScript {
         bankTab = Integer.parseInt(configs.get("BankTab"));
 
         setupFoodIDs();
+
+        // Make sure the inventory is open
+        GameTabs.openInventoryTab();
+
         initialFoodCount();
 
         if (pickedSide.equals("Random")) {
@@ -315,10 +331,6 @@ public class dWintertodt extends AbstractScript {
         foodAmountInInventory = 0; // Reset before counting
 
         Logger.debugLog("Counting initial food in inventory");
-        if (!GameTabs.isInventoryTabOpen()) {
-            GameTabs.openInventoryTab();
-            Condition.wait(() -> GameTabs.isInventoryTabOpen(), 100, 10);
-        }
 
         if (selectedFood.equals("Cakes")) {
             int[] foodIds = {1891, 1893, 1895};
@@ -331,10 +343,10 @@ public class dWintertodt extends AbstractScript {
                 }
 
                 // Assume Inventory.count(id, 0.60) returns the number of items that are at least 60% intact
-                foodAmountInInventory += Inventory.count(id, 0.60) * countMultiplier;
+                foodAmountInInventory += Inventory.count(id, 0.75) * countMultiplier;
             }
         } else {
-            foodAmountInInventory = Inventory.count(foodID, 0.60);
+            foodAmountInInventory = Inventory.count(foodID, 0.75);
         }
     }
 }

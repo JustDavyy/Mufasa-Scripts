@@ -1,16 +1,19 @@
 package tasks;
 
 import helpers.utils.ItemList;
-import main.dWintertodt;
 import utils.StateUpdater;
 import utils.Task;
+
+import java.awt.*;
+import java.util.List;
+import java.util.Random;
 
 import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
 public class Bank extends Task {
     private boolean checkFood = true;
-    private String dynamicBank;
+    Random random = new Random();
 
     @Override
     public boolean activate() {
@@ -22,7 +25,10 @@ public class Bank extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Inside Bank execute()");
+        Logger.log("Banking!");
         checkFood = true;
+
+        GameTabs.openInventoryTab();
 
         if (walkToBankFromDoorInside()) {
             currentLocation = Walker.getPlayerPosition(WTRegion);
@@ -32,16 +38,16 @@ public class Bank extends Task {
             currentLocation = Walker.getPlayerPosition(WTRegion);
         }
 
-        if (!Player.tileEquals(currentLocation, bankTile)) {
+        if (!Player.isTileWithinArea(currentLocation, bankTentArea)) {
             Walker.step(bankTile, WTRegion);
+            Condition.wait(() -> Player.within(bankTentArea, WTRegion), 250, 15);
+            Condition.sleep(generateRandomDelay(500, 1000));
             currentLocation = Walker.getPlayerPosition(WTRegion);
         }
-        if (Player.tileEquals(currentLocation, bankTile)) {
+        if (Player.isTileWithinArea(currentLocation, bankTentArea)) {
             handleBanking();
             return true;
         }
-
-        countFoodInInventory();
         return false;
     }
 
@@ -50,39 +56,66 @@ public class Bank extends Task {
         if (ensureBankIsOpen()) {
             ensureCorrectBankTab();
 
+            depositExcessSupplyCrates();
+
             int foodNeeded = CalculateAmountOfFoodNeeded();
             withdrawFoodIfNeeded(foodNeeded);
-            depositExcessSupplyCrates();
+
+            Bank.close();
+            Condition.sleep(generateRandomDelay(400,700));
+            if (Bank.isOpen()) {
+                Bank.close();
+            }
+
+            GameTabs.openInventoryTab();
+
+            checkFood = true;
+            Condition.sleep(generateRandomDelay(250,500));
+            countFoodInInventory();
         }
     }
 
     private void setupOrStepToBank() {
-        if (dynamicBank == null) {
-            dynamicBank = Bank.setupDynamicBank();
-            currentLocation = Walker.getPlayerPosition(WTRegion);
-        } else {
-            Bank.stepToBank(dynamicBank);
+        if (!Player.within(bankTentArea, WTRegion)) {
+            Walker.step(bankTile, WTRegion);
+            Condition.wait(() -> Player.within(bankTentArea, WTRegion), 250, 15);
+            Condition.sleep(generateRandomDelay(500, 1000));
             currentLocation = Walker.getPlayerPosition(WTRegion);
         }
     }
 
     private boolean ensureBankIsOpen() {
         if (!Bank.isOpen()) {
-            Bank.open(dynamicBank);
-            Condition.wait(() -> Bank.isOpen(), 100, 10);
-            return true;
+            Logger.debugLog("Bank is not open yet, opening!");
+
+            // use color finder here
+            List<Rectangle> foundRectangles = Client.getObjectsFromColorsInRect(bankChest, bankSearchArea, 1);
+
+            if (!foundRectangles.isEmpty()) {
+                Rectangle randomRect = foundRectangles.get(random.nextInt(foundRectangles.size()));
+                Logger.debugLog("Located the wintertodt bank chest using the color finder, tapping.");
+                Client.tap(randomRect);
+                Condition.wait(() -> Bank.isOpen(), 250, 15);
+                Logger.debugLog("Bank should be open now?.");
+                return true;
+            } else {
+                Logger.debugLog("Couldn't locate the wintertodt bank chest using the color finder.");
+                return false;
+            }
+        } else {
+            Logger.debugLog("Bank is already open.");
+            return false;
         }
-        return false;
     }
 
     private void withdrawFoodIfNeeded(int foodNeeded) {
         if (foodNeeded > 0) {
-
+            Logger.log("Withdrawing " + foodNeeded + " " + selectedFood + " from the bank.");
             if (!Bank.isSelectedQuantity1Button()) {
                 Bank.tapQuantity1Button();
             }
             for (int i = 0; i < foodNeeded; i++) {
-                Bank.withdrawItem(foodID, 1);
+                Bank.withdrawItem(foodID, 0.7);
             }
         }
     }
@@ -96,6 +129,7 @@ public class Bank extends Task {
 
     private void depositExcessSupplyCrates() {
         if (Inventory.contains(ItemList.SUPPLY_CRATE_20703, 0.80)) {
+            Logger.log("Depositing supply crates.");
             if (!Bank.isSelectedQuantityAllButton()) {
                 Bank.tapQuantityAllButton();
             }
@@ -106,7 +140,7 @@ public class Bank extends Task {
 
     private int CalculateAmountOfFoodNeeded() {
         // Calculate the amount of food needed to withdraw from the bank
-        int foodNeeded = dWintertodt.foodAmountLeftToBank - dWintertodt.foodAmountInInventory;
+        int foodNeeded = foodAmount - foodAmountInInventory;
 
         // If more food is needed, return that amount; otherwise, return 0
         return Math.max(foodNeeded, 0);
@@ -115,7 +149,8 @@ public class Bank extends Task {
     // Method to count total food items in the inventory
     private void countFoodInInventory() {
         if (checkFood) {
-            dWintertodt.foodAmountInInventory = 0; // Reset before counting
+            Logger.debugLog("Running food count.");
+            foodAmountInInventory = 0; // Reset before counting
 
             if (selectedFood.equals("Cakes")) {
                 int[] foodIds = {1891, 1893, 1895};
@@ -128,11 +163,13 @@ public class Bank extends Task {
                     }
 
                     // Assume Inventory.count(id, 0.60) returns the number of items that are at least 60% intact
-                    dWintertodt.foodAmountInInventory += Inventory.count(id, 0.60) * countMultiplier;
+                    foodAmountInInventory += Inventory.count(id, 0.75) * countMultiplier;
+                    Logger.debugLog("Food in inventory: " + foodAmountInInventory);
                     checkFood = false;
                 }
             } else {
-                dWintertodt.foodAmountInInventory = Inventory.count(foodID, 0.60);
+                foodAmountInInventory = Inventory.count(foodID, 0.75);
+                Logger.debugLog("Food in inventory: " + foodAmountInInventory);
                 checkFood = false;
             }
         }
@@ -144,6 +181,11 @@ public class Bank extends Task {
             Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
             Client.tap(exitDoorRect);
             Condition.sleep(generateRandomDelay(3500, 5000));
+            Walker.walkPath(WTRegion, outsideToBankPath);
+            Condition.sleep(generateRandomDelay(1000, 1500));
+            Walker.step(bankTile, WTRegion);
+            Condition.wait(() -> Player.within(bankTentArea, WTRegion), 250, 15);
+            Condition.sleep(generateRandomDelay(500, 1000));
             currentLocation = Walker.getPlayerPosition(WTRegion);
             return true;
         }
@@ -154,6 +196,11 @@ public class Bank extends Task {
         if (Player.isTileWithinArea(currentLocation, atDoor)) {
             Client.tap(exitDoorRect);
             Condition.sleep(generateRandomDelay(3500, 5000));
+            Walker.walkPath(WTRegion, outsideToBankPath);
+            Condition.sleep(generateRandomDelay(1000, 1500));
+            Walker.step(bankTile, WTRegion);
+            Condition.wait(() -> Player.within(bankTentArea, WTRegion), 250, 15);
+            Condition.sleep(generateRandomDelay(500, 1000));
             currentLocation = Walker.getPlayerPosition(WTRegion);
             return true;
         }
@@ -162,8 +209,11 @@ public class Bank extends Task {
 
     private boolean walkToBankFromOutsideArea() {
         if (Player.isTileWithinArea(currentLocation, outsideArea)) {
+            Walker.walkPath(WTRegion, outsideToBankPath);
+            Condition.sleep(generateRandomDelay(1000, 1500));
             Walker.step(bankTile, WTRegion); //Step to bank tile.
-            Condition.wait(() -> Player.atTile(bankTile, WTRegion), 100, 20);
+            Condition.wait(() -> Player.within(bankTentArea, WTRegion), 250, 15);
+            Condition.sleep(generateRandomDelay(500, 1000));
             currentLocation = Walker.getPlayerPosition(WTRegion);
             return true;
         }

@@ -38,6 +38,7 @@ public class BurnBranches extends Task {
         Logger.debugLog("Inside BurnBranches execute()");
         Integer startHP = Player.getHP();
 
+
         if (!Player.atTile(SideManager.getBurnTile(), WTRegion)) {
             Logger.log("Stepping to burn tile!");
             Walker.step(SideManager.getBurnTile(), WTRegion);

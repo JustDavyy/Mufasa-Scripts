@@ -26,6 +26,9 @@ public class FletchBranches extends Task {
 
         Logger.debugLog("Inside FletchBranches execute()");
         Logger.log("Starting to fletch.");
+
+        GameTabs.openInventoryTab();
+
         Integer startHP = Player.getHP();
         Inventory.tapItem(knife, true,0.60);
         Condition.sleep(generateRandomDelay(75, 150));
