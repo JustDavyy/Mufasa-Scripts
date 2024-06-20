@@ -131,15 +131,15 @@ public class StateUpdater {
 //        gameNearingEnd = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameCheckRect, 10);
 //    }
 
-    private static void updateGameAt13() {
+    public static void updateGameAt13() {
         gameAt13Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt13CheckRect, 10);
     }
 
-    private static void updateGameAt20() {
+    public static void updateGameAt20() {
         gameAt20Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt20CheckRect, 10);
     }
 
-    private static void updateGameAt70() {
+    public static void updateGameAt70() {
         gameAt70Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt70CheckRect, 10);
     }
 

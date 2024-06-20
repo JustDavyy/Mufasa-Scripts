@@ -15,6 +15,7 @@ public class BurnBranches extends Task {
         //Logger.debugLog("Inside BurnBranches activate()");
 
         StateUpdater.updateIsGameGoing();
+        StateUpdater.updateGameAt13();
 
         // Regular check condition
         if (inventoryHasKindlings && !inventoryHasBruma) {
