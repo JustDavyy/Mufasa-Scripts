@@ -54,6 +54,10 @@ public class BreakManager extends Task {
         Logger.log("Break over, resuming script.");
         Login.login();
 
+        // Reset HashMap
+        StateUpdater.mageDeadTimestamps.put("Left", -1L);
+        StateUpdater.mageDeadTimestamps.put("Right", -1L);
+
         currentGameCount = 0;  // Resetting the last break time after the break
         generateRandomNextBreakCount();
         shouldBreakNow = false;

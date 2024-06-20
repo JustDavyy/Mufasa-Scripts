@@ -49,6 +49,8 @@ public class Bank extends Task {
             BurnBranches.isBurning = false;
             FletchBranches.isFletching = false;
             GetBranches.gettingBranches = false;
+            StateUpdater.mageDeadTimestamps.put("Left", -1L);
+            StateUpdater.mageDeadTimestamps.put("Right", -1L);
             return true;
         }
         return false;

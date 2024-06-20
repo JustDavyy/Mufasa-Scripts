@@ -90,6 +90,9 @@ public class PreGame extends Task {
                         Logger.debugLog("Current game count since break:" + BreakManager.currentGameCount);
                         Logger.log("Games till next break: " + (BreakManager.shouldBreakAt - BreakManager.currentGameCount));
 
+                        StateUpdater.mageDeadTimestamps.put("Left", -1L);
+                        StateUpdater.mageDeadTimestamps.put("Right", -1L);
+
                         // Reset our booleans before exiting the task
                         shouldStartWithBurn = false;
                     }
