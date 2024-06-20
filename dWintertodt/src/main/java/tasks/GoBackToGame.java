@@ -25,8 +25,8 @@ public class GoBackToGame extends Task {
         }
 
         if (walkToDoorFromOutside()) {
-            return walkToGameFromDoor();
-        } else return walkToBranchTileFromLobby();
+            return walkToLobbyFromDoor();
+        } else return walkToLobbyFromDoor();
     }
 
     private boolean walkToBranchTileFromLobby() {
@@ -54,6 +54,15 @@ public class GoBackToGame extends Task {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
             Walker.walkPath(WTRegion, SideManager.getDoorToGamePath());
             Condition.wait(SideManager::isWithinGameArea, 100, 20);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean walkToLobbyFromDoor() {
+        if (Player.isTileWithinArea(currentLocation, insideArea)) {
+            Client.tap(new java.awt.Rectangle(795, 57, 16, 19));
+            Condition.sleep(generateRandomDelay(2000, 4000));
             return true;
         }
         return false;

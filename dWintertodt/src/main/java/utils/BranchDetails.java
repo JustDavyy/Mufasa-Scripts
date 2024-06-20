@@ -15,7 +15,7 @@ public enum BranchDetails {
     ),
     RIGHT_BRANCH(
             new Tile(648, 170), //branch tile
-            new Rectangle(481, 254, 63, 23), //branch click rect
+            new Rectangle(483, 251, 59, 27), //branch click rect
             new Tile(648, 159), //burn tile
             new Rectangle(451, 148, 76, 58), //burn click rect
             new Rectangle(757, 94, 21, 19), // burn switch side click rect
