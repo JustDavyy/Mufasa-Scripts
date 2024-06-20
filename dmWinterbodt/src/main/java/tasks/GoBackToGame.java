@@ -81,12 +81,6 @@ public class GoBackToGame extends Task {
             StateUpdater.updateGameAt70();
             if (!gameAt70Percent) {
                 walkToBranchesTile();
-
-                BreakManager.currentGameCount++;
-                totalGameCount++;
-                Logger.log("Total Game Count: " + totalGameCount);
-                Logger.debugLog("Current game count since break:" + BreakManager.currentGameCount);
-                Logger.log("Games till next break: " + (BreakManager.shouldBreakAt - BreakManager.currentGameCount));
             }
             return true;
         }
