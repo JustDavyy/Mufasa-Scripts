@@ -108,12 +108,12 @@ public class dWintertodt extends AbstractScript {
     public static int foodAmountLeftToBank;
     public static int bankTab;
     public static Rectangle bankSearchArea = new Rectangle(410, 144, 429, 358);
-    public static List<Color> bankChest = Arrays.asList(
+    public static List<Color> bankChest = List.of(
             Color.decode("#2c3737")
     );
     public static int foodAmountInInventory;
     public static int currentHp;
-//    public static boolean gameNearingEnd;
+    //    public static boolean gameNearingEnd;
     public static boolean gameAt13Percent;
     public static boolean gameAt20Percent;
     public static boolean gameAt70Percent;
@@ -131,7 +131,7 @@ public class dWintertodt extends AbstractScript {
             new Tile(647, 224),
             new Tile(654, 232)
     );
-    public static Tile[] outsideToBankPath = new Tile[] {
+    public static Tile[] outsideToBankPath = new Tile[]{
             new Tile(638, 212),
             new Tile(645, 225)
     };

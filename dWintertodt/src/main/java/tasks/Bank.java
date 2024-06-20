@@ -12,8 +12,8 @@ import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
 public class Bank extends Task {
-    private boolean checkFood = true;
     Random random = new Random();
+    private boolean checkFood = true;
 
     @Override
     public boolean activate() {
@@ -62,7 +62,7 @@ public class Bank extends Task {
             withdrawFoodIfNeeded(foodNeeded);
 
             Bank.close();
-            Condition.sleep(generateRandomDelay(400,700));
+            Condition.sleep(generateRandomDelay(400, 700));
             if (Bank.isOpen()) {
                 Bank.close();
             }
@@ -70,7 +70,7 @@ public class Bank extends Task {
             GameTabs.openInventoryTab();
 
             checkFood = true;
-            Condition.sleep(generateRandomDelay(250,500));
+            Condition.sleep(generateRandomDelay(250, 500));
             countFoodInInventory();
             StateUpdater.updateIsGameGoing();
         }

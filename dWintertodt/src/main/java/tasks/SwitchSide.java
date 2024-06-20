@@ -11,6 +11,7 @@ import static main.dWintertodt.*;
 
 public class SwitchSide extends Task {
     private boolean isMageDead = false;
+
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside SwitchSide activate()");
@@ -25,7 +26,8 @@ public class SwitchSide extends Task {
                     isMageDead = true;
                     return true;
                 }
-            return isMageDead;}, 250, 20);
+                return isMageDead;
+            }, 250, 20);
 
         }
         return isMageDead;

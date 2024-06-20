@@ -38,7 +38,9 @@ public enum BranchDetails {
         this.switchSideBranchRect = switchSideBranchRect;
     }
 
-    public Tile getBranchTile() { return branchTile; }
+    public Tile getBranchTile() {
+        return branchTile;
+    }
 
     public Rectangle getBranchClickRect() {
         return branchClickRect;
@@ -52,7 +54,12 @@ public enum BranchDetails {
         return burnClickRect;
     }
 
-    public Rectangle getSwitchSideBurnRect() { return switchSideBurnRect; };
+    public Rectangle getSwitchSideBurnRect() {
+        return switchSideBurnRect;
+    }
 
-    public Rectangle getSwitchSideBranchRect() { return switchSideBranchRect; };
+    public Rectangle getSwitchSideBranchRect() {
+        return switchSideBranchRect;
+    }
+
 }

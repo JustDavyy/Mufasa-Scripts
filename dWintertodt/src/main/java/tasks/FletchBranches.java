@@ -30,7 +30,7 @@ public class FletchBranches extends Task {
         GameTabs.openInventoryTab();
 
         Integer startHP = Player.getHP();
-        Inventory.tapItem(knife, true,0.60);
+        Inventory.tapItem(knife, true, 0.60);
         Condition.sleep(generateRandomDelay(75, 150));
         Inventory.tapItem(brumaRoot, 0.60);
         Condition.wait(() -> Chatbox.isMakeMenuVisible(), 100, 30);

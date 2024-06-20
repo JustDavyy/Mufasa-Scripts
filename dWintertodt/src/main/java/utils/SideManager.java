@@ -80,9 +80,13 @@ public class SideManager {
         StateUpdater.updateStates(states);
     }
 
-    public static void updateBurnStates() {StateUpdater.updateBurnStates(states);}
+    public static void updateBurnStates() {
+        StateUpdater.updateBurnStates(states);
+    }
 
-    public static void updateMageDeadState() {StateUpdater.updateMageDead(states);}
+    public static void updateMageDeadState() {
+        StateUpdater.updateMageDead(states);
+    }
 
     // Method to get the burning state for the current side
     public static boolean getBurningState() {

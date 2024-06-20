@@ -10,6 +10,7 @@ import static main.dWintertodt.*;
 
 public class BurnBranches extends Task {
     private boolean isBurning = false;
+
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside BurnBranches activate()");

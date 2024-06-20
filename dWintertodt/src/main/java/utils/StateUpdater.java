@@ -8,7 +8,7 @@ import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
 public class StateUpdater {
-//    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
+    //    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
     static Rectangle gameAt13CheckRect = new Rectangle(83, 38, 1, 1);
     static Rectangle gameAt20CheckRect = new Rectangle(93, 37, 1, 1);
     static Rectangle gameAt70CheckRect = new Rectangle(196, 39, 1, 1);

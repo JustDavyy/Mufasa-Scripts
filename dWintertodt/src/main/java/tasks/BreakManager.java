@@ -8,10 +8,15 @@ import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
 public class BreakManager extends Task {
-    private static Random random = new Random(System.nanoTime());
     public static int currentGameCount = 0;
     public static int shouldBreakAt = 0;
     public static boolean shouldBreakNow = false;
+    private static final Random random = new Random(System.nanoTime());
+
+    private static void generateRandomNextBreakCount() {
+        // nextInt(5) generates a value from 0 to 4, so adding 3 results in a range from 3 to 7
+        shouldBreakAt = random.nextInt(5) + 3;
+    }
 
     @Override
     public boolean activate() {
@@ -47,10 +52,5 @@ public class BreakManager extends Task {
 
         shouldBreakNow = false;
         return true;
-    }
-
-    private static void generateRandomNextBreakCount() {
-        // nextInt(5) generates a value from 0 to 4, so adding 3 results in a range from 3 to 7
-        shouldBreakAt = random.nextInt(5) + 3;
     }
 }

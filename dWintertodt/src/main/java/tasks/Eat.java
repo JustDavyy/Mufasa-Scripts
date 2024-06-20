@@ -18,7 +18,7 @@ public class Eat extends Task {
         Logger.log("Eating food.");
 
         GameTabs.openInventoryTab();
-        
+
         if (java.util.Objects.equals(selectedFood, "Cakes")) {
             // cake IDs; 1891, 1893, 1895
             if (Inventory.contains(1895, 0.75)) { // slice of cake
