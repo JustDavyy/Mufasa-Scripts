@@ -3,6 +3,7 @@ package utils;
 
 import java.awt.*;
 import java.util.Date;
+import java.util.HashMap;
 
 import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
@@ -14,30 +15,34 @@ public class StateUpdater {
     static Rectangle gameAt70CheckRect = new Rectangle(196, 39, 1, 1);
     static Rectangle waitingForGameToStartRect = new Rectangle(253, 41, 1, 1);
     static Rectangle waitingForGameEndedRect = new Rectangle(56, 38, 1, 1);
+    public static final HashMap<String, Long> mageDeadTimestamps = new HashMap<>();
+
+    static {
+        mageDeadTimestamps.put("Left", -1L);
+        mageDeadTimestamps.put("Right", -1L);
+    }
     static long mageDeadTimestamp = -1;
     static Date date = new Date();
 
     public static void updateMageDead(WTStates[] states) {
         for (WTStates state : states) {
             if (state.getName().equals(currentSide)) {
-                Logger.debugLog("Checking mage dead state for side: " + currentSide);
 
-                boolean wasMageDead = state.isMageDead();
                 boolean isMageDead = updateMageDeadState(state);
 
-                Logger.debugLog("Mage dead state for side " + currentSide + ": " + isMageDead);
-
-                state.setMageDead(isMageDead);
-
-                if (isMageDead && !wasMageDead) {
+                if (isMageDead && mageDeadTimestamps.get(currentSide) == -1L) {
                     mageDeadTimestamp = System.currentTimeMillis();
                     date = new Date(mageDeadTimestamp);
                     String formattedTime = String.format("%02d:%02d:%02d", date.getHours(), date.getMinutes(), date.getSeconds());
-                    Logger.debugLog("Mage died at " + formattedTime);
-                } else if (!isMageDead && wasMageDead) {
+
+                    Logger.debugLog("Mage has died at " + formattedTime + " on side " + currentSide);
+                    mageDeadTimestamps.put(currentSide, mageDeadTimestamp);
+                } else if (!isMageDead && mageDeadTimestamps.get(currentSide) != -1L) {
                     Logger.debugLog("Mage is no longer dead on side " + currentSide);
-                    mageDeadTimestamp = -1;
+                    mageDeadTimestamps.put(currentSide, -1L);
                 }
+
+                state.setMageDead(isMageDead);
             }
         }
     }

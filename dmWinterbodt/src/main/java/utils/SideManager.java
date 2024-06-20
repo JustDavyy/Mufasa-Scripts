@@ -116,14 +116,18 @@ public class SideManager {
     }
 
     public static boolean isMageDeadForAtLeast(int seconds) {
-        if (mageDeadTimestamp == -1 || !getMageDead()) {
-            Logger.debugLog("Mage is not dead or timestamp is invalid.");
+        long timestamp = mageDeadTimestamps.getOrDefault(currentSide, -1L);
+        if (!getMageDead()) {
+            Logger.debugLog("Mage is not dead.");
             return false; // Mage is not dead
+        } else if (timestamp == -1) {
+            Logger.debugLog("MageDead timestamp is invalid");
+            return false;
         }
 
         long currentTime = System.currentTimeMillis();
-        boolean result = (currentTime - mageDeadTimestamp) >= (seconds * 1000L);
-        Logger.debugLog("Checking if mage has been dead for at least " + seconds + " seconds: " + result);
+        boolean result = (currentTime - timestamp) >= (seconds * 1000L);
+        Logger.debugLog("Checking if mage has been dead for at least " + seconds + " seconds on side " + currentSide + ": " + result);
 
         return result;
     }
