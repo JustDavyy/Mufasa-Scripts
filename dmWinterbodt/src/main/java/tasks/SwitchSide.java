@@ -33,8 +33,7 @@ public class SwitchSide extends Task {
                 return isMageDead;
             }, 250, 20);
         }
-
-        Logger.debugLog("Activation result: " + isMageDead);
+        
         return isMageDead;
     }
 
