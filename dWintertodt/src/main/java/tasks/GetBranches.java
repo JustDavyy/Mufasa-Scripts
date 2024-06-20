@@ -1,6 +1,7 @@
 package tasks;
 
 import utils.SideManager;
+import utils.StateUpdater;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -12,6 +13,8 @@ public class GetBranches extends Task {
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside GetBranches activate()");
+        StateUpdater.updateIsGameGoing();
+
         if (!Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing && !gameAt13Percent) {
             gettingBranches = true;
         }
