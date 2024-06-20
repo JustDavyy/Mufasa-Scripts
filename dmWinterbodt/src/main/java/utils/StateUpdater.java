@@ -60,6 +60,7 @@ public class StateUpdater {
             // Update each boolean based on some conditions or actions
             state.setNeedsReburning(updateNeedsReburning(state));
             state.setNeedsFixing(updateNeedsFixing(state));
+            state.setMageDead(updateMageDead(state));
         }
         updateIsGameGoing();
         updateCurrentHP();
