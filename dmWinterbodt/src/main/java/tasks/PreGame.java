@@ -79,6 +79,7 @@ public class PreGame extends Task {
                         currentLocation = SideManager.getBranchTile();
 
                         BreakManager.currentGameCount++;
+                        Logger.log("Current game count: " + BreakManager.currentGameCount);
                         Logger.log("Games till next break: " + (BreakManager.currentGameCount - BreakManager.shouldBreakAt));
 
                         // Reset our booleans before exiting the task
