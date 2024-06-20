@@ -9,7 +9,7 @@ import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
 
 public class BurnBranches extends Task {
-    private boolean isBurning = false;
+    public static boolean isBurning = false;
 
     @Override
     public boolean activate() {

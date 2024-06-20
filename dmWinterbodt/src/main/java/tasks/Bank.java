@@ -49,6 +49,9 @@ public class Bank extends Task {
         }
         if (Player.isTileWithinArea(currentLocation, bankTentArea)) {
             handleBanking();
+            BurnBranches.isBurning = false;
+            FletchBranches.isFletching = false;
+            GetBranches.gettingBranches = false;
             return true;
         }
         return false;
