@@ -32,7 +32,7 @@ public class BreakManager extends Task {
 
     @Override
     public boolean execute() {
-        int breakMinutes = random.nextInt(4) + 2;  // Generates a number from 2 to 5
+        int breakMinutes = random.nextInt(4) + 1;  // Generates a number from 1 to 4
         int breakSeconds = random.nextInt(60);     // Use the same random instance here as well
         int breakMillis = breakMinutes * 60000 + breakSeconds * 1000;  // Convert minutes and seconds to milliseconds
 
