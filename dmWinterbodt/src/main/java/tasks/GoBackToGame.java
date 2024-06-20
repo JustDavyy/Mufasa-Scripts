@@ -67,7 +67,7 @@ public class GoBackToGame extends Task {
 
     private boolean walkToLobbyFromDoor() {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
-            Client.tap(new java.awt.Rectangle(795, 57, 16, 19));
+            Client.tap(new java.awt.Rectangle(795, 63, 16, 19));
             Condition.sleep(generateRandomDelay(2000, 4000));
             return true;
         }
