@@ -78,6 +78,7 @@ public class PreGame extends Task {
                         Walker.step(SideManager.getBranchTile(), WTRegion);
                         currentLocation = SideManager.getBranchTile();
                         BreakManager.currentGameCount++;
+                        Logger.log("Games till next break: " + (BreakManager.currentGameCount - BreakManager.shouldBreakAt));
 
                         // Reset our booleans before exiting the task
                         shouldStartWithBurn = false;
