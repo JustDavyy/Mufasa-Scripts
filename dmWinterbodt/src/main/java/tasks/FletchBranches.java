@@ -1,7 +1,6 @@
 package tasks;
 
 import utils.SideManager;
-import utils.StateUpdater;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -39,11 +38,7 @@ public class FletchBranches extends Task {
 
         Logger.debugLog("Heading to FletchBranches conditional wait.");
         Condition.wait(() -> {
-            StateUpdater.updateGameAt20();
-            StateUpdater.updateIsGameGoing();
-            StateUpdater.updateKindlingState();
-            StateUpdater.updateGameAt13();
-
+            SideManager.updateStates();
             XpBar.getXP();
             return !inventoryHasBruma || startHP > currentHp || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
         }, 200, 150);
