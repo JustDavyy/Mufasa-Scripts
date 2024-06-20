@@ -148,7 +148,7 @@ public class StateUpdater {
                 || isGameGoing && gameAt20Percent && (inventoryHasBruma || inventoryHasKindlings);
     }
 
-    public static void updateKindlingState() {
+    private static void updateKindlingState() {
         inventoryHasKindlings = Inventory.contains(brumaKindling, 0.8);
         inventoryHasBruma = Inventory.contains(brumaRoot, 0.8);
     }
