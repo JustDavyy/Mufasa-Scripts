@@ -144,7 +144,6 @@ public class Bank extends Task {
                             Logger.debugLog("Bank is already open.");
                             return false;
                         }
-                        return true;
                     } else {
                         Logger.debugLog("Couldn't locate the wintertodt bank chest using the color finder.");
                         return false;
@@ -153,7 +152,6 @@ public class Bank extends Task {
                     Logger.debugLog("Bank is already open.");
                     return false;
                 }
-                return true;
             } else {
                 Logger.debugLog("Couldn't locate the wintertodt bank chest using the color finder.");
                 return false;
