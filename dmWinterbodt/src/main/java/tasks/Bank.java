@@ -141,24 +141,24 @@ public class Bank extends Task {
                                 return false;
                             }
                         } else {
-                            Logger.debugLog("Bank is already open.");
-                            return false;
+                            Logger.debugLog("Bank is open!");
+                            return true;
                         }
                     } else {
                         Logger.debugLog("Couldn't locate the wintertodt bank chest using the color finder.");
                         return false;
                     }
                 } else {
-                    Logger.debugLog("Bank is already open.");
-                    return false;
+                    Logger.debugLog("Bank is open!");
+                    return true;
                 }
             } else {
                 Logger.debugLog("Couldn't locate the wintertodt bank chest using the color finder.");
                 return false;
             }
         } else {
-            Logger.debugLog("Bank is already open.");
-            return false;
+            Logger.debugLog("Bank is open!");
+            return true;
         }
     }
 
