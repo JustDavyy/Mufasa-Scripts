@@ -28,7 +28,6 @@ public class SwitchSide extends Task {
                 }
                 return isMageDead;
             }, 250, 20);
-
         }
         return isMageDead;
     }
