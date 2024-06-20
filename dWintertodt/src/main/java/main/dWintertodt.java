@@ -21,7 +21,7 @@ import static helpers.Interfaces.*;
 import static utils.SideManager.pickRandomSide;
 
 @ScriptManifest(
-        name = "dWintertodt",
+        name = "dmWinterbodt",
         description = "Completes the Wintertodt minigame.",
         version = "1.0",
         guideLink = "",
