@@ -124,7 +124,7 @@ public class dmWinterbodt extends AbstractScript {
     public static boolean waitingForGameEnded;
     public static boolean isGameGoing;
     public static boolean shouldStartWithBurn;
-    public static long lastWalkToSafety;
+    public static long lastWalkToSafety = System.currentTimeMillis();
     public static boolean isMoreThan40Seconds;
     public static int totalGameCount;
     public static RegionBox WTRegion = new RegionBox("WTRegion", 1701, 264, 2157, 846);
