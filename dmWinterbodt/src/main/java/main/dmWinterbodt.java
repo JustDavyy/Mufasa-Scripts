@@ -124,6 +124,7 @@ public class dmWinterbodt extends AbstractScript {
     public static boolean waitingForGameEnded;
     public static boolean isGameGoing;
     public static boolean shouldStartWithBurn;
+    public static int totalGameCount;
     public static RegionBox WTRegion = new RegionBox("WTRegion", 1701, 264, 2157, 846);
     public static Area lobby = new Area(new Tile(632, 173), new Tile(644, 184));
     public static Tile bankTile = new Tile(651, 230);
