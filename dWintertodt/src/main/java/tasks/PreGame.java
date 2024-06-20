@@ -24,7 +24,10 @@ public class PreGame extends Task {
         Logger.debugLog("Inside PreGame execute()");
 
         // Check if we are at the burn tile, otherwise move there
-        if (!Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
+        if (BreakManager.shouldBreakNow && !Player.isTileWithinArea(currentLocation, lobby)) {
+            Walker.walkPath(WTRegion, fromEitherSideToGameLobby);
+            currentLocation = Walker.getPlayerPosition(WTRegion);
+        } else if (!Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
             Walker.step(SideManager.getBurnTile(), WTRegion);
         }
 
@@ -73,6 +76,7 @@ public class PreGame extends Task {
                         // Move to the branch tile
                         Walker.step(SideManager.getBranchTile(), WTRegion);
                         currentLocation = SideManager.getBranchTile();
+                        BreakManager.currentGameCount++;
 
                         // Reset our booleans before exiting the task
                         shouldStartWithBurn = false;
