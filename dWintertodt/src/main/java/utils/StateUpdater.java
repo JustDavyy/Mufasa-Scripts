@@ -17,6 +17,18 @@ public class StateUpdater {
     static long mageDeadTimestamp = -1;
     static Date date = new Date();
 
+    public static void updateBurnStates(WTStates[] states) {
+        for (WTStates state : states) {
+            // Update each boolean based on some conditions or actions
+            state.setNeedsReburning(updateNeedsReburning(state));
+            state.setNeedsFixing(updateNeedsFixing(state));
+        }
+        updateIsGameGoing();
+        updateCurrentHP();
+        updateKindlingState();
+
+    }
+
     public static void updateStates(WTStates[] states) {
         //Update our position
         currentLocation = Walker.getPlayerPosition(WTRegion);
