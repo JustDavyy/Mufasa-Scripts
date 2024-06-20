@@ -112,6 +112,11 @@ public class SideManager {
         WTStates state = getState(currentSide.equals("Right") ? "Right" : "Left");
         boolean isMageDead = state != null && state.isMageDead();
         Logger.debugLog("Mage dead state for current side (" + currentSide + "): " + isMageDead);
+
+        // Log both current states
+        Logger.debugLog("HashMap mage state Left: " + mageDeadTimestamps.get("Left"));
+        Logger.debugLog("HashMap mage state Right: " + mageDeadTimestamps.get("Right"));
+
         return isMageDead;
     }
 
