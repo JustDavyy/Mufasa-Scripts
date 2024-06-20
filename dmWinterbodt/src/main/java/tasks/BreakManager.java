@@ -44,12 +44,11 @@ public class BreakManager extends Task {
         Logout.logout();
         Condition.sleep(breakMillis);  // Sleep for the calculated duration
 
-        currentGameCount = 0;  // Resetting the last break time after the break
-        generateRandomNextBreakCount();
-
         Logger.log("Break over, resuming script.");
         Login.login();
 
+        currentGameCount = 0;  // Resetting the last break time after the break
+        generateRandomNextBreakCount();
         shouldBreakNow = false;
         return true;
     }
