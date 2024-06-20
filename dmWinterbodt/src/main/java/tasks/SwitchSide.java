@@ -23,6 +23,12 @@ public class SwitchSide extends Task {
             Condition.wait(() -> {
                 SideManager.updateMageDeadState();
 
+                if (!SideManager.getMageDead()) {
+                    Logger.debugLog("Mage is alive again. Exiting early.");
+                    isMageDead = false;
+                    return true;
+                }
+
                 if (SideManager.isMageDeadForAtLeast(5)) {
                     Logger.debugLog("Mage has been dead for at least 5 seconds.");
                     isMageDead = true;

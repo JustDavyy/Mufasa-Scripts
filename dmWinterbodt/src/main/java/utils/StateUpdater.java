@@ -46,8 +46,6 @@ public class StateUpdater {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.MAGE_DEAD.getColor();
 
-        Logger.debugLog("Checking mage dead state in rectangle: " + checkRect + " with color: " + checkColor);
-
         boolean isMageDead = Client.isColorInRect(checkColor, checkRect, 5);
 
         Logger.debugLog("Result of mage dead state check: " + isMageDead);
