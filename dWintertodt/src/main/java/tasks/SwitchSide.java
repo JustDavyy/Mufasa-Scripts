@@ -4,6 +4,9 @@ import helpers.utils.Tile;
 import utils.SideManager;
 import utils.Task;
 
+import java.awt.*;
+import java.sql.Statement;
+
 import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
 
@@ -17,6 +20,8 @@ public class SwitchSide extends Task {
 
             // Check for 5 seconds if the mage is dead for at least 5 seconds
             Condition.wait(() -> {
+                SideManager.updateMageDeadState();
+                
                 if (SideManager.isMageDeadForAtLeast(5)) {
                     isMageDead = true;
                     return true;
@@ -29,86 +34,40 @@ public class SwitchSide extends Task {
 
     @Override
     public boolean execute() {
-        Logger.debugLog("Inside SwitchSide execute()");
         Logger.log("Mage is dead, switching side.");
+        Tile targetTile = null;
+        Rectangle switchSideRect = null;
 
-        // Logic if we're currently on the left side
-        if (currentSide.equals("Left")) {
-            // Check if we are on the branch tile
-            if (Player.tileEquals(currentLocation, SideManager.getBranchTile())) {
-                Client.tap(SideManager.getBranchSwitchSideRect());
-                Condition.sleep(generateRandomDelay(4250, 5250));
+        if (Player.tileEquals(currentLocation, SideManager.getBranchTile())) {
+            targetTile = SideManager.getBranchTile();
+            switchSideRect = SideManager.getBranchSwitchSideRect();
+        } else if (Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
+            targetTile = SideManager.getBurnTile();
+            switchSideRect = SideManager.getBurnSwitchSideRect();
+        }
 
-                // switch the side parameter
-                currentSide = "Right";
-
-                // Step to the branch tile
-                Walker.step(SideManager.getBranchTile(), WTRegion);
-                currentLocation = SideManager.getBranchTile();
-                isMageDead = false;
-            }
-            // Check if we are on the burn tile
-            else if (Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
-                Client.tap(SideManager.getBurnSwitchSideRect());
-                Condition.sleep(generateRandomDelay(4250, 5250));
-
-                // switch the side parameter
-                currentSide = "Right";
-
-                // Step to the burn tile
-                Walker.step(SideManager.getBurnTile(), WTRegion);
-                currentLocation = SideManager.getBurnTile();
-                isMageDead = false;
-            }
-            // Else walk to the middle if we are not found on any of the two tiles
-            else {
-                currentSide = "Right";
-                Walker.walkTo(new Tile(638, 167), WTRegion);
-                currentLocation = Walker.getPlayerPosition(WTRegion);
-                isMageDead = false;
-            }
-        // Logic if we're currently on the right side
-        } else if (currentSide.equals("Right")) {
-            // Check if we are on the branch tile
-            if (Player.tileEquals(currentLocation, SideManager.getBranchTile())) {
-                Client.tap(SideManager.getBranchSwitchSideRect());
-                Condition.sleep(generateRandomDelay(4250, 5250));
-
-                // switch the side parameter
-                currentSide = "Left";
-
-                // Step to the branch tile
-                Walker.step(SideManager.getBranchTile(), WTRegion);
-                currentLocation = SideManager.getBranchTile();
-                isMageDead = false;
-            }
-            // Check if we are on the burn tile
-            else if (Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
-                Client.tap(SideManager.getBurnSwitchSideRect());
-                Condition.sleep(generateRandomDelay(4250, 5250));
-
-                // switch the side parameter
-                currentSide = "Left";
-
-                // Step to the burn tile
-                Walker.step(SideManager.getBurnTile(), WTRegion);
-                currentLocation = SideManager.getBurnTile();
-                isMageDead = false;
-            }
-            // Else walk to the middle if we are not found on any of the two tiles
-            else {
-                currentSide = "Left";
-                Walker.walkTo(new Tile(638, 167), WTRegion);
-                currentLocation = Walker.getPlayerPosition(WTRegion);
-                isMageDead = false;
-            }
+        if (targetTile != null && switchSideRect != null) {
+            performSwitchSide(switchSideRect, targetTile);
         } else {
-            // For some dumb fucking reason we're bot not on the left, and not on the right?
-            Walker.walkTo(new Tile(638, 167), WTRegion);
-            currentLocation = Walker.getPlayerPosition(WTRegion);
-            isMageDead = false;
+            // Default action if not on branch or burn tile
+            walkToMiddle();
         }
 
         return false;
+    }
+
+    private void performSwitchSide(Rectangle switchRect, Tile targetTile) {
+        Client.tap(switchRect);
+        Condition.sleep(generateRandomDelay(4250, 5250));
+        Walker.step(targetTile, WTRegion);
+        currentLocation = targetTile;
+        isMageDead = false;
+    }
+
+    private void walkToMiddle() {
+        Tile middleTile = new Tile(638, 167);
+        Walker.walkTo(middleTile, WTRegion);
+        currentLocation = Walker.getPlayerPosition(WTRegion);
+        isMageDead = false;
     }
 }

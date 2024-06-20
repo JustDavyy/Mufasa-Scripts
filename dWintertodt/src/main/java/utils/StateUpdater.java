@@ -17,6 +17,13 @@ public class StateUpdater {
     static long mageDeadTimestamp = -1;
     static Date date = new Date();
 
+    public static void updateMageDead(WTStates[] states) {
+        for (WTStates state : states) {
+            // Update each boolean based on some conditions or actions
+            state.setMageDead(updateMageDead(state));
+        }
+    }
+
     public static void updateBurnStates(WTStates[] states) {
         for (WTStates state : states) {
             // Update each boolean based on some conditions or actions
