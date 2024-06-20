@@ -5,7 +5,7 @@ import utils.Task;
 import java.util.Random;
 
 import static helpers.Interfaces.*;
-import static main.dWintertodt.*;
+import static main.dmWinterbodt.*;
 
 public class BreakManager extends Task {
     public static int currentGameCount = 0;

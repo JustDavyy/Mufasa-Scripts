@@ -1,13 +1,13 @@
 package utils;
 
 import helpers.utils.Tile;
-import main.dWintertodt;
+import main.dmWinterbodt;
 
 import java.awt.*;
 import java.util.Random;
 
 import static helpers.Interfaces.Player;
-import static main.dWintertodt.*;
+import static main.dmWinterbodt.*;
 
 public class SideManager {
     static Random random = new Random();
@@ -131,7 +131,7 @@ public class SideManager {
 
     // Helper method to get a WTStates object by its name
     private static WTStates getState(String name) {
-        for (WTStates state : dWintertodt.states) {
+        for (WTStates state : dmWinterbodt.states) {
             if (state.getName().equals(name)) {
                 return state;
             }

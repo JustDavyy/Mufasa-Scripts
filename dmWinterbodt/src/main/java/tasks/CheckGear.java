@@ -2,7 +2,7 @@ package tasks;
 
 import helpers.utils.EquipmentSlot;
 import helpers.utils.ItemList;
-import main.dWintertodt;
+import main.dmWinterbodt;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -66,7 +66,7 @@ public class CheckGear extends Task {
     private void checkForItem() {
         ensureInventoryOpen();
 
-        if (!checkedForKnife && Inventory.contains(dWintertodt.knife, INVENTORY_THRESHOLD)) {
+        if (!checkedForKnife && Inventory.contains(dmWinterbodt.knife, INVENTORY_THRESHOLD)) {
             Logger.debugLog("Knife" + " in inventory, continuing");
             checkedForKnife = true;
         } else if (!checkedForKnife) {
