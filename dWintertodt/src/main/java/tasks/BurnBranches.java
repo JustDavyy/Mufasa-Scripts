@@ -1,5 +1,6 @@
 package tasks;
 
+import helpers.utils.Tile;
 import utils.SideManager;
 import utils.StateUpdater;
 import utils.Task;
@@ -38,6 +39,17 @@ public class BurnBranches extends Task {
         Logger.debugLog("Inside BurnBranches execute()");
         Integer startHP = Player.getHP();
 
+        // This is the logic to walk to safety when the game is near end, and we're out of burns.
+        if (!inventoryHasBruma & !inventoryHasKindlings && isGameGoing && Player.tileEquals(currentLocation, SideManager.getBurnTile()) && gameAt13Percent) {
+            Logger.log("Out of items to burn, and game near end. Heading to lobby to prevent getting hit.");
+            Walker.step(new Tile(638, 174), WTRegion);
+            Condition.wait(() -> Player.within(lobby, WTRegion), 100, 20);
+            currentLocation = Walker.getPlayerPosition(WTRegion);
+            return false;
+        } else if (!inventoryHasBruma && !inventoryHasKindlings && isGameGoing && Player.isTileWithinArea(currentLocation, lobby) && gameAt13Percent) {
+            Logger.log("Waiting in lobby for game to end to prevent getting hit.");
+            return false;
+        }
 
         if (!Player.atTile(SideManager.getBurnTile(), WTRegion)) {
             Logger.log("Stepping to burn tile!");
@@ -66,7 +78,7 @@ public class BurnBranches extends Task {
 
                 XpBar.getXP();
                 return !inventoryHasKindlings && !inventoryHasBruma || startHP > currentHp || Player.leveledUp();
-            }, 200, 150);
+            }, 100, 300);
 
             return true;
         }
