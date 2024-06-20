@@ -46,7 +46,7 @@ public class BurnBranches extends Task {
         }
 
         if (Player.atTile(SideManager.getBurnTile(), WTRegion)) {
-            Logger.log("Tapping burn rect!");
+            Logger.log("Initiating burn action!");
             Client.tap(SideManager.getBurnRect());
             Condition.wait(() -> {
                 Logger.debugLog("Waiting for next actions..");

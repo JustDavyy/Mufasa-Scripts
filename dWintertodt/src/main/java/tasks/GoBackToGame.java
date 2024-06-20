@@ -11,6 +11,12 @@ public class GoBackToGame extends Task {
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside GoBackToGame activate()");
+
+        // Use logging here for user visibility as this is the last task in our task list
+        if (Player.isTileWithinArea(currentLocation, lobby) && isGameGoing) {
+            Logger.log("Waiting for game to end.");
+        }
+
         return (Player.within(outsideArea, WTRegion) || Player.within(insideArea, WTRegion)) && !SideManager.isWithinGameArea() && !waitingForGameEnded && !isGameGoing;
     }
 

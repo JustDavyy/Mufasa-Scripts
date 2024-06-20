@@ -34,7 +34,7 @@ public class GetBranches extends Task {
         }
 
         if (Player.atTile(SideManager.getBranchTile(), WTRegion)) {
-            Logger.log("Tapping branch rect!");
+            Logger.log("Initiating chop action!");
             Client.tap(SideManager.getBranchRect());
 
             Logger.debugLog("Heading to GetBranches conditional wait.");

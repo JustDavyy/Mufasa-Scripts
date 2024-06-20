@@ -17,7 +17,7 @@ public class Bank extends Task {
 
     @Override
     public boolean activate() {
-        Logger.debugLog("Inside Bank activate()");
+        //Logger.debugLog("Inside Bank activate()");
         StateUpdater.updateIsGameGoing();
         return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing || foodAmountInInventory < foodAmountLeftToBank && Player.isTileWithinArea(currentLocation, outsideArea);
     }

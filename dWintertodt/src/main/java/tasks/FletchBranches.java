@@ -25,7 +25,7 @@ public class FletchBranches extends Task {
         }
 
         Logger.debugLog("Inside FletchBranches execute()");
-        Logger.log("Starting to fletch.");
+        Logger.log("Initiating fletching action.");
 
         GameTabs.openInventoryTab();
 
