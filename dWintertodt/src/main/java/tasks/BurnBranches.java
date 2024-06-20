@@ -64,7 +64,7 @@ public class BurnBranches extends Task {
                 Logger.debugLog("Waiting for next actions..");
 
                 // Handle reburning/fixing
-                SideManager.updateStates();
+                SideManager.updateBurnStates();
                 if (SideManager.getNeedsFixing() || SideManager.getNeedsReburning()) {
                     Logger.log("Brazier needs fixing or re-lighting!");
                     if (SideManager.getNeedsFixing()) {
