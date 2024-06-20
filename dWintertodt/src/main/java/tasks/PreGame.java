@@ -27,6 +27,7 @@ public class PreGame extends Task {
         if (BreakManager.shouldBreakNow && !Player.isTileWithinArea(currentLocation, lobby)) {
             Walker.walkPath(WTRegion, fromEitherSideToGameLobby);
             currentLocation = Walker.getPlayerPosition(WTRegion);
+            return true;
         } else if (!Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
             Walker.step(SideManager.getBurnTile(), WTRegion);
         }
