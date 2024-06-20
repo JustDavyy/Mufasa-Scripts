@@ -16,7 +16,7 @@ public class PreGame extends Task {
     public boolean activate() {
         //Logger.debugLog("Inside PreGame activate()");
         StateUpdater.updateIsGameGoing();
-        return waitingForGameEnded && !isGameGoing || shouldStartWithBurn && !isGameGoing;
+        return waitingForGameEnded && !isGameGoing && Player.isTileWithinArea(currentLocation, insideArea) || shouldStartWithBurn && !isGameGoing && Player.isTileWithinArea(currentLocation, insideArea);
     }
 
     @Override
