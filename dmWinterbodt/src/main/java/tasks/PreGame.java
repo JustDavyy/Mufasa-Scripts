@@ -24,6 +24,11 @@ public class PreGame extends Task {
     public boolean execute() {
         Logger.debugLog("Inside PreGame execute()");
 
+        if (Player.leveledUp()) {
+            Client.sendKeystroke("KEYCODE_SPACE");
+            Condition.sleep(generateRandomDelay(1000, 2000));
+        }
+
         // Check if we are at the burn tile, otherwise move there
         if (BreakManager.shouldBreakNow && !Player.isTileWithinArea(currentLocation, lobby)) {
             Walker.walkPath(WTRegion, fromEitherSideToGameLobby);
