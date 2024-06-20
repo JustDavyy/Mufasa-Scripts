@@ -18,7 +18,9 @@ public class GoBackToGame extends Task {
             Logger.log("Waiting for game to end.");
         }
 
-        return Player.within(outsideArea, WTRegion) || Player.within(insideArea, WTRegion) && !SideManager.isWithinGameArea() && !waitingForGameEnded && !isGameGoing;
+        isMoreThan40Seconds = (System.currentTimeMillis() - lastWalkToSafety) > 40000;
+
+        return Player.within(outsideArea, WTRegion) || Player.within(insideArea, WTRegion) && !SideManager.isWithinGameArea() && !waitingForGameEnded && !isGameGoing && isMoreThan40Seconds;
     }
 
     @Override

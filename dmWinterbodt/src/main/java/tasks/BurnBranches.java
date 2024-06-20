@@ -52,6 +52,7 @@ public class BurnBranches extends Task {
             Walker.step(new Tile(638, 174), WTRegion);
             Condition.wait(() -> Player.within(lobby, WTRegion), 100, 20);
             currentLocation = Walker.getPlayerPosition(WTRegion);
+            lastWalkToSafety = System.currentTimeMillis();
             return false;
         } else if (!inventoryHasBruma && !inventoryHasKindlings && isGameGoing && Player.isTileWithinArea(currentLocation, lobby) && gameAt13Percent) {
             Logger.log("Waiting in lobby for game to end to prevent getting hit.");
