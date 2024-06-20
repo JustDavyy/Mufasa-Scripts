@@ -37,9 +37,11 @@ public class StateUpdater {
 
                     Logger.debugLog("Mage has died at " + formattedTime + " on side " + currentSide);
                     mageDeadTimestamps.put(currentSide, mageDeadTimestamp);
+                    Logger.debugLog("Set the mageDeadTimeStamp for " + currentSide + " to: " + mageDeadTimestamp);
                 } else if (!isMageDead && mageDeadTimestamps.get(currentSide) != -1L) {
                     Logger.debugLog("Mage is no longer dead on side " + currentSide);
                     mageDeadTimestamps.put(currentSide, -1L);
+                    Logger.debugLog("Set the mageDeadTimeStamp for " + currentSide + " to: " + -1L);
                 }
 
                 state.setMageDead(isMageDead);
