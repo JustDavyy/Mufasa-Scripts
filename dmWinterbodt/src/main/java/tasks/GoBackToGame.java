@@ -81,13 +81,19 @@ public class GoBackToGame extends Task {
             StateUpdater.updateGameAt70();
             if (!gameAt70Percent) {
                 walkToBranchesTile();
+
+                BreakManager.currentGameCount++;
+                totalGameCount++;
+                Logger.log("Total Game Count: " + totalGameCount);
+                Logger.debugLog("Current game count since break:" + BreakManager.currentGameCount);
+                Logger.log("Games till next break: " + (BreakManager.shouldBreakAt - BreakManager.currentGameCount));
             }
             return true;
         }
         return false;
     }
 
-    private boolean walkToBranchesTile() {
+    private void walkToBranchesTile() {
         if (Player.isTileWithinArea(currentLocation, lobby)) {
             Walker.step(SideManager.getBranchTile(), WTRegion);
         }

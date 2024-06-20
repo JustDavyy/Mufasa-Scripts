@@ -44,6 +44,11 @@ public class BurnBranches extends Task {
         // This is the logic to walk to safety when the game is near end, and we're out of burns.
         if (!inventoryHasBruma & !inventoryHasKindlings && isGameGoing && Player.tileEquals(currentLocation, SideManager.getBurnTile()) && gameAt13Percent) {
             Logger.log("Out of items to burn, and game near end. Heading to lobby to prevent getting hit.");
+            Condition.sleep(generateRandomDelay(1250, 2000));
+            if (Player.leveledUp()) {
+                Client.sendKeystroke("KEYCODE_SPACE");
+                Condition.sleep(generateRandomDelay(1000, 2000));
+            }
             Walker.step(new Tile(638, 174), WTRegion);
             Condition.wait(() -> Player.within(lobby, WTRegion), 100, 20);
             currentLocation = Walker.getPlayerPosition(WTRegion);
