@@ -1,5 +1,6 @@
 package tasks;
 
+import utils.StateUpdater;
 import utils.Task;
 
 import java.util.Random;
@@ -23,7 +24,9 @@ public class BreakManager extends Task {
             generateRandomNextBreakCount();
         }
 
-        if (currentGameCount >= shouldBreakAt && Player.isTileWithinArea(currentLocation, lobby) || currentGameCount > shouldBreakAt && Player.isTileWithinArea(currentLocation, outsideArea) && !Bank.isOpen()) {
+        StateUpdater.updateIsGameGoing();
+
+        if (currentGameCount >= shouldBreakAt && Player.isTileWithinArea(currentLocation, lobby) && !isGameGoing || currentGameCount > shouldBreakAt && Player.isTileWithinArea(currentLocation, outsideArea) && !Bank.isOpen()) {
             shouldBreakNow = true;
         }
 
