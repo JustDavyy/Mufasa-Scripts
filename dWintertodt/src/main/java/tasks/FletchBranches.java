@@ -4,7 +4,7 @@ import utils.SideManager;
 import utils.Task;
 
 import static helpers.Interfaces.*;
-import static main.dWintertodt.*;
+import static main.dmWinterbodt.*;
 
 public class FletchBranches extends Task {
     public static boolean isFletching = false;

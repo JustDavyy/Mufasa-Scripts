@@ -89,7 +89,7 @@ import static utils.SideManager.pickRandomSide;
         }
 )
 
-public class dWintertodt extends AbstractScript {
+public class dmWinterbodt extends AbstractScript {
 
     // EVERYTHING FROM CONSTANTS FILE BELOW HERE
     public static final int brumaRoot = ItemList.BRUMA_ROOT_20695;

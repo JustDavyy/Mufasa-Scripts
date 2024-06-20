@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.Date;
 
 import static helpers.Interfaces.*;
-import static main.dWintertodt.*;
+import static main.dmWinterbodt.*;
 
 public class StateUpdater {
     //    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);

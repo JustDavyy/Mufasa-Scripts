@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static helpers.Interfaces.*;
-import static main.dWintertodt.*;
+import static main.dmWinterbodt.*;
 
 public class PreGame extends Task {
     @Override

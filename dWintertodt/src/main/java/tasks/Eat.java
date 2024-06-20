@@ -3,7 +3,7 @@ package tasks;
 import utils.Task;
 
 import static helpers.Interfaces.*;
-import static main.dWintertodt.*;
+import static main.dmWinterbodt.*;
 
 public class Eat extends Task {
     @Override

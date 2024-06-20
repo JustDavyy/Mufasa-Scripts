@@ -23,7 +23,7 @@ dependencies {
 }
 
 jar {
-    archiveFileName = 'dWintertodt.jar'
+    archiveFileName = 'dmWinterbodt.jar'
     destinationDirectory = file('jar/')
 
     manifest {

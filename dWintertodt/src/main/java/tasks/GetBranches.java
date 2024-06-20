@@ -5,7 +5,7 @@ import utils.StateUpdater;
 import utils.Task;
 
 import static helpers.Interfaces.*;
-import static main.dWintertodt.*;
+import static main.dmWinterbodt.*;
 
 public class GetBranches extends Task {
     public static boolean gettingBranches = false;

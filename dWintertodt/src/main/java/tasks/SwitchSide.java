@@ -7,7 +7,7 @@ import utils.Task;
 import java.awt.*;
 
 import static helpers.Interfaces.*;
-import static main.dWintertodt.*;
+import static main.dmWinterbodt.*;
 
 public class SwitchSide extends Task {
     private boolean isMageDead = false;
