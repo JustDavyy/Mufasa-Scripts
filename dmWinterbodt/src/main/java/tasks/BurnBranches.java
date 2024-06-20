@@ -101,7 +101,7 @@ public class BurnBranches extends Task {
                 break; // Exit the loop if the player's health drops
             }
             Client.tap(SideManager.getBurnRect());
-            Condition.sleep(generateRandomDelay(1000, 1500));
+            Condition.sleep(generateRandomDelay(1750, 2500));
         }
     }
 }
