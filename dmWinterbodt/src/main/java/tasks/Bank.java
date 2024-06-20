@@ -78,7 +78,11 @@ public class Bank extends Task {
             checkFood = true;
             Condition.sleep(generateRandomDelay(250, 500));
             countFoodInInventory();
-            StateUpdater.updateIsGameGoing();
+
+            BurnBranches.isBurning = false;
+            FletchBranches.isFletching = false;
+            GetBranches.gettingBranches = false;
+            isGameGoing = false;
         }
     }
 
