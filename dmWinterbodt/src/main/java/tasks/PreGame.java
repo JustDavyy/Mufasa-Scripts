@@ -66,13 +66,13 @@ public class PreGame extends Task {
 
                     // Check if the time is between 5 and 10 seconds (inclusive)
                     if (seconds >= 5 && seconds <= 10) {
-                        // Wait for 2 seconds less than the number of seconds read
-                        int waitTime = Math.max(0, seconds - 2) * 1000; // Convert to milliseconds
+                        // Wait for 1 seconds less than the number of seconds read
+                        int waitTime = Math.max(0, seconds - 1) * 1000; // Convert to milliseconds
                         Condition.sleep(waitTime);
 
-                        // Start a 3-second while loop with an action every 200-300ms
+                        // Start a 1,5-second while loop with an action every 200-300ms
                         long startTime = System.currentTimeMillis();
-                        while (System.currentTimeMillis() - startTime < 3000) {
+                        while (System.currentTimeMillis() - startTime < 1500) {
                             Client.tap(SideManager.getBurnRect());
 
                             Condition.sleep(generateRandomDelay(200, 300));
