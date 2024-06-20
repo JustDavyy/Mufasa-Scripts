@@ -5,6 +5,7 @@ import utils.SideManager;
 import utils.Task;
 
 import java.awt.*;
+import java.sql.Statement;
 
 import static helpers.Interfaces.*;
 import static main.dWintertodt.*;
@@ -19,6 +20,8 @@ public class SwitchSide extends Task {
 
             // Check for 5 seconds if the mage is dead for at least 5 seconds
             Condition.wait(() -> {
+                SideManager.updateMageDeadState();
+                
                 if (SideManager.isMageDeadForAtLeast(5)) {
                     isMageDead = true;
                     return true;

@@ -82,6 +82,8 @@ public class SideManager {
 
     public static void updateBurnStates() {StateUpdater.updateBurnStates(states);}
 
+    public static void updateMageDeadState() {StateUpdater.updateMageDead(states);}
+
     // Method to get the burning state for the current side
     public static boolean getBurningState() {
         WTStates state = getState(currentSide.equals("Right") ? "Right" : "Left");
