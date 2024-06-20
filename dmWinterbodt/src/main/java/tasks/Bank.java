@@ -234,7 +234,7 @@ public class Bank extends Task {
             Walker.walkPath(WTRegion, gameToWTDoor);
             Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
             Client.tap(exitDoorRect);
-            Condition.sleep(generateRandomDelay(3500, 5000));
+            Condition.sleep(generateRandomDelay(4250, 5300));
             Walker.step(bankTile, WTRegion);
             Condition.wait(() -> Player.within(bankTentArea, WTRegion), 250, 15);
             Condition.sleep(generateRandomDelay(500, 1000));
@@ -247,7 +247,7 @@ public class Bank extends Task {
     private boolean walkToBankFromDoorInside() {
         if (Player.isTileWithinArea(currentLocation, atDoor)) {
             Client.tap(exitDoorRect);
-            Condition.sleep(generateRandomDelay(3500, 5000));
+            Condition.sleep(generateRandomDelay(4250, 5300));
             Walker.step(bankTile, WTRegion);
             Condition.wait(() -> Player.within(bankTentArea, WTRegion), 250, 15);
             Condition.sleep(generateRandomDelay(500, 1000));
