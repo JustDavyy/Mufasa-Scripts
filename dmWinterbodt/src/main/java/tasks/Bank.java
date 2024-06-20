@@ -104,7 +104,55 @@ public class Bank extends Task {
                 Logger.debugLog("Located the wintertodt bank chest using the color finder, tapping.");
                 Client.tap(randomRect);
                 Condition.wait(() -> Bank.isOpen(), 250, 15);
-                Logger.debugLog("Bank should be open now?.");
+
+                // re-try if bank is not open.
+                if (!Bank.isOpen()) {
+                    Logger.debugLog("Bank is not open yet, opening!");
+
+                    // use color finder here
+                    List<Rectangle> foundRectangles2 = Client.getObjectsFromColorsInRect(bankChest, bankSearchArea, 1);
+
+                    if (!foundRectangles2.isEmpty()) {
+                        Rectangle randomRect2 = foundRectangles2.get(random.nextInt(foundRectangles2.size()));
+                        Logger.debugLog("Located the wintertodt bank chest using the color finder, tapping.");
+                        Client.tap(randomRect2);
+                        Condition.wait(() -> Bank.isOpen(), 250, 15);
+
+                        // re-try if bank is not open.
+                        if (!Bank.isOpen()) {
+                            Logger.debugLog("Bank is not open yet, opening!");
+
+                            // use color finder here
+                            List<Rectangle> foundRectangles3 = Client.getObjectsFromColorsInRect(bankChest, bankSearchArea, 1);
+
+                            if (!foundRectangles3.isEmpty()) {
+                                Rectangle randomRect3 = foundRectangles3.get(random.nextInt(foundRectangles3.size()));
+                                Logger.debugLog("Located the wintertodt bank chest using the color finder, tapping.");
+                                Client.tap(randomRect3);
+                                Condition.wait(() -> Bank.isOpen(), 250, 15);
+
+                                if (!Bank.isOpen()) {
+                                    Logger.debugLog("Failed to bank three times, resetting position!");
+                                    Walker.step(bankTile, WTRegion);
+                                }
+                                return true;
+                            } else {
+                                Logger.debugLog("Couldn't locate the wintertodt bank chest using the color finder.");
+                                return false;
+                            }
+                        } else {
+                            Logger.debugLog("Bank is already open.");
+                            return false;
+                        }
+                        return true;
+                    } else {
+                        Logger.debugLog("Couldn't locate the wintertodt bank chest using the color finder.");
+                        return false;
+                    }
+                } else {
+                    Logger.debugLog("Bank is already open.");
+                    return false;
+                }
                 return true;
             } else {
                 Logger.debugLog("Couldn't locate the wintertodt bank chest using the color finder.");
