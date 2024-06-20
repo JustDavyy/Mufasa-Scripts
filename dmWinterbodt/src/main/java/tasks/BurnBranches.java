@@ -68,7 +68,6 @@ public class BurnBranches extends Task {
             Logger.log("Initiating burn action!");
             Client.tap(SideManager.getBurnRect());
             Condition.wait(() -> {
-                Logger.debugLog("Waiting for next actions..");
 
                 // Handle reburning/fixing
                 SideManager.updateBurnStates();
