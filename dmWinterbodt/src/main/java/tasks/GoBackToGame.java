@@ -23,7 +23,7 @@ public class GoBackToGame extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Inside GoBackToGame execute()");
-        if (BreakManager.shouldBreakNow) {
+        if (BreakManager.shouldBreakNow && (Player.within(lobby, WTRegion) || Player.within(outsideArea, WTRegion)) ) {
             return true;
         }
 
