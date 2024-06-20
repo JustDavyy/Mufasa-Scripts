@@ -39,6 +39,11 @@ public class BreakManager extends Task {
         int breakSeconds = random.nextInt(60);     // Use the same random instance here as well
         int breakMillis = breakMinutes * 60000 + breakSeconds * 1000;  // Convert minutes and seconds to milliseconds
 
+        // Add a delay just to be safe, only when inside.
+        if (Player.isTileWithinArea(currentLocation, insideArea)){
+            Condition.sleep(generateRandomDelay(4000, 8000));
+        }
+
         // Log the precise break duration
         Logger.log("Taking a break for " + breakMinutes + " minute(s) and " + breakSeconds + " second(s).");
 
