@@ -54,7 +54,7 @@ public class GoBackToGame extends Task {
             Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
             Condition.sleep(generateRandomDelay(700, 1300));
             Client.tap(enterDoorRect);
-            Condition.sleep(generateRandomDelay(3500, 5000));
+            Condition.sleep(generateRandomDelay(4250, 5300));
             currentLocation = Walker.getPlayerPosition(WTRegion);
             return true;
         }
