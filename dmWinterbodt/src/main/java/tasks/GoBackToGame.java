@@ -1,6 +1,7 @@
 package tasks;
 
 import utils.SideManager;
+import utils.StateUpdater;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -17,7 +18,7 @@ public class GoBackToGame extends Task {
             Logger.log("Waiting for game to end.");
         }
 
-        return (Player.within(outsideArea, WTRegion) || Player.within(insideArea, WTRegion)) && !SideManager.isWithinGameArea() && !waitingForGameEnded && !isGameGoing;
+        return Player.within(outsideArea, WTRegion) || Player.within(insideArea, WTRegion) && !SideManager.isWithinGameArea() && !waitingForGameEnded && !isGameGoing;
     }
 
     @Override
@@ -51,6 +52,7 @@ public class GoBackToGame extends Task {
         if (Player.isTileWithinArea(currentLocation, outsideArea)) {
             Walker.walkPath(WTRegion, getReversedTiles(wtDoorToBank));
             Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
+            Condition.sleep(generateRandomDelay(700, 1300));
             Client.tap(enterDoorRect);
             Condition.sleep(generateRandomDelay(3500, 5000));
             currentLocation = Walker.getPlayerPosition(WTRegion);
@@ -63,6 +65,7 @@ public class GoBackToGame extends Task {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
             Walker.walkPath(WTRegion, SideManager.getDoorToGamePath());
             Condition.wait(SideManager::isWithinGameArea, 100, 20);
+            currentLocation = Walker.getPlayerPosition(WTRegion);
             return true;
         }
         return false;
@@ -72,8 +75,21 @@ public class GoBackToGame extends Task {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
             Client.tap(new java.awt.Rectangle(795, 63, 16, 19));
             Condition.sleep(generateRandomDelay(2000, 4000));
+            currentLocation = Walker.getPlayerPosition(WTRegion);
+
+            // Check if we can start a game or not
+            StateUpdater.updateGameAt70();
+            if (!gameAt70Percent) {
+                walkToBranchesTile();
+            }
             return true;
         }
         return false;
+    }
+
+    private boolean walkToBranchesTile() {
+        if (Player.isTileWithinArea(currentLocation, lobby)) {
+            Walker.step(SideManager.getBranchTile(), WTRegion);
+        }
     }
 }
