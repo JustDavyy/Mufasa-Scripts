@@ -14,8 +14,7 @@ public class BreakManager extends Task {
     private static final Random random = new Random(System.nanoTime());
 
     private static void generateRandomNextBreakCount() {
-        // nextInt(5) generates a value from 0 to 4, so adding 3 results in a range from 3 to 7
-        shouldBreakAt = random.nextInt(5) + 3;
+        shouldBreakAt = random.nextInt(4) + 2;  // Generates a number from 2 to 5
     }
 
     @Override
