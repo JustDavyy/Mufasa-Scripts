@@ -71,7 +71,7 @@ public class BurnBranches extends Task {
 
                 // Handle reburning/fixing
                 SideManager.updateBurnStates();
-                if (SideManager.getNeedsFixing() && isGameGoing || SideManager.getNeedsReburning() && isGameGoing) {
+                if (SideManager.getNeedsFixing() && isGameGoing && !SideManager.getMageDead() || SideManager.getNeedsReburning() && isGameGoing && !SideManager.getMageDead()) {
                     Logger.log("Brazier needs fixing or re-lighting!");
                     if (SideManager.getNeedsFixing()) {
                         Logger.log("Fixing & Relighting!");
