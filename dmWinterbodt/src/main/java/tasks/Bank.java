@@ -1,6 +1,7 @@
 package tasks;
 
 import helpers.utils.ItemList;
+import helpers.utils.Tile;
 import utils.StateUpdater;
 import utils.Task;
 
@@ -237,6 +238,8 @@ public class Bank extends Task {
             Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
             Client.tap(exitDoorRect);
             Condition.sleep(generateRandomDelay(4250, 5300));
+            Walker.walkTo(new Tile(640, 221), WTRegion);
+            Condition.sleep(generateRandomDelay(300, 450));
             Walker.step(bankTile, WTRegion);
             Condition.wait(() -> Player.within(bankTentArea, WTRegion), 250, 15);
             Condition.sleep(generateRandomDelay(500, 1000));
@@ -250,6 +253,8 @@ public class Bank extends Task {
         if (Player.isTileWithinArea(currentLocation, atDoor)) {
             Client.tap(exitDoorRect);
             Condition.sleep(generateRandomDelay(4250, 5300));
+            Walker.walkTo(new Tile(640, 221), WTRegion);
+            Condition.sleep(generateRandomDelay(300, 450));
             Walker.step(bankTile, WTRegion);
             Condition.wait(() -> Player.within(bankTentArea, WTRegion), 250, 15);
             Condition.sleep(generateRandomDelay(500, 1000));
