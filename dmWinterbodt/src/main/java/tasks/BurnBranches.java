@@ -58,20 +58,20 @@ public class BurnBranches extends Task {
             return false;
         }
 
-        if (!Player.atTile(SideManager.getBurnTile(), WTRegion)) {
+        if (!Player.atTile(SideManager.getBurnTile(), WTRegion) && isGameGoing) {
             Logger.log("Stepping to burn tile!");
             Walker.step(SideManager.getBurnTile(), WTRegion);
             currentLocation = Walker.getPlayerPosition(WTRegion);
         }
 
-        if (Player.atTile(SideManager.getBurnTile(), WTRegion)) {
+        if (Player.atTile(SideManager.getBurnTile(), WTRegion) && isGameGoing) {
             Logger.log("Initiating burn action!");
             Client.tap(SideManager.getBurnRect());
             Condition.wait(() -> {
 
                 // Handle reburning/fixing
                 SideManager.updateBurnStates();
-                if (SideManager.getNeedsFixing() || SideManager.getNeedsReburning()) {
+                if (SideManager.getNeedsFixing() && isGameGoing || SideManager.getNeedsReburning() && isGameGoing) {
                     Logger.log("Brazier needs fixing or re-lighting!");
                     if (SideManager.getNeedsFixing()) {
                         Logger.log("Fixing & Relighting!");
