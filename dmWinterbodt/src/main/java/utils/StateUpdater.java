@@ -143,14 +143,6 @@ public class StateUpdater {
             if (mageDeadTimestamp == -1) {
                 // Set the timestamp when the mage first becomes dead
                 mageDeadTimestamp = System.currentTimeMillis();
-
-                // Set the timestamp to a date object
-                date = new Date(mageDeadTimestamp);
-
-                // Format the time as HH:MM:SS
-                String formattedTime = String.format("%02d:%02d:%02d", date.getHours(), date.getMinutes(), date.getSeconds());
-
-                Logger.debugLog("Mage died at " + formattedTime);
             }
         } else {
             // Reset the timestamp if the mage is not dead

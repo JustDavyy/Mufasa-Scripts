@@ -4,6 +4,7 @@ import helpers.utils.Tile;
 import main.dmWinterbodt;
 
 import java.awt.*;
+import java.util.Date;
 import java.util.Random;
 
 import static helpers.Interfaces.*;
@@ -111,7 +112,21 @@ public class SideManager {
     public static boolean getMageDead() {
         WTStates state = getState(currentSide.equals("Right") ? "Right" : "Left");
         boolean isMageDead = state != null && state.isMageDead();
-        Logger.debugLog("Mage dead state for current side (" + currentSide + "): " + isMageDead);
+
+        // Update our HashMap
+        if (isMageDead && mageDeadTimestamps.get(currentSide) == -1L) {
+            mageDeadTimestamp = System.currentTimeMillis();
+            date = new Date(mageDeadTimestamp);
+            String formattedTime = String.format("%02d:%02d:%02d", date.getHours(), date.getMinutes(), date.getSeconds());
+
+            Logger.debugLog("Mage has died at " + formattedTime + " on side " + currentSide);
+            mageDeadTimestamps.put(currentSide, mageDeadTimestamp);
+            Logger.debugLog("Set the mageDeadTimeStamp for " + currentSide + " to: " + mageDeadTimestamp);
+        } else if (!isMageDead && mageDeadTimestamps.get(currentSide) != -1L) {
+            Logger.debugLog("Mage is no longer dead on side " + currentSide);
+            mageDeadTimestamps.put(currentSide, -1L);
+            Logger.debugLog("Set the mageDeadTimeStamp for " + currentSide + " to: " + -1L);
+        }
 
         // Log both current states
         Logger.debugLog("HashMap mage state Left: " + mageDeadTimestamps.get("Left"));
