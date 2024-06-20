@@ -19,9 +19,28 @@ public class StateUpdater {
 
     public static void updateMageDead(WTStates[] states) {
         for (WTStates state : states) {
-            // Update each boolean based on some conditions or actions
-            state.setMageDead(updateMageDead(state));
+            if (state.getName().equals(currentSide)) {
+                boolean wasMageDead = state.isMageDead();
+                boolean isMageDead = updateMageDeadState(state);
+
+                state.setMageDead(isMageDead);
+
+                if (isMageDead && !wasMageDead) {
+                    mageDeadTimestamp = System.currentTimeMillis();
+                    date = new Date(mageDeadTimestamp);
+                    String formattedTime = String.format("%02d:%02d:%02d", date.getHours(), date.getMinutes(), date.getSeconds());
+                    Logger.debugLog("Mage died at " + formattedTime);
+                } else if (!isMageDead && wasMageDead) {
+                    mageDeadTimestamp = -1;
+                }
+            }
         }
+    }
+
+    private static boolean updateMageDeadState(WTStates state) {
+        Rectangle checkRect = state.getRectangle();
+        Color checkColor = StateColor.MAGE_DEAD.getColor();
+        return Client.isColorInRect(checkColor, checkRect, 5);
     }
 
     public static void updateBurnStates(WTStates[] states) {
