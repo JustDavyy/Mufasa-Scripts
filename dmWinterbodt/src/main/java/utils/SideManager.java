@@ -8,6 +8,7 @@ import java.util.Random;
 
 import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
+import static utils.StateUpdater.*;
 
 public class SideManager {
     static Random random = new Random();
@@ -115,13 +116,13 @@ public class SideManager {
     }
 
     public static boolean isMageDeadForAtLeast(int seconds) {
-        if (StateUpdater.mageDeadTimestamp == -1 || !getMageDead()) {
+        if (mageDeadTimestamp == -1 || !getMageDead()) {
             Logger.debugLog("Mage is not dead or timestamp is invalid.");
             return false; // Mage is not dead
         }
 
         long currentTime = System.currentTimeMillis();
-        boolean result = (currentTime - StateUpdater.mageDeadTimestamp) >= (seconds * 1000L);
+        boolean result = (currentTime - mageDeadTimestamp) >= (seconds * 1000L);
         Logger.debugLog("Checking if mage has been dead for at least " + seconds + " seconds: " + result);
 
         return result;

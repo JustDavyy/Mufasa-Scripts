@@ -17,18 +17,24 @@ public class SwitchSide extends Task {
         //Logger.debugLog("Inside SwitchSide activate()");
 
         if (SideManager.getMageDead() && Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
+            Logger.debugLog("Mage is dead and player is at burn tile. Checking if mage has been dead for at least 5 seconds.");
 
             // Check for 5 seconds if the mage is dead for at least 5 seconds
             Condition.wait(() -> {
                 SideManager.updateMageDeadState();
 
                 if (SideManager.isMageDeadForAtLeast(5)) {
+                    Logger.debugLog("Mage has been dead for at least 5 seconds.");
                     isMageDead = true;
                     return true;
                 }
+
+                Logger.debugLog("Mage has not been dead for 5 seconds yet.");
                 return isMageDead;
             }, 250, 20);
         }
+
+        Logger.debugLog("Activation result: " + isMageDead);
         return isMageDead;
     }
 
@@ -41,15 +47,17 @@ public class SwitchSide extends Task {
         if (Player.tileEquals(currentLocation, SideManager.getBranchTile())) {
             targetTile = SideManager.getBranchTile();
             switchSideRect = SideManager.getBranchSwitchSideRect();
+            Logger.debugLog("Player is at branch tile. Switching to branch side.");
         } else if (Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
             targetTile = SideManager.getBurnTile();
             switchSideRect = SideManager.getBurnSwitchSideRect();
+            Logger.debugLog("Player is at burn tile. Switching to burn side.");
         }
 
         if (targetTile != null && switchSideRect != null) {
             performSwitchSide(switchSideRect, targetTile);
         } else {
-            // Default action if not on branch or burn tile
+            Logger.debugLog("Player is not on branch or burn tile. Walking to middle.");
             walkToMiddle();
         }
 
@@ -57,17 +65,28 @@ public class SwitchSide extends Task {
     }
 
     private void performSwitchSide(Rectangle switchRect, Tile targetTile) {
+        Logger.debugLog("Performing switch side action.");
+        Logger.debugLog("Current side: " + currentSide);
+        if (currentSide.equals("Right")) {
+            currentSide = "Left";
+        } else if (currentSide.equals("Left")) {
+            currentSide = "Right";
+        }
         Client.tap(switchRect);
         Condition.sleep(generateRandomDelay(4250, 5250));
         Walker.step(targetTile, WTRegion);
         currentLocation = targetTile;
         isMageDead = false;
+
+        Logger.debugLog("Switch side action completed. New side: " + currentSide);
     }
 
     private void walkToMiddle() {
+        Logger.debugLog("Walking to middle tile.");
         Tile middleTile = new Tile(638, 167);
         Walker.walkTo(middleTile, WTRegion);
         currentLocation = Walker.getPlayerPosition(WTRegion);
         isMageDead = false;
+        Logger.debugLog("Reached middle tile. New location: " + currentLocation);
     }
 }
