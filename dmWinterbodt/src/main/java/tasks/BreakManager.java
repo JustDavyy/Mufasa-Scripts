@@ -24,7 +24,7 @@ public class BreakManager extends Task {
             generateRandomNextBreakCount();
         }
 
-        if (currentGameCount > shouldBreakAt && Player.isTileWithinArea(currentLocation, lobby) || currentGameCount > shouldBreakAt && Player.isTileWithinArea(currentLocation, outsideArea) && !Bank.isOpen()) {
+        if (currentGameCount >= shouldBreakAt && Player.isTileWithinArea(currentLocation, lobby) || currentGameCount > shouldBreakAt && Player.isTileWithinArea(currentLocation, outsideArea) && !Bank.isOpen()) {
             shouldBreakNow = true;
         }
 

@@ -23,6 +23,9 @@ public class GoBackToGame extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Inside GoBackToGame execute()");
+        if (BreakManager.shouldBreakNow && (Player.within(lobby, WTRegion) || Player.within(outsideArea, WTRegion)) ) {
+            return true;
+        }
 
         //Choose a new random side if the initial picked side was random.
         if (pickedSide.equals("Random")) {
