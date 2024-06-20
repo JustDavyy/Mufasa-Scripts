@@ -137,7 +137,7 @@ public class dmWinterbodt extends AbstractScript {
             new Tile(645, 225)
     };
     public static Rectangle enterDoorRect = new Rectangle(323, 75, 307, 122);
-    public static Rectangle exitDoorRect = new Rectangle(138, 248, 459, 173);
+    public static Rectangle exitDoorRect = new Rectangle(379, 260, 176, 116);
     public static Area insideArea = new Area(
             new Tile(605, 152),
             new Tile(666, 199)
