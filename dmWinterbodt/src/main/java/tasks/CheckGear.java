@@ -21,7 +21,25 @@ public class CheckGear extends Task {
             ItemList.MITHRIL_AXE_1355,
             ItemList.BLACK_AXE_1361,
             ItemList.IRON_AXE_1349,
-            ItemList.BRONZE_AXE_1351
+            ItemList.BRONZE_AXE_1351,
+
+            // Odd axes, just added to be able to detect and support them, but low in priority.
+            ItemList.CRYSTAL_AXE_23673,
+            ItemList.CRYSTAL_AXE_UNCHARGED_23675,
+            ItemList.CRYSTAL_FELLING_AXE_28220,
+            ItemList.CRYSTAL_FELLING_AXE_UNCHARGED_28223,
+            ItemList.INFERNAL_AXE_13241,
+            ItemList.INFERNAL_AXE_UNCHARGED_13242,
+            ItemList._3RD_AGE_AXE_20011,
+            ItemList._3RD_AGE_FELLING_AXE_28226,
+            ItemList.DRAGON_FELLING_AXE_28217,
+            ItemList.RUNE_FELLING_AXE_28214,
+            ItemList.ADAMANT_FELLING_AXE_28211,
+            ItemList.MITHRIL_FELLING_AXE_28208,
+            ItemList.BLACK_FELLING_AXE_28205,
+            ItemList.STEEL_FELLING_AXE_28202,
+            ItemList.IRON_FELLING_AXE_28199,
+            ItemList.BRONZE_FELLING_AXE_28196
     };
     int[] lightIDs = { //Reversed order to check highest axe first instead of lower ones.
             ItemList.BRUMA_TORCH_20720,
