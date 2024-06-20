@@ -6,7 +6,7 @@ import main.dmWinterbodt;
 import java.awt.*;
 import java.util.Random;
 
-import static helpers.Interfaces.Player;
+import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
 
 public class SideManager {
@@ -109,16 +109,22 @@ public class SideManager {
     // Method to check if the current side mage is dead
     public static boolean getMageDead() {
         WTStates state = getState(currentSide.equals("Right") ? "Right" : "Left");
-        return state != null && state.isMageDead();
+        boolean isMageDead = state != null && state.isMageDead();
+        Logger.debugLog("Mage dead state for current side (" + currentSide + "): " + isMageDead);
+        return isMageDead;
     }
 
     public static boolean isMageDeadForAtLeast(int seconds) {
         if (StateUpdater.mageDeadTimestamp == -1 || !getMageDead()) {
+            Logger.debugLog("Mage is not dead or timestamp is invalid.");
             return false; // Mage is not dead
         }
 
         long currentTime = System.currentTimeMillis();
-        return (currentTime - StateUpdater.mageDeadTimestamp) >= (seconds * 1000L);
+        boolean result = (currentTime - StateUpdater.mageDeadTimestamp) >= (seconds * 1000L);
+        Logger.debugLog("Checking if mage has been dead for at least " + seconds + " seconds: " + result);
+
+        return result;
     }
 
     // Method to pick a random side

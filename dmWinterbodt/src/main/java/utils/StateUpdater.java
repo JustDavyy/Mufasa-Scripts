@@ -20,8 +20,12 @@ public class StateUpdater {
     public static void updateMageDead(WTStates[] states) {
         for (WTStates state : states) {
             if (state.getName().equals(currentSide)) {
+                Logger.debugLog("Checking mage dead state for side: " + currentSide);
+
                 boolean wasMageDead = state.isMageDead();
                 boolean isMageDead = updateMageDeadState(state);
+
+                Logger.debugLog("Mage dead state for side " + currentSide + ": " + isMageDead);
 
                 state.setMageDead(isMageDead);
 
@@ -31,6 +35,7 @@ public class StateUpdater {
                     String formattedTime = String.format("%02d:%02d:%02d", date.getHours(), date.getMinutes(), date.getSeconds());
                     Logger.debugLog("Mage died at " + formattedTime);
                 } else if (!isMageDead && wasMageDead) {
+                    Logger.debugLog("Mage is no longer dead on side " + currentSide);
                     mageDeadTimestamp = -1;
                 }
             }
@@ -40,7 +45,14 @@ public class StateUpdater {
     private static boolean updateMageDeadState(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.MAGE_DEAD.getColor();
-        return Client.isColorInRect(checkColor, checkRect, 5);
+
+        Logger.debugLog("Checking mage dead state in rectangle: " + checkRect + " with color: " + checkColor);
+
+        boolean isMageDead = Client.isColorInRect(checkColor, checkRect, 5);
+
+        Logger.debugLog("Result of mage dead state check: " + isMageDead);
+
+        return isMageDead;
     }
 
     public static void updateBurnStates(WTStates[] states) {
