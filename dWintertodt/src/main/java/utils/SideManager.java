@@ -77,8 +77,10 @@ public class SideManager {
     }
 
     public static void updateStates() {
-        StateUpdater.updateStates(dWintertodt.states);
+        StateUpdater.updateStates(states);
     }
+
+    public static void updateBurnStates() {StateUpdater.updateBurnStates(states);}
 
     // Method to get the burning state for the current side
     public static boolean getBurningState() {
