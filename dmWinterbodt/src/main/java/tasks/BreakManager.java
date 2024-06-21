@@ -24,6 +24,11 @@ public class BreakManager extends Task {
             generateRandomNextBreakCount();
         }
 
+        if (Player.leveledUp()) {
+            Client.sendKeystroke("KEYCODE_SPACE");
+            Condition.sleep(generateRandomDelay(1000, 2000));
+        }
+
         StateUpdater.updateIsGameGoing();
 
         if (currentGameCount >= shouldBreakAt && Player.isTileWithinArea(currentLocation, lobby) && !isGameGoing || currentGameCount > shouldBreakAt && Player.isTileWithinArea(currentLocation, outsideArea) && !Bank.isOpen()) {
