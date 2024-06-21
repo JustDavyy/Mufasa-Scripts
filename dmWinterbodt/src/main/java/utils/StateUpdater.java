@@ -175,11 +175,11 @@ public class StateUpdater {
     private static void updateShouldBurn() {
         shouldBurn = (
                 // for regular mode
-                gameAt20Percent && (inventoryHasKindlings || inventoryHasLogs) && Inventory.usedSlots() >= 18)
-                || isGameGoing && gameAt20Percent && (inventoryHasLogs || inventoryHasKindlings)
+                gameAt20Percent && (inventoryHasKindlings || inventoryHasLogs) && Inventory.usedSlots() >= 18) && !burnOnly
+                || isGameGoing && gameAt20Percent && (inventoryHasLogs || inventoryHasKindlings) && !burnOnly
                 // for burn only!
-                || burnOnly && isGameGoing && inventoryHasLogs && Inventory.isFull()
-                || burnOnly && isGameGoing && gameAt20Percent && inventoryHasLogs && Inventory.usedSlots() >= 18;
+                || burnOnly && isGameGoing && inventoryHasLogs && Inventory.isFull() && !gameAt20Percent
+                || burnOnly && isGameGoing && gameAt20Percent && inventoryHasLogs;
     }
 
     private static void updateKindlingState() {
