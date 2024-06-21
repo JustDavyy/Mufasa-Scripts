@@ -178,7 +178,7 @@ public class StateUpdater {
                 gameAt20Percent && (inventoryHasKindlings || inventoryHasLogs) && Inventory.usedSlots() >= 18) && !burnOnly
                 || isGameGoing && gameAt20Percent && (inventoryHasLogs || inventoryHasKindlings) && !burnOnly
                 // for burn only!
-                || burnOnly && isGameGoing && inventoryHasLogs && Inventory.isFull() && !gameAt20Percent
+                || burnOnly && isGameGoing && inventoryHasLogs && Inventory.isFull()
                 || burnOnly && isGameGoing && inventoryHasLogs && gameAt20Percent;
     }
 
