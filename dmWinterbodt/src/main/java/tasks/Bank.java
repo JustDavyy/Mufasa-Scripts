@@ -20,7 +20,7 @@ public class Bank extends Task {
     public boolean activate() {
         //Logger.debugLog("Inside Bank activate()");
         StateUpdater.updateIsGameGoing();
-        return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing && !Player.leveledUp() || foodAmountInInventory < foodAmountLeftToBank && Player.isTileWithinArea(currentLocation, outsideArea);
+        return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing && !Player.leveledUp() || !isGameGoing && (Inventory.count(ItemList.SUPPLY_CRATE_20703, 0.8) >= 8) || foodAmountInInventory < foodAmountLeftToBank && Player.isTileWithinArea(currentLocation, outsideArea);
     }
 
     @Override
