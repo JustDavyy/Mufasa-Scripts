@@ -126,7 +126,7 @@ public class dmWinterbodt extends AbstractScript {
     public static boolean gameAt70Percent;
     public static boolean shouldBurn;
     public static boolean inventoryHasKindlings;
-    public static boolean inventoryHasBruma;
+    public static boolean inventoryHasLogs;
     public static boolean waitingForGameToStart;
     public static boolean waitingForGameEnded;
     public static boolean isGameGoing;

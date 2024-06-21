@@ -173,14 +173,14 @@ public class StateUpdater {
     }
 
     private static void updateShouldBurn() {
-        shouldBurn = (gameAt20Percent && (inventoryHasKindlings || inventoryHasBruma) && Inventory.usedSlots() >= 18)
-                || isGameGoing && gameAt20Percent && (inventoryHasBruma || inventoryHasKindlings)
-                || isGameGoing && inventoryHasBruma && Inventory.usedSlots() >= 18 && burnOnly;
+        shouldBurn = (gameAt20Percent && (inventoryHasKindlings || inventoryHasLogs) && Inventory.usedSlots() >= 18)
+                || isGameGoing && gameAt20Percent && (inventoryHasLogs || inventoryHasKindlings)
+                || isGameGoing && inventoryHasLogs && Inventory.usedSlots() >= 18 && burnOnly;
     }
 
     private static void updateKindlingState() {
         inventoryHasKindlings = Inventory.contains(brumaKindling, 0.8);
-        inventoryHasBruma = Inventory.contains(brumaRoot, 0.8);
+        inventoryHasLogs = Inventory.contains(brumaRoot, 0.8);
     }
 
     private static void updateWaitingForGameToStart() {
