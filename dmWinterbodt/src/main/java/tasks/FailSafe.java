@@ -9,7 +9,9 @@ import static main.dmWinterbodt.*;
 public class FailSafe extends Task {
     @Override
     public boolean activate() {
+        Logger.debugLog("Inside FailSafe activate()");
         if (foodAmountInInventory == 0) {
+            Logger.debugLog("Food 0?");
             currentLocation = Walker.getPlayerPosition();
 
             // Check if we died
