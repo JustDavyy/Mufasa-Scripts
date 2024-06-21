@@ -19,14 +19,20 @@ public class BurnBranches extends Task {
         StateUpdater.updateGameAt13();
 
         // Regular check condition
-        if (inventoryHasKindlings && !inventoryHasBruma) {
+        if (inventoryHasKindlings && !inventoryHasLogs) {
             return true;
         } else if (shouldBurn && isGameGoing) {
             isBurning = true;
         }
 
         // check if we have brumakindlings & we are at the burn tile
-        return (inventoryHasKindlings && Player.tileEquals(currentLocation, SideManager.getBurnTile())) && isGameGoing && !SideManager.getMageDead() || isBurning && Player.isTileWithinArea(currentLocation, insideArea) && !SideManager.getMageDead();
+        return (inventoryHasKindlings
+                && Player.tileEquals(currentLocation, SideManager.getBurnTile()))
+                && isGameGoing
+                && !SideManager.getMageDead()
+                || isBurning
+                && Player.isTileWithinArea(currentLocation, insideArea)
+                && !SideManager.getMageDead();
     }
 
     @Override
@@ -42,7 +48,7 @@ public class BurnBranches extends Task {
         Integer startHP = Player.getHP();
 
         // This is the logic to walk to safety when the game is near end, and we're out of burns.
-        if (!inventoryHasBruma & !inventoryHasKindlings && isGameGoing && Player.tileEquals(currentLocation, SideManager.getBurnTile()) && gameAt13Percent) {
+        if (!inventoryHasLogs & !inventoryHasKindlings && isGameGoing && Player.tileEquals(currentLocation, SideManager.getBurnTile()) && gameAt13Percent) {
             Logger.log("Out of items to burn, and game near end. Heading to lobby to prevent getting hit.");
             Condition.sleep(generateRandomDelay(1250, 2000));
             if (Player.leveledUp()) {
@@ -54,7 +60,7 @@ public class BurnBranches extends Task {
             currentLocation = Walker.getPlayerPosition(WTRegion);
             lastWalkToSafety = System.currentTimeMillis();
             return false;
-        } else if (!inventoryHasBruma && !inventoryHasKindlings && isGameGoing && Player.isTileWithinArea(currentLocation, lobby) && gameAt13Percent) {
+        } else if (!inventoryHasLogs && !inventoryHasKindlings && isGameGoing && Player.isTileWithinArea(currentLocation, lobby) && gameAt13Percent) {
             Logger.log("Waiting in lobby for game to end to prevent getting hit.");
             return false;
         }
@@ -86,7 +92,7 @@ public class BurnBranches extends Task {
                 StateUpdater.updateIsGameGoing();
 
                 XpBar.getXP();
-                return !inventoryHasKindlings && !inventoryHasBruma || startHP > currentHp || Player.leveledUp() || !isGameGoing;
+                return !inventoryHasKindlings && !inventoryHasLogs || startHP > currentHp || Player.leveledUp() || !isGameGoing;
             }, 100, 300);
 
             return true;

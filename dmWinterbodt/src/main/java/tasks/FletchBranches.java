@@ -11,7 +11,7 @@ public class FletchBranches extends Task {
 
     @Override
     public boolean activate() {
-        if (Inventory.isFull() && inventoryHasBruma && !shouldBurn) {
+        if (Inventory.isFull() && inventoryHasLogs && !shouldBurn && !burnOnly) {
             isFletching = true;
         }
 
@@ -20,7 +20,7 @@ public class FletchBranches extends Task {
 
     @Override
     public boolean execute() {
-        if (isFletching && !inventoryHasBruma || shouldBurn) {
+        if (isFletching && !inventoryHasLogs || shouldBurn) {
             isFletching = false;
         }
 
@@ -40,7 +40,7 @@ public class FletchBranches extends Task {
         Condition.wait(() -> {
             SideManager.updateStates();
             XpBar.getXP();
-            return !inventoryHasBruma || startHP > currentHp || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
+            return !inventoryHasLogs || startHP > currentHp || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
         }, 200, 150);
 
         return true;
