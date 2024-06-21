@@ -26,7 +26,13 @@ public class BurnBranches extends Task {
         }
 
         // check if we have brumakindlings & we are at the burn tile
-        return (inventoryHasKindlings && Player.tileEquals(currentLocation, SideManager.getBurnTile())) && isGameGoing && !SideManager.getMageDead() || isBurning && Player.isTileWithinArea(currentLocation, insideArea) && !SideManager.getMageDead();
+        return (inventoryHasKindlings
+                && Player.tileEquals(currentLocation, SideManager.getBurnTile()))
+                && isGameGoing
+                && !SideManager.getMageDead()
+                || isBurning
+                && Player.isTileWithinArea(currentLocation, insideArea)
+                && !SideManager.getMageDead();
     }
 
     @Override

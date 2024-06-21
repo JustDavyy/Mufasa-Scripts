@@ -11,7 +11,7 @@ public class FletchBranches extends Task {
 
     @Override
     public boolean activate() {
-        if (Inventory.isFull() && inventoryHasBruma && !shouldBurn) {
+        if (Inventory.isFull() && inventoryHasBruma && !shouldBurn && !burnOnly) {
             isFletching = true;
         }
 

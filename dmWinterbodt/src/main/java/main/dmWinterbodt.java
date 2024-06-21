@@ -85,6 +85,12 @@ import static utils.SideManager.pickRandomSide;
                                 @AllowedValue(optionName = "Random")
                         },
                         optionType = OptionType.STRING
+                ),
+                @ScriptConfiguration(
+                        name = "Burn only?",
+                        description = "Would you like to only burn and not fletch? This gives increased FM xp, but no fletching xp and less points per game.",
+                        defaultValue = "False",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -107,6 +113,7 @@ public class dmWinterbodt extends AbstractScript {
     public static int foodAmount;
     public static int foodAmountLeftToBank;
     public static int bankTab;
+    public static boolean burnOnly;
     public static Rectangle bankSearchArea = new Rectangle(410, 144, 429, 358);
     public static List<Color> bankChest = List.of(
             Color.decode("#2c3737")
@@ -245,6 +252,7 @@ public class dmWinterbodt extends AbstractScript {
         foodAmountLeftToBank = Integer.parseInt(configs.get("Food amount left to bank at"));
         pickedSide = configs.get("Side");
         bankTab = Integer.parseInt(configs.get("BankTab"));
+        burnOnly = Boolean.parseBoolean(configs.get("Burn only?"));
 
         setupFoodIDs();
 
