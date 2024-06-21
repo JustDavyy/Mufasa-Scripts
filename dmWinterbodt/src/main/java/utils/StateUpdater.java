@@ -173,6 +173,8 @@ public class StateUpdater {
     }
 
     private static void updateShouldBurn() {
+        long startTime = System.currentTimeMillis(); // Start time
+
         shouldBurn = (
                 // for regular mode
                 gameAt20Percent && (inventoryHasKindlings || inventoryHasLogs) && Inventory.usedSlots() >= 18) && !burnOnly
@@ -180,11 +182,23 @@ public class StateUpdater {
                 // for burn only!
                 || burnOnly && isGameGoing && inventoryHasLogs && Inventory.isFull()
                 || burnOnly && isGameGoing && inventoryHasLogs && gameAt20Percent;
+
+        long endTime = System.currentTimeMillis(); // End time
+        long duration = endTime - startTime; // Duration in milliseconds
+
+        Logger.log("Time taken to execute updateShouldBurn: " + duration + " ms");
     }
 
     private static void updateKindlingState() {
+        long startTime = System.currentTimeMillis(); // Start time
+
         inventoryHasKindlings = Inventory.contains(brumaKindling, 0.8);
         inventoryHasLogs = Inventory.contains(brumaRoot, 0.8);
+
+        long endTime = System.currentTimeMillis(); // End time
+        long duration = endTime - startTime; // Duration in milliseconds
+
+        Logger.log("Time taken to execute updateKindlingState: " + duration + " ms");
     }
 
     private static void updateWaitingForGameToStart() {

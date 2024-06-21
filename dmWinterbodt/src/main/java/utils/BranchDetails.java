@@ -9,7 +9,7 @@ public enum BranchDetails {
             new Tile(627, 170), //branch tile
             new Rectangle(350, 258, 62, 32), //branch click rect
             new Tile(627, 159), // burn tile
-            new Rectangle(361, 151, 71, 54), //burn click rect
+            new Rectangle(397, 179, 43, 33), //burn click rect
             new Rectangle(820, 95, 21, 17), // burn switch side click rect
             new Rectangle(819, 61, 23, 18) // branch switch side click rect
     ),
@@ -17,7 +17,7 @@ public enum BranchDetails {
             new Tile(648, 170), //branch tile
             new Rectangle(509, 263, 43, 29), //branch click rect
             new Tile(648, 159), //burn tile
-            new Rectangle(451, 148, 76, 58), //burn click rect
+            new Rectangle(465, 162, 63, 48), //burn click rect
             new Rectangle(757, 94, 21, 19), // burn switch side click rect
             new Rectangle(755, 62, 22, 19) // branch switch side click rect
     );

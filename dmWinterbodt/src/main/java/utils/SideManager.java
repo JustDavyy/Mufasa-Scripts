@@ -79,7 +79,14 @@ public class SideManager {
     }
 
     public static void updateStates() {
+        long startTime = System.currentTimeMillis(); // Start time
+
         StateUpdater.updateStates(states);
+
+        long endTime = System.currentTimeMillis(); // End time
+        long duration = endTime - startTime; // Duration in milliseconds
+
+        Logger.debugLog("[CON] Time taken to execute updateStates: " + duration + " ms");
     }
 
     public static void updateBurnStates() {
