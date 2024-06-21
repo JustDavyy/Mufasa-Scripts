@@ -179,7 +179,7 @@ public class StateUpdater {
                 || isGameGoing && gameAt20Percent && (inventoryHasLogs || inventoryHasKindlings) && !burnOnly
                 // for burn only!
                 || burnOnly && isGameGoing && inventoryHasLogs && Inventory.isFull() && !gameAt20Percent
-                || burnOnly && isGameGoing && gameAt20Percent && inventoryHasLogs;
+                || burnOnly && isGameGoing && inventoryHasLogs && gameAt20Percent;
     }
 
     private static void updateKindlingState() {
