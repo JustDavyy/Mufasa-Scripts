@@ -133,9 +133,34 @@ public class dmWinterbodt extends AbstractScript {
     public static boolean shouldStartWithBurn;
     public static long lastWalkToSafety = System.currentTimeMillis();
     public static boolean isMoreThan40Seconds;
+    public static boolean weDied;
     public static int totalGameCount;
     public static RegionBox WTRegion = new RegionBox("WTRegion", 1701, 264, 2157, 846);
     public static Area lobby = new Area(new Tile(632, 173), new Tile(644, 184));
+    public static Area LeftTopWTArea = new Area(new Tile(601, 111), new Tile(634, 150));
+    public static Area RightTopWTArea = new Area(new Tile(640, 111), new Tile(670, 153));
+    public static Tile[] LeftTopToStart = new Tile[] {
+            new Tile(630, 122),
+            new Tile(623, 127),
+            new Tile(618, 134),
+            new Tile(617, 145),
+            new Tile(618, 151),
+            new Tile(619, 158),
+            new Tile(624, 163),
+            new Tile(630, 164),
+            new Tile(638, 165)
+    };
+    public static Tile[] RightTopToStart = new Tile[] {
+            new Tile(644, 123),
+            new Tile(650, 126),
+            new Tile(655, 132),
+            new Tile(658, 139),
+            new Tile(659, 147),
+            new Tile(658, 154),
+            new Tile(653, 161),
+            new Tile(647, 164),
+            new Tile(639, 165)
+    };
     public static Tile bankTile = new Tile(651, 230);
     public static Area bankTentArea = new Area(
             new Tile(647, 224),
@@ -212,6 +237,7 @@ public class dmWinterbodt extends AbstractScript {
             new GoToSafety(),
             new Bank(),
             new Eat(),
+            new FailSafe(), // I think it should be here?
             new SwitchSide(),
             new BurnBranches(),
             new FletchBranches(),
