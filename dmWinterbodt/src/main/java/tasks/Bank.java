@@ -83,27 +83,6 @@ public class Bank extends Task {
             FletchBranches.isFletching = false;
             GetBranches.gettingBranches = false;
             isGameGoing = false;
-
-            // Final check to see if we have enough food, otherwise terminate script.
-            if (foodAmountInInventory < foodAmountLeftToBank) { // We at least need to have the amount needed before banking, if not we might have ran out of food
-                if (!alreadyBanked) {
-                    Logger.log("We only have " + foodAmountInInventory + " food in our inventory, reattempting a banking sequence.");
-                    alreadyBanked = true;
-                    handleBanking();
-                } else {
-                    Logger.log("We only have " + foodAmountInInventory + " food in our inventory, and already reattempted banking. Assuming we have no more food in our bank.");
-                    Logger.log("Terminating script.");
-
-                    if (Bank.isOpen()) {
-                        Bank.close();
-                    }
-
-                    Logout.logout();
-                    Script.stop();
-                }
-            } else {
-                alreadyBanked = false;
-            }
         }
     }
 

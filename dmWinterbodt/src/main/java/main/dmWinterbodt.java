@@ -85,12 +85,6 @@ import static utils.SideManager.pickRandomSide;
                                 @AllowedValue(optionName = "Random")
                         },
                         optionType = OptionType.STRING
-                ),
-                @ScriptConfiguration(
-                        name = "Burn only?",
-                        description = "Would you like to only burn and not fletch? This gives increased FM xp, but no fletching xp and less points per game.",
-                        defaultValue = "False",
-                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -113,7 +107,6 @@ public class dmWinterbodt extends AbstractScript {
     public static int foodAmount;
     public static int foodAmountLeftToBank;
     public static int bankTab;
-    public static boolean burnOnly;
     public static Rectangle bankSearchArea = new Rectangle(410, 144, 429, 358);
     public static List<Color> bankChest = List.of(
             Color.decode("#2c3737")
@@ -126,42 +119,16 @@ public class dmWinterbodt extends AbstractScript {
     public static boolean gameAt70Percent;
     public static boolean shouldBurn;
     public static boolean inventoryHasKindlings;
-    public static boolean inventoryHasLogs;
+    public static boolean inventoryHasBruma;
     public static boolean waitingForGameToStart;
     public static boolean waitingForGameEnded;
     public static boolean isGameGoing;
     public static boolean shouldStartWithBurn;
     public static long lastWalkToSafety = System.currentTimeMillis();
     public static boolean isMoreThan40Seconds;
-    public static boolean weDied;
-    public static boolean alreadyBanked;
     public static int totalGameCount;
     public static RegionBox WTRegion = new RegionBox("WTRegion", 1701, 264, 2157, 846);
     public static Area lobby = new Area(new Tile(632, 173), new Tile(644, 184));
-    public static Area LeftTopWTArea = new Area(new Tile(601, 111), new Tile(634, 150));
-    public static Area RightTopWTArea = new Area(new Tile(640, 111), new Tile(670, 153));
-    public static Tile[] LeftTopToStart = new Tile[] {
-            new Tile(630, 122),
-            new Tile(623, 127),
-            new Tile(618, 134),
-            new Tile(617, 145),
-            new Tile(618, 151),
-            new Tile(619, 158),
-            new Tile(624, 163),
-            new Tile(630, 164),
-            new Tile(638, 165)
-    };
-    public static Tile[] RightTopToStart = new Tile[] {
-            new Tile(644, 123),
-            new Tile(650, 126),
-            new Tile(655, 132),
-            new Tile(658, 139),
-            new Tile(659, 147),
-            new Tile(658, 154),
-            new Tile(653, 161),
-            new Tile(647, 164),
-            new Tile(639, 165)
-    };
     public static Tile bankTile = new Tile(651, 230);
     public static Area bankTentArea = new Area(
             new Tile(647, 224),
@@ -238,7 +205,6 @@ public class dmWinterbodt extends AbstractScript {
             new GoToSafety(),
             new Bank(),
             new Eat(),
-            new FailSafe(), // I think it should be here?
             new SwitchSide(),
             new BurnBranches(),
             new FletchBranches(),
@@ -279,7 +245,6 @@ public class dmWinterbodt extends AbstractScript {
         foodAmountLeftToBank = Integer.parseInt(configs.get("Food amount left to bank at"));
         pickedSide = configs.get("Side");
         bankTab = Integer.parseInt(configs.get("BankTab"));
-        burnOnly = Boolean.parseBoolean(configs.get("Burn only?"));
 
         setupFoodIDs();
 
