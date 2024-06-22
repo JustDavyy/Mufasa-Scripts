@@ -20,7 +20,7 @@ public class GoBackToGame extends Task {
 
         isMoreThan40Seconds = (System.currentTimeMillis() - lastWalkToSafety) > 40000;
 
-        return Player.within(outsideArea, WTRegion) || Player.within(insideArea, WTRegion) && !SideManager.isWithinGameArea() && !waitingForGameEnded && !isGameGoing && isMoreThan40Seconds;
+        return Player.within(outsideArea, WTRegion) || Player.within(insideArea, WTRegion) && !SideManager.isWithinGameArea() && !waitingForGameEnded && !isGameGoing && isMoreThan40Seconds || Player.within(insideArea, WTRegion) && !SideManager.isWithinGameArea() && Player.isTileWithinArea(currentLocation, lobby) && isMoreThan40Seconds && !gameAt70Percent;
     }
 
     @Override
