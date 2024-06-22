@@ -200,7 +200,9 @@ public class Bank extends Task {
             }
             for (int i = 0; i < foodNeeded; i++) {
                 Bank.withdrawItem(foodID, 0.7);
+                Condition.sleep(generateRandomDelay(75, 150));
             }
+            Condition.sleep(generateRandomDelay(250, 500));
         }
     }
 
