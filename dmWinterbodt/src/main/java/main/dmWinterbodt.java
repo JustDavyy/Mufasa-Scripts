@@ -385,7 +385,6 @@ public class dmWinterbodt extends AbstractScript {
                     countMultiplier = 2; // half cake counts as 2
                 }
 
-                // Assume Inventory.count(id, 0.85) returns the number of items that are at least 75% intact
                 int count = Inventory.count(id, 0.85);
                 Logger.debugLog("Found " + count + " items with ID " + id + " and multiplier " + countMultiplier);
                 foodAmountInInventory += count * countMultiplier;
