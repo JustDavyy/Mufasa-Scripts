@@ -178,8 +178,9 @@ public class StateUpdater {
                 gameAt13Percent && (inventoryHasKindlings || inventoryHasLogs) && Inventory.usedSlots() >= 18) && !burnOnly
                 || isGameGoing && gameAt13Percent && (inventoryHasLogs || inventoryHasKindlings) && !burnOnly
                 // for burn only!
-                || burnOnly && isGameGoing && inventoryHasLogs && Inventory.isFull()
-                || burnOnly && isGameGoing && inventoryHasLogs && gameAt13Percent;
+                || burnOnly && isGameGoing && inventoryHasLogs && Inventory.isFull() && Player.tileEquals(currentLocation, SideManager.getBranchTile())
+                || burnOnly && isGameGoing && inventoryHasLogs && gameAt13Percent
+                || burnOnly && isGameGoing && inventoryHasLogs && Player.tileEquals(currentLocation, SideManager.getBurnTile());
     }
 
     private static void updateKindlingState() {

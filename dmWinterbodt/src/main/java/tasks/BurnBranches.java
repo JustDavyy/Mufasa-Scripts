@@ -9,7 +9,6 @@ import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
 
 public class BurnBranches extends Task {
-    public static boolean isBurning = false;
 
     @Override
     public boolean activate() {
@@ -48,7 +47,7 @@ public class BurnBranches extends Task {
         Integer startHP = Player.getHP();
 
         // This is the logic to walk to safety when the game is near end, and we're out of burns.
-        if (!inventoryHasLogs & !inventoryHasKindlings && isGameGoing && Player.tileEquals(currentLocation, SideManager.getBurnTile()) && gameAt13Percent) {
+        if (!inventoryHasLogs & !inventoryHasKindlings && isGameGoing && Player.tileEquals(currentLocation, SideManager.getBurnTile()) && gameAt13Percent && !burnOnly) {
             Logger.log("Out of items to burn, and game near end. Heading to lobby to prevent getting hit.");
             Condition.sleep(generateRandomDelay(1250, 2000));
             if (Player.leveledUp()) {
@@ -92,6 +91,10 @@ public class BurnBranches extends Task {
 
                 StateUpdater.updateStates(states);
                 XpBar.getXP();
+
+                if (!shouldBurn && isBurning) {
+                    isBurning = false;
+                }
 
                 return !inventoryHasKindlings && !inventoryHasLogs || startHP > currentHp || Player.leveledUp() || !isGameGoing;
             }, 100, 300);

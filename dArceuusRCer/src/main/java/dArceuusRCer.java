@@ -1329,6 +1329,19 @@ Tile playerPos;
                 lastItemTime = System.currentTimeMillis(); // Reset the timer after resetting
             }
 
+            if (Player.leveledUp()) {
+                if (Player.leveledUp()) {
+                    Client.sendKeystroke("KEYCODE_SPACE");
+                    Condition.sleep(generateRandomDelay(1000, 2000));
+
+                    if (java.util.Objects.equals(currentLoc, "south")) {
+                        Client.tap(tapSouthRuneStoneSOUTH);
+                    } else {
+                        Client.tap(tapNorthRuneStoneNORTH);
+                    }
+                }
+            }
+
             if (java.util.Objects.equals(currentLoc, "south")) {
                 // Check if the runestone is inactive
                 if (isRunestoneInactive(southRuneStoneROI)) {

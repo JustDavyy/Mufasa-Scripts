@@ -53,7 +53,7 @@ public class Bank extends Task {
         }
         if (Player.isTileWithinArea(currentLocation, bankTentArea)) {
             handleBanking();
-            BurnBranches.isBurning = false;
+            isBurning = false;
             FletchBranches.isFletching = false;
             GetBranches.gettingBranches = false;
             StateUpdater.mageDeadTimestamps.put("Left", -1L);
@@ -85,7 +85,7 @@ public class Bank extends Task {
             Condition.sleep(generateRandomDelay(1250, 2000));
             countFoodInInventory();
 
-            BurnBranches.isBurning = false;
+            isBurning = false;
             FletchBranches.isFletching = false;
             GetBranches.gettingBranches = false;
             isGameGoing = false;

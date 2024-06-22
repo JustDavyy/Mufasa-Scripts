@@ -131,6 +131,7 @@ public class dmWinterbodt extends AbstractScript {
     public static boolean waitingForGameToStart;
     public static boolean waitingForGameEnded;
     public static boolean isGameGoing;
+    public static boolean isBurning = false;
     public static boolean shouldStartWithBurn;
     public static long lastWalkToSafety = System.currentTimeMillis();
     public static long lastActivity = System.currentTimeMillis();

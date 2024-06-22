@@ -19,7 +19,7 @@ public class GetBranches extends Task {
             gettingBranches = true;
         }
 
-        return gettingBranches || !Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing && !gameAt13Percent;
+        return gettingBranches || !Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing && !gameAt13Percent || !Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing && gameAt20Percent && burnOnly && !isBurning && Inventory.count(brumaRoot, 0.8) < 7;
     }
 
     @Override
@@ -46,6 +46,12 @@ public class GetBranches extends Task {
             Condition.wait(() -> {
                 SideManager.updateStates();
                 XpBar.getXP();
+
+                if (gameAt13Percent) {
+                    if (Inventory.count(brumaRoot, 0.8) >= 7) {
+                        shouldBurn = true;
+                    }
+                }
 
                 return Inventory.isFull() || hpToEat > currentHp || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
             }, 200, 150);
