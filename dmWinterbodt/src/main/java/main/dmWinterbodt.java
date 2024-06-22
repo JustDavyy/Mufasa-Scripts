@@ -116,7 +116,8 @@ public class dmWinterbodt extends AbstractScript {
     public static boolean burnOnly;
     public static Rectangle bankSearchArea = new Rectangle(410, 144, 429, 358);
     public static List<Color> bankChest = List.of(
-            Color.decode("#2c3737")
+            Color.decode("#2c3737"),
+            Color.decode("#2a3535")
     );
     public static int foodAmountInInventory;
     public static int currentHp;
