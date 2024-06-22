@@ -39,9 +39,8 @@ public class FletchBranches extends Task {
         Logger.debugLog("Heading to FletchBranches conditional wait.");
         Condition.wait(() -> {
             SideManager.updateStates();
-            Logger.debugLog("Reading XP");
             XpBar.getXP();
-            Logger.debugLog("XP Read");
+
             return !inventoryHasLogs || startHP > currentHp || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
         }, 200, 150);
 

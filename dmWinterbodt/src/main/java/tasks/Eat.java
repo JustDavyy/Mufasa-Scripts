@@ -1,5 +1,6 @@
 package tasks;
 
+import utils.StateUpdater;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -9,13 +10,13 @@ public class Eat extends Task {
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside Eat activate()");
+        currentHp = Player.getHP();
         return hpToEat > currentHp;
     }
 
     @Override
     public boolean execute() {
         Logger.debugLog("Inside Eat execute()");
-        Logger.log("Eating food.");
 
         GameTabs.openInventoryTab();
 
