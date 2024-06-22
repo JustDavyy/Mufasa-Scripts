@@ -48,8 +48,8 @@ Area FishingArea = new Area(
 String FishingSpot;
 Boolean SafeModeOn;
 private Instant lastXpGainTime = Instant.now().minusSeconds(15);
-String previousXP = null;
-String newXP;
+int previousXP;
+int newXP;
 Tile SouthSpot = new Tile(55, 49);
 Tile NorthEastSpot = new Tile(63, 32);
 Tile NorthWestSpot = new Tile(42, 34);
@@ -136,10 +136,10 @@ private Instant lastActionTime = Instant.now();
     private void readXP() {
         newXP = XpBar.getXP();
 
-        if (previousXP == null) {
+        if (previousXP == 0 || previousXP == -1) {
             // If previousXP is null, initialize it with the current XP
             previousXP = newXP;
-        } else if (!previousXP.equals(newXP)) {
+        } else if (previousXP != newXP) {
             // If previousXP and newXP are different, update lastXpGainTime and set previousXP to newXP
             lastXpGainTime = Instant.now();
             previousXP = newXP;

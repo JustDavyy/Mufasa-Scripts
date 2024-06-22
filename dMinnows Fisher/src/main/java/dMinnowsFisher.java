@@ -45,8 +45,8 @@ RegionBox minnowRegion = new RegionBox(
 Tile playerPos;
 private Instant lastXpGainTime = Instant.now().minusSeconds(5);
 private Instant lastSharkAction = Instant.now();
-String previousXP = null;
-String newXP;
+int previousXP;
+int newXP;
 String hopProfile;
 Color FishSpotColor = Color.decode("#27ffff");
 Rectangle lastLine = new Rectangle(35, 104, 361, 14);
@@ -191,11 +191,11 @@ Random random = new Random();
     private void readXP() {
         newXP = XpBar.getXP();
 
-        if (previousXP == null) {
+        if (previousXP == 0 || previousXP == -1) {
             // If previousXP is null, initialize it with the current XP
             previousXP = newXP;
             lastXpGainTime = Instant.now();
-        } else if (!previousXP.equals(newXP)) {
+        } else if (previousXP != newXP) {
             // If previousXP and newXP are different, update lastXpGainTime and set previousXP to newXP
             lastXpGainTime = Instant.now();
             previousXP = newXP;
