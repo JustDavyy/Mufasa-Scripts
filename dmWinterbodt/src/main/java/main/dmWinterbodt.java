@@ -385,11 +385,17 @@ public class dmWinterbodt extends AbstractScript {
                     countMultiplier = 2; // half cake counts as 2
                 }
 
-                // Assume Inventory.count(id, 0.60) returns the number of items that are at least 60% intact
-                foodAmountInInventory += Inventory.count(id, 0.75) * countMultiplier;
+                // Assume Inventory.count(id, 0.85) returns the number of items that are at least 75% intact
+                int count = Inventory.count(id, 0.85);
+                Logger.debugLog("Found " + count + " items with ID " + id + " and multiplier " + countMultiplier);
+                foodAmountInInventory += count * countMultiplier;
+                Logger.debugLog("Updated food amount in inventory: " + foodAmountInInventory);
             }
         } else {
-            foodAmountInInventory = Inventory.count(foodID, 0.75);
+            int count = Inventory.count(foodID, 0.85);
+            Logger.debugLog("Found " + count + " items with ID " + foodID);
+            foodAmountInInventory = count;
+            Logger.debugLog("Total food in inventory: " + foodAmountInInventory);
         }
     }
 }

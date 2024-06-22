@@ -40,7 +40,13 @@ public class Bank extends Task {
         }
 
         if (!Player.isTileWithinArea(currentLocation, bankTentArea)) {
-            Walker.step(bankTile, WTRegion);
+            if (Walker.isReachable(bankTile)) {
+                Walker.step(bankTile, WTRegion);
+            } else {
+                Walker.walkTo(new Tile(640, 221), WTRegion);
+                Condition.sleep(generateRandomDelay(900, 1350));
+                Walker.step(bankTile, WTRegion);
+            }
             Condition.wait(() -> Player.within(bankTentArea, WTRegion), 250, 15);
             Condition.sleep(generateRandomDelay(500, 1000));
             currentLocation = Walker.getPlayerPosition(WTRegion);
@@ -240,16 +246,16 @@ public class Bank extends Task {
                         countMultiplier = 2; // half cake counts as 2
                     }
 
-                    // Assume Inventory.count(id, 0.60) returns the number of items that are at least 60% intact
-                    foodAmountInInventory += Inventory.count(id, 0.75) * countMultiplier;
+                    // Assume Inventory.count(id, 0.85) returns the number of items that are at least 75% intact
+                    foodAmountInInventory += Inventory.count(id, 0.85) * countMultiplier;
                     Logger.debugLog("Food in inventory: " + foodAmountInInventory);
-                    checkFood = false;
                 }
             } else {
-                foodAmountInInventory = Inventory.count(foodID, 0.75);
+                foodAmountInInventory = Inventory.count(foodID, 0.85);
                 Logger.debugLog("Food in inventory: " + foodAmountInInventory);
-                checkFood = false;
             }
+
+            checkFood = false;
         }
     }
 
@@ -259,9 +265,13 @@ public class Bank extends Task {
             Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
             Client.tap(exitDoorRect);
             Condition.sleep(generateRandomDelay(4250, 5300));
-            Walker.walkTo(new Tile(640, 221), WTRegion);
-            Condition.sleep(generateRandomDelay(300, 450));
-            Walker.step(bankTile, WTRegion);
+            if (Walker.isReachable(bankTile)) {
+                Walker.step(bankTile, WTRegion);
+            } else {
+                Walker.walkTo(new Tile(640, 221), WTRegion);
+                Condition.sleep(generateRandomDelay(900, 1350));
+                Walker.step(bankTile, WTRegion);
+            }
             Condition.wait(() -> Player.within(bankTentArea, WTRegion), 250, 15);
             Condition.sleep(generateRandomDelay(500, 1000));
             currentLocation = Walker.getPlayerPosition(WTRegion);
@@ -287,9 +297,13 @@ public class Bank extends Task {
 
     private boolean walkToBankFromOutsideArea() {
         if (Player.isTileWithinArea(currentLocation, outsideArea)) {
-            Walker.walkPath(WTRegion, outsideToBankPath);
-            Condition.sleep(generateRandomDelay(1000, 1500));
-            Walker.step(bankTile, WTRegion); //Step to bank tile.
+            if (Walker.isReachable(bankTile)) {
+                Walker.step(bankTile, WTRegion);
+            } else {
+                Walker.walkPath(WTRegion, outsideToBankPath);
+                Condition.sleep(generateRandomDelay(1000, 1500));
+                Walker.step(bankTile, WTRegion);
+            }
             Condition.wait(() -> Player.within(bankTentArea, WTRegion), 250, 15);
             Condition.sleep(generateRandomDelay(500, 1000));
             currentLocation = Walker.getPlayerPosition(WTRegion);

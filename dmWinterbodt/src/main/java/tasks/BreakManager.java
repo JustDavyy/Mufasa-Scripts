@@ -1,5 +1,6 @@
 package tasks;
 
+import helpers.utils.Tile;
 import utils.StateUpdater;
 import utils.Task;
 
@@ -12,6 +13,7 @@ public class BreakManager extends Task {
     public static int currentGameCount = 0;
     public static int shouldBreakAt = 0;
     public static boolean shouldBreakNow = false;
+    public static boolean moveBeforeBreak = false;
     private static final Random random = new Random(System.nanoTime());
 
     private static void generateRandomNextBreakCount() {
@@ -35,6 +37,11 @@ public class BreakManager extends Task {
             shouldBreakNow = true;
         }
 
+        if ((currentGameCount >= shouldBreakAt && Player.isTileWithinArea(currentLocation, insideArea) && !isGameGoing)) {
+            shouldBreakNow = true;
+            moveBeforeBreak = true;
+        }
+
         return shouldBreakNow;
     }
 
@@ -43,6 +50,11 @@ public class BreakManager extends Task {
         int breakMinutes = random.nextInt(4) + 1;  // Generates a number from 1 to 4
         int breakSeconds = random.nextInt(60);     // Use the same random instance here as well
         int breakMillis = breakMinutes * 60000 + breakSeconds * 1000;  // Convert minutes and seconds to milliseconds
+
+        if (moveBeforeBreak) {
+            Walker.walkTo(new Tile(638, 175), WTRegion);
+            moveBeforeBreak = false;
+        }
 
         // Add a delay just to be safe, only when inside.
         if (Player.isTileWithinArea(currentLocation, insideArea)){
