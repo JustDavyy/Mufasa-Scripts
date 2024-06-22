@@ -32,7 +32,7 @@ import static utils.SideManager.pickRandomSide;
                 @ScriptConfiguration(
                         name = "Food",
                         description = "Select which food to use",
-                        defaultValue = "Shark",
+                        defaultValue = "Cakes",
                         allowedValues = {
                                 @AllowedValue(optionIcon = "1891", optionName = "Cakes"),
                                 @AllowedValue(optionIcon = "379", optionName = "Lobster"),
@@ -57,21 +57,21 @@ import static utils.SideManager.pickRandomSide;
                 @ScriptConfiguration(
                         name = "Food amount",
                         description = "Select the amount of food you'd like to bring",
-                        defaultValue = "9",
+                        defaultValue = "7",
                         minMaxIntValues = {1, 28},
                         optionType = OptionType.INTEGER_SLIDER
                 ),
                 @ScriptConfiguration(
                         name = "Food amount left to bank at",
                         description = "Select the amount of food required to have for each game",
-                        defaultValue = "4",
+                        defaultValue = "3",
                         minMaxIntValues = {1, 28},
                         optionType = OptionType.INTEGER_SLIDER
                 ),
                 @ScriptConfiguration(
                         name = "HP to eat at",
                         description = "Select the HP amount you'd like to eat at",
-                        defaultValue = "20",
+                        defaultValue = "7",
                         minMaxIntValues = {0, 100},
                         optionType = OptionType.INTEGER_SLIDER
                 ),
