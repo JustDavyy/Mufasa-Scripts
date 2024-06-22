@@ -89,7 +89,7 @@ public class BurnBranches extends Task {
                     }
                 }
 
-                StateUpdater.updateIsGameGoing();
+                StateUpdater.updateStates(states);
                 XpBar.getXP();
 
                 return !inventoryHasKindlings && !inventoryHasLogs || startHP > currentHp || Player.leveledUp() || !isGameGoing;
