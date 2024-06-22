@@ -22,11 +22,27 @@ public class SideManager {
         }
     }
 
+    public static Tile getOtherSideBurnTile() {
+        if (currentSide.equals("Right")) {
+            return BranchDetails.LEFT_BRANCH.getBurnTile();
+        } else {
+            return BranchDetails.RIGHT_BRANCH.getBurnTile();
+        }
+    }
+
     public static Tile getBranchTile() {
         if (currentSide.equals("Right")) {
             return BranchDetails.RIGHT_BRANCH.getBranchTile();
         } else {
             return BranchDetails.LEFT_BRANCH.getBranchTile();
+        }
+    }
+
+    public static Tile getOtherSideBranchTile() {
+        if (currentSide.equals("Right")) {
+            return BranchDetails.LEFT_BRANCH.getBranchTile();
+        } else {
+            return BranchDetails.RIGHT_BRANCH.getBranchTile();
         }
     }
 

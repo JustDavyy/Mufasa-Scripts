@@ -33,11 +33,11 @@ public class SwitchSide extends Task {
         Rectangle switchSideRect = null;
 
         if (Player.tileEquals(currentLocation, SideManager.getBranchTile())) {
-            targetTile = SideManager.getBranchTile();
+            targetTile = SideManager.getOtherSideBranchTile();
             switchSideRect = SideManager.getBranchSwitchSideRect();
             Logger.debugLog("Player is at branch tile. Switching to branch side.");
         } else if (Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
-            targetTile = SideManager.getBurnTile();
+            targetTile = SideManager.getOtherSideBurnTile();
             switchSideRect = SideManager.getBurnSwitchSideRect();
             Logger.debugLog("Player is at burn tile. Switching to burn side.");
         }
@@ -57,8 +57,10 @@ public class SwitchSide extends Task {
         Logger.debugLog("Current side: " + currentSide);
         if (currentSide.equals("Right")) {
             currentSide = "Left";
+            Logger.debugLog("Switching to side: " + currentSide);
         } else if (currentSide.equals("Left")) {
             currentSide = "Right";
+            Logger.debugLog("Switching to side: " + currentSide);
         }
         Client.tap(switchRect);
         Condition.sleep(generateRandomDelay(4250, 5250));
