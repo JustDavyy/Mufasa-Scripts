@@ -76,7 +76,7 @@ public class Bank extends Task {
             GameTabs.openInventoryTab();
 
             checkFood = true;
-            Condition.sleep(generateRandomDelay(250, 500));
+            Condition.sleep(generateRandomDelay(1250, 2000));
             countFoodInInventory();
 
             BurnBranches.isBurning = false;

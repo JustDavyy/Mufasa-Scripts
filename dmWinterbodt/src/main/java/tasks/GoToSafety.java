@@ -10,8 +10,11 @@ public class GoToSafety extends Task {
     @Override
     public boolean activate() {
         StateUpdater.updateIsGameGoing();
+
+        Logger.debugLog("food in invent: " + foodAmountInInventory);
+
         //Logger.debugLog("Inside GoToSafety activate()");
-        return foodAmountInInventory == 0 && isGameGoing && Player.isTileWithinArea(currentLocation, insideArea) && !Player.isTileWithinArea(currentLocation, lobby);
+        return foodAmountInInventory == 0 && isGameGoing && Player.isTileWithinArea(currentLocation, insideArea) && !Player.isTileWithinArea(currentLocation, lobby) && !Player.isTileWithinArea(currentLocation, insideDoorArea);
     }
 
     @Override
@@ -22,6 +25,7 @@ public class GoToSafety extends Task {
         // Walk towards the door
         Walker.walkPath(WTRegion, gameToWTDoor);
         Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
+        currentLocation = Walker.getPlayerPosition(WTRegion);
         return false;
     }
 
