@@ -8,7 +8,6 @@ import static main.dmWinterbodt.*;
 public class Eat extends Task {
     @Override
     public boolean activate() {
-        Logger.log("eat activate");
         //Logger.debugLog("Inside Eat activate()");
         return hpToEat > currentHp;
     }

@@ -128,10 +128,6 @@ public class SideManager {
             Logger.debugLog("Set the mageDeadTimeStamp for " + currentSide + " to: " + -1L);
         }
 
-        // Log both current states
-        Logger.debugLog("HashMap mage state Left: " + mageDeadTimestamps.get("Left"));
-        Logger.debugLog("HashMap mage state Right: " + mageDeadTimestamps.get("Right"));
-
         return isMageDead;
     }
 
