@@ -13,7 +13,7 @@ public class GetBranches extends Task {
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside GetBranches activate()");
-        StateUpdater.updateIsGameGoing();
+        StateUpdater.updateStates(states);
 
         if (!Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing && !gameAt13Percent) {
             gettingBranches = true;

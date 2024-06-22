@@ -22,7 +22,7 @@ public class PreGame extends Task {
 
     @Override
     public boolean execute() {
-        Logger.debugLog("Inside PreGame execute()");
+        //Logger.debugLog("Inside PreGame execute()");
 
         if (Player.leveledUp()) {
             Client.sendKeystroke("KEYCODE_SPACE");

@@ -13,6 +13,8 @@ public class GoBackToGame extends Task {
     public boolean activate() {
         //Logger.debugLog("Inside GoBackToGame activate()");
 
+        StateUpdater.updateStates(states);
+
         // Use logging here for user visibility as this is the last task in our task list
         if (Player.isTileWithinArea(currentLocation, lobby) && isGameGoing) {
             Logger.log("Waiting for game to end.");
