@@ -74,6 +74,7 @@ public class BurnBranches extends Task {
         if (Player.atTile(SideManager.getBurnTile(), WTRegion) && isGameGoing) {
             Logger.log("Initiating burn action!");
             Client.tap(SideManager.getBurnRect());
+            lastActivity = System.currentTimeMillis();
             Condition.wait(() -> {
 
                 // Handle reburning/fixing

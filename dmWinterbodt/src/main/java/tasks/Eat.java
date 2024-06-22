@@ -24,16 +24,19 @@ public class Eat extends Task {
             // cake IDs; 1891, 1893, 1895
             if (Inventory.contains(1895, 0.75)) { // slice of cake
                 Inventory.eat(1895, 0.75);
+                lastActivity = System.currentTimeMillis();
                 foodAmountInInventory--;
                 Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
                 return true;
             } else if (Inventory.contains(1893, 0.75)) { // 2/3 cake
                 Inventory.eat(1893, 0.75);
+                lastActivity = System.currentTimeMillis();
                 foodAmountInInventory--;
                 Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
                 return true;
             } else if (Inventory.contains(1891, 0.75)) { // full cake
                 Inventory.eat(1891, 0.75);
+                lastActivity = System.currentTimeMillis();
                 foodAmountInInventory--;
                 Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
                 return true;
@@ -41,6 +44,7 @@ public class Eat extends Task {
             return false;
         } else {
             Inventory.eat(foodID, 0.75);
+            lastActivity = System.currentTimeMillis();
             foodAmountInInventory--;
             Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
             return true;

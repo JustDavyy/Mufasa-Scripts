@@ -18,6 +18,13 @@ public class GoBackToGame extends Task {
         // Use logging here for user visibility as this is the last task in our task list
         if (Player.isTileWithinArea(currentLocation, lobby) && isGameGoing) {
             Logger.log("Waiting for game to end.");
+
+            // Prevent DCing because of idling
+            if (System.currentTimeMillis() - lastActivity > 240000) {
+                Game.antiAFK();
+                lastActivity = System.currentTimeMillis();
+            }
+
         }
 
         isMoreThan40Seconds = (System.currentTimeMillis() - lastWalkToSafety) > 40000;
@@ -78,6 +85,7 @@ public class GoBackToGame extends Task {
     private boolean walkToLobbyFromDoor() {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
             Client.tap(new java.awt.Rectangle(795, 63, 16, 19));
+            lastActivity = System.currentTimeMillis();
             Condition.sleep(generateRandomDelay(2000, 4000));
             currentLocation = Walker.getPlayerPosition(WTRegion);
 

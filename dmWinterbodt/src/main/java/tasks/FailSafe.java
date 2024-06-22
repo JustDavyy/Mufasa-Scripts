@@ -30,6 +30,7 @@ public class FailSafe extends Task {
             Walker.walkPath(WTRegion, LeftTopToStart);
             Player.waitTillNotMoving(4, WTRegion);
             Walker.step(SideManager.getBranchTile());
+            lastActivity = System.currentTimeMillis();
             currentLocation = Walker.getPlayerPosition(WTRegion);
             return false;
         }
@@ -39,6 +40,7 @@ public class FailSafe extends Task {
             Walker.walkPath(WTRegion, RightTopToStart);
             Player.waitTillNotMoving(4, WTRegion);
             Walker.step(SideManager.getBranchTile());
+            lastActivity = System.currentTimeMillis();
             currentLocation = Walker.getPlayerPosition(WTRegion);
             return false;
         }
@@ -49,6 +51,7 @@ public class FailSafe extends Task {
             Logger.log("Logging out and stopping script!");
 
             Logout.logout();
+            lastActivity = System.currentTimeMillis();
             Condition.sleep(generateRandomDelay(10000, 12000));
 
             // Additional check due to possible in combat

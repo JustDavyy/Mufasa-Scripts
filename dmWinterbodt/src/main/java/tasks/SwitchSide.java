@@ -63,6 +63,7 @@ public class SwitchSide extends Task {
         Client.tap(switchRect);
         Condition.sleep(generateRandomDelay(4250, 5250));
         Walker.step(targetTile, WTRegion);
+        lastActivity = System.currentTimeMillis();
         currentLocation = targetTile;
         isMageDead = false;
 
@@ -73,6 +74,7 @@ public class SwitchSide extends Task {
         Logger.debugLog("Walking to middle tile.");
         Tile middleTile = new Tile(638, 167);
         Walker.walkTo(middleTile, WTRegion);
+        lastActivity = System.currentTimeMillis();
         currentLocation = Walker.getPlayerPosition(WTRegion);
         isMageDead = false;
         Logger.debugLog("Reached middle tile. New location: " + currentLocation);

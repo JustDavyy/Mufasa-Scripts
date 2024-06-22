@@ -35,6 +35,7 @@ public class FletchBranches extends Task {
         Inventory.tapItem(brumaRoot, 0.60);
         Condition.wait(() -> Chatbox.isMakeMenuVisible(), 100, 30);
         Chatbox.makeOption(1);
+        lastActivity = System.currentTimeMillis();
 
         Logger.debugLog("Heading to FletchBranches conditional wait.");
         Condition.wait(() -> {

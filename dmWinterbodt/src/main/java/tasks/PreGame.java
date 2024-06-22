@@ -82,6 +82,7 @@ public class PreGame extends Task {
 
                         // Move to the branch tile
                         Walker.step(SideManager.getBranchTile(), WTRegion);
+                        lastActivity = System.currentTimeMillis();
                         currentLocation = SideManager.getBranchTile();
 
                         BreakManager.currentGameCount++;

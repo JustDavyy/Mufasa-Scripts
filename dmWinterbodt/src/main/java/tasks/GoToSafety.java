@@ -21,6 +21,7 @@ public class GoToSafety extends Task {
 
         // Walk towards the door
         Walker.walkPath(WTRegion, gameToWTDoor);
+        lastActivity = System.currentTimeMillis();
         Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
         currentLocation = Walker.getPlayerPosition(WTRegion);
         return false;

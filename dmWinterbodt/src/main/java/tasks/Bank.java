@@ -89,6 +89,7 @@ public class Bank extends Task {
             FletchBranches.isFletching = false;
             GetBranches.gettingBranches = false;
             isGameGoing = false;
+            lastActivity = System.currentTimeMillis();
 
             // Final check to see if we have enough food, otherwise terminate script.
             if (foodAmountInInventory < foodAmountLeftToBank) { // We at least need to have the amount needed before banking, if not we might have ran out of food

@@ -78,6 +78,7 @@ public class BreakManager extends Task {
         currentGameCount = 0;  // Resetting the last break time after the break
         generateRandomNextBreakCount();
         shouldBreakNow = false;
+        lastActivity = System.currentTimeMillis();
         return true;
     }
 }
