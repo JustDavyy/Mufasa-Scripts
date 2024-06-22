@@ -20,7 +20,7 @@ public class Bank extends Task {
     public boolean activate() {
         //Logger.debugLog("Inside Bank activate()");
         StateUpdater.updateIsGameGoing();
-        return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing && !Player.leveledUp() || !isGameGoing && (Inventory.count(ItemList.SUPPLY_CRATE_20703, 0.8) >= 8) || foodAmountInInventory < foodAmountLeftToBank && Player.isTileWithinArea(currentLocation, outsideArea) || foodAmountInInventory < foodAmountLeftToBank && Player.isTileWithinArea(currentLocation, lobby) && !isGameGoing;
+        return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing && !Player.leveledUp() || !isGameGoing && (Inventory.count(ItemList.SUPPLY_CRATE_20703, 0.8) >= 8) || foodAmountInInventory < foodAmountLeftToBank && Player.isTileWithinArea(currentLocation, outsideArea) || foodAmountInInventory < foodAmountLeftToBank && Player.isTileWithinArea(currentLocation, lobby) && (!isGameGoing || totalGameCount == 0);
     }
 
     @Override
@@ -270,7 +270,13 @@ public class Bank extends Task {
             Walker.walkPath(WTRegion, gameToWTDoor);
             Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
             Client.tap(exitDoorRect);
-            Condition.sleep(generateRandomDelay(4250, 5300));
+            if (totalGameCount == 0) {
+                Condition.sleep(generateRandomDelay(2000, 3000));
+                Client.sendKeystroke("KEYCODE_SPACE");
+                Condition.sleep(generateRandomDelay(4250, 5300));
+            } else {
+                Condition.sleep(generateRandomDelay(4250, 5300));
+            }
             if (Walker.isReachable(bankTile)) {
                 Walker.step(bankTile, WTRegion);
             } else {
