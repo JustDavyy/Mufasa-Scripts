@@ -57,10 +57,8 @@ public class SwitchSide extends Task {
         Logger.debugLog("Current side: " + currentSide);
         if (currentSide.equals("Right")) {
             currentSide = "Left";
-            Logger.debugLog("Switching to side: " + currentSide);
         } else if (currentSide.equals("Left")) {
             currentSide = "Right";
-            Logger.debugLog("Switching to side: " + currentSide);
         }
         Client.tap(switchRect);
         Condition.sleep(generateRandomDelay(4250, 5250));
