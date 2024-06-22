@@ -22,6 +22,7 @@ public class GoBackToGame extends Task {
             // Prevent DCing because of idling
             if (System.currentTimeMillis() - lastActivity > 240000) {
                 Game.antiAFK();
+                GameTabs.openInventoryTab();
                 lastActivity = System.currentTimeMillis();
             }
 
