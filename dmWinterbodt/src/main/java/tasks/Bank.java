@@ -27,7 +27,6 @@ public class Bank extends Task {
     public boolean execute() {
         Logger.debugLog("Inside Bank execute()");
         Logger.log("Banking!");
-        StateUpdater.resetAllStates();
         checkFood = true;
 
         if (!GameTabs.isInventoryTabOpen()) {
@@ -42,6 +41,7 @@ public class Bank extends Task {
             currentLocation = Walker.getPlayerPosition(WTRegion);
         }
 
+        StateUpdater.resetAllStates();
         if (!Player.isTileWithinArea(currentLocation, bankTentArea)) {
             if (Walker.isReachable(bankTile)) {
                 Walker.step(bankTile, WTRegion);
