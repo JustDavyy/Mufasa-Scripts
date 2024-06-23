@@ -44,7 +44,7 @@ public class BurnBranches extends Task {
         }
 
         Logger.debugLog("Inside BurnBranches execute()");
-        Integer startHP = Player.getHP();
+        int startHP = Player.getHP();
 
         // This is the logic to walk to safety when the game is near end, and we're out of burns.
         if (!inventoryHasLogs & !inventoryHasKindlings && isGameGoing && Player.tileEquals(currentLocation, SideManager.getBurnTile()) && gameAt13Percent && !burnOnly) {

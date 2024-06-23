@@ -27,9 +27,12 @@ public class Bank extends Task {
     public boolean execute() {
         Logger.debugLog("Inside Bank execute()");
         Logger.log("Banking!");
+        StateUpdater.resetAllStates();
         checkFood = true;
 
-        GameTabs.openInventoryTab();
+        if (!GameTabs.isInventoryTabOpen()) {
+            GameTabs.openInventoryTab();
+        }
 
         if (walkToBankFromDoorInside()) {
             currentLocation = Walker.getPlayerPosition(WTRegion);
@@ -92,7 +95,7 @@ public class Bank extends Task {
             lastActivity = System.currentTimeMillis();
 
             // Final check to see if we have enough food, otherwise terminate script.
-            if (foodAmountInInventory < foodAmountLeftToBank) { // We at least need to have the amount needed before banking, if not we might have ran out of food
+            if (foodAmountInInventory < foodAmountLeftToBank) { // We at least need to have the amount needed before banking, if not we might have run out of food
                 if (!alreadyBanked) {
                     Logger.log("We only have " + foodAmountInInventory + " food in our inventory, reattempting a banking sequence.");
                     alreadyBanked = true;
