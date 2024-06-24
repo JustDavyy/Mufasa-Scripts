@@ -23,7 +23,7 @@ import static utils.SideManager.pickRandomSide;
 @ScriptManifest(
         name = "dmWinterbodt",
         description = "Completes the Wintertodt minigame.",
-        version = "1.02",
+        version = "1.021",
         guideLink = "https://wiki.mufasaclient.com/docs/dmwinterbodt/",
         categories = {ScriptCategory.Firemaking, ScriptCategory.Minigames}
 )
