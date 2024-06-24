@@ -132,8 +132,14 @@ public class Bank extends Task {
 
             if (!foundRectangles.isEmpty()) {
                 Rectangle randomRect = foundRectangles.get(random.nextInt(foundRectangles.size()));
+                Rectangle centerRect = new Rectangle(
+                        randomRect.x + randomRect.width / 2 - 2,
+                        randomRect.y + randomRect.height / 2 - 2,
+                        5,
+                        5
+                );
                 Logger.debugLog("Located the wintertodt bank chest using the color finder, tapping.");
-                Client.tap(randomRect);
+                Client.tap(centerRect);
                 Condition.wait(() -> Bank.isOpen(), 250, 15);
 
                 // re-try if bank is not open.
@@ -145,8 +151,14 @@ public class Bank extends Task {
 
                     if (!foundRectangles2.isEmpty()) {
                         Rectangle randomRect2 = foundRectangles2.get(random.nextInt(foundRectangles2.size()));
+                        Rectangle centerRect2 = new Rectangle(
+                                randomRect2.x + randomRect2.width / 2 - 2,
+                                randomRect2.y + randomRect2.height / 2 - 2,
+                                5,
+                                5
+                        );
                         Logger.debugLog("Located the wintertodt bank chest using the color finder, tapping.");
-                        Client.tap(randomRect2);
+                        Client.tap(centerRect2);
                         Condition.wait(() -> Bank.isOpen(), 250, 15);
 
                         // re-try if bank is not open.
@@ -158,8 +170,14 @@ public class Bank extends Task {
 
                             if (!foundRectangles3.isEmpty()) {
                                 Rectangle randomRect3 = foundRectangles3.get(random.nextInt(foundRectangles3.size()));
+                                Rectangle centerRect3 = new Rectangle(
+                                        randomRect3.x + randomRect3.width / 2 - 2,
+                                        randomRect3.y + randomRect3.height / 2 - 2,
+                                        5,
+                                        5
+                                );
                                 Logger.debugLog("Located the wintertodt bank chest using the color finder, tapping.");
-                                Client.tap(randomRect3);
+                                Client.tap(centerRect3);
                                 Condition.wait(() -> Bank.isOpen(), 250, 15);
 
                                 if (!Bank.isOpen()) {
