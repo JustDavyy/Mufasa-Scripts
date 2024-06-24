@@ -2,11 +2,17 @@ package utils;
 
 
 import java.awt.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 
 import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
+import static tasks.FletchBranches.isFletching;
+import static tasks.GetBranches.gettingBranches;
 
 public class StateUpdater {
     //    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
@@ -32,8 +38,10 @@ public class StateUpdater {
 
                 if (isMageDead && mageDeadTimestamps.get(currentSide) == -1L) {
                     mageDeadTimestamp = System.currentTimeMillis();
-                    date = new Date(mageDeadTimestamp);
-                    String formattedTime = String.format("%02d:%02d:%02d", date.getHours(), date.getMinutes(), date.getSeconds());
+                    // Convert the timestamp to LocalDateTime for formatting
+                    LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(mageDeadTimestamp), ZoneId.systemDefault());
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                    String formattedTime = dateTime.format(formatter);
 
                     Logger.debugLog("Mage has died at " + formattedTime + " on side " + currentSide);
                     mageDeadTimestamps.put(currentSide, mageDeadTimestamp);
@@ -87,7 +95,6 @@ public class StateUpdater {
             }
 
             // Update the game state boolean (true if wt game is 15% or less left.
-//            updateGameState();
             updateGameAt13();
             updateGameAt20();
             updateGameAt70();
@@ -156,10 +163,6 @@ public class StateUpdater {
         currentHp = Player.getHP();
     }
 
-//    private static void updateGameState() {
-//        gameNearingEnd = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameCheckRect, 10);
-//    }
-
     public static void updateGameAt13() {
         gameAt13Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt13CheckRect, 10);
     }
@@ -199,5 +202,19 @@ public class StateUpdater {
     public static void updateIsGameGoing() {
         isGameGoing = Client.isColorInRect(StateColor.GAME_GREEN_COLOR.getColor(), waitingForGameEndedRect, 10);
     }
-
+    
+    public static void resetAllStates() {
+        isGameGoing = false;
+        waitingForGameEnded = false;
+        waitingForGameToStart = false;
+        inventoryHasKindlings = false;
+        inventoryHasLogs = false;
+        gameAt13Percent = false;
+        gameAt20Percent = false;
+        gameAt70Percent = false;
+        shouldBurn = false;
+        isBurning = false;
+        isFletching = false;
+        gettingBranches = false;
+    }
 }
