@@ -23,7 +23,7 @@ import static utils.SideManager.pickRandomSide;
 @ScriptManifest(
         name = "dmWinterbodt",
         description = "Completes the Wintertodt minigame.",
-        version = "1.021",
+        version = "1.022",
         guideLink = "https://wiki.mufasaclient.com/docs/dmwinterbodt/",
         categories = {ScriptCategory.Firemaking, ScriptCategory.Minigames}
 )
@@ -57,14 +57,14 @@ import static utils.SideManager.pickRandomSide;
                 @ScriptConfiguration(
                         name = "Food amount",
                         description = "Select the amount of food you'd like to bring",
-                        defaultValue = "7",
+                        defaultValue = "8",
                         minMaxIntValues = {1, 28},
                         optionType = OptionType.INTEGER_SLIDER
                 ),
                 @ScriptConfiguration(
                         name = "Food amount left to bank at",
                         description = "Select the amount of food required to have for each game",
-                        defaultValue = "3",
+                        defaultValue = "4",
                         minMaxIntValues = {1, 28},
                         optionType = OptionType.INTEGER_SLIDER
                 ),

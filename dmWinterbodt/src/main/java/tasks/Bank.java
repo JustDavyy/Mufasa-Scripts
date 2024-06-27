@@ -186,7 +186,7 @@ public class Bank extends Task {
                                 if (!Bank.isOpen()) {
                                     Logger.debugLog("Failed to bank three times, resetting position!");
                                     Walker.step(bankTile, WTRegion);
-return false;
+                                    return false;
                                 }
                                 return true;
                             } else {
