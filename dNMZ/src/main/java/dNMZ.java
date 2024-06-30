@@ -19,7 +19,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.072",
+        version = "1.073",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -1302,7 +1302,12 @@ public class dNMZ extends AbstractScript {
 
         // Tap the vial
         Client.tap(440,229);
-        Condition.sleep(1500);
+        if (Player.isRunEnabled()) {
+            Condition.sleep(generateDelay(2500, 3500));
+        } else {
+            Condition.sleep(generateDelay(5000, 7500));
+        }
+
         // Check if the NMZ interface is open
         java.awt.Rectangle foundObjects = Objects.getNearest("/images/Accept.png");
 
@@ -1921,7 +1926,7 @@ public class dNMZ extends AbstractScript {
         } else if (Inventory.contains(139, 0.96)) {
             Inventory.eat(139, 0.96);
             Condition.sleep(generateDelay(2000, 3000));
-            Logger.debugLog("Drinking from a 1 dosed prayer potion.");
+            Logger.debugLog("Drinking from a 3 dosed prayer potion.");
         } else if (Inventory.contains(2434, 0.96)) {
             Inventory.eat(2434, 0.96);
             Condition.sleep(generateDelay(2000, 3000));
