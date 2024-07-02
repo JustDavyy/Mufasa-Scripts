@@ -7,37 +7,56 @@ import static main.dmCrabber.*;
 
 public class Eat extends Task {
     public boolean activate() {
-        return hpToEat > Player.getHP();
+        currentHP = Player.getHP();
+        return (currentHP <= hpToEat && currentHP != -1);
     }
 
     @Override
     public boolean execute() {
-        Logger.debugLog("Inside Eat execute()");
-
+        Logger.log("Below HP threshold, eating food.");
         if (!GameTabs.isInventoryTabOpen()) {
             GameTabs.openInventoryTab();
+            Condition.sleep(generateRandomDelay(1250,1750));
         }
 
-        if (java.util.Objects.equals(selectedFood, "Cakes")) {
-            // cake IDs; 1891, 1893, 1895
-            if (Inventory.contains(1895, 0.75)) { // slice of cake
-                Inventory.eat(1895, 0.75);
-                Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
-                return true;
-            } else if (Inventory.contains(1893, 0.75)) { // 2/3 cake
-                Inventory.eat(1893, 0.75);
-                Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
-                return true;
-            } else if (Inventory.contains(1891, 0.75)) { // full cake
-                Inventory.eat(1891, 0.75);
-                Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
-                return true;
+        Logger.debugLog("Eating food til above threshold.");
+        if (selectedFood.equals("Cake")) {
+            if (Inventory.contains("1895", 0.8)) { // 1/3 cake
+                eat(1895);
             }
-            return false;
+            else if (Inventory.contains("1893", 0.8)) { // 2/3 cake
+                eat(1893);
+            }
+            else if (Inventory.contains("1891", 0.8)) { // 3/3 cake
+                eat(1891);
+            }
+            else {
+                Logger.log("No more food, stopping script.");
+                Logout.logout();
+                Script.stop();
+            }
         } else {
-            Inventory.eat(foodID, 0.75);
-            Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
-            return true;
+            if (Inventory.count(foodID, 0.8) > 0) {
+                eat(foodID);
+            } else {
+                Logger.log("No more food, stopping script.");
+
+                // Add logic here to walk away or something first?
+
+                //Logout.logout();
+                //Script.stop();
+            }
         }
+
+        GameTabs.closeInventoryTab();
+        Logger.log("Done eating food.");
+        return true;
+    }
+
+    public void eat(int food){
+        Logger.debugLog("Eating food now.");
+        Inventory.eat(food, 0.8);
+        Condition.sleep(generateRandomDelay(2750, 3500));
+        currentHP = Player.getHP();
     }
 }

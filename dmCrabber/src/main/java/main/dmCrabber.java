@@ -17,6 +17,7 @@ import utils.Task;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static helpers.Interfaces.*;
 
@@ -44,7 +45,6 @@ import static helpers.Interfaces.*;
                         },
                         optionType = OptionType.STRING
                 ),
-                // Example config for bank tabs
                 @ScriptConfiguration(
                         name =  "BankTab",
                         description = "What bank tab is your resources located in?",
@@ -84,10 +84,12 @@ public class dmCrabber extends AbstractScript {
     String selectedSpot;
     String selectedBankTab;
     public static int hpToEat;
+    public static int currentHP;
     public static String selectedFood;
     public static int foodID;
     public static Tile currentLocation;
     public static Spots spot;
+    private static final Random random = new Random();
 
     public static RegionBox crabRegion = new RegionBox("crabRegion", 2016, 2373, 2748, 2826);
 
@@ -196,5 +198,15 @@ public class dmCrabber extends AbstractScript {
                 Script.stop();
                 break;
         }
+    }
+
+    public static int generateRandomDelay(int lowerBound, int upperBound) {
+        // Swap if lowerBound is greater than upperBound
+        if (lowerBound > upperBound) {
+            int temp = lowerBound;
+            lowerBound = upperBound;
+            upperBound = temp;
+        }
+        return lowerBound + random.nextInt(upperBound - lowerBound + 1);
     }
 }
