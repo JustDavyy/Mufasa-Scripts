@@ -1,11 +1,16 @@
 package main;
 
 import Tasks.Bank;
+import Tasks.Eat;
+import Tasks.GoToSpot;
+import Tasks.PerformCrabbing;
 import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.OptionType;
+import helpers.utils.RegionBox;
+import helpers.utils.Tile;
 import utils.Spots;
 import utils.Task;
 
@@ -81,8 +86,10 @@ public class dmCrabber extends AbstractScript {
     public static int hpToEat;
     public static String selectedFood;
     public static int foodID;
-
+    public static Tile currentLocation;
     public static Spots spot;
+
+    public static RegionBox crabRegion = new RegionBox("d", 0,0,0,0);
 
     @Override
     public void onStart(){
@@ -101,12 +108,16 @@ public class dmCrabber extends AbstractScript {
 
     // Task list!
     List<Task> crabTasks = Arrays.asList(
-            new Bank()
+            new Bank(),
+            new Eat(),
+            new GoToSpot(),
+            new PerformCrabbing()
     );
 
     @Override
     public void poll() {
         XpBar.getXP();
+        currentLocation = Walker.getPlayerPosition(crabRegion);
 
         //Run tasks
         for (Task task : crabTasks) {
