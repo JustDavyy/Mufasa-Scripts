@@ -89,7 +89,7 @@ public class dmCrabber extends AbstractScript {
     public static Tile currentLocation;
     public static Spots spot;
 
-    public static RegionBox crabRegion = new RegionBox("d", 0,0,0,0);
+    public static RegionBox crabRegion = new RegionBox("crabRegion", 2016, 2373, 2748, 2826);
 
     @Override
     public void onStart(){
