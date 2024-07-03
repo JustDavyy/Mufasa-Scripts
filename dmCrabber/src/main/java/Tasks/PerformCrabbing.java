@@ -2,8 +2,7 @@ package Tasks;
 
 import utils.Task;
 
-import static helpers.Interfaces.Player;
-import static helpers.Interfaces.Walker;
+import static helpers.Interfaces.*;
 import static main.dmCrabber.*;
 
 public class PerformCrabbing extends Task {
@@ -16,5 +15,10 @@ public class PerformCrabbing extends Task {
     public boolean execute() {
         // We need some way for a timer here, and also anti afk in-between? And a method to reset?
         return false;
+    }
+    
+    private void performAFK() {
+        Game.antiAFK();
+        Condition.sleep(generateRandomDelay(2000, 10000));
     }
 }
