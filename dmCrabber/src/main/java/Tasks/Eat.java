@@ -2,10 +2,15 @@ package Tasks;
 
 import utils.Task;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static helpers.Interfaces.*;
 import static main.dmCrabber.*;
 
 public class Eat extends Task {
+    private final List<Integer> cakeIds = Arrays.asList(1895, 1893, 1891);
+
     public boolean activate() {
         currentHP = Player.getHP();
         return (currentHP <= hpToEat && currentHP != -1);
@@ -21,28 +26,29 @@ public class Eat extends Task {
 
         Logger.debugLog("Eating food til above threshold.");
         if (selectedFood.equals("Cake")) {
-            if (Inventory.contains("1895", 0.8)) { // 1/3 cake
-                eat(1895);
+            boolean foodEaten = false;
+            for (int cakeId : cakeIds) {
+                if (Inventory.contains(cakeId, 0.8)) {
+                    eat(cakeId);
+                    foodEaten = true;
+                    break;
+                }
             }
-            else if (Inventory.contains("1893", 0.8)) { // 2/3 cake
-                eat(1893);
-            }
-            else if (Inventory.contains("1891", 0.8)) { // 3/3 cake
-                eat(1891);
-            }
-            else {
-                Logger.log("No more food, stopping script.");
-                Logout.logout();
-                Script.stop();
+            if (!foodEaten) {
+                Logger.log("No more food, walking to bank.");
+                Walker.walkPath(spot.getPathToBank());
+                return true;
             }
         } else {
             if (Inventory.count(foodID, 0.8) > 0) {
                 eat(foodID);
             } else {
-                Logger.log("No more food, stopping script.");
+                Logger.log("No more food, walking to bank.");
                 Walker.walkPath(spot.getPathToBank());
+                return true;
             }
         }
+
 
         GameTabs.closeInventoryTab();
         Logger.log("Done eating food.");

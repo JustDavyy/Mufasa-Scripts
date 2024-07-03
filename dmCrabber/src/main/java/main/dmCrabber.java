@@ -209,4 +209,13 @@ public class dmCrabber extends AbstractScript {
         }
         return lowerBound + random.nextInt(upperBound - lowerBound + 1);
     }
+
+    public static Tile[] getReversedTiles(Tile[] array) {
+        if (array == null) return null;
+        Tile[] reversed = new Tile[array.length];
+        for (int i = 0; i < array.length; i++) {
+            reversed[i] = array[array.length - 1 - i];
+        }
+        return reversed;
+    }
 }
