@@ -16,13 +16,14 @@ public class GoToSpot extends Task {
         if (!Player.tileEquals(currentLocation, spot.getSpotTile())) {
             Walker.walkPath(crabRegion, getReversedTiles(spot.getPathToBank()));
             currentLocation = Walker.getPlayerPosition(crabRegion);
-
-            if (!Player.tileEquals(currentLocation, spot.getSpotTile())) {
-                Walker.step(spot.getSpotTile(), crabRegion);
-                currentLocation = Walker.getPlayerPosition(crabRegion);
-            }
+        }
+        
+        if (!Player.tileEquals(currentLocation, spot.getSpotTile())) {
+            Walker.step(spot.getSpotTile(), crabRegion);
+            currentLocation = Walker.getPlayerPosition(crabRegion);
             return true;
         }
+
         return false;
     }
 }
