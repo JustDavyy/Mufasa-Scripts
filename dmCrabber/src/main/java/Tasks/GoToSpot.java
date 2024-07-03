@@ -17,7 +17,7 @@ public class GoToSpot extends Task {
             Walker.walkPath(crabRegion, getReversedTiles(spot.getPathToBank()));
             currentLocation = Walker.getPlayerPosition(crabRegion);
         }
-        
+
         if (!Player.tileEquals(currentLocation, spot.getSpotTile())) {
             Walker.step(spot.getSpotTile(), crabRegion);
             currentLocation = Walker.getPlayerPosition(crabRegion);
