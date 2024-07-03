@@ -3,8 +3,8 @@ package Tasks;
 import utils.Task;
 
 import static helpers.Interfaces.Player;
-import static main.dmCrabber.currentLocation;
-import static main.dmCrabber.spot;
+import static helpers.Interfaces.Walker;
+import static main.dmCrabber.*;
 
 public class PerformCrabbing extends Task {
     @Override

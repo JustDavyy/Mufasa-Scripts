@@ -54,7 +54,7 @@ import static helpers.Interfaces.*;
                 @ScriptConfiguration(
                         name = "Food",
                         description = "Select which food to use",
-                        defaultValue = "Cakes",
+                        defaultValue = "Shark",
                         allowedValues = {
                                 @AllowedValue(optionIcon = "1891", optionName = "Cakes"),
                                 @AllowedValue(optionIcon = "379", optionName = "Lobster"),
@@ -73,7 +73,7 @@ import static helpers.Interfaces.*;
                 @ScriptConfiguration(
                         name = "HP to eat at",
                         description = "Select the HP amount you'd like to eat at",
-                        defaultValue = "7",
+                        defaultValue = "15",
                         minMaxIntValues = {0, 100},
                         optionType = OptionType.INTEGER_SLIDER
                 )
