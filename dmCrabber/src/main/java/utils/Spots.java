@@ -8,7 +8,11 @@ public enum Spots {
                     new Tile(771, 864),
                     new Tile(758, 869)
             }, //path to bank
-            new Tile(774, 862) //crab tile
+            new Tile(774, 862), //crab tile
+            new Tile[]{
+                    new Tile(771, 864),
+                    new Tile(758, 869)
+            } // reset path
     ),
     EAST2(
             new Tile[]{
@@ -19,7 +23,11 @@ public enum Spots {
                     new Tile(768, 866),
                     new Tile(757, 868)
             },
-            new Tile(796, 863)
+            new Tile(796, 863),
+            new Tile[]{
+                    new Tile(771, 864),
+                    new Tile(758, 869)
+            }
     ),
     EAST3(
             new Tile[]{
@@ -31,7 +39,11 @@ public enum Spots {
                     new Tile(770, 866),
                     new Tile(758, 869)
             },
-            new Tile(818, 863)
+            new Tile(818, 863),
+            new Tile[]{
+                    new Tile(771, 864),
+                    new Tile(758, 869)
+            }
     ),
     EAST4(
             new Tile[]{
@@ -44,7 +56,11 @@ public enum Spots {
                     new Tile(768, 867),
                     new Tile(757, 869)
             },
-            new Tile(832, 863)
+            new Tile(832, 863),
+            new Tile[]{
+                    new Tile(771, 864),
+                    new Tile(758, 869)
+            }
     ),
     WEST1(
             new Tile[]{
@@ -53,7 +69,11 @@ public enum Spots {
                     new Tile(742, 866),
                     new Tile(751, 868)
             },
-            new Tile(724, 859)
+            new Tile(724, 859),
+            new Tile[]{
+                    new Tile(771, 864),
+                    new Tile(758, 869)
+            }
     ),
     WEST2(
             new Tile[]{
@@ -65,14 +85,20 @@ public enum Spots {
                     new Tile(746, 867),
                     new Tile(755, 868)
             },
-            new Tile(710, 848)
+            new Tile(710, 848),
+            new Tile[]{
+                    new Tile(771, 864),
+                    new Tile(758, 869)
+            }
     );
     private final Tile[] path;
     private final Tile spot;
+    private final Tile[] resetPath;
 
-    Spots(Tile[] path, Tile spot) {
+    Spots(Tile[] path, Tile spot, Tile[] resetPath) {
         this.path = path;
         this.spot = spot;
+        this.resetPath = resetPath;
     }
 
     public Tile[] getPathToBank() {
@@ -82,4 +108,9 @@ public enum Spots {
     public Tile getSpotTile() {
         return spot;
     }
+
+    public Tile[] getResetPath() {
+        return resetPath;
+    }
+
 }

@@ -4,6 +4,7 @@ import helpers.utils.Area;
 import helpers.utils.Tile;
 import utils.Task;
 
+import static Tasks.PerformCrabbing.startTime;
 import static helpers.Interfaces.*;
 import static main.dmCrabber.*;
 
@@ -27,6 +28,8 @@ public class Bank extends Task {
 
     @Override
     public boolean execute() {
+        startTime = 0; //Reset the performcrabbing start time
+
         if (!Player.isTileWithinArea(currentLocation, bankArea)) {
             Walker.walkPath(crabRegion, spot.getPathToBank());
             currentLocation = Walker.getPlayerPosition(crabRegion);
