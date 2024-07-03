@@ -13,3 +13,4 @@
 # Ignore all gradlew and gradlew.bat files
 **/gradlew
 **/gradlew.bat
+/TEMPTESTSHIT
