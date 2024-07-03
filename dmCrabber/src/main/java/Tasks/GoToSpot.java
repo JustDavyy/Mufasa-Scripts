@@ -14,7 +14,7 @@ public class GoToSpot extends Task {
 
     @Override
     public boolean execute() {
-        Walker.walkPath(crabRegion, spot.getPathFromBank());
+        Walker.walkPath(crabRegion, spot.getPathToBank());
 
         // If within area -> step to tile if we didnt land on it(?)
         return true;

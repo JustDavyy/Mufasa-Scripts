@@ -16,7 +16,7 @@ public class Eat extends Task {
         Logger.log("Below HP threshold, eating food.");
         if (!GameTabs.isInventoryTabOpen()) {
             GameTabs.openInventoryTab();
-            Condition.sleep(generateRandomDelay(1250,1750));
+            Condition.wait(() -> GameTabs.isInventoryTabOpen(), 100, 10);
         }
 
         Logger.debugLog("Eating food til above threshold.");
@@ -40,11 +40,7 @@ public class Eat extends Task {
                 eat(foodID);
             } else {
                 Logger.log("No more food, stopping script.");
-
-                // Add logic here to walk away or something first?
-
-                //Logout.logout();
-                //Script.stop();
+                Walker.walkPath(spot.getPathToBank());
             }
         }
 

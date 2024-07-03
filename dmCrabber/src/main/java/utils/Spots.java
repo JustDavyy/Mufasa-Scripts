@@ -75,7 +75,7 @@ public enum Spots {
         this.spot = spot;
     }
 
-    public Tile[] getPathFromBank() {
+    public Tile[] getPathToBank() {
         return path;
     }
 
