@@ -14,7 +14,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dAmethyst Cutter",
         description = "Cuts amethyst into usable supplies, supports dynamic banking and world hops.",
-        version = "1.02",
+        version = "1.03",
         guideLink = "https://wiki.mufasaclient.com/docs/damethyst-cutter/",
         categories = {ScriptCategory.Crafting}
 )

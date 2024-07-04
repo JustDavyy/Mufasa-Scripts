@@ -15,7 +15,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dUnfPotMixer",
         description = "Mixes all your herbs to unfinished potions, supports dynamic banking and world hops.",
-        version = "1.01",
+        version = "1.02",
         guideLink = "https://wiki.mufasaclient.com/docs/dunfinished-potion-maker/",
         categories = {ScriptCategory.Herblore, ScriptCategory.Moneymaking}
 )

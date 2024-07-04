@@ -14,7 +14,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dHerbCleaner",
         description = "Cleans all your grimy herbs with customisable speeds, supports dynamic banking and world hops.",
-        version = "1.00",
+        version = "1.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dherbcleaner/",
         categories = {ScriptCategory.Herblore}
 )

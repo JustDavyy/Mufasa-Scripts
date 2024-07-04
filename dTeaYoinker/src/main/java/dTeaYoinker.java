@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @ScriptManifest(
         name = "dTeaYoinker",
         description = "Steals from the tea stall in east Varrock. Supports world hopping and banking the tea.",
-        version = "1.03",
+        version = "1.04",
         guideLink = "https://wiki.mufasaclient.com/docs/dtea-yoinker/",
         categories = {ScriptCategory.Thieving}
 )

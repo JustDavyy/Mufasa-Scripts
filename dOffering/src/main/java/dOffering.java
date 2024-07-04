@@ -15,7 +15,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dOffering",
         description = "Offers bones and ashes using the Arceuus spellbook for quick prayer gains.",
-        version = "1.00",
+        version = "1.01",
         guideLink = "https://wiki.mufasaclient.com/docs/doffering/",
         categories = {ScriptCategory.Prayer, ScriptCategory.Magic}
 )
