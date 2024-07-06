@@ -8,18 +8,15 @@ import helpers.utils.OptionType;
 import helpers.utils.Tile;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import static helpers.Interfaces.*;
-
-import java.util.Random;
 
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.074",
+        version = "1.075",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -125,6 +122,9 @@ public class dNMZ extends AbstractScript {
     int absorptionPotionInterval;
     int offensivePotionInterval = 302000;
     int targetHPForAction = 0;
+    int unlockCofferAttempts = 0;
+    static int MAX_UNLOCK_COFFER_ATTEMPTS = 3;
+
 
     // Longs
     long lastBreakTime;
@@ -174,6 +174,17 @@ public class dNMZ extends AbstractScript {
 
     // Points
     Point lowerHPItem = new Point(69,69);
+
+    // Color find stuff
+    List<Color> NMZVialOutside = Arrays.asList(
+            Color.decode("#575640"),
+            Color.decode("#583332"),
+            Color.decode("#472a28"),
+            Color.decode("#545641"),
+            Color.decode("#705d3d"),
+            Color.decode("#92794f"),
+            Color.decode("#564530")
+    );
 
     // This is the onStart, and only gets ran once.
     @Override
@@ -474,7 +485,7 @@ public class dNMZ extends AbstractScript {
             // Start a dream
             startNMZDream();
             // Enter the just started dream
-            enterNMZDream();
+            enterNMZDream(false);
         }
 
         if (!insideNMZ && java.util.Objects.equals(NMZMethod, "Absorption") && !java.util.Objects.equals(potions, "Overload")){
@@ -503,7 +514,7 @@ public class dNMZ extends AbstractScript {
             // Start a dream
             startNMZDream();
             // Enter the just started dream
-            enterNMZDream();
+            enterNMZDream(false);
         }
 
         if (!insideNMZ && NMZMethod.startsWith("Prayer") && java.util.Objects.equals(potions, "Overload")) {
@@ -532,7 +543,7 @@ public class dNMZ extends AbstractScript {
             // Start a dream
             startNMZDream();
             // Enter the just started dream
-            enterNMZDream();
+            enterNMZDream(false);
         }
 
         if (!insideNMZ && NMZMethod.startsWith("Prayer") && !java.util.Objects.equals(potions, "Overload")) {
@@ -552,7 +563,7 @@ public class dNMZ extends AbstractScript {
             // Start a dream
             startNMZDream();
             // Enter the just started dream
-            enterNMZDream();
+            enterNMZDream(false);
         }
 
         // Update XP counter
@@ -1221,7 +1232,15 @@ public class dNMZ extends AbstractScript {
     }
 
     private void unlockCoffer() {
-        Logger.debugLog("Unlocking NMZ coffer, as it's needed.");
+        if (unlockCofferAttempts >= MAX_UNLOCK_COFFER_ATTEMPTS) {
+            Logger.debugLog("unlockCoffer has been run the maximum of " + MAX_UNLOCK_COFFER_ATTEMPTS + " times. Looks like we got stuck, stopping script!");
+            Logout.logout();
+            Script.stop();
+        }
+
+        unlockCofferAttempts++;
+
+        Logger.debugLog("Attempt " + unlockCofferAttempts + ": Unlocking NMZ coffer, as it's needed.");
 
         if (!Player.atTile(vialOutsideTile)) {
             Walker.step(vialOutsideTile);
@@ -1235,14 +1254,14 @@ public class dNMZ extends AbstractScript {
             if (!Player.atTile(vialOutsideTile)) {
                 moveToDominic();
                 Condition.wait(() -> Player.atTile(dominicOnionTile), 250, 20);
-                Client.tap(316,228);
+                Client.tap(316, 228);
                 Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
             }
 
             if (!Player.atTile(vialOutsideTile)) {
                 moveToDominic();
                 Condition.wait(() -> Player.atTile(dominicOnionTile), 250, 20);
-                Client.tap(316,228);
+                Client.tap(316, 228);
                 Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
             }
 
@@ -1254,35 +1273,35 @@ public class dNMZ extends AbstractScript {
 
         if (Player.atTile(vialOutsideTile)) {
             // tap the coffer
-            Client.tap(537,360);
-            Condition.sleep(3000);
+            Client.tap(537, 360);
+            Condition.sleep(generateDelay(7500, 10000));
 
             // Check if bankpin is needed
             if (Bank.isBankPinNeeded()) {
                 Bank.enterBankPin();
+            } else {
+                Logger.debugLog("Verified bank pin is not needed, setting attempts to 3.");
+                unlockCofferAttempts = 3;
             }
 
             // tap the vial
-            Client.tap(408,161);
-            Condition.sleep(4000);
+            Client.tap(408, 161);
+            Condition.sleep(generateDelay(5000, 7500));
         } else {
             Logger.debugLog("We're not located at the vial, something must have gone wrong.");
         }
     }
 
-    private void enterNMZDream() {
-        // Check if we are at the right tile
-        if (!Player.atTile(vialOutsideTile)) {
-            Walker.step(vialOutsideTile);
-            Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
+    private void enterNMZDream(boolean fromRecovery) {
 
+        if (!fromRecovery) {
+            // Check if we are at the right tile
             if (!Player.atTile(vialOutsideTile)) {
                 Walker.step(vialOutsideTile);
                 Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
 
                 if (!Player.atTile(vialOutsideTile)) {
-                    moveToDominic();
-                    Client.tap(316,228);
+                    Walker.step(vialOutsideTile);
                     Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
 
                     if (!Player.atTile(vialOutsideTile)) {
@@ -1291,21 +1310,27 @@ public class dNMZ extends AbstractScript {
                         Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
 
                         if (!Player.atTile(vialOutsideTile)) {
-                            Logger.debugLog("Could not path to the NMZ vial. Stopping script");
-                            Logout.logout();
-                            Script.stop();
+                            moveToDominic();
+                            Client.tap(316,228);
+                            Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
+
+                            if (!Player.atTile(vialOutsideTile)) {
+                                Logger.debugLog("Could not path to the NMZ vial. Stopping script");
+                                Logout.logout();
+                                Script.stop();
+                            }
                         }
                     }
                 }
             }
-        }
 
-        // Tap the vial
-        Client.tap(440,229);
-        if (Player.isRunEnabled()) {
-            Condition.sleep(generateDelay(2500, 3500));
-        } else {
-            Condition.sleep(generateDelay(5000, 7500));
+            // Tap the vial
+            Client.tap(440,229);
+            if (Player.isRunEnabled()) {
+                Condition.sleep(generateDelay(2500, 3500));
+            } else {
+                Condition.sleep(generateDelay(5000, 7500));
+            }
         }
 
         // Check if the NMZ interface is open
@@ -1483,14 +1508,18 @@ public class dNMZ extends AbstractScript {
             if (NMZMethod.startsWith("Prayer")) {
                 // Check for the tab, if not open, open it
                 GameTabs.openPrayerTab();
+                Condition.sleep(generateDelay(1250, 2000));
 
-                Prayer.activateProtectfromMelee();
+                Client.tap(new Rectangle(177, 349, 23, 28));
+                Condition.sleep(generateDelay(750, 1250));
                 Condition.wait(() -> Prayer.isActiveProtectfromMelee(), 250, 20);
                 if (!Prayer.isActiveProtectfromMelee()) {
                     Prayer.activateProtectfromMelee();
+                    Condition.sleep(generateDelay(750, 1250));
                     Condition.wait(() -> Prayer.isActiveProtectfromMelee(), 250, 10);
                     if (!Prayer.isActiveProtectfromMelee()) {
                         Prayer.activateProtectfromMelee();
+                        Condition.sleep(generateDelay(750, 1250));
                         Condition.wait(() -> Prayer.isActiveProtectfromMelee(), 250, 10);
                     } if (!Prayer.isActiveProtectfromMelee()) {
                         Logger.debugLog("Failed to activate protect from melee.");
@@ -1498,111 +1527,142 @@ public class dNMZ extends AbstractScript {
                 }
 
                 // Activate offensive prayers if chosen
-                if (NMZMethod.equals("Prayer - Ultimate Strength")) {
-                    Prayer.activateUltimateStrength();
-                    Condition.wait(() -> Prayer.isActiveUltimateStrength(), 250, 20);
-                    if (!Prayer.isActiveUltimateStrength()) {
+                switch (NMZMethod) {
+                    case "Prayer - Ultimate Strength":
                         Prayer.activateUltimateStrength();
-                        Condition.wait(() -> Prayer.isActiveUltimateStrength(), 250, 10);
+                        Condition.sleep(generateDelay(750, 1250));
+                        Condition.wait(() -> Prayer.isActiveUltimateStrength(), 250, 20);
                         if (!Prayer.isActiveUltimateStrength()) {
+                            Condition.sleep(generateDelay(750, 1250));
                             Prayer.activateUltimateStrength();
                             Condition.wait(() -> Prayer.isActiveUltimateStrength(), 250, 10);
+                            if (!Prayer.isActiveUltimateStrength()) {
+                                Condition.sleep(generateDelay(750, 1250));
+                                Prayer.activateUltimateStrength();
+                                Condition.wait(() -> Prayer.isActiveUltimateStrength(), 250, 10);
+                            }
+                            if (!Prayer.isActiveUltimateStrength()) {
+                                Logger.debugLog("Failed to activate Ultimate Strength.");
+                            }
                         }
-                        if (!Prayer.isActiveUltimateStrength()) {
-                            Logger.debugLog("Failed to activate Ultimate Strength.");
-                        }
-                    }
-                } else if (NMZMethod.equals("Prayer - Eagle Eye")) {
-                    Prayer.activateEagleEye();
-                    Condition.wait(() -> Prayer.isActiveEagleEye(), 250, 20);
-                    if (!Prayer.isActiveEagleEye()) {
+                        break;
+                    case "Prayer - Eagle Eye":
                         Prayer.activateEagleEye();
-                        Condition.wait(() -> Prayer.isActiveEagleEye(), 250, 10);
+                        Condition.sleep(generateDelay(750, 1250));
+                        Condition.wait(() -> Prayer.isActiveEagleEye(), 250, 20);
                         if (!Prayer.isActiveEagleEye()) {
                             Prayer.activateEagleEye();
+                            Condition.sleep(generateDelay(750, 1250));
                             Condition.wait(() -> Prayer.isActiveEagleEye(), 250, 10);
+                            if (!Prayer.isActiveEagleEye()) {
+                                Prayer.activateEagleEye();
+                                Condition.sleep(generateDelay(750, 1250));
+                                Condition.wait(() -> Prayer.isActiveEagleEye(), 250, 10);
+                            }
+                            if (!Prayer.isActiveEagleEye()) {
+                                Logger.debugLog("Failed to activate Eagle Eye.");
+                            }
                         }
-                        if (!Prayer.isActiveEagleEye()) {
-                            Logger.debugLog("Failed to activate Eagle Eye.");
-                        }
-                    }
-                } else if (NMZMethod.equals("Prayer - Mystic Might")) {
-                    Prayer.activateMysticMight();
-                    Condition.wait(() -> Prayer.isActiveMysticMight(), 250, 20);
-                    if (!Prayer.isActiveMysticMight()) {
+                        break;
+                    case "Prayer - Mystic Might":
                         Prayer.activateMysticMight();
-                        Condition.wait(() -> Prayer.isActiveMysticMight(), 250, 10);
+                        Condition.sleep(generateDelay(750, 1250));
+                        Condition.wait(() -> Prayer.isActiveMysticMight(), 250, 20);
                         if (!Prayer.isActiveMysticMight()) {
                             Prayer.activateMysticMight();
+                            Condition.sleep(generateDelay(750, 1250));
                             Condition.wait(() -> Prayer.isActiveMysticMight(), 250, 10);
+                            if (!Prayer.isActiveMysticMight()) {
+                                Prayer.activateMysticMight();
+                                Condition.sleep(generateDelay(750, 1250));
+                                Condition.wait(() -> Prayer.isActiveMysticMight(), 250, 10);
+                            }
+                            if (!Prayer.isActiveMysticMight()) {
+                                Logger.debugLog("Failed to activate Mystic Might.");
+                            }
                         }
-                        if (!Prayer.isActiveMysticMight()) {
-                            Logger.debugLog("Failed to activate Mystic Might.");
-                        }
-                    }
-                } else if (NMZMethod.equals("Prayer - Chivalry")) {
-                    Prayer.activateChivalry();
-                    Condition.wait(() -> Prayer.isActiveChivalry(), 250, 20);
-                    if (!Prayer.isActiveChivalry()) {
+                        break;
+                    case "Prayer - Chivalry":
                         Prayer.activateChivalry();
-                        Condition.wait(() -> Prayer.isActiveChivalry(), 250, 10);
+                        Condition.sleep(generateDelay(750, 1250));
+                        Condition.wait(() -> Prayer.isActiveChivalry(), 250, 20);
                         if (!Prayer.isActiveChivalry()) {
                             Prayer.activateChivalry();
+                            Condition.sleep(generateDelay(750, 1250));
                             Condition.wait(() -> Prayer.isActiveChivalry(), 250, 10);
+                            if (!Prayer.isActiveChivalry()) {
+                                Prayer.activateChivalry();
+                                Condition.sleep(generateDelay(750, 1250));
+                                Condition.wait(() -> Prayer.isActiveChivalry(), 250, 10);
+                            }
+                            if (!Prayer.isActiveChivalry()) {
+                                Logger.debugLog("Failed to activate Chivalry.");
+                            }
                         }
-                        if (!Prayer.isActiveChivalry()) {
-                            Logger.debugLog("Failed to activate Chivalry.");
-                        }
-                    }
-                } else if (NMZMethod.equals("Prayer - Piety")) {
-                    Prayer.activatePiety();
-                    Condition.wait(() -> Prayer.isActivePiety(), 250, 20);
-                    if (!Prayer.isActivePiety()) {
+                        break;
+                    case "Prayer - Piety":
                         Prayer.activatePiety();
-                        Condition.wait(() -> Prayer.isActivePiety(), 250, 10);
+                        Condition.sleep(generateDelay(750, 1250));
+                        Condition.wait(() -> Prayer.isActivePiety(), 250, 20);
                         if (!Prayer.isActivePiety()) {
                             Prayer.activatePiety();
+                            Condition.sleep(generateDelay(750, 1250));
                             Condition.wait(() -> Prayer.isActivePiety(), 250, 10);
+                            if (!Prayer.isActivePiety()) {
+                                Prayer.activatePiety();
+                                Condition.sleep(generateDelay(750, 1250));
+                                Condition.wait(() -> Prayer.isActivePiety(), 250, 10);
+                            }
+                            if (!Prayer.isActivePiety()) {
+                                Logger.debugLog("Failed to activate Piety.");
+                            }
                         }
-                        if (!Prayer.isActivePiety()) {
-                            Logger.debugLog("Failed to activate Piety.");
-                        }
-                    }
-                } else if (NMZMethod.equals("Prayer - Rigour")) {
-                    Prayer.activateRigour();
-                    Condition.wait(() -> Prayer.isActiveRigour(), 250, 20);
-                    if (!Prayer.isActiveRigour()) {
+                        break;
+                    case "Prayer - Rigour":
                         Prayer.activateRigour();
-                        Condition.wait(() -> Prayer.isActiveRigour(), 250, 10);
+                        Condition.sleep(generateDelay(750, 1250));
+                        Condition.wait(() -> Prayer.isActiveRigour(), 250, 20);
                         if (!Prayer.isActiveRigour()) {
                             Prayer.activateRigour();
+                            Condition.sleep(generateDelay(750, 1250));
                             Condition.wait(() -> Prayer.isActiveRigour(), 250, 10);
+                            if (!Prayer.isActiveRigour()) {
+                                Prayer.activateRigour();
+                                Condition.sleep(generateDelay(750, 1250));
+                                Condition.wait(() -> Prayer.isActiveRigour(), 250, 10);
+                            }
+                            if (!Prayer.isActiveRigour()) {
+                                Logger.debugLog("Failed to activate Rigour.");
+                            }
                         }
-                        if (!Prayer.isActiveRigour()) {
-                            Logger.debugLog("Failed to activate Rigour.");
-                        }
-                    }
-                } else if (NMZMethod.equals("Prayer - Augury")) {
-                    Prayer.activateAugury();
-                    Condition.wait(() -> Prayer.isActiveAugury(), 250, 20);
-                    if (!Prayer.isActiveAugury()) {
+                        break;
+                    case "Prayer - Augury":
                         Prayer.activateAugury();
-                        Condition.wait(() -> Prayer.isActiveAugury(), 250, 10);
+                        Condition.sleep(generateDelay(750, 1250));
+                        Condition.wait(() -> Prayer.isActiveAugury(), 250, 20);
                         if (!Prayer.isActiveAugury()) {
                             Prayer.activateAugury();
+                            Condition.sleep(generateDelay(750, 1250));
                             Condition.wait(() -> Prayer.isActiveAugury(), 250, 10);
+                            if (!Prayer.isActiveAugury()) {
+                                Prayer.activateAugury();
+                                Condition.sleep(generateDelay(750, 1250));
+                                Condition.wait(() -> Prayer.isActiveAugury(), 250, 10);
+                            }
+                            if (!Prayer.isActiveAugury()) {
+                                Logger.debugLog("Failed to activate Augury.");
+                            }
                         }
-                        if (!Prayer.isActiveAugury()) {
-                            Logger.debugLog("Failed to activate Augury.");
-                        }
-                    }
+                        break;
                 }
 
 
                 GameTabs.openInventoryTab();
+                Condition.sleep(generateDelay(750, 1250));
 
                 if (!GameTabs.isInventoryTabOpen()) {
                     GameTabs.openInventoryTab();
+                    Condition.sleep(generateDelay(750, 1250));
                 }
             }
 
@@ -1610,9 +1670,56 @@ public class dNMZ extends AbstractScript {
             readXP();
 
         } else {
-            // Assuming the coffer is locked
-            unlockCoffer();
-            enterNMZDream();
+
+            // FailSafe using the color finder
+            if (!Player.atTile(vialOutsideTile)) {
+                Walker.step(vialOutsideTile);
+                Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
+
+                if (!Player.atTile(vialOutsideTile)) {
+                    Walker.step(vialOutsideTile);
+                    Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
+
+                    if (!Player.atTile(vialOutsideTile)) {
+                        moveToDominic();
+                        Client.tap(316,228);
+                        Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
+
+                        if (!Player.atTile(vialOutsideTile)) {
+                            moveToDominic();
+                            Client.tap(316,228);
+                            Condition.wait(() -> Player.atTile(vialOutsideTile), 250, 20);
+
+                            if (!Player.atTile(vialOutsideTile)) {
+                                Logger.debugLog("Could not path to the NMZ vial. Stopping script");
+                                Logout.logout();
+                                Script.stop();
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Try and fine the vial with the colorfinder instead.
+            List<Point> foundPoints = Client.getPointsFromColorsInRect(NMZVialOutside, new Rectangle(382, 188, 115, 108), 5);
+
+            if (!foundPoints.isEmpty()) {
+                Logger.debugLog("Located the vial using the color finder, tapping.");
+                Client.tap(foundPoints, true);
+                Condition.sleep(generateDelay(2000,3500));
+                enterNMZDream(true);
+                return;
+            } else {
+                if (unlockCofferAttempts >= MAX_UNLOCK_COFFER_ATTEMPTS) {
+                    Logger.log("Had issues starting a dream, stopping the script to be sure!");
+                    Logout.logout();
+                    Script.stop();
+                } else {
+                    // Assuming the coffer is locked
+                    unlockCoffer();
+                    enterNMZDream(false);
+                }
+            }
         }
     }
 
