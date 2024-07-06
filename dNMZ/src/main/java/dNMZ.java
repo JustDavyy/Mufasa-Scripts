@@ -16,7 +16,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.075",
+        version = "1.076",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -804,7 +804,7 @@ public class dNMZ extends AbstractScript {
         }
 
         Client.tap(446,225);
-        Condition.sleep(1250);
+        Condition.sleep(generateDelay(1750,2250));
 
         // Check if bank pin is needed, if so enter it
         if (Bank.isBankPinNeeded()) {
@@ -814,35 +814,35 @@ public class dNMZ extends AbstractScript {
 
         // Go to the benefits tab
         Client.tap(new Rectangle(308, 234, 50, 11));
-        Condition.sleep(1000);
+        Condition.sleep(generateDelay(1300, 1700));
 
         // Restock absorptions
         if (java.util.Objects.equals(NMZMethod, "Absorption")) {
             Client.longPress(340, 361);
-            Condition.sleep(generateDelay(500, 750));
+            Condition.sleep(generateDelay(800, 1100));
             Client.tap(340, 476);
-            Condition.sleep(generateDelay(750, 1250));
+            Condition.sleep(generateDelay(1250, 2000));
             Client.sendKeystroke("KEYCODE_8");
             Client.sendKeystroke("KEYCODE_4");
             Client.sendKeystroke("KEYCODE_ENTER");
-            Condition.sleep(generateDelay(300, 600));
+            Condition.sleep(generateDelay(500, 800));
         }
 
         // Restock overloads
         if (java.util.Objects.equals(potions, "Overload")) {
             Client.longPress(274, 361);
-            Condition.sleep(generateDelay(500, 750));
+            Condition.sleep(generateDelay(800, 1100));
             Client.tap(274, 476);
-            Condition.sleep(generateDelay(750, 1250));
+            Condition.sleep(generateDelay(1250, 2000));
             Client.sendKeystroke("KEYCODE_2");
             Client.sendKeystroke("KEYCODE_4");
             Client.sendKeystroke("KEYCODE_ENTER");
-            Condition.sleep(generateDelay(300, 600));
+            Condition.sleep(generateDelay(500, 800));
         }
 
         // Close the interface again
         Client.tap(new Rectangle(565, 205, 14, 13));
-        Condition.sleep(generateDelay(500, 750));
+        Condition.sleep(generateDelay(800, 1100));
     }
 
     private void restockNMZPotionsBARREL() {
@@ -930,24 +930,24 @@ public class dNMZ extends AbstractScript {
     private void takeBarrel(String potion) {
         if (java.util.Objects.equals(potion, "Absorption")) {
             Client.longPress(397,256);
-            Condition.sleep(generateDelay(500,800));
+            Condition.sleep(generateDelay(1000,1400));
             Client.tap(397,319);
-            Condition.sleep(generateDelay(800,1200));
+            Condition.sleep(generateDelay(1500,2000));
             Client.sendKeystroke("KEYCODE_8");
             Client.sendKeystroke("KEYCODE_4");
             Client.sendKeystroke("KEYCODE_ENTER");
-            Condition.sleep(generateDelay(300, 600));
+            Condition.sleep(generateDelay(600, 900));
         }
 
         if (java.util.Objects.equals(potion, "Overload")) {
             Client.longPress(397,256);
-            Condition.sleep(generateDelay(500,800));
+            Condition.sleep(generateDelay(1000,1400));
             Client.tap(397,319);
-            Condition.sleep(generateDelay(800,1200));
+            Condition.sleep(generateDelay(1500,2000));
             Client.sendKeystroke("KEYCODE_2");
             Client.sendKeystroke("KEYCODE_4");
             Client.sendKeystroke("KEYCODE_ENTER");
-            Condition.sleep(generateDelay(300, 600));
+            Condition.sleep(generateDelay(600, 900));
         }
     }
 
