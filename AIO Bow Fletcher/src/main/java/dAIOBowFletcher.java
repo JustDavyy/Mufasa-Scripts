@@ -14,7 +14,7 @@ import static helpers.Interfaces.Logout;
 @ScriptManifest(
         name = "dAIO Bow Fletcher",
         description = "Cuts or strings bows for you. Supports all log tiers, and both short and longbows with dynamic banking.",
-        version = "1.37",
+        version = "1.371",
         guideLink = "https://wiki.mufasaclient.com/docs/daio-bow-fletcher/",
         categories = {ScriptCategory.Fletching}
 )
@@ -86,6 +86,10 @@ public class dAIOBowFletcher extends AbstractScript {
     String longbow;
     String bowstring = "1777";
     String knife = "946";
+    String productName;
+    int finalProductID = -1;
+    int processCount = 0;
+    int productIndex;
     private Map<String, String[]> itemIDs;
 
     // This is the onStart, and only gets ran once.
@@ -100,15 +104,28 @@ public class dAIOBowFletcher extends AbstractScript {
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
 
+        //Logs for debugging purposes
+        Logger.log("Thank you for using the dAIO Bow Fletcher script!");
+
+        // Creating the Paint object
+        Logger.debugLog("Creating paint object.");
+        Paint.Create("/logo/davyy.png");
+
         // One-time setup
         initializeItemIDs();
+        setProductNameAndID();
+
+        // Create a single image box, to show the amount of processed bows
+        productIndex = Paint.createBox(productName, finalProductID, processCount);
+
+        // Set the two top headers of paintUI.
+        Paint.setStatus("Initializing...");
+
+        // One-time setup
         hopActions();
         setupItemIds();
         setupBanking();
         initialSetup();
-
-        //Logs for debugging purposes
-        Logger.log("Thank you for using the dAIO Bow Fletcher script!");
     }
 
     // This is the main part of the script, poll gets looped constantly
@@ -135,6 +152,7 @@ public class dAIOBowFletcher extends AbstractScript {
 
     private void initializeItemIDs() {
         Logger.debugLog("Running the initializeItemIDs() method.");
+        Paint.setStatus("Initializing item IDs");
 
         itemIDs = new HashMap<>();
 
@@ -149,8 +167,45 @@ public class dAIOBowFletcher extends AbstractScript {
         Logger.debugLog("Ending the initializeItemIDs() method.");
     }
 
+    private void setProductNameAndID() {
+        Logger.debugLog("Running the setProductNameAndID() method.");
+        Paint.setStatus("Initializing paint variables");
+        String[] itemIDArray = itemIDs.get(tier);
+
+        if (itemIDArray == null) {
+            Logger.debugLog("Invalid tier: " + tier);
+            return;
+        }
+
+        String tierName = tier.equals("Logs") ? "" : tier.replace(" logs", "") + " ";
+
+        if (method.equals("String")) {
+            if (product.equals("Shortbow")) {
+                productName = tierName + "Shortbow";
+                finalProductID = Integer.parseInt(itemIDArray[3]);
+            } else if (product.equals("Longbow")) {
+                productName = tierName + "Longbow";
+                finalProductID = Integer.parseInt(itemIDArray[4]);
+            }
+        } else if (method.equals("Cut")) {
+            if (product.equals("Shortbow")) {
+                productName = tierName + "Shortbow (u)";
+                finalProductID = Integer.parseInt(itemIDArray[1]);
+            } else if (product.equals("Longbow")) {
+                productName = tierName + "Longbow (u)";
+                finalProductID = Integer.parseInt(itemIDArray[2]);
+            }
+        }
+
+        Logger.debugLog("Product Name: " + productName);
+        Logger.debugLog("Final Product ID: " + finalProductID);
+
+        Logger.debugLog("Ending the setProductNameAndID() method.");
+    }
+
     private void setupItemIds() {
         Logger.debugLog("Running the setupItemIds() method.");
+        Paint.setStatus("Initializing item IDs");
         if (longbow == null) {
             String[] itemIds = itemIDs.get(tier);
             logs = itemIds[0];
@@ -167,6 +222,7 @@ public class dAIOBowFletcher extends AbstractScript {
 
     private void setupBanking() {
         Logger.debugLog("Starting setupBanking() method.");
+        Paint.setStatus("Setting up for banking");
         if (bankloc == null) {
             Logger.debugLog("Starting dynamic banking setup...");
 
@@ -211,6 +267,7 @@ public class dAIOBowFletcher extends AbstractScript {
     @SuppressWarnings("IfStatementWithIdenticalBranches")
     private void initialSetup() {
         Logger.debugLog("Starting initialSetup() method.");
+        Paint.setStatus("Running initial setup");
 
         int randomDelay = new Random().nextInt(600) + 600;
         int randomBiggerDelay = new Random().nextInt(1500) + 1500;
@@ -365,6 +422,7 @@ public class dAIOBowFletcher extends AbstractScript {
 
     private void executeCutMethod() {
         Logger.debugLog("Starting executeCutMethod() method.");
+        Paint.setStatus("Execute cut bows");
 
         // Check if we have both a knife and the logs in the inventory.
         if (!Inventory.contains(logs, 0.75) && !Inventory.contains(knife, 0.75)) {
@@ -393,10 +451,32 @@ public class dAIOBowFletcher extends AbstractScript {
         // Wait for the inventory to finish (with a timeout)
         long startTime = System.currentTimeMillis();
         long timeout = 60 * 1000; // 60 seconds in milliseconds as a full invent is about 45-50 seconds.
+        Paint.setStatus("Waiting for cut completion");
         while (Inventory.contains(logs, 0.75)) {
             readXP();
             Condition.sleep(randomDelay3);
             hopActions();
+
+            if (Player.leveledUp()) {
+                startTime = System.currentTimeMillis();
+                // Starting to process items
+                Inventory.tapItem(knife, 0.75);
+                randomDelay2 = new Random().nextInt(150) + 100;
+                randomDelay3 = new Random().nextInt(1500) + 500;
+                Condition.sleep(randomDelay2);
+                Inventory.tapItem(logs, 0.75);
+                Logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
+                Condition.wait(() -> Chatbox.isMakeMenuVisible(), 200, 12);
+
+                // tap option needed based on choice in config
+                if (product.equals("Shortbow")) {
+                    Chatbox.makeOption(2);
+                    Logger.debugLog("Selected option 2 in chatbox.");
+                } else {
+                    Chatbox.makeOption(3);
+                    Logger.debugLog("Selected option 3 in chatbox.");
+                }
+            }
 
             // Check if we have passed the timeout
             if (System.currentTimeMillis() - startTime > timeout) {
@@ -405,12 +485,15 @@ public class dAIOBowFletcher extends AbstractScript {
             }
         }
         readXP();
+        processCount += 27;
+        Paint.updateBox(productIndex, processCount);
 
         Logger.debugLog("Ending the executeCutMethod() method.");
     }
 
     private void executeStringMethod() {
         Logger.debugLog("Starting executeStringMethod() method.");
+        Paint.setStatus("Execute string bows");
 
         // Check if we have both unstrung bows and bowstrings in the inventory.
         if (product.equals("Shortbow")) {
@@ -444,10 +527,31 @@ public class dAIOBowFletcher extends AbstractScript {
         // Wait for the inventory to finish (with a timeout)
         long startTime = System.currentTimeMillis();
         long timeout = 22 * 1000; // 22 seconds in milliseconds as a full invent is about 15-17 seconds.
+        Paint.setStatus("Waiting for string completion");
         while (Inventory.contains(bowstring, 0.75)) {
             readXP();
             Condition.sleep(randomDelay3);
             hopActions();
+
+            if (Player.leveledUp()) {
+                startTime = System.currentTimeMillis();
+
+                // tap item needed based on choice in config
+                if (product.equals("Shortbow")) {
+                    Inventory.tapItem(shortbowU, 0.75);
+                } else {
+                    Inventory.tapItem(longbowU, 0.75);
+                }
+
+                randomDelay2 = new Random().nextInt(150) + 100;
+                randomDelay3 = new Random().nextInt(1500) + 500;
+                Condition.sleep(randomDelay2);
+                Inventory.tapItem(bowstring, 0.75);
+                Logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
+                Condition.wait(() -> Chatbox.isMakeMenuVisible(), 200, 12);
+                Chatbox.makeOption(1);
+                Logger.debugLog("Selected option 1 in chatbox.");
+            }
 
             // Check if we have passed the timeout
             if (System.currentTimeMillis() - startTime > timeout) {
@@ -455,13 +559,17 @@ public class dAIOBowFletcher extends AbstractScript {
                 break;
             }
         }
+
         readXP();
+        processCount += 14;
+        Paint.updateBox(productIndex, processCount);
 
         Logger.debugLog("Ending the executeStringMethod() method.");
     }
 
     private void bank() {
         Logger.debugLog("Starting bank() method.");
+        Paint.setStatus("Banking");
         Logger.log("Banking.");
         int randomDelay = new Random().nextInt(250) + 250;
 
@@ -531,6 +639,7 @@ public class dAIOBowFletcher extends AbstractScript {
     }
 
     private void checkInventOpen() {
+        Paint.setStatus("Check invent open");
         // Check if the inventory is open (needs this check after a break)
         if (!GameTabs.isInventoryTabOpen()) {
             GameTabs.openInventoryTab();
@@ -538,6 +647,7 @@ public class dAIOBowFletcher extends AbstractScript {
     }
 
     private void checkInventCutMethod() {
+        Paint.setStatus("Check invent for items");
         String[] items = {knife, logs};
         // Check if we have both a knife and the logs in the inventory.
         if (!Inventory.contains(items, 0.75)) {
@@ -554,6 +664,7 @@ public class dAIOBowFletcher extends AbstractScript {
     }
 
     private void checkInventStringMethod() {
+        Paint.setStatus("Check invent for items");
         // Check if we have both unstrung bows and bowstrings in the inventory.
         //noinspection IfStatementWithIdenticalBranches
         if (product.equals("Shortbow")) {
