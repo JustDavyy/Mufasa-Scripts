@@ -67,7 +67,9 @@ public class dGemCutter extends AbstractScript {
     String unprocessedItemID;
     String processedItemID;
     int productIndex;
+    int crushedIndex;
     int processedItems = 0;
+    int crushedItems = 0;
     Map<String, String[]> ItemIDs;
 
     // This is the onStart, and only gets ran once.
@@ -101,6 +103,9 @@ public class dGemCutter extends AbstractScript {
         }
         finalProduct = Character.toUpperCase(finalProduct.charAt(0)) + finalProduct.substring(1).toLowerCase();  // Capitalize first letter and make others lowercase
         productIndex = Paint.createBox(finalProduct, Integer.parseInt(processedItemID), processedItems);
+        if (product.equals("Uncut opal") || product.equals("Uncut jade") || product.equals("Uncut red topaz")) {
+            crushedIndex = Paint.createBox("Crushed gems", ItemList.CRUSHED_GEM_1633, crushedItems);
+        }
 
         setupBanking();
         initialSetup();
@@ -350,8 +355,10 @@ public class dGemCutter extends AbstractScript {
         Condition.wait(() -> outOfUncuts(), 250, 160);
         readXP();
 
-        int processCount = Inventory.count(processedItemID, 0.8);
-        Paint.updateBox(productIndex, processedItems + processCount);
+        Paint.updateBox(productIndex, processedItems + Inventory.count(processedItemID, 0.8));
+        if (product.equals("Uncut opal") || product.equals("Uncut jade") || product.equals("Uncut red topaz")) {
+            Paint.updateBox(crushedIndex, crushedItems + Inventory.count(ItemList.CRUSHED_GEM_1633, 0.8));
+        }
 
         Logger.debugLog("Ending the executeCutting() method.");
     }
