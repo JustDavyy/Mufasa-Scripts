@@ -44,24 +44,23 @@ public class Bank extends Task {
             currentLocation = Walker.getPlayerPosition(crabRegion);
         }
 
-        // Set up dynamic bank if not already done
-        if (dynamicBank == null) {
-            dynamicBank = Bank.setupDynamicBank();
-        } else {
-            Bank.stepToBank(dynamicBank);
-        }
+        //If we are IN the bank area.
+        if (Player.isTileWithinArea(currentLocation, bankArea)) {
+            if (dynamicBank == null) {
+                dynamicBank = Bank.setupDynamicBank();
+            } else {
+                Bank.stepToBank(dynamicBank);
+            }
 
-        // Open the bank if not already open
-        if (!Bank.isOpen()) {
-            Bank.open(dynamicBank);
-            Condition.wait(() -> Bank.isOpen(), 100, 20);
-        }
+            if (!Bank.isOpen()) {
+                Bank.open(dynamicBank);
+                Condition.wait(() -> Bank.isOpen(), 100, 20);
+            }
 
-        // Perform actual banking logic if the bank is open
-        if (Bank.isOpen()) {
-            // Perform actual banking logic
+            if (Bank.isOpen()) {
+                // Perform actual banking logic
+            }
         }
-
         return false; // Return false to continue the loop
     }
 
