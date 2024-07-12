@@ -1,9 +1,6 @@
 package main;
 
-import Tasks.Bank;
-import Tasks.Eat;
-import Tasks.GoToSpot;
-import Tasks.PerformCrabbing;
+import Tasks.*;
 import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
@@ -110,6 +107,7 @@ public class dmCrabber extends AbstractScript {
 
     // Task list!
     List<Task> crabTasks = Arrays.asList(
+            new CheckAutoRetaliate(),
             new Bank(),
             new Eat(),
             new GoToSpot(),
