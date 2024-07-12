@@ -17,6 +17,7 @@ public class Eat extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Inside Eat execute()");
+        Paint.setStatus("Eating");
 
         GameTabs.openInventoryTab();
 

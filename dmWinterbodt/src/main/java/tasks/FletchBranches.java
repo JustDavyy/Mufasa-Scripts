@@ -26,6 +26,7 @@ public class FletchBranches extends Task {
 
         Logger.debugLog("Inside FletchBranches execute()");
         Logger.log("Initiating fletching action.");
+        Paint.setStatus("Initiating fletching action");
 
         GameTabs.openInventoryTab();
 
@@ -38,6 +39,7 @@ public class FletchBranches extends Task {
         lastActivity = System.currentTimeMillis();
 
         Logger.debugLog("Heading to FletchBranches conditional wait.");
+        Paint.setStatus("Waiting for fletching to end");
         Condition.wait(() -> {
             SideManager.updateStates();
             XpBar.getXP();

@@ -30,6 +30,7 @@ public class GetBranches extends Task {
 
         Logger.debugLog("Inside GetBranches execute()");
         if (!Player.atTile(SideManager.getBranchTile(), WTRegion)) {
+            Paint.setStatus("Stepping to branch tile");
             Logger.log("Stepping to branch tile!");
             Walker.step(SideManager.getBranchTile(), WTRegion);
             lastActivity = System.currentTimeMillis();
@@ -38,11 +39,13 @@ public class GetBranches extends Task {
         }
 
         if (Player.atTile(SideManager.getBranchTile(), WTRegion)) {
+            Paint.setStatus("Initiating chop action");
             Logger.log("Initiating chop action!");
             Client.tap(SideManager.getBranchRect());
             lastActivity = System.currentTimeMillis();
 
             Logger.debugLog("Heading to GetBranches conditional wait.");
+            Paint.setStatus("Waiting for chop action to end");
             Condition.wait(() -> {
                 SideManager.updateStates();
                 XpBar.getXP();

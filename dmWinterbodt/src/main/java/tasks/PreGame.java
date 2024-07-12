@@ -31,15 +31,18 @@ public class PreGame extends Task {
 
         // Check if we are at the burn tile, otherwise move there
         if (BreakManager.shouldBreakNow && !Player.isTileWithinArea(currentLocation, lobby)) {
+            Paint.setStatus("Moving to burn tile");
             Walker.walkPath(WTRegion, fromEitherSideToGameLobby);
             currentLocation = Walker.getPlayerPosition(WTRegion);
             return true;
         } else if (!Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
+            Paint.setStatus("Stepping to burn tile");
             Walker.step(SideManager.getBurnTile(), WTRegion);
         }
 
         // If at burn tile, update current location and lock ourselves to this task
         if (Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
+            Paint.setStatus("Updating our location");
             // Set shouldStartWithBurn to true, so we lock ourselves in this task.
             shouldStartWithBurn = true;
 
@@ -60,6 +63,7 @@ public class PreGame extends Task {
                     String time = matcher.group();
                     int seconds = Integer.parseInt(time.split(":")[1].trim());
                     if (seconds >= 5) {
+                        Paint.setStatus("Wintertodt starting in " + seconds + "s");
                         Logger.log("Wintertodt starting in " + seconds + " seconds.");
                     }
 
@@ -73,6 +77,9 @@ public class PreGame extends Task {
                         // Start a 1,5-second while loop with an action every 200-300ms
                         long startTime = System.currentTimeMillis();
                         while (System.currentTimeMillis() - startTime < 1500) {
+                            Paint.setStatus("Perform initial burn");
+                            totalRelightCount = totalRelightCount + 1;
+                            Paint.setStatistic("Brazier repairs: " + totalRepairCount + " | Brazier relights: " + totalRelightCount);
                             Client.tap(SideManager.getBurnRect());
 
                             Condition.sleep(generateRandomDelay(200, 300));
@@ -81,6 +88,7 @@ public class PreGame extends Task {
                         Condition.sleep(generateRandomDelay(750, 1000));
 
                         // Move to the branch tile
+                        Paint.setStatus("Stepping to branch tile");
                         Walker.step(SideManager.getBranchTile(), WTRegion);
                         lastActivity = System.currentTimeMillis();
                         currentLocation = SideManager.getBranchTile();
@@ -88,9 +96,12 @@ public class PreGame extends Task {
                         BreakManager.currentGameCount++;
                         totalGameCount++;
                         Logger.log("Total Game Count: " + totalGameCount);
+                        Paint.updateBox(brazierIndex, totalGameCount - 1);
+                        Paint.updateBox(crateIndex, totalGameCount - 1);
                         Logger.debugLog("Current game count since break:" + BreakManager.currentGameCount);
                         Logger.log("Games till next break: " + (BreakManager.shouldBreakAt - BreakManager.currentGameCount));
 
+                        Paint.setStatus("Resetting states");
                         StateUpdater.mageDeadTimestamps.put("Left", -1L);
                         StateUpdater.mageDeadTimestamps.put("Right", -1L);
 

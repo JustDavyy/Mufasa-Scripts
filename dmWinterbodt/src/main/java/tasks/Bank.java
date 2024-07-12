@@ -43,7 +43,7 @@ public class Bank extends Task {
 
         StateUpdater.resetAllStates();
         if (!Player.isTileWithinArea(currentLocation, bankTentArea)) {
-            if (Walker.isReachable(bankTile)) {
+            if (Walker.isReachable(bankTile, WTRegion)) {
                 Walker.step(bankTile, WTRegion);
             } else {
                 Walker.walkTo(new Tile(640, 221), WTRegion);
@@ -67,6 +67,7 @@ public class Bank extends Task {
     }
 
     private void handleBanking() {
+        Paint.setStatus("Banking");
         setupOrStepToBank();
         if (ensureBankIsOpen()) {
             ensureCorrectBankTab();
@@ -97,6 +98,7 @@ public class Bank extends Task {
             // Final check to see if we have enough food, otherwise terminate script.
             if (foodAmountInInventory < foodAmountLeftToBank) { // We at least need to have the amount needed before banking, if not we might have run out of food
                 if (!alreadyBanked) {
+                    Paint.setStatus("Reattempting bank sequence");
                     Logger.log("We only have " + foodAmountInInventory + " food in our inventory, reattempting a banking sequence.");
                     alreadyBanked = true;
                     handleBanking();
@@ -127,6 +129,7 @@ public class Bank extends Task {
     }
 
     private boolean ensureBankIsOpen() {
+        Paint.setStatus("Checking if bank is open");
         if (!Bank.isOpen()) {
             Logger.debugLog("Bank is not open yet, opening!");
 
@@ -238,7 +241,11 @@ public class Bank extends Task {
 
     private void depositExcessSupplyCrates() {
         if (Inventory.contains(ItemList.SUPPLY_CRATE_20703, 0.80)) {
+            int createAmount = Inventory.count(ItemList.SUPPLY_CRATE_20703, 0.80);
+            totalCrateCount += createAmount;
+            Paint.updateBox(crateIndex, totalCrateCount);
             Logger.log("Depositing supply crates.");
+            Paint.setStatus("Depositing supply crates");
             if (!Bank.isSelectedQuantityAllButton()) {
                 Bank.tapQuantityAllButton();
             }
@@ -248,6 +255,7 @@ public class Bank extends Task {
     }
 
     private int CalculateAmountOfFoodNeeded() {
+        Paint.setStatus("Calculating food needed");
         // Calculate the amount of food needed to withdraw from the bank
         int foodNeeded = foodAmount - foodAmountInInventory;
 
@@ -258,6 +266,7 @@ public class Bank extends Task {
     // Method to count total food items in the inventory
     private void countFoodInInventory() {
         if (checkFood) {
+            Paint.setStatus("Running food count");
             Logger.debugLog("Running food count.");
             foodAmountInInventory = 0; // Reset before counting
 
@@ -289,6 +298,7 @@ public class Bank extends Task {
 
     private boolean walkToBankFromGame() {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
+            Paint.setStatus("Walking to the bank from game area");
             Walker.walkPath(WTRegion, gameToWTDoor);
             Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
             Client.tap(exitDoorRect);
@@ -299,7 +309,7 @@ public class Bank extends Task {
             } else {
                 Condition.sleep(generateRandomDelay(4250, 5300));
             }
-            if (Walker.isReachable(bankTile)) {
+            if (Walker.isReachable(bankTile, WTRegion)) {
                 Walker.step(bankTile, WTRegion);
             } else {
                 Walker.walkTo(new Tile(640, 221), WTRegion);
@@ -316,6 +326,7 @@ public class Bank extends Task {
 
     private boolean walkToBankFromDoorInside() {
         if (Player.isTileWithinArea(currentLocation, atDoor)) {
+            Paint.setStatus("Walking to the bank from inside");
             Client.tap(exitDoorRect);
             Condition.sleep(generateRandomDelay(4250, 5300));
             Walker.walkTo(new Tile(640, 221), WTRegion);
@@ -331,7 +342,8 @@ public class Bank extends Task {
 
     private boolean walkToBankFromOutsideArea() {
         if (Player.isTileWithinArea(currentLocation, outsideArea)) {
-            if (Walker.isReachable(bankTile)) {
+            Paint.setStatus("Walking to the bank from outside");
+            if (Walker.isReachable(bankTile, WTRegion)) {
                 Walker.step(bankTile, WTRegion);
             } else {
                 Walker.walkPath(WTRegion, outsideToBankPath);

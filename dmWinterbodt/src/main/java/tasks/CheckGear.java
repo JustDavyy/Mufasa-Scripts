@@ -54,6 +54,7 @@ public class CheckGear extends Task {
 
     @Override
     public boolean execute() {
+        Paint.setStatus("Checking gear");
         Logger.log("Checking gear..");
         checkForItem();
 
@@ -76,6 +77,7 @@ public class CheckGear extends Task {
 
     private void ensureInventoryOpen() {
         if (!GameTabs.isInventoryTabOpen()) {
+            Paint.setStatus("Opening inventory");
             GameTabs.openInventoryTab();
             Condition.wait(() -> GameTabs.isInventoryTabOpen(), 50, 10);
         }
@@ -83,6 +85,7 @@ public class CheckGear extends Task {
 
     private void checkForItem() {
         ensureInventoryOpen();
+        Paint.setStatus("Checking for a knife");
 
         if (!checkedForKnife && Inventory.contains(dmWinterbodt.knife, INVENTORY_THRESHOLD)) {
             Logger.debugLog("Knife" + " in inventory, continuing");
@@ -95,6 +98,7 @@ public class CheckGear extends Task {
 
     private void checkForAxe() {
         ensureInventoryOpen();
+        Paint.setStatus("Checking for an axe");
 
         if (!checkedForAxe) {
             if (Inventory.containsAny(axeIDs, INVENTORY_THRESHOLD)) {
@@ -118,6 +122,7 @@ public class CheckGear extends Task {
 
     private void checkForTinderboxOrBruma() {
         ensureInventoryOpen();
+        Paint.setStatus("Checking for tinderbox/bruma");
 
         if (!checkedForTinderboxOrBruma) {
             if (Inventory.containsAny(lightIDs, INVENTORY_THRESHOLD)) {

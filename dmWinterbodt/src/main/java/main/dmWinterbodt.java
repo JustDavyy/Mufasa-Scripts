@@ -23,7 +23,7 @@ import static utils.SideManager.pickRandomSide;
 @ScriptManifest(
         name = "dmWinterbodt",
         description = "Completes the Wintertodt minigame.",
-        version = "1.023",
+        version = "1.03",
         guideLink = "https://wiki.mufasaclient.com/docs/dmwinterbodt/",
         categories = {ScriptCategory.Firemaking, ScriptCategory.Minigames}
 )
@@ -104,6 +104,8 @@ public class dmWinterbodt extends AbstractScript {
     // EVERYTHING FROM CONSTANTS FILE ABOVE
     private static final Random random = new Random();
     // Variables
+    public static int crateIndex;
+    public static int brazierIndex;
     public static String hopProfile;
     public static Boolean hopEnabled;
     public static Boolean useWDH;
@@ -138,7 +140,10 @@ public class dmWinterbodt extends AbstractScript {
     public static boolean isMoreThan40Seconds;
     public static boolean weDied;
     public static boolean alreadyBanked;
-    public static int totalGameCount;
+    public static int totalGameCount = 0;
+    public static int totalCrateCount = 0;
+    public static int totalRepairCount = 0;
+    public static int totalRelightCount = 0;
     public static RegionBox WTRegion = new RegionBox("WTRegion", 1701, 264, 2157, 846);
     public static Area lobby = new Area(new Tile(630, 168), new Tile(646, 191));
     public static Area LeftTopWTArea = new Area(new Tile(601, 111), new Tile(634, 150));
@@ -288,14 +293,29 @@ public class dmWinterbodt extends AbstractScript {
         bankTab = Integer.parseInt(configs.get("BankTab"));
         burnOnly = Boolean.parseBoolean(configs.get("Burn only?"));
 
+        // Creating the Paint object
+        Logger.debugLog("Creating paint object.");
+        Paint.Create("/logo/dm.png");
+
+        // Create two image boxes
+        crateIndex = Paint.createBox("Supply crate (s)", ItemList.SUPPLY_CRATE_20703, totalCrateCount);
+        brazierIndex = Paint.createBox("Games completed", ItemList.WINTERTODT_BRAZIER_99999, totalGameCount);
+
+        // Set the two top headers of paintUI.
+        Paint.setStatus("Initializing...");
+        Paint.setStatistic("Brazier Repairs: " + totalRepairCount + " | Relights: " + totalRelightCount);
+
         setupFoodIDs();
 
         // Make sure the inventory is open
+        Paint.setStatus("Opening inventory");
         GameTabs.openInventoryTab();
+
 
         initialFoodCount();
 
         if (pickedSide.equals("Random")) {
+            Paint.setStatus("Picking random side");
             currentSide = pickRandomSide();
             Logger.debugLog("Picked the " + currentSide + " side.");
         } else {
@@ -303,6 +323,7 @@ public class dmWinterbodt extends AbstractScript {
         }
 
         // Make sure our Chatbox is closed
+        Paint.setStatus("Closing chatbox");
         Chatbox.closeChatbox();
 
         // Disable break and AFK handlers, as we use custom breaks
@@ -329,6 +350,7 @@ public class dmWinterbodt extends AbstractScript {
     }
 
     private void setupFoodIDs() {
+        Paint.setStatus("Setting up food IDs");
         Logger.debugLog("Setting up food IDs");
         switch (selectedFood) {
             case "Cakes":
@@ -373,6 +395,7 @@ public class dmWinterbodt extends AbstractScript {
 
     // Method to count total food items in the inventory
     private void initialFoodCount() {
+        Paint.setStatus("Counting initial food");
         foodAmountInInventory = 0; // Reset before counting
 
         Logger.debugLog("Counting initial food in inventory");

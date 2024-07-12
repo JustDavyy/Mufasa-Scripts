@@ -63,15 +63,19 @@ public class BreakManager extends Task {
 
         // Log the precise break duration
         Logger.log("Taking a break for " + breakMinutes + " minute(s) and " + breakSeconds + " second(s).");
+        Paint.setStatus("Taking a break for 0" + breakMinutes + ":" + breakSeconds);
 
         // Breaking logic
         Logout.logout();
         Condition.sleep(breakMillis);  // Sleep for the calculated duration
 
         Logger.log("Break over, resuming script.");
+        Paint.setStatus("Break over, resuming script");
+        Paint.setStatus("Logging in");
         Login.login();
 
         // Reset HashMap
+        Paint.setStatus("Resetting states");
         StateUpdater.mageDeadTimestamps.put("Left", -1L);
         StateUpdater.mageDeadTimestamps.put("Right", -1L);
 

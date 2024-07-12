@@ -18,6 +18,7 @@ public class GoToSafety extends Task {
     public boolean execute() {
         Logger.debugLog("Inside GoToSafety execute()");
         Logger.log("We're out of food, heading to the lobby for safety and waiting till the game ends.");
+        Paint.setStatus("Going to safety");
 
         // Walk towards the door
         Walker.walkPath(WTRegion, gameToWTDoor);

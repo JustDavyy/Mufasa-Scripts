@@ -23,10 +23,12 @@ public class FailSafe extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Inside FailSafe execute()");
+        Paint.setStatus("FailSafe triggered");
         Logger.log("FailSafe triggered!");
 
         // FailSafe for if we are at the top left of the WT area
         if (Player.isTileWithinArea(currentLocation, LeftTopWTArea)) {
+            Paint.setStatus("FailSafe top left activated");
             Walker.walkPath(WTRegion, LeftTopToStart);
             Player.waitTillNotMoving(4, WTRegion);
             Walker.step(SideManager.getBranchTile());
@@ -35,8 +37,9 @@ public class FailSafe extends Task {
             return false;
         }
 
-        //FailSafe for if we are at the top left of the WT area
+        //FailSafe for if we are at the top right of the WT area
         if (Player.isTileWithinArea(currentLocation, RightTopWTArea)) {
+            Paint.setStatus("FailSafe top right activated");
             Walker.walkPath(WTRegion, RightTopToStart);
             Player.waitTillNotMoving(4, WTRegion);
             Walker.step(SideManager.getBranchTile());
@@ -47,6 +50,7 @@ public class FailSafe extends Task {
 
         // FailSafe for if we've died?
         if (weDied) {
+            Paint.setStatus("Oh dear, you're dead!");
             Logger.log("Oh dear, you're dead!");
             Logger.log("Logging out and stopping script!");
 

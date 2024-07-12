@@ -49,6 +49,7 @@ public class BurnBranches extends Task {
         // This is the logic to walk to safety when the game is near end, and we're out of burns.
         if (!inventoryHasLogs & !inventoryHasKindlings && isGameGoing && Player.tileEquals(currentLocation, SideManager.getBurnTile()) && gameAt13Percent && !burnOnly) {
             Logger.log("Out of items to burn, and game near end. Heading to lobby to prevent getting hit.");
+            Paint.setStatus("Walking to safety");
             Condition.sleep(generateRandomDelay(1250, 2000));
             if (Player.leveledUp()) {
                 Client.sendKeystroke("KEYCODE_SPACE");
@@ -61,19 +62,23 @@ public class BurnBranches extends Task {
             return false;
         } else if (!inventoryHasLogs && !inventoryHasKindlings && isGameGoing && Player.isTileWithinArea(currentLocation, lobby) && gameAt13Percent) {
             Logger.log("Waiting in lobby for game to end to prevent getting hit.");
+            Paint.setStatus("Waiting inside the lobby");
             return false;
         }
 
         if (!Player.atTile(SideManager.getBurnTile(), WTRegion) && isGameGoing) {
+            Paint.setStatus("Stepping to burn tile");
             Logger.log("Stepping to burn tile!");
             Walker.step(SideManager.getBurnTile(), WTRegion);
             currentLocation = Walker.getPlayerPosition(WTRegion);
         }
 
         if (Player.atTile(SideManager.getBurnTile(), WTRegion) && isGameGoing) {
+            Paint.setStatus("Initiating burn action");
             Logger.log("Initiating burn action!");
             Client.tap(SideManager.getBurnRect());
             lastActivity = System.currentTimeMillis();
+            Paint.setStatus("Waiting for burning to end");
             Condition.wait(() -> {
 
                 // Handle reburning/fixing
@@ -81,9 +86,16 @@ public class BurnBranches extends Task {
                 if (SideManager.getNeedsFixing() && isGameGoing && !SideManager.getMageDead() || SideManager.getNeedsReburning() && isGameGoing && !SideManager.getMageDead()) {
                     Logger.log("Brazier needs fixing or re-lighting!");
                     if (SideManager.getNeedsFixing()) {
+                        Paint.setStatus("Fixing & Relighting brazier");
+                        totalRelightCount = totalRelightCount + 1;
+                        totalRepairCount = totalRepairCount + 1;
+                        Paint.setStatistic("Brazier Repairs: " + totalRepairCount + " | Relights: " + totalRelightCount);
                         Logger.log("Fixing & Relighting!");
                         tapAndSleep(3, startHP); // Fixing and relighting requires three repetitions
                     } else {
+                        Paint.setStatus("Relighting brazier");
+                        totalRelightCount = totalRelightCount + 1;
+                        Paint.setStatistic("Brazier Repairs: " + totalRepairCount + " | Relights: " + totalRelightCount);
                         Logger.log("Relighting!");
                         tapAndSleep(2, startHP); // Relighting requires two repetitions
                     }

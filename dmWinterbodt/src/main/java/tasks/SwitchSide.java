@@ -56,8 +56,10 @@ public class SwitchSide extends Task {
         Logger.debugLog("Performing switch side action.");
         Logger.debugLog("Current side: " + currentSide);
         if (currentSide.equals("Right")) {
+            Paint.setStatus("Switching to left side");
             currentSide = "Left";
         } else if (currentSide.equals("Left")) {
+            Paint.setStatus("Switching to right side");
             currentSide = "Right";
         }
         Client.tap(switchRect);
@@ -71,6 +73,7 @@ public class SwitchSide extends Task {
     }
 
     private void walkToMiddle() {
+        Paint.setStatus("Walking to the middle");
         Logger.debugLog("Walking to middle tile.");
         Tile middleTile = new Tile(638, 167);
         Walker.walkTo(middleTile, WTRegion);
