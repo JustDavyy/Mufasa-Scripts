@@ -16,7 +16,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAIOCooker",
         description = "The cooker script to cook all your raw fish (or seaweed) at various different places.",
-        version = "1.01",
+        version = "1.02",
         guideLink = "https://wiki.mufasaclient.com/docs/dcooker/",
         categories = {ScriptCategory.Cooking}
 )
@@ -83,6 +83,10 @@ Boolean hopEnabled;
 Boolean useWDH;
 int banktab;
 String productID;
+String productName;
+int cookedProductID;
+int productIndex;
+int processCount = 0;
 String product;
 String location;
 
@@ -161,11 +165,19 @@ Tile playerPos;
         Logger.debugLog("We're using bank tab: " + banktab);
         Logger.debugLog("We're cooking " + product + " in this run at " + location + ".");
 
+        // Creating the Paint object
+        Logger.debugLog("Creating paint object.");
+        Paint.Create("/logo/davyy.png");
+
         // Initialize all the banking locations and other stuff
         initializeBankRects();
 
         // Initialize itemIDs
         initializeItemIDS();
+
+        Paint.setStatus("Creating paint box");
+        // Create a single image box, to show the amount of processed bows
+        productIndex = Paint.createBox(productName, cookedProductID, processCount);
 
         // Initialize hop timer for this run
         hopActions();
@@ -175,6 +187,7 @@ Tile playerPos;
 
         // Open the inventory if not already the case
         if (!GameTabs.isInventoryTabOpen()) {
+            Paint.setStatus("Opening inventory");
             GameTabs.openInventoryTab();
         }
 
@@ -234,6 +247,7 @@ Tile playerPos;
 
     // Methods and stuff here
     private void checkArea() {
+        Paint.setStatus("Checking areas");
         Logger.debugLog("Checking which area we are in, and moving to the start tile.");
         switch (location) {
             case "Catherby range":
@@ -249,6 +263,7 @@ Tile playerPos;
     }
 
     private void setZoom() {
+        Paint.setStatus("Setting zoom level");
         Logger.debugLog("Setting correct zoom level based on location.");
         switch (location) {
             case "Catherby range":
@@ -263,6 +278,7 @@ Tile playerPos;
 
     private void initializeBankRects() {
         Logger.debugLog("Initializing all the bank and range/oven areas.");
+        Paint.setStatus("Initializing range/oven areas");
 
         // Nardah
         List<RectanglePair> nardahRects = new ArrayList<>();
@@ -311,63 +327,102 @@ Tile playerPos;
     }
 
     private void initializeItemIDS() {
+        Paint.setStatus("Initializing itemIDS");
         switch (product) {
             case "Seaweed":
                 productID = "401";
+                productName = "Soda ash";
+                cookedProductID = ItemList.SODA_ASH_1781;
                 break;
             case "Giant seaweed":
                 productID = "21504";
+                productName = "Soda ash";
+                cookedProductID = ItemList.SODA_ASH_1781;
                 break;
             case "Raw shrimps":
                 productID = "317";
+                productName = "Shrimps";
+                cookedProductID = ItemList.SHRIMPS_315;
                 break;
             case "Raw sardine":
                 productID = "327";
+                productName = "Sardine";
+                cookedProductID = ItemList.SARDINE_325;
                 break;
             case "Raw herring":
                 productID = "345";
+                productName = "Herring";
+                cookedProductID = ItemList.HERRING_347;
                 break;
             case "Raw mackerel":
                 productID = "353";
+                productName = "Mackerel";
+                cookedProductID = ItemList.MACKEREL_355;
                 break;
             case "Raw trout":
                 productID = "335";
+                productName = "Trout";
+                cookedProductID = ItemList.TROUT_333;
                 break;
             case "Raw cod":
                 productID = "341";
+                productName = "Cod";
+                cookedProductID = ItemList.COD_339;
                 break;
             case "Raw pike":
                 productID = "349";
+                productName = "Pike";
+                cookedProductID = ItemList.PIKE_351;
                 break;
             case "Raw salmon":
                 productID = "331";
+                productName = "Salmon";
+                cookedProductID = ItemList.SALMON_329;
                 break;
             case "Raw karambwan":
                 productID = "3142";
+                productName = "Cooked karambwan";
+                cookedProductID = ItemList.COOKED_KARAMBWAN_3144;
                 break;
             case "Raw tuna":
                 productID = "359";
+                productName = "Tuna";
+                cookedProductID = ItemList.TUNA_361;
                 break;
             case "Raw lobster":
                 productID = "377";
+                productName = "Lobster";
+                cookedProductID = ItemList.LOBSTER_379;
                 break;
             case "Raw swordfish":
                 productID = "371";
+                productName = "Swordfish";
+                cookedProductID = ItemList.SWORDFISH_373;
                 break;
             case "Raw monkfish":
                 productID = "7944";
+                productName = "Monkfish";
+                cookedProductID = ItemList.MONKFISH_7946;
                 break;
             case "Raw shark":
                 productID = "383";
+                productName = "Shark";
+                cookedProductID = ItemList.SHARK_385;
                 break;
             case "Raw sea turtle":
                 productID = "395";
+                productName = "Sea turtle";
+                cookedProductID = ItemList.SEA_TURTLE_397;
                 break;
             case "Raw anglerfish":
                 productID = "13439";
+                productName = "Anglerfish";
+                cookedProductID = ItemList.ANGLERFISH_13441;
                 break;
             case "Raw manta ray":
                 productID = "389";
+                productName = "Manta ray";
+                cookedProductID = ItemList.MANTA_RAY_391;
                 break;
             default:
                 throw new IllegalArgumentException("Unknown product: " + product);
@@ -423,6 +478,7 @@ Tile playerPos;
     }
 
     private void setupBanking() {
+        Paint.setStatus("Set up banking");
         Logger.debugLog("Starting setupBanking() method.");
 
         Logger.debugLog("Opening the bank of Gielinor");
@@ -461,11 +517,13 @@ Tile playerPos;
         Condition.wait(() -> Bank.isOpen(), 200, 20);
 
         // Deposit the entire inventory
+        Paint.setStatus("Deposit inventory");
         Bank.tapDepositInventoryButton();
 
         // Set the correct quantities based on config choices
 
         if (product.equals("Giant seaweed")) {
+            Paint.setStatus("Set custom quantity 4");
             // Set to custom quantity 4, as it cooks into 6 soda ashes each
             Bank.tapQuantity1Button();
             Condition.sleep(generateRandomDelay(400, 800));
@@ -481,6 +539,7 @@ Tile playerPos;
         } else {
             // Set to all, as all others is just using 28.
             if (!Bank.isSelectedQuantityAllButton()) {
+                Paint.setStatus("Set quantity all");
                 Bank.tapQuantityAllButton();
                 Condition.wait(() -> Bank.isSelectedQuantityAllButton(), 200, 20);
             }
@@ -488,14 +547,17 @@ Tile playerPos;
 
         // Select the right bank tab if needed.
         if (!Bank.isSelectedBankTab(banktab)) {
+            Paint.setStatus("Open bank tab " + banktab);
             Bank.openTab(banktab);
             Logger.log("Selecting bank tab " + banktab);
         }
 
         // Withdraw the first set of items
+        Paint.setStatus("Withdrawing " + product);
         Bank.withdrawItem(productID, 0.88);
 
         // Close the bank after, twice just in case.
+        Paint.setStatus("Close bank");
         Bank.close();
 
         if (Bank.isOpen()) {
@@ -509,22 +571,27 @@ Tile playerPos;
 
     private void bank() {
         Logger.log("Banking.");
+        Paint.setStatus("Banking");
 
         // Select the right bank tab if needed.
         if (!Bank.isSelectedBankTab(banktab)) {
+            Paint.setStatus("Open tab " + banktab);
             Bank.openTab(banktab);
             Logger.log("Selecting bank tab " + banktab);
         }
 
         // Deposit everything
+        Paint.setStatus("Deposit inventory");
         Bank.tapDepositInventoryButton();
         Condition.sleep(generateRandomDelay(300, 500));
 
         // Withdraw new items
+        Paint.setStatus("Withdraw " + product);
         Bank.withdrawItem(productID, 0.88);
         Condition.sleep(generateRandomDelay(400, 800));
 
         // Close the bank after, twice just in case.
+        Paint.setStatus("Closing bank");
         Bank.close();
 
         if (Bank.isOpen()) {
@@ -536,18 +603,23 @@ Tile playerPos;
 
     private void cook() {
         Logger.log("Cooking.");
+        Paint.setStatus("Cooking");
         Condition.wait(() -> Chatbox.isMakeMenuVisible(), 200, 75);
+        Paint.setStatus("Press make option 1");
         Chatbox.makeOption(1);
         Logger.log("Waiting for cooking to finish...");
 
         if (!GameTabs.isInventoryTabOpen()) {
+            Paint.setStatus("Open inventory");
             GameTabs.openInventoryTab();
         }
 
         long startTime = System.currentTimeMillis();
         long timeout = 65 * 1000; // 1 minute and 5 seconds in milliseconds
 
+        Paint.setStatus("Waiting for cooking to finish");
         Condition.wait(() -> {
+            readXP();
             boolean inventoryCheck = !Inventory.contains(productID, 0.88);
             boolean levelUpCheck = Player.leveledUp();
             boolean timeCheck = (System.currentTimeMillis() - startTime) >= timeout;
@@ -555,10 +627,20 @@ Tile playerPos;
         }, 200, 325);
 
         Logger.debugLog("Cooking finished, player leveled up, or timeout reached.");
+        Paint.setStatus("Updating paint statistics");
+        if (productName.equals("Soda ash")) {
+            Integer ashes = Inventory.count(ItemList.SODA_ASH_1781, 0.8);
+            processCount = processCount + ashes;
+            Paint.updateBox(productIndex, processCount);
+        } else {
+            processCount = processCount + 28;
+            Paint.updateBox(productIndex, processCount);
+        }
         readXP();
     }
 
     public void resetAndRecheck() {
+        Paint.setStatus("Reset!");
         if (!Inventory.contains(productID, 0.88)) {
             Logger.debugLog("Our inventory does not contain any " + product + " resetting and retrying... (2nd attempt)");
             switch (location) {
@@ -614,6 +696,7 @@ Tile playerPos;
     }
 
     private void notInArea() {
+        Paint.setStatus("Not in area");
         Logger.log("We are not within the " + location + " area. Please move there and restart the script.");
         Logout.logout();
         Script.stop();
