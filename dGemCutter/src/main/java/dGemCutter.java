@@ -2,6 +2,7 @@ import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
+import helpers.utils.ItemList;
 import helpers.utils.OptionType;
 
 import java.util.Map;
@@ -14,7 +15,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dGem Cutter",
         description = "Cuts any uncut into their cut variants, supports dynamic banking and world hops.",
-        version = "1.01",
+        version = "1.02",
         guideLink = "https://wiki.mufasaclient.com/docs/dgem-cutter/",
         categories = {ScriptCategory.Crafting}
 )
@@ -62,8 +63,11 @@ public class dGemCutter extends AbstractScript {
     int banktab;
     String chisel = "1755";
     String crushedgem = "1633";
+    String finalProduct;
     String unprocessedItemID;
     String processedItemID;
+    int productIndex;
+    int processedItems = 0;
     Map<String, String[]> ItemIDs;
 
     // This is the onStart, and only gets ran once.
@@ -78,11 +82,26 @@ public class dGemCutter extends AbstractScript {
 
         initializeItemIDs();
 
+        // Creating the Paint object
+        Logger.debugLog("Creating paint object.");
+        Paint.Create("/logo/davyy.png");
+
         // Initialize hop timer for this run if hopping is enabled
+        Paint.setStatus("Initialize hop timer");
         hopActions();
 
         // One-time setup
         setupItemIDs();
+
+        Paint.setStatus("Creating paint box");
+        // Create a single image box, to show the amount of processed bows
+        finalProduct = product.trim();  // Trim any leading or trailing spaces
+        if (finalProduct.startsWith("Uncut ")) {
+            finalProduct = finalProduct.substring(6);  // Remove "Uncut "
+        }
+        finalProduct = Character.toUpperCase(finalProduct.charAt(0)) + finalProduct.substring(1).toLowerCase();  // Capitalize first letter and make others lowercase
+        productIndex = Paint.createBox(finalProduct, Integer.parseInt(processedItemID), processedItems);
+
         setupBanking();
         initialSetup();
 
@@ -125,6 +144,7 @@ public class dGemCutter extends AbstractScript {
 
     private void setupItemIDs() {
         Logger.debugLog("Running the setupItemIDs() method.");
+        Paint.setStatus("Initialize item IDs");
 
         if (ItemIDs.containsKey(product)) {
             String[] ids = ItemIDs.get(product);
@@ -145,6 +165,7 @@ public class dGemCutter extends AbstractScript {
     }
 
     private void setupBanking() {
+        Paint.setStatus("Setup banking");
         Logger.debugLog("Starting setupBanking() method.");
         if (bankloc == null) {
             Logger.debugLog("Starting dynamic banking setup...");
@@ -152,10 +173,12 @@ public class dGemCutter extends AbstractScript {
             // Opening the inventory if not yet opened.
             Logger.debugLog("Opening up the inventory.");
             if (!GameTabs.isInventoryTabOpen()) {
+                Paint.setStatus("Open inventory");
                 GameTabs.openInventoryTab();
             }
 
             Logger.debugLog("Starting setup for Dynamic Banking.");
+            Paint.setStatus("Setup dynamic bank");
             bankloc = Bank.setupDynamicBank();
             Logger.log("We're located at: " + bankloc + ".");
             Logger.debugLog("We're located at: " + bankloc + ".");
@@ -166,20 +189,24 @@ public class dGemCutter extends AbstractScript {
             }
             Condition.sleep(5000);
             Logger.debugLog("Attempting to open the Bank of Gielinor.");
+            Paint.setStatus("Open bank");
             Bank.open(bankloc);
             Logger.debugLog("Bank interface detected!");
             if (Bank.isBankPinNeeded()) {
+                Paint.setStatus("Enter bank pin");
                 Logger.debugLog("Bank pin is needed!");
                 Bank.enterBankPin();
                 Condition.sleep(500);
                 Condition.wait(() -> Bank.isOpen(), 200, 12);
                 Logger.debugLog("Bank pin entered.");
                 Logger.debugLog("Depositing inventory.");
+                Paint.setStatus("Deposit inventory");
                 Bank.tapDepositInventoryButton();
                 Condition.sleep(706);
             } else {
                 Logger.debugLog("Bank pin is not needed, bank is open!");
                 Logger.debugLog("Depositing inventory.");
+                Paint.setStatus("Deposit inventory");
                 Bank.tapDepositInventoryButton();
                 Condition.sleep(699);
             }
@@ -188,6 +215,7 @@ public class dGemCutter extends AbstractScript {
     }
 
     private void initialSetup() {
+        Paint.setStatus("Perform initial setup");
         Logger.debugLog("Starting initialSetup() method.");
 
         int randomDelay = new Random().nextInt(600) + 600;
@@ -196,12 +224,15 @@ public class dGemCutter extends AbstractScript {
         // Withdrawing a chisel from the bank
         Logger.debugLog("Withdrawing a chisel from the bank.");
         if (!Bank.isSelectedQuantity1Button()) {
+            Paint.setStatus("Set quantity 1");
             Bank.tapQuantity1Button();
             Condition.wait(() -> Bank.isSelectedQuantity1Button(), 200, 12);
         }
+        Paint.setStatus("Tap search");
         Bank.tapSearchButton();
         Condition.sleep(randomDelay);
 
+        Paint.setStatus("Type chisel");
         String textToSend = "chisel";
         for (char c : textToSend.toCharArray()) {
             String keycode = "KEYCODE_" + Character.toUpperCase(c);
@@ -210,6 +241,7 @@ public class dGemCutter extends AbstractScript {
         }
 
         Condition.sleep(randomBiggerDelay);
+        Paint.setStatus("Withdraw chisel");
         Bank.withdrawItem(chisel, 0.75);
         Condition.sleep(randomDelay);
         Logger.debugLog("Withdrew chisel from the bank.");
@@ -232,17 +264,20 @@ public class dGemCutter extends AbstractScript {
 
         // Grabbing the first uncuts to process
         if (!Bank.isSelectedQuantityAllButton()) {
+            Paint.setStatus("Set quantity all");
             Bank.tapQuantityAllButton();
             Condition.wait(() -> Bank.isSelectedQuantityAllButton(), 200, 12);
             Logger.debugLog("Selected Quantity All button.");
 
             // Selecting the right bank tab again if needed
             if (!Bank.isSelectedBankTab(banktab)) {
+                Paint.setStatus("Open tab " + banktab);
                 Bank.openTab(banktab);
                 Logger.debugLog("Opened bank tab " + banktab);
             }
 
             // Withdraw first set of items
+            Paint.setStatus("Withdraw " + product);
             Bank.withdrawItem(unprocessedItemID, 0.75);
             Logger.debugLog("Withdrew " + product + " from the bank.");
 
@@ -259,6 +294,7 @@ public class dGemCutter extends AbstractScript {
             }
         } else {
             // Withdraw first set of items
+            Paint.setStatus("Withdraw " + product);
             Bank.withdrawItem(unprocessedItemID, 0.75);
 
             // Check if we have both uncuts and a chisel in the inventory, otherwise stop script.
@@ -279,6 +315,7 @@ public class dGemCutter extends AbstractScript {
 
         // Finishing off with closing the bank
         Logger.debugLog("Closing bank interface.");
+        Paint.setStatus("Close bank");
         Bank.close();
         Logger.debugLog("Closed bank interface.");
 
@@ -287,6 +324,7 @@ public class dGemCutter extends AbstractScript {
 
     private void executeCutting() {
         Logger.debugLog("Starting executeCutting() method.");
+        Paint.setStatus("Start process item");
 
         // Check if we have both a chisel and uncuts in the inventory.
         if (!Inventory.contains(chisel, 0.75) && !Inventory.contains(unprocessedItemID, 0.75)) {
@@ -294,53 +332,51 @@ public class dGemCutter extends AbstractScript {
             return;
         }
 
+        Paint.setStatus("Tap chisel");
         // Starting to process items
         Inventory.tapItem(chisel, 0.75);
         int randomDelay2 = new Random().nextInt(150) + 100;
         int randomDelay3 = new Random().nextInt(1500) + 500;
         Condition.sleep(randomDelay2);
+        Paint.setStatus("Tap " + product);
         Inventory.tapItem(unprocessedItemID, 0.75);
         Logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
         Condition.wait(() -> Chatbox.isMakeMenuVisible(), 200, 12);
+        Paint.setStatus("Tap make option 1");
         Chatbox.makeOption(1);
         Logger.debugLog("Selected option 1 in chatbox.");
 
-        // Wait for the inventory to finish (with a timeout)
-        long startTime = System.currentTimeMillis();
-        long timeout = 40 * 1000; // 40 seconds in milliseconds as a full invent is about 32 seconds.
-        while (Inventory.contains(unprocessedItemID, 0.75)) {
-            readXP();
-            hopActions();
-            Condition.sleep(randomDelay3);
-
-            // Check if we have passed the timeout
-            if (System.currentTimeMillis() - startTime > timeout) {
-                Logger.debugLog("Timeout reached for inventory.contains() method");
-                break;
-            }
-        }
+        // Wait for the inventory to finish
+        Condition.wait(() -> outOfUncuts(), 250, 160);
         readXP();
+
+        int processCount = Inventory.count(processedItemID, 0.8);
+        Paint.updateBox(productIndex, processedItems + processCount);
 
         Logger.debugLog("Ending the executeCutting() method.");
     }
 
     private void bank() {
+        Paint.setStatus("Bank");
         Logger.debugLog("Starting bank() method.");
         int randomDelay = new Random().nextInt(250) + 250;
 
         // Opening the bank based on your location
         Logger.debugLog("Attempting to open the bank.");
+        Paint.setStatus("Open bank");
         Bank.open(bankloc);
         Logger.debugLog("Bank is open.");
 
         // Select the right bank tab if needed.
         if (!Bank.isSelectedBankTab(banktab)) {
+            Paint.setStatus("Open tab " + banktab);
             Bank.openTab(banktab);
             Logger.debugLog("Opened bank tab " + banktab);
         }
 
         // Depositing items based on your product chosen
         Logger.debugLog("Depositing " + product + ".");
+        Paint.setStatus("Deposit " + finalProduct);
         Inventory.tapItem(processedItemID, 0.75);
         Condition.sleep(randomDelay);
 
@@ -348,15 +384,18 @@ public class dGemCutter extends AbstractScript {
         if ("Uncut opal".equals(product) || "Uncut jade".equals(product) || "Uncut red topaz".equals(product)) {
             // Check for and process crushed gems while processing these specific uncuts
             if (Inventory.contains(crushedgem, 0.75)) {
+                Paint.setStatus("Deposit crushed gems");
                 Inventory.tapItem(crushedgem, 0.75);
                 Condition.sleep(randomDelay);
             }
         }
 
+        Paint.setStatus("Withdraw " + product);
         Bank.withdrawItem(unprocessedItemID, 0.75);
         Logger.debugLog("Withdrew " + product + " from the bank.");
 
         // Closing the bank, as banking should be done now
+        Paint.setStatus("Close bank");
         Bank.close();
         if(Bank.isOpen()) {
             Bank.close();
@@ -369,29 +408,58 @@ public class dGemCutter extends AbstractScript {
     private void checkInventOpen() {
         // Check if the inventory is open (needs this check after a break)
         if (!GameTabs.isInventoryTabOpen()) {
+            Paint.setStatus("Open inventory");
             GameTabs.openInventoryTab();
         }
     }
 
     private void checkInventUncuts() {
-        String[] items = {chisel, unprocessedItemID};
+        Paint.setStatus("Checking inventory");
+        int[] items = {Integer.parseInt(chisel), Integer.parseInt(unprocessedItemID)};
         // Check if we have both a chisel and uncuts in the inventory.
-        if (!Inventory.contains(items, 0.75)) {
+        if (!Inventory.containsAll(items, 0.75)) {
             Logger.log("1st check failed for a chisel and uncuts in our inventory, going back to banking!");
-            bank();
-        }
-
-        // Check if we have both a chisel and uncuts in the inventory.
-        if (!Inventory.contains(items, 0.75)) {
-            Logger.log("2nd check failed for a chisel and uncuts in our inventory, logging out and aborting script!");
             Logout.logout();
             Script.stop();
         }
+
+        // Check if we have both a chisel and uncuts in the inventory.
+        if (!Inventory.containsAll(items, 0.75)) {
+            Logger.log("2nd check failed for a chisel and uncuts in our inventory, logging out and aborting script!");
+
+        }
+    }
+
+    private boolean outOfUncuts() {
+        readXP();
+        hopActions();
+
+        if (Player.leveledUp()) {
+            Paint.setStatus("Leveled up!");
+            Paint.setStatus("Tap chisel");
+            // Starting to process items
+            Inventory.tapItem(chisel, 0.75);
+            Condition.sleep(250);
+            Paint.setStatus("Tap " + product);
+            Inventory.tapItem(unprocessedItemID, 0.75);
+            Logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
+            Condition.wait(() -> Chatbox.isMakeMenuVisible(), 200, 12);
+            Paint.setStatus("Tap make option 1");
+            Chatbox.makeOption(1);
+            Logger.debugLog("Selected option 1 in chatbox.");
+            Condition.sleep(1000);
+        }
+
+        return !Inventory.contains(unprocessedItemID, 0.8);
     }
 
     private void hopActions() {
         if(hopEnabled) {
             Game.hop(hopProfile, useWDH, false);
+
+            if (!GameTabs.isInventoryTabOpen()) {
+                GameTabs.openInventoryTab();
+            }
         } else {
             // We do nothing here, as hop is disabled.
         }
