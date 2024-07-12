@@ -2,6 +2,7 @@ import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
+import helpers.utils.ItemList;
 import helpers.utils.OptionType;
 import helpers.utils.RegionBox;
 import helpers.utils.Tile;
@@ -9,15 +10,15 @@ import helpers.utils.Tile;
 import java.awt.*;
 import java.util.Map;
 import java.util.HashMap;
-import static helpers.Interfaces.*;
-import static helpers.Interfaces.Logout;
 
 import java.util.Random;
+
+import static helpers.Interfaces.*;
 
 @ScriptManifest(
         name = "dCannonball Smelter",
         description = "Smelts steel bars into cannonballs at various locations. Supports hopping worlds.",
-        version = "1.02",
+        version = "1.03",
         guideLink = "https://wiki.mufasaclient.com/docs/dcannonball-smelter/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Moneymaking}
 )
@@ -59,6 +60,8 @@ public class dCannonballSmelter extends AbstractScript {
     String steelbar = "2353";
     String mouldUsed = "Nothing";
     int banktab;
+    int productIndex;
+    int startCount = 0;
     Boolean runEnabled;
 
     // Tiles
@@ -119,10 +122,19 @@ public class dCannonballSmelter extends AbstractScript {
             Walker.setup("/maps/Prifddinas.png");
         }
 
+        // Creating the Paint object
+        Logger.debugLog("Creating paint object.");
+        Paint.Create("/logo/davyy.png");
+
+        Paint.setStatus("Creating paint box");
+        // Create a single image box, to show the amount of processed bows
+        productIndex = Paint.createBox("Cannonballs", ItemList.CANNONBALL_2, 0);
+
         // Initialize hop timer for this run if hopping is enabled
         hopActions();
 
         // Close chatbox
+        Paint.setStatus("Closing chatbox");
         Chatbox.closeChatbox();
 
         //Logs for debugging purposes
@@ -144,17 +156,16 @@ public class dCannonballSmelter extends AbstractScript {
     public void poll() {
 
         doSmelting();
-        readXP();
         bank();
-
-
 
     }
 
     private void initialSetup() {
+        Paint.setStatus("Initial setup");
         Logger.debugLog("Starting initialSetup() method.");
 
         // Set zoom based on which location was selected
+        Paint.setStatus("Set zoom");
         if (java.util.Objects.equals(location, "Edgeville")) {
             Game.setZoom("1");
         } else if (java.util.Objects.equals(location, "Mount Karuulm")) {
@@ -167,10 +178,12 @@ public class dCannonballSmelter extends AbstractScript {
 
         // Make sure the inventory is open
         if (!GameTabs.isInventoryTabOpen()) {
+            Paint.setStatus("Open inventory");
             GameTabs.openInventoryTab();
         }
 
         // Check if we have the moulds here, if no log out with error message
+        Paint.setStatus("Check for mould");
         if (!Inventory.containsAny(new int[]{4,27012}, 0.9)) {
             Logger.log("We have no ammo mould in our inventory. Stopping script!");
             Logout.logout();
@@ -184,8 +197,15 @@ public class dCannonballSmelter extends AbstractScript {
             mouldUsed = "Single";
         }
 
+        // Check if we already have cballs in invent, and store the count if yes
+        Paint.setStatus("Check start amount of balls");
+        if (Inventory.contains(ItemList.CANNONBALL_2, 0.8)) {
+            startCount = Inventory.stackSize(ItemList.CANNONBALL_2);
+        }
+
         // Move to the bank tile we will use, then use Rectangles for the clicks to the furnace and back to the bank
         if (java.util.Objects.equals(location, "Edgeville")) {
+            Paint.setStatus("Move to bank");
             Logger.debugLog("Moving towards the " + location + " bank.");
             Walker.step(edgeBankTile);
             Condition.wait(() -> Player.atTile(edgeBankTile), 250, 45);
@@ -199,6 +219,7 @@ public class dCannonballSmelter extends AbstractScript {
                 }
             }
         } else if (java.util.Objects.equals(location, "Mount Karuulm")) {
+            Paint.setStatus("Move to bank");
             Logger.debugLog("Moving towards the " + location + " bank.");
             Walker.step(karuulmBankTile);
             Condition.wait(() -> Player.atTile(karuulmBankTile), 250, 45);
@@ -212,6 +233,7 @@ public class dCannonballSmelter extends AbstractScript {
                 }
             }
         } else if (java.util.Objects.equals(location, "Neitiznot")) {
+            Paint.setStatus("Move to bank");
             Logger.debugLog("Moving towards the " + location + " bank.");
             Walker.step(neitBankTile);
             Condition.wait(() -> Player.atTile(neitBankTile), 250, 45);
@@ -225,6 +247,7 @@ public class dCannonballSmelter extends AbstractScript {
                 }
             }
         } else if (java.util.Objects.equals(location, "Prifddinas")) {
+            Paint.setStatus("Move to bank");
             Logger.debugLog("Moving towards the " + location + " bank.");
             Walker.step(priffBankTile3);
             Condition.wait(() -> Player.atTile(priffBankTile3), 250, 45);
@@ -240,6 +263,7 @@ public class dCannonballSmelter extends AbstractScript {
         }
 
         // Open the bank
+        Paint.setStatus("Open bank");
         if (java.util.Objects.equals(location, "Edgeville")) {
             Client.tap(openEdgeBankONCE);
         } else if (java.util.Objects.equals(location, "Mount Karuulm")) {
@@ -258,21 +282,26 @@ public class dCannonballSmelter extends AbstractScript {
             Script.stop();
         }
         if (Bank.isBankPinNeeded()) {
+            Paint.setStatus("Enter pin");
             Bank.enterBankPin();
             Condition.sleep(750);
         }
         if (Bank.isSelectedQuantityAllButton()) {
+            Paint.setStatus("Set quantity all");
             Bank.tapQuantityAllButton();
         }
         if (!Bank.isSelectedBankTab(banktab)) {
+            Paint.setStatus("Open tab " + banktab);
             Bank.openTab(banktab);
             Condition.sleep(750);
         }
 
         // Withdraw the steel bars
+        Paint.setStatus("Withdraw steel bars");
         Bank.withdrawItem(steelbar, 0.9);
 
         // Close the bank interface
+        Paint.setStatus("Close bank");
         Bank.close();
         Condition.wait(() -> !Bank.isOpen(), 250, 20);
         if (Bank.isOpen()) {
@@ -284,6 +313,7 @@ public class dCannonballSmelter extends AbstractScript {
     }
 
     private void bank() {
+        Paint.setStatus("Bank");
         Logger.log("Banking.");
         Logger.debugLog("Starting bank() method.");
 
@@ -306,11 +336,13 @@ public class dCannonballSmelter extends AbstractScript {
         }
 
         if (Bank.isBankPinNeeded()) {
+            Paint.setStatus("Enter bank pin");
             Bank.enterBankPin();
         }
+        Paint.setStatus("Withdraw steel bar");
         Bank.withdrawItem(steelbar, 0.9);
 
-
+        Paint.setStatus("Close bank");
         Bank.close();
         Condition.wait(() -> !Bank.isOpen(),250,20);
         if (Bank.isOpen()) {
@@ -326,6 +358,7 @@ public class dCannonballSmelter extends AbstractScript {
     private void doSmelting() {
         Logger.log("Proceeding to process the steel bars.");
         if (!runEnabled) {
+            Paint.setStatus("Toggle run");
             Player.toggleRun();
         }
 
@@ -345,12 +378,15 @@ public class dCannonballSmelter extends AbstractScript {
 
         if (java.util.Objects.equals(location, "Edgeville")) {
             Logger.debugLog("Tapping the " + location + " furnace.");
+            Paint.setStatus("Tap furnace");
             Client.tap(edgeFurnaceRect);
             Condition.wait(() -> Player.atTile(edgeFurnaceTile), 250, 45);
+            Paint.setStatus("Tap make option 1");
             Chatbox.makeOption(1);
             waitForFinish();
         } else if (java.util.Objects.equals(location, "Mount Karuulm")) {
             Logger.debugLog("Tapping the " + location + " furnace.");
+            Paint.setStatus("Path to furnace");
             Walker.walkPath(pathToKaruulmFurnace);
             Condition.sleep(generateDelay(1500,2500));
             Walker.step(karuulmFurnaceTile);
@@ -371,14 +407,18 @@ public class dCannonballSmelter extends AbstractScript {
                 }
             }
 
+            Paint.setStatus("Tap furnace");
             Client.tap(new Rectangle(463, 272, 36, 33));
             Condition.wait(() -> Chatbox.isMakeMenuVisible(), 250, 20);
+            Paint.setStatus("Tap make option 1");
             Chatbox.makeOption(1);
             waitForFinish();
         } else if (java.util.Objects.equals(location, "Neitiznot")) {
             Logger.debugLog("Tapping the " + location + " furnace.");
+            Paint.setStatus("Tap furnace");
             Client.tap(neitFurnaceRect);
             Condition.wait(() -> Player.atTile(neitFurnaceTile), 250, 45);
+            Paint.setStatus("Tap make option 1");
             Chatbox.makeOption(1);
             waitForFinish();
         } else if (java.util.Objects.equals(location, "Prifddinas")) {
@@ -386,6 +426,7 @@ public class dCannonballSmelter extends AbstractScript {
 
             // Determine which furnace rectangle to tap based on player's tile
             Rectangle tapRectangle = null;
+            Paint.setStatus("Tap furnace");
             if (currentTile.x() == priffBankTile1.x() && currentTile.y() == priffBankTile1.y()) {
                 tapRectangle = priffFurnaceRect1;
             } else if (currentTile.x() == priffBankTile2.x() && currentTile.y() == priffBankTile2.y()) {
@@ -403,6 +444,7 @@ public class dCannonballSmelter extends AbstractScript {
 
             // Wait to be at the furnace tile after tapping
             Condition.wait(() -> Player.atTile(priffFurnaceTile), 250, 45);
+            Paint.setStatus("Tap make option 1");
             Chatbox.makeOption(1);
             waitForFinish();
         }
@@ -410,6 +452,7 @@ public class dCannonballSmelter extends AbstractScript {
 
     private void waitForFinish() {
         Logger.log("Waiting for inventory to finish processing...");
+        Paint.setStatus("Wait finish processing");
         // Define random generator
         Random random = new Random();
 
@@ -417,20 +460,26 @@ public class dCannonballSmelter extends AbstractScript {
         int randomDelay = 200 + random.nextInt(201); // nextInt(201) gives a random integer from 0 to 200
 
         // Calculate the number of checks to not exceed 15 seconds total duration
-        int maxChecks = 15000 / randomDelay; // 15000ms is 15 seconds
+        int maxChecks = 165000 / randomDelay; // 15000ms is 15 seconds
 
         if (java.util.Objects.equals(mouldUsed, "Double")) {
             runEnabled = Player.isRunEnabled();
-            Condition.sleep(70000);
-            Condition.wait(() -> !Inventory.contains(steelbar, 0.9), randomDelay, maxChecks);
+            Condition.wait(() -> outOfBars(), randomDelay, maxChecks);
 
         } else {
             runEnabled = Player.isRunEnabled();
-            Condition.sleep(150000);
-            Condition.wait(() -> !Inventory.contains(steelbar, 0.9), randomDelay, maxChecks);
+            Condition.wait(() -> outOfBars(), randomDelay, maxChecks);
         }
 
         Logger.log("Processing is completed!");
+    }
+
+    private boolean outOfBars() {
+        readXP();
+        int processedBalls = Inventory.stackSize(ItemList.CANNONBALL_2);
+        Paint.updateBox(productIndex, processedBalls - startCount);
+
+        return !Inventory.contains(ItemList.STEEL_BAR_2353, 0.8);
     }
 
     private int generateDelay(int lowerEnd, int higherEnd) {
