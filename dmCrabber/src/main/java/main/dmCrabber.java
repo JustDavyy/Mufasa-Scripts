@@ -121,6 +121,10 @@ public class dmCrabber extends AbstractScript {
         XpBar.getXP();
         currentLocation = Walker.getPlayerPosition(crabRegion);
 
+        if (!GameTabs.isInventoryTabOpen()) {
+            GameTabs.openInventoryTab();
+        }
+
         //Run tasks
         for (Task task : crabTasks) {
             if (task.activate()) {
