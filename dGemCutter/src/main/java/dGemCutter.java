@@ -71,6 +71,7 @@ public class dGemCutter extends AbstractScript {
     int processedItems = 0;
     int crushedItems = 0;
     Map<String, String[]> ItemIDs;
+    private final Random random = new Random();
 
     // This is the onStart, and only gets ran once.
     @Override
@@ -223,9 +224,6 @@ public class dGemCutter extends AbstractScript {
         Paint.setStatus("Perform initial setup");
         Logger.debugLog("Starting initialSetup() method.");
 
-        int randomDelay = new Random().nextInt(600) + 600;
-        int randomBiggerDelay = new Random().nextInt(1500) + 1500;
-
         // Withdrawing a chisel from the bank
         Logger.debugLog("Withdrawing a chisel from the bank.");
         if (!Bank.isSelectedQuantity1Button()) {
@@ -235,7 +233,7 @@ public class dGemCutter extends AbstractScript {
         }
         Paint.setStatus("Tap search");
         Bank.tapSearchButton();
-        Condition.sleep(randomDelay);
+        Condition.sleep(generateDelay(300, 500));
 
         Paint.setStatus("Type chisel");
         String textToSend = "chisel";
@@ -245,14 +243,14 @@ public class dGemCutter extends AbstractScript {
             Logger.debugLog("Sent keystroke: " + keycode);
         }
 
-        Condition.sleep(randomBiggerDelay);
+        Condition.sleep(generateDelay(1500, 2000));
         Paint.setStatus("Withdraw chisel");
         Bank.withdrawItem(chisel, 0.75);
-        Condition.sleep(randomDelay);
+        Condition.sleep(generateDelay(300, 500));
         Logger.debugLog("Withdrew chisel from the bank.");
 
         Client.sendKeystroke("KEYCODE_ENTER");
-        Condition.sleep(randomDelay);
+        Condition.sleep(generateDelay(300, 500));
         Logger.debugLog("Closed search interface.");
 
         // Check if we have the chisel in the inventory, otherwise stop script.
@@ -340,9 +338,7 @@ public class dGemCutter extends AbstractScript {
         Paint.setStatus("Tap chisel");
         // Starting to process items
         Inventory.tapItem(chisel, 0.75);
-        int randomDelay2 = new Random().nextInt(150) + 100;
-        int randomDelay3 = new Random().nextInt(1500) + 500;
-        Condition.sleep(randomDelay2);
+        Condition.sleep(generateDelay(150, 300));
         Paint.setStatus("Tap " + product);
         Inventory.tapItem(unprocessedItemID, 0.75);
         Logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
@@ -366,7 +362,6 @@ public class dGemCutter extends AbstractScript {
     private void bank() {
         Paint.setStatus("Bank");
         Logger.debugLog("Starting bank() method.");
-        int randomDelay = new Random().nextInt(250) + 250;
 
         // Opening the bank based on your location
         Logger.debugLog("Attempting to open the bank.");
@@ -385,7 +380,7 @@ public class dGemCutter extends AbstractScript {
         Logger.debugLog("Depositing " + product + ".");
         Paint.setStatus("Deposit " + finalProduct);
         Inventory.tapItem(processedItemID, 0.75);
-        Condition.sleep(randomDelay);
+        Condition.sleep(generateDelay(150, 300));
 
         // Check if the product is one of the specific uncut gems
         if ("Uncut opal".equals(product) || "Uncut jade".equals(product) || "Uncut red topaz".equals(product)) {
@@ -393,7 +388,7 @@ public class dGemCutter extends AbstractScript {
             if (Inventory.contains(crushedgem, 0.75)) {
                 Paint.setStatus("Deposit crushed gems");
                 Inventory.tapItem(crushedgem, 0.75);
-                Condition.sleep(randomDelay);
+                Condition.sleep(generateDelay(150, 300));
             }
         }
 
@@ -446,7 +441,7 @@ public class dGemCutter extends AbstractScript {
             Paint.setStatus("Tap chisel");
             // Starting to process items
             Inventory.tapItem(chisel, 0.75);
-            Condition.sleep(250);
+            Condition.sleep(generateDelay(200,300));
             Paint.setStatus("Tap " + product);
             Inventory.tapItem(unprocessedItemID, 0.75);
             Logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
@@ -454,7 +449,7 @@ public class dGemCutter extends AbstractScript {
             Paint.setStatus("Tap make option 1");
             Chatbox.makeOption(1);
             Logger.debugLog("Selected option 1 in chatbox.");
-            Condition.sleep(1000);
+            Condition.sleep(generateDelay(900, 1200));
         }
 
         return !Inventory.contains(unprocessedItemID, 0.8);
@@ -474,6 +469,16 @@ public class dGemCutter extends AbstractScript {
 
     private void readXP() {
         XpBar.getXP();
+    }
+
+    private int generateDelay(int lowerEnd, int higherEnd) {
+        if (lowerEnd > higherEnd) {
+            // Swap lowerEnd and higherEnd if lowerEnd is greater
+            int temp = lowerEnd;
+            lowerEnd = higherEnd;
+            higherEnd = temp;
+        }
+        return random.nextInt(higherEnd - lowerEnd + 1) + lowerEnd;
     }
 
 }
