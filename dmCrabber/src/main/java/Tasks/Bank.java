@@ -15,6 +15,8 @@ public class Bank extends Task {
     );
     private final Tile bankTile = new Tile(756,867);
 
+    String dynamicBank;
+
     // I'm guessing we should just withdraw full inv of food?
     @Override
     public boolean activate() {
@@ -28,19 +30,39 @@ public class Bank extends Task {
 
     @Override
     public boolean execute() {
-        startTime = 0; //Reset the performcrabbing start time
+        startTime = 0; // Reset the perform crabbing start time
 
+        // Check if player needs to walk to the bank area
         if (!Player.isTileWithinArea(currentLocation, bankArea)) {
             Walker.walkPath(crabRegion, spot.getPathToBank());
             currentLocation = Walker.getPlayerPosition(crabRegion);
         }
 
-        if (!Player.tileEquals(currentLocation, bankTile) && Player.isTileWithinArea(currentLocation, bankArea)) {
+        // Check if player needs to step to the bank tile
+        if (!Player.tileEquals(currentLocation, bankTile)) {
             Walker.step(bankTile, crabRegion);
             currentLocation = Walker.getPlayerPosition(crabRegion);
         }
 
+        // Set up dynamic bank if not already done
+        if (dynamicBank == null) {
+            dynamicBank = Bank.setupDynamicBank();
+        } else {
+            Bank.stepToBank(dynamicBank);
+        }
 
-        return false;
+        // Open the bank if not already open
+        if (!Bank.isOpen()) {
+            Bank.open(dynamicBank);
+            Condition.wait(() -> Bank.isOpen(), 100, 20);
+        }
+
+        // Perform actual banking logic if the bank is open
+        if (Bank.isOpen()) {
+            // Perform actual banking logic
+        }
+
+        return false; // Return false to continue the loop
     }
+
 }
