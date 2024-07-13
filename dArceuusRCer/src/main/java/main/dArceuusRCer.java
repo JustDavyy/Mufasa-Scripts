@@ -26,7 +26,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dArceuus RCer",
         description = "Crafts blood or soul runes at Arceuus, supports using blood essence and hopping worlds. DISCLAIMER: This script is NOT fully safe for 10HP accounts, use at own risk!",
-        version = "2.00",
+        version = "2.01",
         guideLink = "https://wiki.mufasaclient.com/docs/darceuus-rcer/",
         categories = {ScriptCategory.Runecrafting, ScriptCategory.Moneymaking}
 )
@@ -537,11 +537,12 @@ public class dArceuusRCer extends AbstractScript {
         // Format runes per hour with dot as thousand separator and no decimals
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
         symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(','); // Set the decimal separator to comma
         DecimalFormat runesFormat = new DecimalFormat("#,###", symbols);
         String runesPerHourFormatted = runesFormat.format(runesPerHour);
 
-        // Format profit per hour as 'k' with two decimals
-        DecimalFormat profitFormat = new DecimalFormat("#.##0,00k");
+        // Format profit per hour as 'k' with two decimals, dot as thousand separator, and comma as decimal separator
+        DecimalFormat profitFormat = new DecimalFormat("#,##0.00k", symbols);
         String profitPerHourFormatted = profitFormat.format(profitPerHour / 1000);
 
         // Update the statistics label
