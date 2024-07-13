@@ -24,9 +24,9 @@ import java.util.Locale;
 import static helpers.Interfaces.*;
 
 @ScriptManifest(
-        name = "dArceuus RCer new",
+        name = "dArceuus RCer",
         description = "Crafts blood or soul runes at Arceuus, supports using blood essence and hopping worlds. DISCLAIMER: This script is NOT fully safe for 10HP accounts, use at own risk!",
-        version = "1.00",
+        version = "2.00",
         guideLink = "https://wiki.mufasaclient.com/docs/darceuus-rcer/",
         categories = {ScriptCategory.Runecrafting, ScriptCategory.Moneymaking}
 )
