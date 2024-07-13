@@ -10,14 +10,14 @@ repositories {
         google()
     }
 
-configurations.all {
+configurations.configureEach {
     resolutionStrategy {
         cacheChangingModulesFor 0, 'seconds'
     }
 }
 
 dependencies {
-    implementation('com.github.Mufasa-SDK:SDKRepo:1.1.119') {
+    implementation('com.github.Mufasa-SDK:SDKRepo:1.2.10') {
         changing = true
     }
 }
@@ -29,7 +29,7 @@ jar {
     manifest {
         attributes(
                 'Manifest-Version': '1.0',
-                'Created-By': 'JustDavyy'
+                'Created-By': 'Davyy'
         )
     }
 }

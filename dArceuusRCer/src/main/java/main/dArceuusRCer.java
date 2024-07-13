@@ -6,6 +6,7 @@ import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.Area;
+import helpers.utils.ItemList;
 import helpers.utils.OptionType;
 import helpers.utils.Tile;
 import utils.Task;
@@ -15,6 +16,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 import static helpers.Interfaces.*;
 
@@ -46,7 +51,7 @@ import static helpers.Interfaces.*;
         }
 )
 
-public class dArceuusRCerNEW extends AbstractScript {
+public class dArceuusRCer extends AbstractScript {
     public static Tile[] mineToShortcutOutPath = new Tile[] {
             new Tile(205, 145),
             new Tile(200, 137),
@@ -63,20 +68,82 @@ public class dArceuusRCerNEW extends AbstractScript {
             new Tile(170, 109),
             new Tile(163, 107),
             new Tile(157, 103),
-            new Tile(154, 102)
+            new Tile(154, 107)
     };
 
     public static Tile venerateAltarTile = new Tile(152, 104);
     public static Tile obstacleOutsideTile = new Tile(210, 112);
     public static Tile obstacleInsideTile = new Tile(210, 114);
     public static Area BloodArea1 = new Area(
-            new Tile(45, 69),
-            new Tile(144, 189)
+            new Tile(57, 77),
+            new Tile(146, 149)
     );
     public static Area BloodArea2 = new Area(
-            new Tile(48, 118),
-            new Tile(186, 194)
+            new Tile(146, 128),
+            new Tile(184, 157)
     );
+    public static Area BloodArea3 = new Area(
+            new Tile(153, 154),
+            new Tile(186, 184)
+    );
+    public static Area veneratePathArea = new Area(
+            new Tile(152, 97),
+            new Tile(211, 114)
+    );
+    public static Area mineFailSafeArea1 = new Area(
+            new Tile(216, 112),
+            new Tile(245, 160)
+    );
+    public static Area mineFailSafeArea2 = new Area(
+            new Tile(197, 121),
+            new Tile(209, 155)
+    );
+    public static Area mineFailSafeArea3 = new Area(
+            new Tile(199, 116),
+            new Tile(221, 123)
+    );
+    public static Tile[] mineFailSafe1Path = new Tile[] {
+            new Tile(223, 107),
+            new Tile(232, 111),
+            new Tile(239, 117),
+            new Tile(243, 127),
+            new Tile(243, 138),
+            new Tile(241, 145),
+            new Tile(239, 153),
+            new Tile(234, 154),
+            new Tile(229, 148),
+            new Tile(231, 143),
+            new Tile(232, 135),
+            new Tile(232, 127),
+            new Tile(226, 122),
+            new Tile(221, 119),
+            new Tile(213, 118),
+            new Tile(204, 122),
+            new Tile(201, 130),
+            new Tile(199, 135),
+            new Tile(201, 142),
+            new Tile(205, 147),
+            new Tile(211, 140)
+    };
+    public static Tile[] mineFailSafe2Path = new Tile[] {
+            new Tile(202, 123),
+            new Tile(200, 131),
+            new Tile(199, 137),
+            new Tile(201, 142),
+            new Tile(204, 145),
+            new Tile(210, 141)
+    };
+    public static Tile[] mineFailSafe3Path = new Tile[] {
+            new Tile(218, 118),
+            new Tile(212, 118),
+            new Tile(206, 120),
+            new Tile(202, 124),
+            new Tile(200, 130),
+            new Tile(199, 136),
+            new Tile(201, 141),
+            new Tile(204, 144),
+            new Tile(210, 141)
+    };
     public static Area SoulArea1 = new Area(
             new Tile(245, 67),
             new Tile(353, 200)
@@ -84,26 +151,6 @@ public class dArceuusRCerNEW extends AbstractScript {
     public static Area SoulArea2 = new Area(
             new Tile(149, 63),
             new Tile(303, 95)
-    );
-    public static Area miningAreaonStart = new Area(
-            new Tile(198, 118),
-            new Tile(237, 164)
-    );
-    public static Area VenerateAltarArea = new Area(
-            new Tile(141, 92),
-            new Tile(157, 110)
-    );
-    public static Area obstaclesArea1 = new Area(
-            new Tile(158, 100),
-            new Tile(194, 121)
-    );
-    public static Area obstaclesArea2 = new Area(
-            new Tile(194, 105),
-            new Tile(216, 115)
-    );
-    public static Area obstaclesArea3 = new Area(
-            new Tile(218, 100),
-            new Tile(244, 116)
     );
     public static Area soulAltarArea = new Area(
             new Tile(261, 110),
@@ -120,15 +167,6 @@ public class dArceuusRCerNEW extends AbstractScript {
     public static Area beforeObstacleInArea = new Area(
             new Tile(197, 101),
             new Tile(221, 114)
-    );
-    public static Area beforeObstacleInBLOODArea = new Area(
-            new Tile(177, 132),
-            new Tile(192, 149)
-    );
-
-    public static Area successObstacleINArea = new Area(
-            new Tile(205, 113),
-            new Tile(213, 119)
     );
     public static Area successObstacleOUTArea = new Area(
             new Tile(196, 102),
@@ -227,7 +265,7 @@ public class dArceuusRCerNEW extends AbstractScript {
             new Tile(198, 114),
             new Tile(203, 111)
     };
-    Tile[] bloodBackToObstaclePath = new Tile[] {
+    public static Tile[] bloodBackToObstaclePath = new Tile[] {
             new Tile(158, 175),
             new Tile(166, 174),
             new Tile(174, 173),
@@ -290,14 +328,6 @@ public class dArceuusRCerNEW extends AbstractScript {
     public static Integer essenceCount = 0;
     public static Tile obstacleBackToMineFromBloodInTile = new Tile(185, 141);
     public static Tile obstacleNorthBackFromSoulAltarTile = new Tile(231, 100);
-    public static Area soulAltarBackObstacleArea = new Area(
-            new Tile(225, 95),
-            new Tile(235, 103)
-    );
-    public static Area soulAltarBackObstacleSUCCESSArea = new Area(
-            new Tile(222, 104),
-            new Tile(236, 112)
-    );
     public static Area miningArea = new Area(
             new Tile(208, 134),
             new Tile(216, 147)
@@ -336,6 +366,16 @@ public class dArceuusRCerNEW extends AbstractScript {
     public static Tile playerPos;
     public static long lastItemTime;
     public static int lastEmptySlots;
+    public static int runeIndex;
+    public static int profitIndex;
+    public static int essenceIndex;
+    public static int runePrice = 0;
+    public static int essencePrice = 0;
+    public static int startRunes = 0;
+    public static int craftedRunes = 0;
+    public static int bloodEssenceStartStack = 0;
+    public static int bloodEssenceUsed = 0;
+    public static long startTime;
 
     @Override
     public void onStart(){
@@ -350,30 +390,67 @@ public class dArceuusRCerNEW extends AbstractScript {
         Logger.log("Setting up everything for your gains now...");
         Logger.log("We will be crafting " + runeType + "s this run.");
 
+        // Creating the Paint object
+        Logger.debugLog("Creating paint object.");
+        Paint.Create("/logo/davyy.png");
+
+        // Set the two top headers of paintUI.
+        Paint.setStatus("Initializing...");
+
         // Set zoom to level 1
         Game.setZoom("1");
 
         // Open up the inventory
         GameTabs.openInventoryTab();
+        Condition.sleep(800);
 
         // Check if we are using blood essence or not (only if running blood runes)
         if (java.util.Objects.equals(runeType, "Blood rune")) {
-            Logger.debugLog("We are using blood essences, set usingEssence to TRUE.");
             usingEssence = Inventory.containsAny(new int[] {26390, 26392}, 0.95);
+            Logger.debugLog("Using bloodEssence is: " + usingEssence);
+            runeIndex = Paint.createBox(runeType, ItemList.BLOOD_RUNE_565, 0);
+            Paint.setStatus("Fetch rune price");
+            runePrice = GrandExchange.getItemPrice(ItemList.BLOOD_RUNE_565);
+            Logger.debugLog("Blood rune price is currently: " + runePrice);
+            Paint.setStatus("Fetch start rune stack");
+            startRunes = Inventory.stackSize(ItemList.BLOOD_RUNE_565);
+            Logger.debugLog("Stack of runes at start: " + startRunes);
+
+            if (usingEssence) {
+                essenceIndex = Paint.createBox("Blood essence(s)", 26392, 0);
+                essencePrice = GrandExchange.getItemPrice(26390);
+                Logger.debugLog("Blood essence price is currently: " + essencePrice);
+            }
+        } else {
+            runeIndex = Paint.createBox(runeType, ItemList.SOUL_RUNE_566, 0);
+            Paint.setStatus("Fetch rune price");
+            runePrice = GrandExchange.getItemPrice(ItemList.SOUL_RUNE_566);
+            Logger.debugLog("Soul rune price is currently: " + runePrice);
+            Paint.setStatus("Fetch start rune stack");
+            startRunes = Inventory.stackSize(ItemList.SOUL_RUNE_566);
+            Logger.debugLog("Stack of runes at start: " + startRunes);
         }
 
         if (usingEssence) {
-            int stackCount = Inventory.stackSize(26390);
-            Logger.debugLog("We currently have " + stackCount + " blood essence in our inventory");
+            bloodEssenceStartStack = Inventory.stackSize(26390);
+            Logger.debugLog("We currently have " + bloodEssenceStartStack + " blood essence in our inventory");
 
             if (!Inventory.contains(26392, 0.95)) {
-                Logger.debugLog("No active blood essence found, activating one!");
-                Inventory.tapItem(26390, false, 0.7);
+                if (Inventory.contains(26390, 0.7)) {
+                    Paint.setStatus("Activate blood essence");
+                    Logger.debugLog("No active blood essence found, activating one!");
+                    Inventory.tapItem(26390, false, 0.7);
+                    bloodEssenceUsed += 1;
+                    Paint.updateBox(essenceIndex, bloodEssenceUsed);
+                }
             } else {
                 Logger.debugLog("We already have a blood essence active!");
             }
         }
 
+        profitIndex = Paint.createBox("Profit", ItemList.COINS_9_1004, 0);
+
+        Paint.setStatus("Check for chisel");
         // Check if we have a chisel
         if (!Inventory.contains(1755, 0.80)) {
             Logger.debugLog("No chisel found in our inventory, stopping script...");
@@ -381,20 +458,36 @@ public class dArceuusRCerNEW extends AbstractScript {
             Script.stop();
         }
 
+        Paint.setStatus("Initiate hop timers");
+        // Initialize hop timer
+        hopActions();
+
+        Paint.setStatus("Close chatbox");
         // Close the chatbox
         Chatbox.closeChatbox();
+
+        // Filling playerPos with current position
+        Paint.setStatus("Fetch player position");
+        playerPos = Walker.getPlayerPosition();
+
+        startTime = System.currentTimeMillis();
+
+        // Update the statistics label
+        updateStatLabel();
+
+        Paint.setStatus("End of onStart");
     }
 
     // Task list!
     List<Task> RCTasks = Arrays.asList(
             new mineEssence(),
-            new craftBloodRunes(),
-            new craftSoulRunes(),
-            new moveBackToMine(),
-            new moveToBlood(),
-            new moveToSoul(),
+            new venerateEssence(),
             new moveToVenerate(),
-            new venerateEssence()
+            new moveBackToMine(),
+            new craftBloodRunes(),
+            new moveToSoul(),
+            new craftSoulRunes(),
+            new moveToBlood()
     );
 
     @Override
@@ -421,5 +514,38 @@ public class dArceuusRCerNEW extends AbstractScript {
 
     public static void readXP() {
         XpBar.getXP();
+    }
+
+    public static void hopActions() {
+        if(hopEnabled) {
+            Game.hop(hopProfile, false, false);
+        } else {
+            // We do nothing here, as hop is disabled.
+        }
+    }
+
+    public static void updateStatLabel() {
+        // Calculations for the statistics label
+        long currentTime = System.currentTimeMillis();
+        double elapsedTimeInHours = (currentTime - startTime) / (1000.0 * 60 * 60);
+        double runesPerHour = craftedRunes / elapsedTimeInHours;
+
+        // Calculate the total profit subtracting the cost of the blood essences used
+        double totalProfit = (craftedRunes * runePrice) - (bloodEssenceUsed * essencePrice);
+        double profitPerHour = totalProfit / elapsedTimeInHours;
+
+        // Format runes per hour with dot as thousand separator and no decimals
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+        symbols.setGroupingSeparator('.');
+        DecimalFormat runesFormat = new DecimalFormat("#,###", symbols);
+        String runesPerHourFormatted = runesFormat.format(runesPerHour);
+
+        // Format profit per hour as 'k' with two decimals
+        DecimalFormat profitFormat = new DecimalFormat("#.##0,00k");
+        String profitPerHourFormatted = profitFormat.format(profitPerHour / 1000);
+
+        // Update the statistics label
+        String statistics = String.format("Runes/hr: %s | Profit/hr: %s", runesPerHourFormatted, profitPerHourFormatted);
+        Paint.setStatistic(statistics);
     }
 }
