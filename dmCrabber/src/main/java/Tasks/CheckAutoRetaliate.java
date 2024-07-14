@@ -26,14 +26,15 @@ public class CheckAutoRetaliate extends Task {
         }
 
         if (GameTabs.isCombatTabOpen()) {
-            if (Client.isColorInRect(retaliateActiveColor, autoRetaliateRect, 2)) {
+            if (Player.isAutoRetaliateOn()) {
                 Logger.log("Auto retaliate already enabled, continuing..");
                 checkedRetaliate = true;
                 return true;
             } else {
                 Logger.log("Activating auto retaliate");
-                Client.tap(autoRetaliateRect);
-                if (Client.isColorInRect(retaliateActiveColor, autoRetaliateRect, 2)) {
+                Player.enableAutoRetaliate();
+                Condition.wait(() -> Player.isAutoRetaliateOn(), 200, 10);
+                if (Player.isAutoRetaliateOn()) {
                     checkedRetaliate = true;
                     return true;
                 } else {
