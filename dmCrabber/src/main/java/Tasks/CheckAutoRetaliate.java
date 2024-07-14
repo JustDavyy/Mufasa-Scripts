@@ -8,9 +8,6 @@ import static helpers.Interfaces.*;
 
 public class CheckAutoRetaliate extends Task {
     boolean checkedRetaliate;
-    Rectangle autoRetaliateRect = new Rectangle(67, 377, 172, 40);
-    Color retaliateActiveColor = Color.decode("#831f1d");
-
 
     @Override
     public boolean activate() {
