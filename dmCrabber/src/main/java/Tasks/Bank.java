@@ -25,7 +25,7 @@ public class Bank extends Task {
             Condition.wait(() -> GameTabs.isInventoryTabOpen(), 100, 10);
         }
 
-        return !Inventory.contains(foodID, 0.80);
+        return (!Inventory.contains(foodID, 0.80) || outOfPots);
     }
 
     @Override
