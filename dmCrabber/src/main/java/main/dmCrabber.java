@@ -133,7 +133,7 @@ public class dmCrabber extends AbstractScript {
             new Bank(),
             new Eat(),
             new GoToSpot(),
-            //new UsePotions(),
+            new UsePotions(),
             new PerformCrabbing()
     );
 
