@@ -15,10 +15,10 @@ public class PerformCrabbing extends Task {
     private final long noHitDuration = 15000; // 5 seconds in milliseconds
     private long playerDetectedTime = 0;
 
-    private Rectangle playerRect = new Rectangle(429, 231, 49, 63);
-    private Color redHit = Color.decode("#ba0000");
-    private Color blueHit = Color.decode("#4040ff");
-    private Color hitbarColor = Color.decode("#00ff00");
+    private final Rectangle playerRect = new Rectangle(429, 231, 49, 63);
+    private final Color redHit = Color.decode("#ba0000");
+    private final Color blueHit = Color.decode("#4040ff");
+    private final Color hitbarColor = Color.decode("#00ff00");
 
     @Override
     public boolean activate() {

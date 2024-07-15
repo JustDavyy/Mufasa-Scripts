@@ -5,6 +5,7 @@ import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
+import helpers.utils.Area;
 import helpers.utils.OptionType;
 import helpers.utils.RegionBox;
 import helpers.utils.Tile;
@@ -38,6 +39,20 @@ import static helpers.Interfaces.*;
                                 @AllowedValue(optionName = "West 2 (2 crabs)"),
                         },
                         optionType = OptionType.STRING
+                ),
+                @ScriptConfiguration(
+                        name =  "Breaking (lower end)",
+                        description = "Please provide the lower end of your desired break time (in minutes).\nDISCLAIMER: It is advised to stay under an hour when breaking while doing NMZ.\nValid range is between 15 and 60, it will be randomised between the lower and higher end.",
+                        defaultValue = "30",
+                        minMaxIntValues = {15, 60},
+                        optionType = OptionType.INTEGER
+                ),
+                @ScriptConfiguration(
+                        name =  "Breaking (higher end)",
+                        description = "Please provide the higher end of your desired break time (in minutes).\nDISCLAIMER: It is advised to stay under an hour when breaking while doing NMZ.\nValid range is between 30 and 120, it will be randomised between the lower and higher end.",
+                        defaultValue = "60",
+                        minMaxIntValues = {30, 120},
+                        optionType = OptionType.INTEGER
                 ),
                 @ScriptConfiguration(
                         name =  "BankTab",
@@ -102,6 +117,14 @@ public class dmCrabber extends AbstractScript {
     public static int potionID;
     public static Tile currentLocation;
     public static Spots spot;
+    public static int lowerBreak;
+    public static int higherBreak;
+
+    public static Area bankArea = new Area(
+            new Tile(748, 864),
+            new Tile(761, 874)
+    );
+
     private static final Random random = new Random();
 
     public static RegionBox crabRegion = new RegionBox("crabRegion", 2016, 2373, 2748, 2826);
@@ -117,10 +140,16 @@ public class dmCrabber extends AbstractScript {
         selectedFood = configs.get("Food");
         potions = (configs.get("Potions"));
         usingPots = !java.util.Objects.equals(potions, "None");
+        lowerBreak = Integer.parseInt(configs.get("Breaking (lower end)"));
+        higherBreak = Integer.parseInt(configs.get("Breaking (higher end)"));
 
         setupCrabSpots();
         setupFoodIDs();
         setupPotIDs();
+
+        Client.disableBreakHandler();
+        Client.disableAFKHandler();
+
         Logger.log("Done with startup, script starting");
     }
 
@@ -128,6 +157,7 @@ public class dmCrabber extends AbstractScript {
     List<Task> crabTasks = Arrays.asList(
             new CheckAutoRetaliate(),
             new Bank(),
+            new BreakManager(),
             new Eat(),
             new GoToSpot(),
             new UsePotions(),

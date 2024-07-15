@@ -1,6 +1,5 @@
 package Tasks;
 
-import helpers.utils.Area;
 import helpers.utils.Tile;
 import utils.Task;
 
@@ -9,10 +8,6 @@ import static helpers.Interfaces.*;
 import static main.dmCrabber.*;
 
 public class Bank extends Task {
-    private final Area bankArea = new Area(
-            new Tile(748, 864),
-            new Tile(761, 874)
-    );
     private final Tile bankTile = new Tile(756,867);
 
     String dynamicBank = "Hosidius_crab_bank";
@@ -32,6 +27,16 @@ public class Bank extends Task {
     public boolean execute() {
         startTime = 0; // Reset the perform crabbing start time
 
+        navigateToBankArea();
+        if (Player.isTileWithinArea(currentLocation, bankArea)) {
+            handleBanking();
+        }
+
+        outOfPots = false;
+        return true;
+    }
+
+    private void navigateToBankArea() {
         // Check if player needs to walk to the bank area
         if (!Player.isTileWithinArea(currentLocation, bankArea)) {
             Walker.walkPath(crabRegion, spot.getPathToBank());
@@ -43,67 +48,73 @@ public class Bank extends Task {
             Walker.step(bankTile, crabRegion);
             currentLocation = Walker.getPlayerPosition(crabRegion);
         }
-
-        //If we are IN the bank area.
-        if (Player.isTileWithinArea(currentLocation, bankArea)) {
-            if (dynamicBank == null) {
-                dynamicBank = Bank.setupDynamicBank();
-            } else {
-                Bank.stepToBank(dynamicBank);
-            }
-
-            if (!Bank.isOpen()) {
-                Bank.open(dynamicBank);
-                Condition.wait(() -> Bank.isOpen(), 100, 20);
-            }
-
-            if (Bank.isOpen()) {
-                // Deposit everything
-                Bank.tapDepositInventoryButton();
-
-                // Go to the right bank tab if needed
-                if (!Bank.isSelectedBankTab(selectedBankTab)) {
-                    Bank.openTab(selectedBankTab);
-                    Condition.wait(() -> Bank.isSelectedBankTab(selectedBankTab), 250, 12);
-                    Logger.debugLog("Opened bank tab " + selectedBankTab);
-                }
-
-                // If using potions, withdraw these first.
-                if (!java.util.Objects.equals(potions, "None")) {
-                    if (!Bank.isSelectedQuantity5Button()) {
-                        Bank.tapQuantity5Button();
-                        Condition.wait(() -> Bank.isSelectedQuantity5Button(), 250, 12);
-                    }
-
-                    Bank.withdrawItem(potionID, 0.95);
-                    if (!Bank.isSelectedQuantity1Button()) {
-                        Bank.tapQuantity1Button();
-                        Condition.wait(() -> Bank.isSelectedQuantity1Button(), 250, 12);
-                    }
-                    Bank.withdrawItem(potionID, 0.95);
-                    Bank.withdrawItem(potionID, 0.95);
-                    // This should have withdrawn 7 of the chosen potions.
-                }
-
-                // Now fill the rest of the inventory with food
-                if (!Bank.isSelectedQuantityAllButton()) {
-                    Bank.tapQuantityAllButton();
-                    Condition.wait(() -> Bank.isSelectedQuantityAllButton(), 250, 12);
-                }
-                Bank.withdrawItem(foodID, 0.8);
-
-                // Finally, close the bank.
-                Bank.close();
-                Condition.sleep(generateRandomDelay( 400, 750));
-
-                if (Bank.isOpen()) {
-                    Bank.close();
-                }
-            }
-        }
-
-        outOfPots = false;
-        return false; // Return false to continue the loop
     }
 
+    private void handleBanking() {
+        if (dynamicBank == null) {
+            dynamicBank = Bank.setupDynamicBank();
+        } else {
+            Bank.stepToBank(dynamicBank);
+        }
+
+        if (!Bank.isOpen()) {
+            Bank.open(dynamicBank);
+            Condition.wait(() -> Bank.isOpen(), 500, 10);
+        }
+
+        if (Bank.isOpen()) {
+            depositItems();
+            selectBankTab();
+            withdrawPotions();
+            withdrawFood();
+            closeBank();
+        }
+    }
+
+    private void depositItems() {
+        Bank.tapDepositInventoryButton();
+    }
+
+    private void selectBankTab() {
+        if (!Bank.isSelectedBankTab(selectedBankTab)) {
+            Bank.openTab(selectedBankTab);
+            Condition.wait(() -> Bank.isSelectedBankTab(selectedBankTab), 250, 12);
+            Logger.debugLog("Opened bank tab " + selectedBankTab);
+        }
+    }
+
+    private void withdrawPotions() {
+        if (!potions.equals("None")) {
+            if (!Bank.isSelectedQuantity5Button()) {
+                Bank.tapQuantity5Button();
+                Condition.wait(() -> Bank.isSelectedQuantity5Button(), 250, 12);
+            }
+
+            for (int i = 0; i < 3; i++) {
+                Bank.withdrawItem(potionID, 0.95);
+            }
+
+            if (!Bank.isSelectedQuantity1Button()) {
+                Bank.tapQuantity1Button();
+                Condition.wait(() -> Bank.isSelectedQuantity1Button(), 250, 12);
+            }
+        }
+    }
+
+    private void withdrawFood() {
+        if (!Bank.isSelectedQuantityAllButton()) {
+            Bank.tapQuantityAllButton();
+            Condition.wait(() -> Bank.isSelectedQuantityAllButton(), 250, 12);
+        }
+        Bank.withdrawItem(foodID, 0.8);
+    }
+
+    private void closeBank() {
+        Bank.close();
+        Condition.wait(() -> Bank.isOpen(), 500, 10);
+
+        if (Bank.isOpen()) {
+            Bank.close();
+        }
+    }
 }
