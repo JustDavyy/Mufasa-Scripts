@@ -15,7 +15,7 @@ public class Bank extends Task {
     );
     private final Tile bankTile = new Tile(756,867);
 
-    String dynamicBank;
+    String dynamicBank = "Hosidius_crab_bank";
 
     // I'm guessing we should just withdraw full inv of food?
     @Override
@@ -58,7 +58,47 @@ public class Bank extends Task {
             }
 
             if (Bank.isOpen()) {
-                // Perform actual banking logic
+                // Deposit everything
+                Bank.tapDepositInventoryButton();
+
+                // Go to the right bank tab if needed
+                if (!Bank.isSelectedBankTab(selectedBankTab)) {
+                    Bank.openTab(selectedBankTab);
+                    Condition.wait(() -> Bank.isSelectedBankTab(selectedBankTab), 250, 12);
+                    Logger.debugLog("Opened bank tab " + selectedBankTab);
+                }
+
+                // If using potions, withdraw these first.
+                if (!java.util.Objects.equals(potions, "None")) {
+                    if (!Bank.isSelectedQuantity5Button()) {
+                        Bank.tapQuantity5Button();
+                        Condition.wait(() -> Bank.isSelectedQuantity5Button(), 250, 12);
+                    }
+
+                    Bank.withdrawItem(potionID, 0.95);
+                    if (!Bank.isSelectedQuantity1Button()) {
+                        Bank.tapQuantity1Button();
+                        Condition.wait(() -> Bank.isSelectedQuantity1Button(), 250, 12);
+                    }
+                    Bank.withdrawItem(potionID, 0.95);
+                    Bank.withdrawItem(potionID, 0.95);
+                    // This should have withdrawn 7 of the chosen potions.
+                }
+
+                // Now fill the rest of the inventory with food
+                if (!Bank.isSelectedQuantityAllButton()) {
+                    Bank.tapQuantityAllButton();
+                    Condition.wait(() -> Bank.isSelectedQuantityAllButton(), 250, 12);
+                }
+                Bank.withdrawItem(foodID, 0.8);
+
+                // Finally, close the bank.
+                Bank.close();
+                Condition.sleep(generateRandomDelay( 400, 750));
+
+                if (Bank.isOpen()) {
+                    Bank.close();
+                }
             }
         }
         return false; // Return false to continue the loop

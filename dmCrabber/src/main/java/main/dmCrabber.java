@@ -11,10 +11,7 @@ import helpers.utils.Tile;
 import utils.Spots;
 import utils.Task;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static helpers.Interfaces.*;
 
@@ -73,17 +70,36 @@ import static helpers.Interfaces.*;
                         defaultValue = "15",
                         minMaxIntValues = {0, 100},
                         optionType = OptionType.INTEGER_SLIDER
-                )
+                ),
+                @ScriptConfiguration(
+                        name = "Potions",
+                        description = "Which combat potions would you like to use?",
+                        defaultValue = "None",
+                        allowedValues = {
+                                @AllowedValue(optionName = "None"),
+                                @AllowedValue(optionIcon = "9739", optionName = "Combat potion"),
+                                @AllowedValue(optionIcon = "23685", optionName = "Divine super combat"),
+                                @AllowedValue(optionIcon = "23733", optionName = "Divine ranging"),
+                                @AllowedValue(optionIcon = "2444", optionName = "Ranging"),
+                                @AllowedValue(optionIcon = "12695", optionName = "Super combat"),
+                                @AllowedValue(optionIcon = "2440", optionName = "Super strength")
+                        },
+                        optionType = OptionType.STRING
+                ),
         }
 )
 
 public class dmCrabber extends AbstractScript {
     String selectedSpot;
-    String selectedBankTab;
+    public static int selectedBankTab;
+    public static String potions;
+    public static boolean usingPots;
+    public static boolean outOfPots;
     public static int hpToEat;
     public static int currentHP;
     public static String selectedFood;
     public static int foodID;
+    public static int potionID;
     public static Tile currentLocation;
     public static Spots spot;
     private static final Random random = new Random();
@@ -96,12 +112,18 @@ public class dmCrabber extends AbstractScript {
         Logger.log("initializing script..");
         Map<String, String> configs = getConfigurations(); //Get the script configuration
         selectedSpot = configs.get("Spot"); // Example to get value of the first option
-        selectedBankTab = configs.get("BankTab"); // Get the bankTab value from the last configuration option
+        selectedBankTab = Integer.parseInt(configs.get("BankTab")); // Get the bankTab value from the last configuration option
         hpToEat = Integer.parseInt(configs.get("HP to eat at"));
         selectedFood = configs.get("Food");
+        potions = (configs.get("Potions"));
+
+        if (!java.util.Objects.equals(potions, "None")) {
+            usingPots = true;
+        }
 
         setupCrabSpots();
         setupFoodIDs();
+        setupPotIDs();
         Logger.log("Done with startup, script starting");
     }
 
@@ -155,8 +177,36 @@ public class dmCrabber extends AbstractScript {
                 spot = Spots.WEST2;
                 break;
             default:
-                Logger.debugLog("Incorrect setup for vein colors.");
+                Logger.debugLog("Incorrect spot setup.");
                 Script.stop();
+        }
+    }
+
+    private void setupPotIDs() {
+        Logger.debugLog("Setting up potion IDs");
+        switch (selectedFood) {
+            case "Divine super combat":
+                potionID = 23685;
+                break;
+            case "Divine ranging":
+                potionID = 23733;
+                break;
+            case "Ranging":
+                potionID = 2444;
+                break;
+            case "Super combat":
+                potionID = 12695;
+                break;
+            case "Super strength":
+                potionID = 2440;
+                break;
+            case "Combat potion":
+                potionID = 9739;
+                break;
+            default:
+                Logger.log("Invalid potion configuration, please restart script");
+                Script.stop();
+                break;
         }
     }
 
