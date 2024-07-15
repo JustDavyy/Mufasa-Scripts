@@ -184,7 +184,7 @@ public class dmCrabber extends AbstractScript {
 
     private void setupPotIDs() {
         Logger.debugLog("Setting up potion IDs");
-        switch (selectedFood) {
+        switch (potions) {
             case "Divine super combat":
                 potionID = 23685;
                 break;
