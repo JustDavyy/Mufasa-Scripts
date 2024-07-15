@@ -38,7 +38,39 @@ public class PerformCrabbing extends Task {
         } else {
             Game.antiAFK();
             Condition.sleep(generateRandomDelay(2000, 10000));
+            checkIfPeopleUnder();
         }
+    }
+
+    private long playerDetectedTime = -1;
+
+    private void checkIfPeopleUnder() {
+        if (Game.isPlayersUnderUs()) {
+            if (playerDetectedTime == -1) {
+                // Record the time when the player is first detected
+                playerDetectedTime = System.currentTimeMillis();
+            } else {
+                // Check if 5 seconds have passed since the first detection
+                long currentTime = System.currentTimeMillis();
+                if (currentTime - playerDetectedTime >= 5000) {
+                    // Perform the action if the player has been under us for 5 seconds
+                    performHopAction();
+                    // Reset the detection time to prevent repeated actions
+                    playerDetectedTime = -1;
+                }
+            }
+        } else {
+            // Reset the detection time if no player is detected
+            playerDetectedTime = -1;
+        }
+    }
+
+    private void performHopAction() {
+        Walker.walkPath(crabRegion, spot.getResetPath());
+        Logout.logout();
+        //Game.hop();
+        Login.login();
+        Walker.walkPath(crabRegion, getReversedTiles(spot.getResetPath()));
     }
 
     private void performReset() {
