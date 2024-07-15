@@ -21,7 +21,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dmCrabber",
         description = "Does crab people",
-        version = "1.00",
+        version = "1.0",
         guideLink = "",
         categories = {ScriptCategory.Combat}
 )

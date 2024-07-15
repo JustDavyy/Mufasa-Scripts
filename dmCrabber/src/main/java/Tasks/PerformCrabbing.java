@@ -2,13 +2,23 @@ package Tasks;
 
 import utils.Task;
 
+import java.awt.*;
+
 import static helpers.Interfaces.*;
 import static main.dmCrabber.*;
 
 public class PerformCrabbing extends Task {
     public static boolean shouldReset = false;
     public static long startTime = 0;
+    private long lastHitTime = 0;
     private final long resetTime = 10 * 60 * 1000; // 10 minutes
+    private final long noHitDuration = 5000; // 5 seconds in milliseconds
+    private long playerDetectedTime = 0;
+
+    private Rectangle playerRect = new Rectangle(429, 231, 49, 63);
+    private Color redHit = Color.decode("#ba0000");
+    private Color blueHit = Color.decode("#4040ff");
+    private Color hitbarColor = Color.decode("#00ff00");
 
     @Override
     public boolean activate() {
@@ -26,27 +36,42 @@ public class PerformCrabbing extends Task {
     }
 
     private void performAFK() {
+        boolean redHitHappened = Client.isColorInRect(redHit, playerRect, 5);
+        boolean blueHitHappened = Client.isColorInRect(blueHit, playerRect, 5);
+        boolean hpBarVisible = Client.isColorInRect(hitbarColor, playerRect, 5);
+
+        long currentTime = System.currentTimeMillis();
+
+        // Initialize startTime if not already set
         if (startTime == 0) {
-            startTime = System.currentTimeMillis();
+            startTime = currentTime;
         }
 
-        // Check if 15 minutes have passed
-        if (System.currentTimeMillis() - startTime >= resetTime) {
-            shouldReset = true;
-            // Optionally reset startTime if needed for continuous checking
-            startTime = System.currentTimeMillis();
+        // If neither redHitHappened, blueHitHappened, nor hpBarVisible is true, track the time
+        if (!redHitHappened && !blueHitHappened && !hpBarVisible) {
+            if (lastHitTime == 0) {
+                lastHitTime = currentTime;
+            } else if (currentTime - lastHitTime >= noHitDuration) {
+                shouldReset = true;
+            }
         } else {
+            // Reset the last hit time when a hit happens
+            lastHitTime = 0;
+        }
+
+        // Check if 10 minutes have passed
+        if (currentTime - startTime >= resetTime) {
+            shouldReset = true;
+        } else if (!shouldReset) {
             Game.antiAFK();
             Condition.sleep(generateRandomDelay(2000, 10000));
-            checkIfPeopleUnder();
+            //checkForPlayers();
         }
     }
 
-    private long playerDetectedTime = -1;
-
-    private void checkIfPeopleUnder() {
+    private void checkForPlayers() {
         if (Game.isPlayersUnderUs()) {
-            if (playerDetectedTime == -1) {
+            if (playerDetectedTime == 0) {
                 // Record the time when the player is first detected
                 playerDetectedTime = System.currentTimeMillis();
             } else {
@@ -56,12 +81,12 @@ public class PerformCrabbing extends Task {
                     // Perform the action if the player has been under us for 5 seconds
                     performHopAction();
                     // Reset the detection time to prevent repeated actions
-                    playerDetectedTime = -1;
+                    playerDetectedTime = 0;
                 }
             }
         } else {
             // Reset the detection time if no player is detected
-            playerDetectedTime = -1;
+            playerDetectedTime = 0;
         }
     }
 
@@ -75,6 +100,7 @@ public class PerformCrabbing extends Task {
 
     private void performReset() {
         startTime = 0; // Reset the start time
+        lastHitTime = 0;
 
         Walker.walkPath(crabRegion, spot.getResetPath());
 
