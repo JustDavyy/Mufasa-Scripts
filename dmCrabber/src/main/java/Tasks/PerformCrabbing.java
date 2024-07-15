@@ -98,6 +98,7 @@ public class PerformCrabbing extends Task {
         Walker.walkPath(crabRegion, getReversedTiles(spot.getResetPath()));
         Condition.sleep(generateRandomDelay(1500, 2250));
         Walker.step(spot.getSpotTile(), crabRegion);
+        Condition.sleep(generateRandomDelay(1500, 2250));
     }
 
     private void performReset() {
@@ -109,6 +110,7 @@ public class PerformCrabbing extends Task {
         Walker.walkPath(crabRegion, getReversedTiles(spot.getResetPath()));
         Condition.sleep(generateRandomDelay(1500, 2250));
         Walker.step(spot.getSpotTile(), crabRegion);
+        Condition.sleep(generateRandomDelay(1500, 2250));
 
         shouldReset = false;
     }
