@@ -12,7 +12,7 @@ public class PerformCrabbing extends Task {
     public static long startTime = 0;
     private long lastHitTime = 0;
     private final long resetTime = 10 * 60 * 1000; // 10 minutes
-    private final long noHitDuration = 5000; // 5 seconds in milliseconds
+    private final long noHitDuration = 15000; // 5 seconds in milliseconds
     private long playerDetectedTime = 0;
 
     private Rectangle playerRect = new Rectangle(429, 231, 49, 63);
@@ -96,6 +96,8 @@ public class PerformCrabbing extends Task {
         //Game.hop();
         Login.login();
         Walker.walkPath(crabRegion, getReversedTiles(spot.getResetPath()));
+        Condition.sleep(generateRandomDelay(1500, 2250));
+        Walker.step(spot.getSpotTile(), crabRegion);
     }
 
     private void performReset() {
@@ -105,6 +107,7 @@ public class PerformCrabbing extends Task {
         Walker.walkPath(crabRegion, spot.getResetPath());
 
         Walker.walkPath(crabRegion, getReversedTiles(spot.getResetPath()));
+        Condition.sleep(generateRandomDelay(1500, 2250));
         Walker.step(spot.getSpotTile(), crabRegion);
 
         shouldReset = false;
