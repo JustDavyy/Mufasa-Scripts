@@ -26,7 +26,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dArceuus RCer",
         description = "Crafts blood or soul runes at Arceuus, supports using blood essence and hopping worlds. DISCLAIMER: This script is NOT fully safe for 10HP accounts, use at own risk!",
-        version = "2.01",
+        version = "2.02",
         guideLink = "https://wiki.mufasaclient.com/docs/darceuus-rcer/",
         categories = {ScriptCategory.Runecrafting, ScriptCategory.Moneymaking}
 )
@@ -68,7 +68,7 @@ public class dArceuusRCer extends AbstractScript {
             new Tile(170, 109),
             new Tile(163, 107),
             new Tile(157, 103),
-            new Tile(154, 107)
+            new Tile(156, 105)
     };
 
     public static Tile venerateAltarTile = new Tile(152, 104);
