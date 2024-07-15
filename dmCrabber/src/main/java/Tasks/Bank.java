@@ -101,6 +101,8 @@ public class Bank extends Task {
                 }
             }
         }
+
+        outOfPots = false;
         return false; // Return false to continue the loop
     }
 
