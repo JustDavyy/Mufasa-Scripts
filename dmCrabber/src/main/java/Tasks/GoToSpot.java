@@ -15,11 +15,13 @@ public class GoToSpot extends Task {
     public boolean execute() {
         if (!Player.tileEquals(currentLocation, spot.getSpotTile())) {
             Walker.walkPath(crabRegion, getReversedTiles(spot.getPathToBank()));
+            Condition.sleep(generateRandomDelay(2500, 3000));
             currentLocation = Walker.getPlayerPosition(crabRegion);
         }
 
         if (!Player.tileEquals(currentLocation, spot.getSpotTile())) {
             Walker.step(spot.getSpotTile(), crabRegion);
+            Condition.sleep(generateRandomDelay(1500, 2250));
             currentLocation = Walker.getPlayerPosition(crabRegion);
             return true;
         }

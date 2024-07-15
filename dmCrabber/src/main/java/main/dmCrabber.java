@@ -116,10 +116,7 @@ public class dmCrabber extends AbstractScript {
         hpToEat = Integer.parseInt(configs.get("HP to eat at"));
         selectedFood = configs.get("Food");
         potions = (configs.get("Potions"));
-
-        if (!java.util.Objects.equals(potions, "None")) {
-            usingPots = true;
-        }
+        usingPots = !java.util.Objects.equals(potions, "None");
 
         setupCrabSpots();
         setupFoodIDs();
@@ -202,6 +199,10 @@ public class dmCrabber extends AbstractScript {
                 break;
             case "Combat potion":
                 potionID = 9739;
+                break;
+            case "None":
+                potionID = 0;
+                usingPots = false;
                 break;
             default:
                 Logger.log("Invalid potion configuration, please restart script");

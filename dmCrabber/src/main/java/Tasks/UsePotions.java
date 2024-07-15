@@ -16,6 +16,10 @@ public class UsePotions extends Task {
     @Override
     public boolean activate() {
 
+        if (!usingPots) {
+            return false;
+        }
+
         if (lastOffensivePotionTime == 0) {
             return true;
         }
