@@ -33,7 +33,7 @@ public class DepositFinds extends Task {
             Client.tap(depositRect);
             Condition.wait(() -> Client.isColorInRect(checkColor, checkRect, 5), 100, 10);
             Client.tap(chatboxRectangle);
-            Condition.wait(() -> !Inventory.containsAny(dropList, 0.80), 1000, 90);
+            Condition.wait(() -> !Inventory.containsAny(depositItemsList, 0.80), 1000, 90);
             shouldDrop = true;
             return true;
         }

@@ -27,7 +27,7 @@ public class Drop extends Task {
                 }
             });
 
-            if (!Inventory.containsAll(dropList, 0.80)) {
+            if (!Inventory.containsAny(dropList, 0.80)) {
                 shouldDrop = false;
             }
         }
