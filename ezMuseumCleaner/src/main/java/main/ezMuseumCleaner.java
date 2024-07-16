@@ -1,0 +1,259 @@
+package main;
+
+import helpers.*;
+import helpers.annotations.AllowedValue;
+import helpers.annotations.ScriptConfiguration;
+import helpers.annotations.ScriptManifest;
+import helpers.utils.ItemList;
+import helpers.utils.OptionType;
+import helpers.utils.RegionBox;
+import helpers.utils.Tile;
+import tasks.*;
+import utils.Task;
+
+import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import static helpers.Interfaces.*;
+
+@ScriptManifest(
+        name = "ezMuseumCleaner",
+        description = "Does Museum Cleaning",
+        version = "1.0",
+        guideLink = "",
+        categories = {ScriptCategory.Minigames}
+)
+@ScriptConfiguration.List(
+        {
+                @ScriptConfiguration(
+                        name =  "Use world hopper?",
+                        description = "Would you like to hop worlds based on your hop profile settings?",
+                        defaultValue = "1",
+                        optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Lamp skill",
+                        description = "Select which skill you would like to spend lamps on",
+                        defaultValue = "Slayer",
+                        allowedValues = {
+                                @AllowedValue(optionName = "Attack"),
+                                @AllowedValue(optionName = "Strenght"),
+                                @AllowedValue(optionName = "Ranged"),
+                                @AllowedValue(optionName = "Magic"),
+                                @AllowedValue(optionName = "Defence"),
+                                @AllowedValue(optionName = "HP"),
+                                @AllowedValue(optionName = "Prayer"),
+                                @AllowedValue(optionName = "Agility"),
+                                @AllowedValue(optionName = "Herblore"),
+                                @AllowedValue(optionName = "Thieving"),
+                                @AllowedValue(optionName = "Crafting"),
+                                @AllowedValue(optionName = "Runecrafting"),
+                                @AllowedValue(optionName = "Slayer"),
+                                @AllowedValue(optionName = "Farming"),
+                                @AllowedValue(optionName = "Mining"),
+                                @AllowedValue(optionName = "Smithing"),
+                                @AllowedValue(optionName = "Fishing"),
+                                @AllowedValue(optionName = "Cooking"),
+                                @AllowedValue(optionName = "Firemaking"),
+                                @AllowedValue(optionName = "Woodcutting"),
+                                @AllowedValue(optionName = "Fletching"),
+                                @AllowedValue(optionName = "Construction"),
+                                @AllowedValue(optionName = "Hunter"),
+                        },
+                        optionType = OptionType.STRING
+                )
+        }
+)
+
+public class ezMuseumCleaner extends AbstractScript {
+    Boolean hopEnabled;
+    Boolean useWDH;
+    String hopProfile;
+    private static final Random random = new Random();
+
+    public static boolean hasFinds;
+    public static boolean shouldDrop = false;
+    public static String selectedLampSkill;
+    public static Rectangle selectedLampSkillRectangle;
+
+    public static Tile depositTile = new Tile(186, 117);
+    public static Tile cleanTile = new Tile(181,116);
+    public static RegionBox museumRegion = new RegionBox(
+	"museumRegion",
+            414, 237,
+            636, 438
+    );
+
+    public static int[] depositItemsList = {
+            ItemList.POTTERY_11178,
+            ItemList.JEWELLERY_11177,
+            ItemList.OLD_CHIPPED_VASE_11183,
+            ItemList.ARROWHEADS_11176,
+    };
+
+    public static int[] dropList = {
+            ItemList.BROKEN_ARROW_687,
+            ItemList.BROKEN_GLASS_690,
+            ItemList.IRON_DAGGER_1203,
+            ItemList.UNCUT_JADE_1627,
+            ItemList.BONES_526,
+            ItemList.BOWL_1923,
+            ItemList.POT_1931,
+            ItemList.BRONZE_LIMBS_9420,
+            ItemList.WOODEN_STOCK_9440,
+            ItemList.TIN_ORE_438,
+            ItemList.COAL_453,
+            ItemList.COPPER_ORE_436,
+            ItemList.BIG_BONES_532,
+            ItemList.IRON_ORE_440,
+            ItemList.MITHRIL_ORE_447,
+            ItemList.UNCUT_OPAL_1625
+    };
+
+    public static Tile currentLocation;
+
+    public static int paintLampBox;
+    public static int currentLampCount = 0;
+
+    @Override
+    public void onStart(){
+        Map<String, String> configs = getConfigurations(); //Get the script configuration
+        hopProfile = configs.get("Use world hopper?");
+        hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
+        useWDH = Boolean.valueOf(configs.get("Use world hopper?.useWDH"));
+        selectedLampSkill = configs.get("Lamp skill");
+
+        Walker.setup("maps/Varrock.png");
+
+        Chatbox.closeChatbox();
+
+        Logger.log("Starting ezMuseumCleaner v1.0");
+        Paint.Create(null);
+        paintLampBox = Paint.createBox("Lamps", ItemList.ANTIQUE_LAMP_4447, currentLampCount);
+
+        updateSelectedLampSkillRectangle();
+    }
+
+    // Task list!
+    List<Task> museumTasks = Arrays.asList(
+            new CheckEquipment(),
+            new HandleLamp(),
+            new Drop(),
+            new DepositFinds(),
+            new CleanFinds(),
+            new CollectFinds()
+    );
+
+    @Override
+    public void poll() {
+        if (!GameTabs.isInventoryTabOpen()) {
+            GameTabs.openInventoryTab();
+            Condition.wait(() -> GameTabs.isInventoryTabOpen(), 200, 20);
+        }
+        hasFinds = Inventory.contains(ItemList.UNCLEANED_FIND_11175, 0.80);
+
+        currentLocation = Walker.getPlayerPosition(museumRegion);
+        //Run tasks
+        for (Task task : museumTasks) {
+            if (task.activate()) {
+                task.execute();
+                return;
+            }
+        }
+
+        // Just an example, make sure to remove this ;)
+        Logger.log("We are looping the poll() method!");
+        Condition.sleep(5000);
+    }
+
+    public static int generateRandomDelay(int lowerBound, int upperBound) {
+        // Swap if lowerBound is greater than upperBound
+        if (lowerBound > upperBound) {
+            int temp = lowerBound;
+            lowerBound = upperBound;
+            upperBound = temp;
+        }
+        return lowerBound + random.nextInt(upperBound - lowerBound + 1);
+    }
+
+    public static void updateSelectedLampSkillRectangle() {
+        switch (selectedLampSkill) {
+            case "Attack":
+                selectedLampSkillRectangle = new Rectangle(265, 293, 18, 19);
+                break;
+            case "Strength":
+                selectedLampSkillRectangle = new Rectangle(302, 295, 16, 17);
+                break;
+            case "Ranged":
+                selectedLampSkillRectangle = new Rectangle(338, 297, 15, 15);
+                break;
+            case "Magic":
+                selectedLampSkillRectangle = new Rectangle(375, 295, 14, 16);
+                break;
+            case "Defence":
+                selectedLampSkillRectangle = new Rectangle(412, 297, 11, 14);
+                break;
+            case "HP":
+                selectedLampSkillRectangle = new Rectangle(248, 332, 13, 14);
+                break;
+            case "Prayer":
+                selectedLampSkillRectangle = new Rectangle(284, 334, 14, 14);
+                break;
+            case "Agility":
+                selectedLampSkillRectangle = new Rectangle(320, 332, 14, 15);
+                break;
+            case "Herblore":
+                selectedLampSkillRectangle = new Rectangle(355, 332, 16, 14);
+                break;
+            case "Thieving":
+                selectedLampSkillRectangle = new Rectangle(391, 331, 20, 20);
+                break;
+            case "Crafting":
+                selectedLampSkillRectangle = new Rectangle(425, 331, 19, 18);
+                break;
+            case "Runecrafting":
+                selectedLampSkillRectangle = new Rectangle(246, 367, 17, 17);
+                break;
+            case "Slayer":
+                selectedLampSkillRectangle = new Rectangle(283, 366, 18, 18);
+                break;
+            case "Farming":
+                selectedLampSkillRectangle = new Rectangle(319, 365, 17, 21);
+                break;
+            case "Mining":
+                selectedLampSkillRectangle = new Rectangle(355, 367, 16, 18);
+                break;
+            case "Smithing":
+                selectedLampSkillRectangle = new Rectangle(390, 367, 19, 19);
+                break;
+            case "Fishing":
+                selectedLampSkillRectangle = new Rectangle(426, 366, 18, 19);
+                break;
+            case "Cooking":
+                selectedLampSkillRectangle = new Rectangle(247, 402, 18, 18);
+                break;
+            case "Firemaking":
+                selectedLampSkillRectangle = new Rectangle(282, 402, 19, 18);
+                break;
+            case "Woodcutting":
+                selectedLampSkillRectangle = new Rectangle(319, 403, 16, 18);
+                break;
+            case "Fletching":
+                selectedLampSkillRectangle = new Rectangle(355, 402, 17, 18);
+                break;
+            case "Construction":
+                selectedLampSkillRectangle = new Rectangle(390, 401, 19, 19);
+                break;
+            case "Hunter":
+                selectedLampSkillRectangle = new Rectangle(426, 404, 17, 17);
+                break;
+            default:
+                Logger.log("Incorrect lamp skill setup, stopping script");
+                Script.stop();
+                break;
+        }
+    }
+}
