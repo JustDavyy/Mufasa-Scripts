@@ -96,7 +96,6 @@ public class ezMuseumCleaner extends AbstractScript {
 
     public static int[] dropList = {
             ItemList.BROKEN_ARROW_687,
-            ItemList.BROKEN_GLASS_690,
             ItemList.IRON_DAGGER_1203,
             ItemList.UNCUT_JADE_1627,
             ItemList.BONES_526,
@@ -110,7 +109,8 @@ public class ezMuseumCleaner extends AbstractScript {
             ItemList.BIG_BONES_532,
             ItemList.IRON_ORE_440,
             ItemList.MITHRIL_ORE_447,
-            ItemList.UNCUT_OPAL_1625
+            ItemList.UNCUT_OPAL_1625,
+            ItemList.BROKEN_GLASS_1469
     };
 
     public static Tile currentLocation;

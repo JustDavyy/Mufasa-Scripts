@@ -27,11 +27,11 @@ public class HandleLamp extends Task {
         Paint.updateBox(paintLampBox, currentLampCount++);
 
         Inventory.tapItem(ItemList.ANTIQUE_LAMP_4447, 0.80);
-        Condition.wait(() -> Client.isColorInRect(crossColor, crossRect, 5), 200, 20);
+        Condition.wait(() -> Client.isColorInRect(crossColor, crossRect, 5), 100, 20);
         Client.tap(selectedLampSkillRectangle);
         Condition.sleep(generateRandomDelay(500, 1500));
         Client.tap(submitButton);
-        Condition.wait(() -> !Client.isColorInRect(crossColor, crossRect, 5), 200, 20);
+        Condition.sleep(generateRandomDelay(1500, 2000));
         return true;
     }
 }
