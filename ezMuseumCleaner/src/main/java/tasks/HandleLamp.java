@@ -9,12 +9,12 @@ import static helpers.Interfaces.*;
 import static main.ezMuseumCleaner.*;
 
 public class HandleLamp extends Task {
-    private Rectangle crossRect = new Rectangle(564, 191, 24, 22);
-    private Color crossColor = Color.decode("#ff9100");
-    private Rectangle submitButton = new Rectangle(291, 434, 108, 20);
+    private final Rectangle crossRect = new Rectangle(564, 191, 24, 22);
+    private final Color crossColor = Color.decode("#ff9100");
+    private final Rectangle submitButton = new Rectangle(291, 434, 108, 20);
 
-    private Rectangle paperRect = new Rectangle(136, 207, 59, 47);
-    private Color paperColor = Color.decode("#524a4a");
+    private final Rectangle paperRect = new Rectangle(136, 207, 59, 47);
+    private final Color paperColor = Color.decode("#524a4a");
 
     @Override
     public boolean activate() {

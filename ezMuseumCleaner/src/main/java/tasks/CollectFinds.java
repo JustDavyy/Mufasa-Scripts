@@ -1,6 +1,5 @@
 package tasks;
 
-import helpers.utils.Tile;
 import utils.Task;
 
 import java.awt.*;
