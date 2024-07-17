@@ -28,7 +28,7 @@ public class venerateEssence extends Task {
         if (!foundPoints.isEmpty()) {
             Logger.debugLog("Located the venerate altar using the color finder, tapping.");
             Paint.setStatus("Tap venerate altar");
-            Client.tap(foundPoints, true);
+            Client.tap(foundPoints, false);
             Condition.wait(this::doneVenerating, 100, 50);
         } else {
             Logger.debugLog("Couldn't locate the obstacle with the color finder, using fallback method.");
@@ -68,7 +68,7 @@ public class venerateEssence extends Task {
             if (!foundPoints2.isEmpty()) {
                 Logger.debugLog("Located the venerate altar using the color finder, tapping.");
                 Paint.setStatus("Tap venerate altar");
-                Client.tap(foundPoints2, true);
+                Client.tap(foundPoints2, false);
                 Condition.wait(this::doneVenerating, 100, 50);
             } else {
                 Logger.debugLog("Failed to re-find the venerate altar.");

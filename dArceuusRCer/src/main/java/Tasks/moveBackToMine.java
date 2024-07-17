@@ -9,6 +9,8 @@ import static helpers.Interfaces.*;
 import main.dArceuusRCer;
 
 import java.awt.*;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class moveBackToMine extends Task {
@@ -363,10 +365,19 @@ public class moveBackToMine extends Task {
 
         List<Point> foundPoints = Client.getPointsFromColorsInRect(dArceuusRCer.obstacleColors, new Rectangle(384, 213, 211, 169), 3);
 
+        // Calculate the centroid of the points
+        Point centroid = calculateCentroid(foundPoints);
+
+        // Sort points by distance to the centroid
+        foundPoints.sort(Comparator.comparingDouble(p -> distance(p, centroid)));
+
+        // Select the top 4-5 most central points
+        List<Point> mostCentralPoints = foundPoints.subList(0, Math.min(5, foundPoints.size()));
+
         if (!foundPoints.isEmpty()) {
             Logger.debugLog("Located the obstacle using the color finder, tapping.");
-            Client.tap(foundPoints, true);
-            waitTillStopped(6);
+            Client.tap(mostCentralPoints, false);
+            waitTillStopped(8);
         } else {
             Logger.debugLog("Couldn't locate the obstacle with the color finder, using fallback method.");
 
@@ -467,5 +478,18 @@ public class moveBackToMine extends Task {
 
         // Check if the essence is dark instead of dense to verify if we have venerated correctly
         return Client.isColorInRect(Color.decode("#675b4e"), smallRect, 10);
+    }
+
+    private static Point calculateCentroid(List<Point> points) {
+        int sumX = 0, sumY = 0;
+        for (Point p : points) {
+            sumX += p.x;
+            sumY += p.y;
+        }
+        return new Point(sumX / points.size(), sumY / points.size());
+    }
+
+    private static double distance(Point p1, Point p2) {
+        return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
     }
 }

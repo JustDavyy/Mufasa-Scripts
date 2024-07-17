@@ -8,6 +8,7 @@ import static helpers.Interfaces.*;
 import main.dArceuusRCer;
 
 import java.awt.*;
+import java.util.Comparator;
 import java.util.List;
 
 public class moveToVenerate extends Task {
@@ -33,15 +34,24 @@ public class moveToVenerate extends Task {
             }
             Logger.debugLog("Walking towards the agility shortcut.");
             Walker.walkPath(dArceuusRCer.mineToShortcutOutPath);
-            waitTillStopped(3);
+            waitTillStopped(6);
 
             Logger.debugLog("Crossing the rocks obstacle.");
 
             java.util.List<Point> foundPoints = Client.getPointsFromColorsInRect(dArceuusRCer.obstacleColors, new Rectangle(369, 140, 261, 218), 5);
 
+            // Calculate the centroid of the points
+            Point centroid = calculateCentroid(foundPoints);
+
+            // Sort points by distance to the centroid
+            foundPoints.sort(Comparator.comparingDouble(p -> distance(p, centroid)));
+
+            // Select the top 4-5 most central points
+            List<Point> mostCentralPoints = foundPoints.subList(0, Math.min(5, foundPoints.size()));
+
             if (!foundPoints.isEmpty()) {
                 Logger.debugLog("Located the obstacle using the color finder, tapping.");
-                Client.tap(foundPoints, true);
+                Client.tap(mostCentralPoints, false);
                 Condition.wait(() -> Player.within(dArceuusRCer.successObstacleOUTArea), 250, 25);
                 waitTillStopped(7);
             } else {
@@ -64,12 +74,22 @@ public class moveToVenerate extends Task {
 
                 if (Player.atTile(dArceuusRCer.obstacleInsideTile)) {
                     List<Point> foundPoints2 = Client.getPointsFromColorsInRect(dArceuusRCer.obstacleColors, new Rectangle(337, 122, 275, 241), 5);
+
+                    // Calculate the centroid of the points
+                    Point centroid2 = calculateCentroid(foundPoints2);
+
+                    // Sort points by distance to the centroid
+                    foundPoints2.sort(Comparator.comparingDouble(p -> distance(p, centroid2)));
+
+                    // Select the top 4-5 most central points
+                    List<Point> mostCentralPoints2 = foundPoints2.subList(0, Math.min(5, foundPoints2.size()));
+
                     Condition.wait(() -> Player.within(dArceuusRCer.successObstacleOUTArea), 250, 25);
                     waitTillStopped(4);
-                    if (!foundPoints2.isEmpty()) {
-                        Client.tap(foundPoints2, true);
+                    if (!mostCentralPoints2.isEmpty()) {
+                        Client.tap(mostCentralPoints2, false);
                         Condition.wait(() -> Player.within(dArceuusRCer.successObstacleOUTArea), 250, 25);
-                        waitTillStopped(4);
+                        waitTillStopped(7);
                     }
                 }
             }
@@ -143,5 +163,18 @@ public class moveToVenerate extends Task {
 
         // Check if the essence is dark instead of dense to verify if we have venerated correctly
         return Client.isColorInRect(Color.decode("#675b4e"), smallRect, 10);
+    }
+
+    private static Point calculateCentroid(List<Point> points) {
+        int sumX = 0, sumY = 0;
+        for (Point p : points) {
+            sumX += p.x;
+            sumY += p.y;
+        }
+        return new Point(sumX / points.size(), sumY / points.size());
+    }
+
+    private static double distance(Point p1, Point p2) {
+        return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
     }
 }
