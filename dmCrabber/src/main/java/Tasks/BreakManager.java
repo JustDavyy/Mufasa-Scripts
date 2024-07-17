@@ -2,6 +2,8 @@ package Tasks;
 
 import utils.Task;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 import static helpers.Interfaces.*;
@@ -10,16 +12,27 @@ import static main.dmCrabber.*;
 public class BreakManager extends Task {
     private final Random random = new Random();
     private long lastBreakTime;
-    int breakAfterMinutes = 0;
+    private long breakAfterMillis = 0;
 
     @Override
     public boolean activate() {
-        if (breakAfterMinutes == 0) { // Initialize it
-            breakAfterMinutes = generateDelay(lowerBreak, higherBreak) * 60000; // Convert minutes to milliseconds
+        if (breakAfterMillis == 0) { // Initialize it
+            breakAfterMillis = generateRandomBreak(lowerBreak, higherBreak);
             lastBreakTime = System.currentTimeMillis();
+
+            // Calculate and print the time till next break and the exact break time
+            long currentTimeMillis = System.currentTimeMillis();
+            long nextBreakTimeMillis = currentTimeMillis + breakAfterMillis;
+            Date nextBreakTime = new Date(nextBreakTimeMillis);
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+
+            Logger.debugLog("Time till next break: " + breakAfterMillis / 60000 + " minutes and " + (breakAfterMillis % 60000) / 1000 + " seconds.");
+            Logger.debugLog("Next break will be at: " + sdf.format(nextBreakTime));
         }
 
-        return System.currentTimeMillis() - lastBreakTime >= breakAfterMinutes && (Player.tileEquals(currentLocation, spot.getSpotTile()) || Player.isTileWithinArea(currentLocation, bankArea));
+        return System.currentTimeMillis() - lastBreakTime >= breakAfterMillis
+                && (Player.tileEquals(currentLocation, spot.getSpotTile())
+                || Player.isTileWithinArea(currentLocation, bankArea));
     }
 
     @Override
@@ -43,11 +56,13 @@ public class BreakManager extends Task {
         lastBreakTime = System.currentTimeMillis();
         Logger.log("Break over, resuming script.");
         Login.login();
+        breakAfterMillis = 0;
     }
 
     private void moveToSafeLocation() {
         Walker.walkPath(crabRegion, spot.getResetPath());
         Condition.sleep(generateRandomDelay(1500, 2250));
+        currentLocation = Walker.getPlayerPosition(crabRegion);
     }
 
     private void moveBackToSpot() {
@@ -56,6 +71,7 @@ public class BreakManager extends Task {
         Condition.sleep(generateRandomDelay(1500, 2250));
         Walker.step(spot.getSpotTile(), crabRegion);
         Condition.sleep(generateRandomDelay(1500, 2250));
+        currentLocation = Walker.getPlayerPosition(crabRegion);
     }
 
     private int generateRandomBreakTime() {
@@ -64,13 +80,21 @@ public class BreakManager extends Task {
         return breakMinutes * 60000 + breakSeconds * 1000;
     }
 
-    private int generateDelay(int lowerEnd, int higherEnd) {
-        if (lowerEnd > higherEnd) {
-            // Swap lowerEnd and higherEnd if lowerEnd is greater
-            int temp = lowerEnd;
-            lowerEnd = higherEnd;
-            higherEnd = temp;
+    private long generateRandomBreak(int lowerMinutes, int higherMinutes) {
+        int higherSeconds = 59;
+
+        // Ensure lower and higher bounds are correct
+        if (lowerMinutes > higherMinutes) {
+            int temp = lowerMinutes;
+            lowerMinutes = higherMinutes;
+            higherMinutes = temp;
         }
-        return random.nextInt(higherEnd - lowerEnd + 1) + lowerEnd;
+
+        // Convert minutes and seconds to milliseconds
+        long lowerMillis = lowerMinutes * 60000L; // Changed to long to prevent overflow
+        long higherMillis = higherMinutes * 60000L + higherSeconds * 1000L; // Changed to long to prevent overflow
+
+        // Generate a random delay in milliseconds
+        return lowerMillis + (long)(random.nextDouble() * (higherMillis - lowerMillis + 1));
     }
 }

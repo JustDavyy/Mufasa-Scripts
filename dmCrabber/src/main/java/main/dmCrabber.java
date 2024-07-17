@@ -42,14 +42,14 @@ import static helpers.Interfaces.*;
                 ),
                 @ScriptConfiguration(
                         name =  "Breaking (lower end)",
-                        description = "Please provide the lower end of your desired break time (in minutes).\nDISCLAIMER: It is advised to stay under an hour when breaking while doing NMZ.\nValid range is between 15 and 60, it will be randomised between the lower and higher end.",
+                        description = "Please provide the lower end of your desired break time (in minutes).\nValid range is between 15 and 60, it will be randomised between the lower and higher end.",
                         defaultValue = "30",
                         minMaxIntValues = {15, 60},
                         optionType = OptionType.INTEGER
                 ),
                 @ScriptConfiguration(
                         name =  "Breaking (higher end)",
-                        description = "Please provide the higher end of your desired break time (in minutes).\nDISCLAIMER: It is advised to stay under an hour when breaking while doing NMZ.\nValid range is between 30 and 120, it will be randomised between the lower and higher end.",
+                        description = "Please provide the higher end of your desired break time (in minutes).\nValid range is between 30 and 120, it will be randomised between the lower and higher end.",
                         defaultValue = "60",
                         minMaxIntValues = {30, 120},
                         optionType = OptionType.INTEGER
@@ -150,7 +150,11 @@ public class dmCrabber extends AbstractScript {
         Client.disableBreakHandler();
         Client.disableAFKHandler();
 
+        Chatbox.closeChatbox();
+
         Logger.log("Done with startup, script starting");
+
+        currentLocation = Walker.getPlayerPosition(crabRegion);
     }
 
     // Task list!
@@ -167,7 +171,6 @@ public class dmCrabber extends AbstractScript {
     @Override
     public void poll() {
         XpBar.getXP();
-        currentLocation = Walker.getPlayerPosition(crabRegion);
 
         if (!GameTabs.isInventoryTabOpen()) {
             GameTabs.openInventoryTab();

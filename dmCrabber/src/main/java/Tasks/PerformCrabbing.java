@@ -99,6 +99,7 @@ public class PerformCrabbing extends Task {
         Condition.sleep(generateRandomDelay(1500, 2250));
         Walker.step(spot.getSpotTile(), crabRegion);
         Condition.sleep(generateRandomDelay(1500, 2250));
+        currentLocation = Walker.getPlayerPosition(crabRegion);
     }
 
     private void performReset() {
@@ -111,6 +112,7 @@ public class PerformCrabbing extends Task {
         Condition.sleep(generateRandomDelay(1500, 2250));
         Walker.step(spot.getSpotTile(), crabRegion);
         Condition.sleep(generateRandomDelay(1500, 2250));
+        currentLocation = Walker.getPlayerPosition(crabRegion);
 
         shouldReset = false;
     }
