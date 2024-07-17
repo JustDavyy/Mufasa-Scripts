@@ -62,6 +62,7 @@ public class PerformCrabbing extends Task {
         // Check if 10 minutes have passed
         if (currentTime - startTime >= resetTime) {
             shouldReset = true;
+            Logger.debugLog("We should reset shortly, 10 minutes have passed.");
         } else if (!shouldReset) {
             Game.antiAFK();
             Condition.sleep(generateRandomDelay(2000, 10000));
@@ -74,10 +75,12 @@ public class PerformCrabbing extends Task {
             if (playerDetectedTime == 0) {
                 // Record the time when the player is first detected
                 playerDetectedTime = System.currentTimeMillis();
+                Logger.debugLog("Player detected, running further checks.");
             } else {
-                // Check if 5 seconds have passed since the first detection
+                // Check if 10 seconds have passed since the first detection
                 long currentTime = System.currentTimeMillis();
                 if (currentTime - playerDetectedTime >= 10000) {
+                    Logger.debugLog("Player is still present after 10 seconds, hopping.");
                     // Perform the action if the player has been under us for 10 seconds
                     performHopAction();
                     // Reset the detection time to prevent repeated actions
@@ -92,6 +95,7 @@ public class PerformCrabbing extends Task {
 
     private void performHopAction() {
         Walker.walkPath(crabRegion, spot.getResetPath());
+        Condition.sleep(generateRandomDelay(4000, 7000));
         Logout.logout();
         Game.switchWorldNoProfile();
         Login.login();
