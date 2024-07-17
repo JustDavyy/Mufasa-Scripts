@@ -30,7 +30,7 @@ public class CleanFinds extends Task {
         if (Player.tileEquals(currentLocation, cleanTile)) {
             Logger.debugLog("in position, lets clean!");
             Client.tap(cleaningTable);
-            Condition.wait(() -> !Inventory.contains(ItemList.UNCLEANED_FIND_11175, 0.80) || Game.isPlayersAround(), 1000, 90);
+            Condition.wait(() -> !Inventory.contains(ItemList.UNCLEANED_FIND_11175, 0.80) || Game.isPlayersAround() || Script.isTimeForBreak(), 1000, 90);
 
             if (Inventory.containsAny(dropList, 0.80)) {
                 shouldDrop = true;
