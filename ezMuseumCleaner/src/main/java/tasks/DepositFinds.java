@@ -28,6 +28,7 @@ public class DepositFinds extends Task {
         if (!Player.tileEquals(currentLocation, depositTile)) {
             Logger.debugLog("Stepping to deposit box");
             Walker.step(depositTile);
+            Condition.sleep(generateRandomDelay(400, 600));
             currentLocation = depositTile;
         }
 
