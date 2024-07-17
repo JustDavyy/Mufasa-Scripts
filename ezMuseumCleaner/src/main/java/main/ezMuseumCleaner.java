@@ -31,7 +31,7 @@ import static helpers.Interfaces.*;
                 @ScriptConfiguration(
                         name =  "Use world hopper?",
                         description = "Would you like to hop worlds based on your hop profile settings?",
-                        defaultValue = "1",
+                        defaultValue = "true",
                         optionType = OptionType.WORLDHOPPER
                 ),
                 @ScriptConfiguration(
@@ -65,6 +65,12 @@ import static helpers.Interfaces.*;
                         },
                         optionType = OptionType.STRING
                 ),
+                @ScriptConfiguration(
+                        name = "Drop All",
+                        description = "Toggle this to drop everything, darts, knives, bolts etc. it will NOT drop the coins.",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
+                )
         }
 )
 
@@ -78,6 +84,7 @@ public class ezMuseumCleaner extends AbstractScript {
     public static boolean shouldDrop = false;
     public static String selectedLampSkill;
     public static Rectangle selectedLampSkillRectangle;
+    public static boolean dropAll;
 
     public static Tile depositTile = new Tile(186, 117);
     public static Tile cleanTile = new Tile(181,116);
@@ -95,24 +102,7 @@ public class ezMuseumCleaner extends AbstractScript {
             ItemList.ARROWHEADS_11176,
     };
 
-    public static int[] dropList = {
-            ItemList.BROKEN_ARROW_687,
-            ItemList.IRON_DAGGER_1203,
-            ItemList.UNCUT_JADE_1627,
-            ItemList.BONES_526,
-            ItemList.BOWL_1923,
-            ItemList.POT_1931,
-            ItemList.BRONZE_LIMBS_9420,
-            ItemList.WOODEN_STOCK_9440,
-            ItemList.TIN_ORE_438,
-            ItemList.COAL_453,
-            ItemList.COPPER_ORE_436,
-            ItemList.BIG_BONES_532,
-            ItemList.IRON_ORE_440,
-            ItemList.MITHRIL_ORE_447,
-            ItemList.UNCUT_OPAL_1625,
-            ItemList.BROKEN_GLASS_1469
-    };
+    public static int[] dropList;
 
     public static Tile currentLocation;
 
@@ -126,6 +116,7 @@ public class ezMuseumCleaner extends AbstractScript {
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf(configs.get("Use world hopper?.useWDH"));
         selectedLampSkill = configs.get("Lamp skill");
+        dropAll = Boolean.parseBoolean(configs.get("Drop All"));
 
         Walker.setup("maps/Varrock.png", museumRegion);
 
@@ -135,7 +126,7 @@ public class ezMuseumCleaner extends AbstractScript {
         Paint.Create(null);
         Paint.setStatus("Performing startup actions");
         paintLampBox = Paint.createBox("Lamps", ItemList.ANTIQUE_LAMP_4447, currentLampCount);
-
+        setupDropList();
         updateSelectedLampSkillRectangle();
     }
 
@@ -169,6 +160,52 @@ public class ezMuseumCleaner extends AbstractScript {
         // Just an example, make sure to remove this ;)
         Logger.log("We are looping the poll() method!");
         Condition.sleep(5000);
+    }
+
+    private void setupDropList() {
+        if (dropAll) {
+            dropList = new int[] {
+                    ItemList.BROKEN_ARROW_687,
+                    ItemList.IRON_DAGGER_1203,
+                    ItemList.UNCUT_JADE_1627,
+                    ItemList.BONES_526,
+                    ItemList.BOWL_1923,
+                    ItemList.POT_1931,
+                    ItemList.BRONZE_LIMBS_9420,
+                    ItemList.WOODEN_STOCK_9440,
+                    ItemList.TIN_ORE_438,
+                    ItemList.COAL_453,
+                    ItemList.COPPER_ORE_436,
+                    ItemList.BIG_BONES_532,
+                    ItemList.IRON_ORE_440,
+                    ItemList.MITHRIL_ORE_447,
+                    ItemList.UNCUT_OPAL_1625,
+                    ItemList.BROKEN_GLASS_1469,
+                    ItemList.IRON_ARROWTIPS_40,
+                    ItemList.IRON_BOLTS_9140,
+                    ItemList.IRON_DART_807,
+                    ItemList.IRON_KNIFE_863
+            };
+        } else {
+            dropList = new int[] {
+                    ItemList.BROKEN_ARROW_687,
+                    ItemList.IRON_DAGGER_1203,
+                    ItemList.UNCUT_JADE_1627,
+                    ItemList.BONES_526,
+                    ItemList.BOWL_1923,
+                    ItemList.POT_1931,
+                    ItemList.BRONZE_LIMBS_9420,
+                    ItemList.WOODEN_STOCK_9440,
+                    ItemList.TIN_ORE_438,
+                    ItemList.COAL_453,
+                    ItemList.COPPER_ORE_436,
+                    ItemList.BIG_BONES_532,
+                    ItemList.IRON_ORE_440,
+                    ItemList.MITHRIL_ORE_447,
+                    ItemList.UNCUT_OPAL_1625,
+                    ItemList.BROKEN_GLASS_1469
+            };
+        }
     }
 
     public static int generateRandomDelay(int lowerBound, int upperBound) {
