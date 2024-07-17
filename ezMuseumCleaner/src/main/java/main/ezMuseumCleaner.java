@@ -12,10 +12,8 @@ import tasks.*;
 import utils.Task;
 
 import java.awt.*;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 import static helpers.Interfaces.*;
 
@@ -166,52 +164,6 @@ public class ezMuseumCleaner extends AbstractScript {
         Condition.sleep(5000);
     }
 
-    private void setupDropList() {
-        if (dropAll) {
-            dropList = new int[] {
-                    ItemList.BROKEN_ARROW_687,
-                    ItemList.IRON_DAGGER_1203,
-                    ItemList.UNCUT_JADE_1627,
-                    ItemList.BONES_526,
-                    ItemList.BOWL_1923,
-                    ItemList.POT_1931,
-                    ItemList.BRONZE_LIMBS_9420,
-                    ItemList.WOODEN_STOCK_9440,
-                    ItemList.TIN_ORE_438,
-                    ItemList.COAL_453,
-                    ItemList.COPPER_ORE_436,
-                    ItemList.BIG_BONES_532,
-                    ItemList.IRON_ORE_440,
-                    ItemList.MITHRIL_ORE_447,
-                    ItemList.UNCUT_OPAL_1625,
-                    ItemList.BROKEN_GLASS_1469,
-                    ItemList.IRON_ARROWTIPS_40,
-                    ItemList.IRON_BOLTS_9140,
-                    ItemList.IRON_DART_807,
-                    ItemList.IRON_KNIFE_863
-            };
-        } else {
-            dropList = new int[] {
-                    ItemList.BROKEN_ARROW_687,
-                    ItemList.IRON_DAGGER_1203,
-                    ItemList.UNCUT_JADE_1627,
-                    ItemList.BONES_526,
-                    ItemList.BOWL_1923,
-                    ItemList.POT_1931,
-                    ItemList.BRONZE_LIMBS_9420,
-                    ItemList.WOODEN_STOCK_9440,
-                    ItemList.TIN_ORE_438,
-                    ItemList.COAL_453,
-                    ItemList.COPPER_ORE_436,
-                    ItemList.BIG_BONES_532,
-                    ItemList.IRON_ORE_440,
-                    ItemList.MITHRIL_ORE_447,
-                    ItemList.UNCUT_OPAL_1625,
-                    ItemList.BROKEN_GLASS_1469
-            };
-        }
-    }
-
     public static int generateRandomDelay(int lowerBound, int upperBound) {
         // Swap if lowerBound is greater than upperBound
         if (lowerBound > upperBound) {
@@ -222,7 +174,42 @@ public class ezMuseumCleaner extends AbstractScript {
         return lowerBound + random.nextInt(upperBound - lowerBound + 1);
     }
 
-    public static void updateSelectedLampSkillRectangle() {
+    private void setupDropList() {
+        // Base list of items, shared between both conditions
+        List<Integer> baseList = new ArrayList<>(Arrays.asList(
+                ItemList.BROKEN_ARROW_687,
+                ItemList.IRON_DAGGER_1203,
+                ItemList.UNCUT_JADE_1627,
+                ItemList.BONES_526,
+                ItemList.BOWL_1923,
+                ItemList.POT_1931,
+                ItemList.BRONZE_LIMBS_9420,
+                ItemList.WOODEN_STOCK_9440,
+                ItemList.TIN_ORE_438,
+                ItemList.COAL_453,
+                ItemList.COPPER_ORE_436,
+                ItemList.BIG_BONES_532,
+                ItemList.IRON_ORE_440,
+                ItemList.MITHRIL_ORE_447,
+                ItemList.UNCUT_OPAL_1625,
+                ItemList.BROKEN_GLASS_1469
+        ));
+
+        // Items exclusive to dropAll condition
+        if (dropAll) {
+            baseList.addAll(Arrays.asList(
+                    ItemList.IRON_ARROWTIPS_40,
+                    ItemList.IRON_BOLTS_9140,
+                    ItemList.IRON_DART_807,
+                    ItemList.IRON_KNIFE_863
+            ));
+        }
+
+        // Convert List to array for dropList assignment
+        dropList = baseList.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    private static void updateSelectedLampSkillRectangle() {
         switch (selectedLampSkill) {
             case "Attack":
                 selectedLampSkillRectangle = new Rectangle(265, 293, 18, 19);
