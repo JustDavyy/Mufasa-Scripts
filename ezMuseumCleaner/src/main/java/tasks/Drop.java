@@ -14,7 +14,9 @@ public class Drop extends Task {
 
     @Override
     public boolean execute() {
+        Logger.log("We should drop items..");
         if (!Game.isTapToDropEnabled()) {
+            Logger.log("Enabling tap to drop");
             Game.enableTapToDrop();
             Condition.wait(() -> Game.isTapToDropEnabled(), 200, 20);
             return true;
@@ -22,9 +24,6 @@ public class Drop extends Task {
             if (Player.tileEquals(currentLocation, depositTile)) {
                 Walker.step(cleanTile, museumRegion, () -> {
                     dropItems();
-                    if (!Inventory.containsAny(dropList, 0.80)) {
-                        shouldDrop = false;
-                    }
                 });
             } else {
                 dropItems();
@@ -34,6 +33,7 @@ public class Drop extends Task {
     }
 
     private void dropItems() {
+        Logger.log("Dropping items..");
         for (int id : dropList) {
             if (Inventory.contains(id, 0.80)) {
                 Inventory.tapAllItems(id, 0.80);
