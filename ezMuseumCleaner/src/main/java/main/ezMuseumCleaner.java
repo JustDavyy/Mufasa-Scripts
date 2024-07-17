@@ -142,6 +142,10 @@ public class ezMuseumCleaner extends AbstractScript {
 
     @Override
     public void poll() {
+        if(hopEnabled) {
+            Game.hop(hopProfile, useWDH, false);
+        }
+
         if (!GameTabs.isInventoryTabOpen()) {
             GameTabs.openInventoryTab();
             Condition.wait(() -> GameTabs.isInventoryTabOpen(), 200, 20);

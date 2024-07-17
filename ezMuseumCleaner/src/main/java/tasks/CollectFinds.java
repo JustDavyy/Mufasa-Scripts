@@ -26,7 +26,7 @@ public class CollectFinds extends Task {
             currentLocation = collectTile;
         }
 
-        while (!Inventory.isFull() && Player.tileEquals(currentLocation, collectTile)) {
+        while (!Inventory.isFull() && Player.tileEquals(currentLocation, collectTile) && !Game.isPlayersUnderUs()) {
             Logger.debugLog("Collecting finds!");
             Client.tap(findsPile);
             Condition.sleep(generateRandomDelay(200, 500));
