@@ -19,9 +19,9 @@ import static helpers.Interfaces.*;
 
 @ScriptManifest(
         name = "ezMuseumCleaner",
-        description = "Does Museum Cleaning",
+        description = "Does Museum Cleaning for all your off-skill needs",
         version = "1.0",
-        guideLink = "",
+        guideLink = "https://wiki.mufasaclient.com/docs/ezmuseumcleaner/",
         categories = {ScriptCategory.Minigames}
 )
 @ScriptConfiguration.List(
