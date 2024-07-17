@@ -23,6 +23,7 @@ public class CheckEquipment extends Task {
 
     @Override
     public boolean execute() {
+        Paint.setStatus("Checking equipment");
         Logger.log("Checking for tools");
 
         if (!GameTabs.isInventoryTabOpen()) {

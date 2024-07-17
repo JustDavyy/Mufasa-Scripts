@@ -23,13 +23,16 @@ public class DepositFinds extends Task {
 
     @Override
     public boolean execute() {
+        Paint.setStatus("Depositing finds");
         Logger.log("Depositing finds");
         if (!Player.tileEquals(currentLocation, depositTile)) {
-            Walker.step(depositTile, museumRegion);
+            Logger.debugLog("Stepping to deposit box");
+            Walker.step(depositTile);
             currentLocation = depositTile;
         }
 
         if (Player.tileEquals(currentLocation, depositTile)) {
+            Logger.debugLog("Depositing!");
             Client.tap(depositRect);
             Condition.wait(() -> Client.isColorInRect(checkColor, checkRect, 5), 100, 10);
             Client.tap(chatboxRectangle);

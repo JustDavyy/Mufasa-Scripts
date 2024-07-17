@@ -31,7 +31,7 @@ import static helpers.Interfaces.*;
                 @ScriptConfiguration(
                         name =  "Use world hopper?",
                         description = "Would you like to hop worlds based on your hop profile settings?",
-                        defaultValue = "1",
+                        defaultValue = "true",
                         optionType = OptionType.WORLDHOPPER
                 ),
                 @ScriptConfiguration(
@@ -87,6 +87,7 @@ public class ezMuseumCleaner extends AbstractScript {
 
     public static Tile depositTile = new Tile(186, 117);
     public static Tile cleanTile = new Tile(181,116);
+    public static Tile collectTile = new Tile(182, 114);
     public static RegionBox museumRegion = new RegionBox(
 	"museumRegion",
             414, 237,
@@ -132,12 +133,13 @@ public class ezMuseumCleaner extends AbstractScript {
         useWDH = Boolean.valueOf(configs.get("Use world hopper?.useWDH"));
         selectedLampSkill = configs.get("Lamp skill");
 
-        Walker.setup("maps/Varrock.png");
+        Walker.setup("maps/Varrock.png", museumRegion);
 
         Chatbox.closeChatbox();
 
         Logger.log("Starting ezMuseumCleaner v1.0");
         Paint.Create(null);
+        Paint.setStatus("Performing startup actions");
         paintLampBox = Paint.createBox("Lamps", ItemList.ANTIQUE_LAMP_4447, currentLampCount);
 
         updateSelectedLampSkillRectangle();
@@ -161,7 +163,7 @@ public class ezMuseumCleaner extends AbstractScript {
         }
         hasFinds = Inventory.contains(ItemList.UNCLEANED_FIND_11175, 0.80);
 
-        currentLocation = Walker.getPlayerPosition(museumRegion);
+        currentLocation = Walker.getPlayerPosition();
         //Run tasks
         for (Task task : museumTasks) {
             if (task.activate()) {

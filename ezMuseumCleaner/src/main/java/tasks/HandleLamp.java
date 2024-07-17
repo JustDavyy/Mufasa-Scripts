@@ -23,8 +23,9 @@ public class HandleLamp extends Task {
 
     @Override
     public boolean execute() {
+        Paint.setStatus("Using lamp");
         logAndPaintLampBox();
-        useLamp(ItemList.ANTIQUE_LAMP_4447);
+        useLamp();
         waitForColorChange(crossColor, crossRect);
         selectSkillAndSubmit();
         return true;
@@ -32,11 +33,12 @@ public class HandleLamp extends Task {
 
     private void logAndPaintLampBox() {
         Logger.log("We have a lamp!");
-        Paint.updateBox(paintLampBox, currentLampCount++);
+        currentLampCount++;
+        Paint.updateBox(paintLampBox, currentLampCount);
     }
 
-    private void useLamp(int lampId) {
-        Inventory.tapItem(lampId, 0.80);
+    private void useLamp() {
+        Inventory.tapItem(ItemList.ANTIQUE_LAMP_4447, 0.80);
     }
 
     private void waitForColorChange(Color color, Rectangle rect) {
@@ -48,5 +50,6 @@ public class HandleLamp extends Task {
         Condition.sleep(generateRandomDelay(500, 1500));
         Client.tap(submitButton);
         Condition.sleep(generateRandomDelay(1500, 2000));
+        XpBar.getXP();
     }
 }

@@ -14,6 +14,7 @@ public class Drop extends Task {
 
     @Override
     public boolean execute() {
+        Paint.setStatus("Dropping items");
         Logger.log("We should drop items..");
         if (!Game.isTapToDropEnabled()) {
             Logger.log("Enabling tap to drop");
@@ -21,13 +22,8 @@ public class Drop extends Task {
             Condition.wait(() -> Game.isTapToDropEnabled(), 200, 20);
             return true;
         } else {
-            if (Player.tileEquals(currentLocation, depositTile)) {
-                Walker.step(cleanTile, museumRegion, () -> {
-                    dropItems();
-                });
-            } else {
-                dropItems();
-            }
+            Logger.debugLog("Stepping to collect tile while dropping");
+            Walker.step(collectTile, this::dropItems);
         }
         return false;
     }

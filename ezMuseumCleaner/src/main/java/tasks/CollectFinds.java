@@ -9,7 +9,6 @@ import static helpers.Interfaces.*;
 import static main.ezMuseumCleaner.*;
 
 public class CollectFinds extends Task {
-    private final Tile collectTile = new Tile(182, 114);
     private final Rectangle findsPile = new Rectangle(430, 216, 39, 34);
 
     @Override
@@ -19,13 +18,16 @@ public class CollectFinds extends Task {
 
     @Override
     public boolean execute() {
+        Paint.setStatus("Collecting finds");
         Logger.log("Collecting uncleaned finds");
         if (!Player.tileEquals(currentLocation, collectTile)) {
+            Logger.debugLog("Stepping to collect pile");
             Walker.step(collectTile, museumRegion);
-            return true;
+            currentLocation = collectTile;
         }
 
         while (!Inventory.isFull() && Player.tileEquals(currentLocation, collectTile)) {
+            Logger.debugLog("Collecting finds!");
             Client.tap(findsPile);
             Condition.sleep(generateRandomDelay(200, 500));
         }

@@ -19,16 +19,23 @@ public class CleanFinds extends Task {
 
     @Override
     public boolean execute() {
+        Paint.setStatus("Cleaning finds");
         Logger.log("Cleaning finds");
         if (!Player.tileEquals(currentLocation, cleanTile)) {
+            Logger.debugLog("stepping to cleaning bench");
             Walker.step(cleanTile, museumRegion);
             currentLocation = cleanTile;
         }
 
         if (Player.tileEquals(currentLocation, cleanTile)) {
+            Logger.debugLog("in position, lets clean!");
             Client.tap(cleaningTable);
             Condition.wait(() -> !Inventory.contains(ItemList.UNCLEANED_FIND_11175, 0.80), 1000, 90);
-            shouldDrop = true;
+
+            if (Inventory.containsAny(dropList, 0.80)) {
+                shouldDrop = true;
+            }
+
             return true;
         }
 
