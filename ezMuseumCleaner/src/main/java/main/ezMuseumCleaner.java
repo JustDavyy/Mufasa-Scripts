@@ -31,7 +31,7 @@ import static helpers.Interfaces.*;
                 @ScriptConfiguration(
                         name =  "Use world hopper?",
                         description = "Would you like to hop worlds based on your hop profile settings?",
-                        defaultValue = "true",
+                        defaultValue = "1",
                         optionType = OptionType.WORLDHOPPER
                 ),
                 @ScriptConfiguration(
@@ -65,12 +65,6 @@ import static helpers.Interfaces.*;
                         },
                         optionType = OptionType.STRING
                 ),
-                @ScriptConfiguration(
-                        name = "Drop All",
-                        description = "Toggle this to drop everything, also the darts, coins etc",
-                        defaultValue = "false",
-                        optionType = OptionType.BOOLEAN
-                )
         }
 )
 
