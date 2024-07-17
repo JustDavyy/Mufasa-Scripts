@@ -107,6 +107,7 @@ public class PerformCrabbing extends Task {
     }
 
     private void performReset() {
+        Logger.debugLog("Resetting.");
         startTime = 0; // Reset the start time
         lastHitTime = 0;
 

@@ -37,6 +37,7 @@ public class Bank extends Task {
     }
 
     private void navigateToBankArea() {
+        Logger.debugLog("Navigating to the bank area");
         // Check if player needs to walk to the bank area
         if (!Player.isTileWithinArea(currentLocation, bankArea)) {
             Walker.walkPath(crabRegion, spot.getPathToBank());
@@ -51,6 +52,7 @@ public class Bank extends Task {
     }
 
     private void handleBanking() {
+        Logger.debugLog("Banking");
         if (dynamicBank == null) {
             dynamicBank = Bank.setupDynamicBank();
         } else {
