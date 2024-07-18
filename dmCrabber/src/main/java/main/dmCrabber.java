@@ -19,7 +19,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dmCrabber",
         description = "Does crab people",
-        version = "1.0",
+        version = "1.01",
         guideLink = "",
         categories = {ScriptCategory.Combat}
 )
@@ -36,7 +36,7 @@ import static helpers.Interfaces.*;
                                 @AllowedValue(optionName = "East 3 (3 crabs)"),
                                 @AllowedValue(optionName = "East 4 (3 crabs)"),
                                 @AllowedValue(optionName = "West 1 (2 crabs)"),
-                                @AllowedValue(optionName = "West 2 (2 crabs)"),
+                                @AllowedValue(optionName = "West 2 (3 crabs)"),
                         },
                         optionType = OptionType.STRING
                 ),
@@ -203,7 +203,7 @@ public class dmCrabber extends AbstractScript {
             case "West 1 (2 crabs)":
                 spot = Spots.WEST1;
                 break;
-            case "West 2 (2 crabs)":
+            case "West 2 (3 crabs)":
                 spot = Spots.WEST2;
                 break;
             default:

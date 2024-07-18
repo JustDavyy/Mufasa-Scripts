@@ -14,7 +14,8 @@ public class GoToSpot extends Task {
     @Override
     public boolean execute() {
         Logger.debugLog("Walking to crab spot.");
-        if (!Player.tileEquals(currentLocation, spot.getSpotTile())) {
+
+        if (!Player.tileEquals(currentLocation, spot.getSpotTile()) && !Walker.isReachable(spot.getSpotTile(), crabRegion)) {
             Walker.walkPath(crabRegion, getReversedTiles(spot.getPathToBank()));
             Condition.sleep(generateRandomDelay(2500, 3000));
             currentLocation = Walker.getPlayerPosition(crabRegion);

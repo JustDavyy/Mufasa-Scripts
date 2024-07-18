@@ -101,24 +101,24 @@ public enum Spots {
             }
     ),
     WEST2(
-            new Tile[]{
-                    new Tile(713, 849),
-                    new Tile(716, 853),
-                    new Tile(722, 858),
-                    new Tile(730, 861),
-                    new Tile(739, 864),
-                    new Tile(746, 867),
-                    new Tile(755, 868)
-            },
-            new Tile(710, 848),
             new Tile[] {
-                    new Tile(709, 849),
-                    new Tile(715, 848),
-                    new Tile(723, 846),
-                    new Tile(733, 844),
-                    new Tile(740, 842),
-                    new Tile(746, 838),
-                    new Tile(754, 832)
+                    new Tile(701, 852),
+                    new Tile(709, 852),
+                    new Tile(716, 856),
+                    new Tile(723, 860),
+                    new Tile(732, 863),
+                    new Tile(739, 866),
+                    new Tile(747, 869),
+                    new Tile(754, 870)
+            },
+            new Tile(698, 850),
+            new Tile[] {
+                    new Tile(702, 850),
+                    new Tile(710, 847),
+                    new Tile(719, 844),
+                    new Tile(729, 843),
+                    new Tile(738, 842),
+                    new Tile(745, 839)
             }
     );
     private final Tile[] path;

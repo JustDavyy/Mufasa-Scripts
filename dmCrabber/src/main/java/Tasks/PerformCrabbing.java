@@ -12,7 +12,7 @@ public class PerformCrabbing extends Task {
     public static long startTime = 0;
     private long lastHitTime = 0;
     private final long resetTime = 10 * 60 * 1000; // 10 minutes
-    private final long noHitDuration = 15000; // 5 seconds in milliseconds
+    private final long noHitDuration = 40000; // 40 seconds in milliseconds as respawn time is 30 seconds
     private long playerDetectedTime = 0;
 
     private final Rectangle playerRect = new Rectangle(429, 231, 49, 63);
@@ -52,6 +52,7 @@ public class PerformCrabbing extends Task {
             if (lastHitTime == 0) {
                 lastHitTime = currentTime;
             } else if (currentTime - lastHitTime >= noHitDuration) {
+                Logger.debugLog("We should reset, no hits detected in 40 seconds.");
                 shouldReset = true;
             }
         } else {
@@ -62,7 +63,7 @@ public class PerformCrabbing extends Task {
         // Check if 10 minutes have passed
         if (currentTime - startTime >= resetTime) {
             shouldReset = true;
-            Logger.debugLog("We should reset shortly, 10 minutes have passed.");
+            Logger.debugLog("We should reset shortly, 10 minutes have passed (aggro timer).");
         } else if (!shouldReset) {
             Game.antiAFK();
             Condition.sleep(generateRandomDelay(2000, 10000));
@@ -108,8 +109,6 @@ public class PerformCrabbing extends Task {
 
     private void performReset() {
         Logger.debugLog("Resetting.");
-        startTime = 0; // Reset the start time
-        lastHitTime = 0;
 
         Walker.walkPath(crabRegion, spot.getResetPath());
 
@@ -118,6 +117,9 @@ public class PerformCrabbing extends Task {
         Walker.step(spot.getSpotTile(), crabRegion);
         Condition.sleep(generateRandomDelay(1500, 2250));
         currentLocation = Walker.getPlayerPosition(crabRegion);
+
+        startTime = 0;
+        lastHitTime = 0;
 
         shouldReset = false;
     }
