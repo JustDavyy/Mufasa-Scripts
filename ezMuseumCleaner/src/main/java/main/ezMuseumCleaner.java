@@ -28,8 +28,9 @@ import static helpers.Interfaces.*;
         {
                 @ScriptConfiguration(
                         name =  "Use world hopper?",
-                        description = "Would you like to hop worlds based on your hop profile settings?",
+                        description = "The default for this script is enabled and recommended to do so",
                         defaultValue = "true",
+                        wdhEnabled = "true",
                         optionType = OptionType.WORLDHOPPER
                 ),
                 @ScriptConfiguration(
