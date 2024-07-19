@@ -16,7 +16,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAIOCooker",
         description = "The cooker script to cook all your raw fish (or seaweed) at various different places.",
-        version = "1.021",
+        version = "1.022",
         guideLink = "https://wiki.mufasaclient.com/docs/dcooker/",
         categories = {ScriptCategory.Cooking}
 )

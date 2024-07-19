@@ -15,7 +15,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dArrowFletcher",
         description = "Fletches any type of arrow in any location in Gielinor, also supports headless arrows.",
-        version = "1.011",
+        version = "1.012",
         guideLink = "https://wiki.mufasaclient.com/docs/darrow-fletcher/",
         categories = {ScriptCategory.Fletching}
 )
