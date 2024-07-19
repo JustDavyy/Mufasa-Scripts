@@ -26,7 +26,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dArceuus RCer",
         description = "Crafts blood or soul runes at Arceuus, supports using blood essence and hopping worlds. DISCLAIMER: This script is NOT fully safe for 10HP accounts, use at own risk!",
-        version = "2.031",
+        version = "2.04",
         guideLink = "https://wiki.mufasaclient.com/docs/darceuus-rcer/",
         categories = {ScriptCategory.Runecrafting, ScriptCategory.Moneymaking}
 )
@@ -448,7 +448,7 @@ public class dArceuusRCer extends AbstractScript {
             }
         }
 
-        profitIndex = Paint.createBox("Profit", ItemList.COINS_9_1004, 0);
+        profitIndex = Paint.createBox("Profit", ItemList.STONKS_99960, 0);
 
         Paint.setStatus("Check for chisel");
         // Check if we have a chisel

@@ -36,6 +36,28 @@ public class mineEssence extends Task {
                 resetToSouth();
                 dArceuusRCer.lastItemTime = System.currentTimeMillis(); // Reset the timer after resetting
             }
+            else if (Chatbox.findChatboxMenu() != null) {
+                Logger.debugLog("Detected chatbox open, current runestone is inactive.");
+
+                if (java.util.Objects.equals(dArceuusRCer.currentLoc, "south")) {
+                    Paint.setStatus("Switch to north runestone");
+                    Client.tap(dArceuusRCer.tapNorthRuneStoneSOUTH);  // Switch and start mining at the north runestone
+                    Logger.debugLog("Switching to north runestone, as south is inactive.");
+                    dArceuusRCer.currentLoc = "north";
+                    dArceuusRCer.playerPos = dArceuusRCer.northDenseRunestone;
+                    Paint.setStatus("Mine at north runestone");
+                    Condition.sleep(4500);
+                }
+                else if (java.util.Objects.equals(dArceuusRCer.currentLoc, "north")) {
+                    Paint.setStatus("Switch to south runestone");
+                    Client.tap(dArceuusRCer.tapSouthRuneStoneNORTH);  // Switch and start mining at the south runestone
+                    Logger.debugLog("Switching to south runestone, as north is inactive.");
+                    dArceuusRCer.currentLoc = "south";
+                    dArceuusRCer.playerPos = dArceuusRCer.southDenseRunestone;
+                    Paint.setStatus("Mine at south runestone");
+                    Condition.sleep(4500);
+                }
+            }
         }
 
 
