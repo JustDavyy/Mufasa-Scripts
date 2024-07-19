@@ -16,7 +16,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dKarambwanji Fisher",
         description = "Fishes Karambwanji at Karamja to use as bait for Karambwans. Has a safe option for low HP accounts (keep in mind, this slows down the catch rate).",
-        version = "1.052",
+        version = "1.051",
         guideLink = "https://wiki.mufasaclient.com/docs/dkarambwanji-fisher/",
         categories = {ScriptCategory.Fishing}
 )
