@@ -15,7 +15,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dGem Cutter",
         description = "Cuts any uncut into their cut variants, supports dynamic banking and world hops.",
-        version = "1.021",
+        version = "1.022",
         guideLink = "https://wiki.mufasaclient.com/docs/dgem-cutter/",
         categories = {ScriptCategory.Crafting}
 )
