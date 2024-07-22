@@ -91,7 +91,7 @@ public class GoBackToGame extends Task {
     private boolean walkToLobbyFromDoor() {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
             Paint.setStatus("Walking to lobby from the door");
-            Client.tap(new java.awt.Rectangle(800, 63, 16, 19));
+            Client.tap(new java.awt.Rectangle(807, 63, 16, 19));
             lastActivity = System.currentTimeMillis();
             Condition.sleep(generateRandomDelay(2000, 4000));
             currentLocation = Walker.getPlayerPosition(WTRegion);
