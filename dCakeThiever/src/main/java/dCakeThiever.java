@@ -71,7 +71,7 @@ public class dCakeThiever extends AbstractScript {
             new Tile(2023, 1070)
     };
 
-    Rectangle stallTapWindow = new Rectangle(340, 240, 55, 33);
+    Rectangle stallTapWindow = new Rectangle(382, 262, 18, 24);
     Rectangle bankBooth = new Rectangle(483, 250, 25, 26);
     Tile[] pathToBank = new Tile[] {
             new Tile(2023, 1070),
