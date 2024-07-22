@@ -318,7 +318,7 @@ public class dCakeThiever extends AbstractScript {
                 usedInvent = Inventory.usedSlots();
                 Client.tap(stallTapWindow);
                 // Generate a random number between 2600 and 2750
-                int delay = 3000 + random.nextInt(2750- 2600 + 1);
+                int delay = 3100 + random.nextInt(2750- 2600 + 1);
                 Condition.sleep(delay);
                 return !checkCaught();
             } else {
@@ -329,7 +329,7 @@ public class dCakeThiever extends AbstractScript {
             usedInvent = Inventory.usedSlots();
             Client.tap(stallTapWindow);
             // Generate a random number between 2600 and 2750
-            int delay = 3000 + random.nextInt(2750- 2600 + 1);
+            int delay = 3100 + random.nextInt(2750- 2600 + 1);
             Condition.sleep(delay);
             return !checkCaught();
         }
