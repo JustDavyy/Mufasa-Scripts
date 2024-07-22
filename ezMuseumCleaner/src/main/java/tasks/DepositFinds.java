@@ -1,5 +1,6 @@
 package tasks;
 
+import helpers.utils.ItemList;
 import utils.Task;
 
 import java.awt.*;
@@ -17,7 +18,7 @@ public class DepositFinds extends Task {
 
     @Override
     public boolean activate() {
-        return Inventory.isFull() && !hasFinds;
+        return shouldDeposit;
     }
 
     @Override
@@ -36,10 +37,21 @@ public class DepositFinds extends Task {
             Client.tap(depositRect);
             Condition.wait(() -> Client.isColorInRect(checkColor, checkRect, 5), 100, 10);
             Client.tap(chatboxRectangle);
-            Condition.wait(() -> !Inventory.containsAny(depositItemsList, 0.80) || Game.isPlayersAround() || Script.isTimeForBreak(), 1000, 90);
-            shouldDrop = true;
+            Condition.wait(() -> !Inventory.containsAny(depositItemsList, 0.80) || Game.isPlayersAround() || Script.isTimeForBreak(), 300, 270);
+            shouldDeposit = false;
+
+            if (Inventory.contains(ItemList.ANTIQUE_LAMP_4447, 0.80)) {
+                shouldDrop = true;
+            } else {
+                Walker.step(collectTile, this::dropAllItems);
+            }
             return true;
         }
         return false;
+    }
+
+    private void dropAllItems() {
+        Logger.log("Dropping items..");
+        Inventory.dropInventItems(toolPositionList, false);
     }
 }

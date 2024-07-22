@@ -6,6 +6,7 @@ import helpers.utils.ItemList;
 import utils.Task;
 
 import static helpers.Interfaces.*;
+import static main.ezMuseumCleaner.toolPositionList;
 
 public class CheckEquipment extends Task {
     int[] museumToolIDs = {
@@ -31,10 +32,13 @@ public class CheckEquipment extends Task {
             Condition.wait(GameTabs::isInventoryTabOpen, 50, 10);
         }
 
-        if (!Inventory.containsAll(museumToolIDs, 0.80)) {
-            Logger.log("We did not find some of the tools in inventory, stopping script");
-            Script.stop();
-            return false;
+        for (int item : museumToolIDs) {
+            if (Inventory.contains(item, 0.80)) {
+                toolPositionList.add(Inventory.itemSlotPosition(item, 0.80));
+            } else {
+                Logger.log("missing item: " + item);
+                Script.stop();
+            }
         }
 
         if (!GameTabs.isEquipTabOpen()) {

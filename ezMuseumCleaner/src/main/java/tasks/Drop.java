@@ -31,11 +31,8 @@ public class Drop extends Task {
     private void dropItems() {
         Logger.log("Dropping items..");
         for (int id : dropList) {
-            if (Inventory.contains(id, 0.80)) {
-                Inventory.tapAllItems(id, 0.80);
-                Condition.sleep(generateRandomDelay(100, 300));
-                shouldDrop = false;
-            }
+            Inventory.tapAllItems(id, 0.80);
+            shouldDrop = false;
         }
     }
 }

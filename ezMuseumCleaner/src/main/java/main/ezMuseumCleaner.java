@@ -67,7 +67,7 @@ import static helpers.Interfaces.*;
                 @ScriptConfiguration(
                         name = "Drop All",
                         description = "Toggle this to drop everything, darts, knives, bolts etc. it will NOT drop the coins.",
-                        defaultValue = "false",
+                        defaultValue = "true",
                         optionType = OptionType.BOOLEAN
                 )
         }
@@ -81,6 +81,7 @@ public class ezMuseumCleaner extends AbstractScript {
 
     public static boolean hasFinds;
     public static boolean shouldDrop = false;
+    public static boolean shouldDeposit = false;
     public static String selectedLampSkill;
     public static Rectangle selectedLampSkillRectangle;
     public static boolean dropAll;
@@ -100,6 +101,8 @@ public class ezMuseumCleaner extends AbstractScript {
             ItemList.OLD_CHIPPED_VASE_11183,
             ItemList.ARROWHEADS_11176,
     };
+
+    public static List<Integer> toolPositionList = new ArrayList<>();
 
     public static int[] dropList;
 
@@ -200,7 +203,7 @@ public class ezMuseumCleaner extends AbstractScript {
         if (dropAll) {
             baseList.addAll(Arrays.asList(
                     ItemList.IRON_ARROWTIPS_40,
-                    ItemList.IRON_BOLTS_9140,
+                    ItemList.IRON_BOLTS_2_9150,
                     ItemList.IRON_DART_807,
                     ItemList.IRON_KNIFE_863
             ));
