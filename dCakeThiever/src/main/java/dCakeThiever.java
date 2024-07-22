@@ -3,6 +3,7 @@ import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.Area;
 import helpers.utils.OptionType;
+import helpers.utils.RegionBox;
 import helpers.utils.Tile;
 
 import java.awt.*;
@@ -43,46 +44,61 @@ public class dCakeThiever extends AbstractScript {
     Boolean hopEnabled;
     Boolean useWDH;
     Boolean bankYN;
+    Random random = new Random();
+
+    RegionBox ardyRegion = new RegionBox(
+            "ardyRegion",
+            5808, 3138,
+            6270, 3447
+    );
+
+    Area scriptArea = new Area(
+            new Tile(2015, 1063),
+            new Tile(2030, 1080)
+    );
+
     Tile playerPos;
     int chocSlice = 1901;
-    Tile stallTile = new Tile(84, 45);
-    Tile outAttackRange = new Tile(92, 72);
-    Tile bankBoothTile = new Tile(65, 77);
+    Tile stallTile = new Tile(2023, 1070);
+    Tile bankBoothTile = new Tile(2004, 1102);
     Tile[] pathToStall = new Tile[] {
-            new Tile(60, 80),
-            new Tile(51, 80),
-            new Tile(50, 70),
-            new Tile(50, 59),
-            new Tile(53, 50),
-            new Tile(61, 49),
-            new Tile(70, 49),
-            new Tile(79, 50),
-            new Tile(84, 48)
+            new Tile(2004, 1102),
+            new Tile(2007, 1097),
+            new Tile(2015, 1096),
+            new Tile(2019, 1089),
+            new Tile(2023, 1085),
+            new Tile(2024, 1078),
+            new Tile(2023, 1070)
     };
-    Rectangle stallTapWindow = new Rectangle(381, 260, 15, 15);
-    Rectangle bankBooth = new Rectangle(486, 246, 28, 30);
+
+    Rectangle stallTapWindow = new Rectangle(340, 240, 55, 33);
+    Rectangle bankBooth = new Rectangle(483, 250, 25, 26);
     Tile[] pathToBank = new Tile[] {
-            new Tile(86, 54),
-            new Tile(81, 59),
-            new Tile(77, 68),
-            new Tile(68, 73),
-            new Tile(57, 73),
-            new Tile(54, 79),
-            new Tile(63, 77)
+            new Tile(2023, 1070),
+            new Tile(2024, 1078),
+            new Tile(2023, 1085),
+            new Tile(2019, 1089),
+            new Tile(2015, 1096),
+            new Tile(2007, 1097),
+            new Tile(2004, 1102)
     };
 
     Tile[] runAwayPath = new Tile[] {
-            new Tile(87, 55),
-            new Tile(87, 61),
-            new Tile(88, 67),
-            outAttackRange
+            new Tile(2024, 1073),
+            new Tile(2025, 1076),
+            new Tile(2029, 1077),
+            new Tile(2036, 1078),
+            new Tile(2041, 1078),
+            new Tile(2049, 1078)
     };
 
     Tile[] runBackPath = new Tile[] {
-            new Tile(88, 67),
-            new Tile(86, 60),
-            new Tile(87, 54),
-            new Tile(87, 47)
+            new Tile(2049, 1078),
+            new Tile(2041, 1078),
+            new Tile(2036, 1078),
+            new Tile(2029, 1077),
+            new Tile(2025, 1076),
+            new Tile(2024, 1073)
     };
 
     int pollsSinceLastDrop = 0;
@@ -104,8 +120,8 @@ public class dCakeThiever extends AbstractScript {
         Logger.log("Thank you for using the dCakeThiever script!\nSetting up everything for your gains now...");
         Logger.debugLog("Selected hopProfile: " + hopProfile);
 
-        // Set the map we'll be using (Custom Ardougne)
-        Walker.setup("/maps/ArdougneMarket2.png");
+        // Set the walker to use ardy region
+        Walker.setup(ardyRegion);
 
         hopActions();
         initialSetup();
@@ -157,10 +173,6 @@ public class dCakeThiever extends AbstractScript {
         // Get the script area and current player position
         playerPos = Walker.getPlayerPosition();
         Logger.debugLog(String.valueOf(playerPos));
-        Area scriptArea = new Area(
-                new Tile(36, 20),
-                new Tile(100, 99)
-        );
 
         // Check if we are within the script area, otherwise stop the script.
 
@@ -306,8 +318,7 @@ public class dCakeThiever extends AbstractScript {
                 usedInvent = Inventory.usedSlots();
                 Client.tap(stallTapWindow);
                 // Generate a random number between 2600 and 2750
-                Random random = new Random();
-                int delay = 2600 + random.nextInt(2750- 2600 + 1);
+                int delay = 2800 + random.nextInt(2750- 2600 + 1);
                 Condition.sleep(delay);
                 return !checkCaught();
             } else {
@@ -318,8 +329,7 @@ public class dCakeThiever extends AbstractScript {
             usedInvent = Inventory.usedSlots();
             Client.tap(stallTapWindow);
             // Generate a random number between 2600 and 2750
-            Random random = new Random();
-            int delay = 2600 + random.nextInt(2750- 2600 + 1);
+            int delay = 2800 + random.nextInt(2750- 2600 + 1);
             Condition.sleep(delay);
             return !checkCaught();
         }
@@ -373,40 +383,31 @@ public class dCakeThiever extends AbstractScript {
             runBack();
 
             // Eat a bread or choc slice if we have it to heal up
-            if (Inventory.contains(2309, 0.9)){
-                // Disable tap to drop if enabled
-                if (Game.isTapToDropEnabled()) {
-                    Game.disableTapToDrop();
-                    Condition.sleep(250);
+            int[] foodItems = {2309, chocSlice};
+            for (int food : foodItems) {
+                if (Inventory.contains(food, 0.9)) {
+                    // Disable tap to drop if enabled
+                    if (Game.isTapToDropEnabled()) {
+                        Game.disableTapToDrop();
+                        Condition.sleep(250);
+                    }
+
+                    Inventory.eat(food, 0.9);
+                    Condition.sleep(1500);
+
+                    // Update invent count
+                    usedInvent = Inventory.usedSlots();
+                    inventUsed = 1337;
+
+                    // Enable tap to drop again
+                    Game.enableTapToDrop();
+                    return true;
                 }
-
-                Inventory.eat(2309, 0.9);
-                Condition.sleep(1500);
-
-                // Update invent count
-                usedInvent = Inventory.usedSlots();
-                inventUsed = 1337;
-
-                // Enable tap to drop again
-                Game.enableTapToDrop();
-            } else if (Inventory.contains(chocSlice, 0.9)) {
-                // Disable tap to drop if enabled
-                if (Game.isTapToDropEnabled()) {
-                    Game.disableTapToDrop();
-                    Condition.sleep(250);
-                }
-
-                Inventory.eat(chocSlice, 0.9);
-                Condition.sleep(1500);
-
-                // Update invent count
-                usedInvent = Inventory.usedSlots();
-                inventUsed = 1337;
-            } else {
-                // Update invent count
-                usedInvent = Inventory.usedSlots();
-                inventUsed = usedInvent;
             }
+
+            // Update invent count if no food was found
+            usedInvent = Inventory.usedSlots();
+            inventUsed = usedInvent;
 
             // return true, we were caught
             return true;
@@ -416,6 +417,7 @@ public class dCakeThiever extends AbstractScript {
             return false;
         }
     }
+
 
     private void runAway() {
         // Enable running if it is not enabled
@@ -427,7 +429,6 @@ public class dCakeThiever extends AbstractScript {
         Walker.walkPath(runAwayPath);
 
         // Generate a random number between 500 and 1500
-        Random random = new Random();
         int delay = 500 + random.nextInt(1500- 500 + 1);
         Condition.sleep(delay);
     }
