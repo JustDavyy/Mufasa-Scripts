@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @ScriptManifest(
         name = "dCakeThiever",
         description = "Steals from the bakery stall at Ardougne market. Supports world hopping and banking. Detects being caught, runs away if needed.",
-        version = "1.092",
+        version = "1.93",
         guideLink = "https://wiki.mufasaclient.com/docs/dcake-thiever/",
         categories = {ScriptCategory.Thieving}
 )
