@@ -18,7 +18,7 @@ public class DepositFinds extends Task {
 
     @Override
     public boolean activate() {
-        return shouldDeposit;
+        return shouldDeposit && !hasFinds;
     }
 
     @Override
