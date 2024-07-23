@@ -20,7 +20,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "ezMuseumCleaner",
         description = "Does Museum Cleaning for all your off-skill needs",
-        version = "1.2",
+        version = "1.3",
         guideLink = "https://wiki.mufasaclient.com/docs/ezmuseumcleaner/",
         categories = {ScriptCategory.Minigames}
 )
