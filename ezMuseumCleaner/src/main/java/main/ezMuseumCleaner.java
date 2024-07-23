@@ -132,6 +132,11 @@ public class ezMuseumCleaner extends AbstractScript {
         paintLampBox = Paint.createBox("Lamps", ItemList.ANTIQUE_LAMP_4447, currentLampCount);
         setupDropList();
         updateSelectedLampSkillRectangle();
+
+        if (count(depositItemsList) >= 16) {
+            Logger.log("We have enough to deposit, depositing!");
+            shouldDeposit = true;
+        }
     }
 
     // Task list!
@@ -164,10 +169,6 @@ public class ezMuseumCleaner extends AbstractScript {
                 return;
             }
         }
-
-        // Just an example, make sure to remove this ;)
-        Logger.log("We are looping the poll() method!");
-        Condition.sleep(5000);
     }
 
     public static int generateRandomDelay(int lowerBound, int upperBound) {
@@ -291,5 +292,14 @@ public class ezMuseumCleaner extends AbstractScript {
                 Script.stop();
                 break;
         }
+    }
+
+    public int count(int[] itemsToCount) {
+        int totalCount = 0;
+        for (int item : itemsToCount) {
+            totalCount += Inventory.count(item, 0.80);
+        }
+        Logger.debugLog("deposit inventory count: " + totalCount);
+        return totalCount;
     }
 }
