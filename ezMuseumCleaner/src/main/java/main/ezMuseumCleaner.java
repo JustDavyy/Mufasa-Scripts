@@ -294,7 +294,7 @@ public class ezMuseumCleaner extends AbstractScript {
         }
     }
 
-    public int count(int[] itemsToCount) {
+    public static int count(int[] itemsToCount) {
         int totalCount = 0;
         for (int item : itemsToCount) {
             totalCount += Inventory.count(item, 0.80);

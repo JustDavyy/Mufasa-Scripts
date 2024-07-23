@@ -44,13 +44,4 @@ public class CleanFinds extends Task {
 
         return false;
     }
-
-    public int count(int[] itemsToCount) {
-        int totalCount = 0;
-        for (int item : itemsToCount) {
-            totalCount += Inventory.count(item, 0.80);
-        }
-        Logger.debugLog("deposit inventory count: " + totalCount);
-        return totalCount;
-    }
 }
