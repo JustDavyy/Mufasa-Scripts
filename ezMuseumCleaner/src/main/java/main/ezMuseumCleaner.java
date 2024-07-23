@@ -20,7 +20,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "ezMuseumCleaner",
         description = "Does Museum Cleaning for all your off-skill needs",
-        version = "1.1",
+        version = "1.2",
         guideLink = "https://wiki.mufasaclient.com/docs/ezmuseumcleaner/",
         categories = {ScriptCategory.Minigames}
 )
@@ -67,7 +67,7 @@ import static helpers.Interfaces.*;
                 @ScriptConfiguration(
                         name = "Drop All",
                         description = "Toggle this to drop everything, darts, knives, bolts etc. it will NOT drop the coins.",
-                        defaultValue = "true",
+                        defaultValue = "false",
                         optionType = OptionType.BOOLEAN
                 )
         }
@@ -87,6 +87,7 @@ public class ezMuseumCleaner extends AbstractScript {
     public static boolean dropAll;
 
     public static Tile depositTile = new Tile(186, 117);
+    public static Tile depositTile2 = new Tile(185, 118);
     public static Tile cleanTile = new Tile(181,116);
     public static Tile collectTile = new Tile(182, 114);
     public static RegionBox museumRegion = new RegionBox(
@@ -123,6 +124,7 @@ public class ezMuseumCleaner extends AbstractScript {
         Walker.setup("maps/Varrock.png", museumRegion);
 
         Chatbox.closeChatbox();
+        Game.setZoom("2");
 
         Logger.log("Starting ezMuseumCleaner v1.0");
         Paint.Create(null);

@@ -9,8 +9,8 @@ import static helpers.Interfaces.*;
 import static main.ezMuseumCleaner.*;
 
 public class CleanFinds extends Task {
-    private final Rectangle cleaningTable = new Rectangle(376, 301, 80, 33);
-    private final Rectangle instantTap = new Rectangle(366, 343, 49, 27);
+    private final Rectangle cleaningTable = new Rectangle(427, 290, 26, 15);
+    private final Rectangle instantTap = new Rectangle(398, 312, 32, 14);
     @Override
     public boolean activate() {
         return Inventory.isFull() && hasFinds;
