@@ -14,3 +14,6 @@
 **/gradlew
 **/gradlew.bat
 /TEMPTESTSHIT
+/dNestOpener
+dNestOpener/jar/dNestOpener.jar
+/dNestOpener/jar
