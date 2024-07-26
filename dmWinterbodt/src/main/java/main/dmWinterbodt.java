@@ -23,7 +23,7 @@ import static utils.SideManager.pickRandomSide;
 @ScriptManifest(
         name = "dmWinterbodt",
         description = "Completes the Wintertodt minigame.",
-        version = "1.033",
+        version = "1.34",
         guideLink = "https://wiki.mufasaclient.com/docs/dmwinterbodt/",
         categories = {ScriptCategory.Firemaking, ScriptCategory.Minigames}
 )
@@ -123,7 +123,8 @@ public class dmWinterbodt extends AbstractScript {
     );
     public static int foodAmountInInventory;
     public static int currentHp;
-    //    public static boolean gameNearingEnd;
+
+    public static boolean preGameFoodCheck = true;
     public static boolean gameAt13Percent;
     public static boolean gameAt20Percent;
     public static boolean gameAt70Percent;

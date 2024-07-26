@@ -1,6 +1,5 @@
 package tasks;
 
-import main.dmWinterbodt;
 import utils.SideManager;
 import utils.StateUpdater;
 import utils.Task;
@@ -23,10 +22,19 @@ public class PreGame extends Task {
     @Override
     public boolean execute() {
         //Logger.debugLog("Inside PreGame execute()");
-
         if (Player.leveledUp()) {
             Client.sendKeystroke("KEYCODE_SPACE");
             Condition.sleep(generateRandomDelay(1000, 2000));
+        }
+
+        if (preGameFoodCheck) {
+            if (!GameTabs.isInventoryTabOpen()) {
+                Logger.log("Checking inventory for food in pre-game");
+                GameTabs.openInventoryTab();
+                Condition.wait(() -> GameTabs.isInventoryTabOpen(), 100, 10);
+                countFoodInInventory();
+                preGameFoodCheck = false;
+            }
         }
 
         // Check if we are at the burn tile, otherwise move there
@@ -117,5 +125,33 @@ public class PreGame extends Task {
         }
 
         return false;
+    }
+
+    private void countFoodInInventory() {
+        Paint.setStatus("Running food count");
+        Logger.debugLog("Running food count.");
+        foodAmountInInventory = 0; // Reset before counting
+
+        if (selectedFood.equals("Cakes")) {
+            int[] foodIds = {1891, 1893, 1895};
+            for (int id : foodIds) {
+                int countMultiplier = 1; // Default count multiplier
+                if (id == 1891) {
+                    countMultiplier = 3; // A full cake counts as 3
+                } else if (id == 1893) {
+                    countMultiplier = 2; // half cake counts as 2
+                }
+
+                int count = Inventory.count(id, 0.85);
+                Logger.debugLog("Found " + count + " items with ID " + id + " and multiplier " + countMultiplier);
+                foodAmountInInventory += count * countMultiplier;
+                Logger.debugLog("Updated food amount in inventory: " + foodAmountInInventory);
+            }
+        } else {
+            int count = Inventory.count(foodID, 0.85);
+            Logger.debugLog("Found " + count + " items with ID " + foodID);
+            foodAmountInInventory = count;
+            Logger.debugLog("Total food in inventory: " + foodAmountInInventory);
+        }
     }
 }
