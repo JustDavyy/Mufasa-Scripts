@@ -24,6 +24,8 @@ public class GetBranches extends Task {
 
     @Override
     public boolean execute() {
+        preGameFoodCheck = true; //set this back to true now that a game is going?
+
         if (gettingBranches && Inventory.isFull() || shouldBurn) {
             gettingBranches = false;
         }
