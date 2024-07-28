@@ -27,9 +27,9 @@ public class Drop extends Task {
 
                 Game.enableTapToDrop();
                 Condition.wait(() -> Game.isTapToDropEnabled(), 200, 20);
-                checkedTapToDrop = true;
                 return true;
             }
+            checkedTapToDrop = true;
         } else {
             Logger.debugLog("Stepping to collect tile while dropping");
             Walker.step(collectTile, this::dropItems);
