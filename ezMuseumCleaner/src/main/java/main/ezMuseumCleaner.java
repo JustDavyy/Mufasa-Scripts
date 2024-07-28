@@ -20,7 +20,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "ezMuseumCleaner",
         description = "Does Museum Cleaning for all your off-skill needs",
-        version = "1.3",
+        version = "1.4",
         guideLink = "https://wiki.mufasaclient.com/docs/ezmuseumcleaner/",
         categories = {ScriptCategory.Minigames}
 )
@@ -74,8 +74,8 @@ import static helpers.Interfaces.*;
 )
 
 public class ezMuseumCleaner extends AbstractScript {
-    Boolean hopEnabled;
-    Boolean useWDH;
+    public static Boolean hopEnabled;
+    public static Boolean useWDH;
     String hopProfile;
     private static final Random random = new Random();
 

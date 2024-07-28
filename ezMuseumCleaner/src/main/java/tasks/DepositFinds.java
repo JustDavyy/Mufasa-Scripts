@@ -66,7 +66,7 @@ public class DepositFinds extends Task {
         }
         Condition.wait(() -> Client.isColorInRect(checkColor, checkRect, 5), 100, 10);
         Client.tap(chatboxRectangle);
-        Condition.wait(() -> !Inventory.containsAny(depositItemsList, 0.80) || Game.isPlayersAround() || Script.isTimeForBreak(), 300, 300);
+        Condition.wait(() -> !Inventory.containsAny(depositItemsList, 0.80) || (hopEnabled && useWDH && !Game.isPlayersAround()) || Script.isTimeForBreak(), 300, 300);
 
         shouldDeposit = false;
 
