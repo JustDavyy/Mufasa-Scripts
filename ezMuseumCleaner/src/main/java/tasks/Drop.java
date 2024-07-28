@@ -6,6 +6,7 @@ import static helpers.Interfaces.*;
 import static main.ezMuseumCleaner.*;
 
 public class Drop extends Task {
+    boolean checkedTapToDrop = false;
 
     @Override
     public boolean activate() {
@@ -16,19 +17,23 @@ public class Drop extends Task {
     public boolean execute() {
         Paint.setStatus("Dropping items");
         Logger.log("We should drop items..");
-        if (!Game.isTapToDropEnabled()) {
-            Logger.log("Enabling tap to drop");
-            if (Chatbox.findChatboxMenu() != null) {
-                Client.sendKeystroke("KEYCODE_SPACE");
-                Condition.wait(() -> Chatbox.findChatboxMenu() == null, 100, 30);
-            }
+        if (!checkedTapToDrop) {
+            if (!Game.isTapToDropEnabled()) {
+                Logger.log("Enabling tap to drop");
+                if (Chatbox.findChatboxMenu() != null) {
+                    Client.sendKeystroke("KEYCODE_SPACE");
+                    Condition.wait(() -> Chatbox.findChatboxMenu() == null, 100, 30);
+                }
 
-            Game.enableTapToDrop();
-            Condition.wait(() -> Game.isTapToDropEnabled(), 200, 20);
-            return true;
+                Game.enableTapToDrop();
+                Condition.wait(() -> Game.isTapToDropEnabled(), 200, 20);
+                checkedTapToDrop = true;
+                return true;
+            }
         } else {
             Logger.debugLog("Stepping to collect tile while dropping");
             Walker.step(collectTile, this::dropItems);
+            return true;
         }
         return false;
     }
