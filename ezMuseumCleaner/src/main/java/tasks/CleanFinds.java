@@ -24,7 +24,7 @@ public class CleanFinds extends Task {
         if (Player.tileEquals(currentLocation, collectTile) || Player.tileEquals(currentLocation, cleanTile)) {
             boolean atCollectTile = Player.tileEquals(currentLocation, collectTile);
             Client.tap(atCollectTile ? instantTap : cleaningTable);
-            Condition.wait(() -> !Inventory.contains(ItemList.UNCLEANED_FIND_11175, 0.80) || !checkIfPlayersAround() || Script.isTimeForBreak(), 300, 300);
+            Condition.wait(() -> !Inventory.contains(ItemList.UNCLEANED_FIND_11175, 0.80) || checkIfPlayersAround() || Script.isTimeForBreak(), 300, 300);
 
             if (count(depositItemsList) >= 16) {
                 Logger.log("We have enough to deposit, depositing!");

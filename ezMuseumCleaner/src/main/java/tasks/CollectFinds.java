@@ -54,7 +54,12 @@ public class CollectFinds extends Task {
     }
 
     private void collectFinds() {
-        while (!Inventory.isFull() && Player.atTile(collectTile) && !checkIfPlayersAround() && !Script.isScriptStopping() && !Script.isTimeForBreak()) {
+        while (!Inventory.isFull() && Player.atTile(collectTile) && !Script.isScriptStopping() && !Script.isTimeForBreak()) {
+            if (checkIfPlayersAround()) {
+                Logger.log("Player nearby! aborting to hop!");
+                break;
+            }
+
             Logger.debugLog("Collecting finds!");
             Client.tap(findsPile);
             Condition.sleep(generateRandomDelay(200, 500));
