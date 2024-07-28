@@ -74,8 +74,8 @@ import static helpers.Interfaces.*;
 )
 
 public class ezMuseumCleaner extends AbstractScript {
-    public static Boolean hopEnabled;
-    public static Boolean useWDH;
+    private static Boolean hopEnabled;
+    private static Boolean useWDH;
     String hopProfile;
     private static final Random random = new Random();
 
@@ -301,5 +301,13 @@ public class ezMuseumCleaner extends AbstractScript {
         }
         Logger.debugLog("deposit inventory count: " + totalCount);
         return totalCount;
+    }
+
+    public static boolean checkIfPlayersAround() {
+        if (hopEnabled && useWDH) {
+            return Game.isPlayersAround();
+        } else {
+            return false;
+        }
     }
 }
