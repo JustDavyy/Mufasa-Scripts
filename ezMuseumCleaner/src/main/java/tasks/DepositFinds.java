@@ -64,7 +64,7 @@ public class DepositFinds extends Task {
         if (currentLocation.equals(depositTile)) {
             Client.tap(depositRect);
         }
-        Condition.wait(() -> Client.isColorInRect(checkColor, checkRect, 5), 100, 10);
+        Condition.wait(() -> Chatbox.findChatboxMenu() != null, 100, 20);
         Client.tap(chatboxRectangle);
         Condition.wait(() -> !Inventory.containsAny(depositItemsList, 0.80) || checkIfPlayersAround() || Script.isTimeForBreak(), 100, 600);
 

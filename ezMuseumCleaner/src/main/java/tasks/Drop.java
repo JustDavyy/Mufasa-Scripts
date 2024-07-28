@@ -35,6 +35,7 @@ public class Drop extends Task {
             Walker.step(collectTile, this::dropItems);
             return true;
         }
+        shouldDrop = false;
         return false;
     }
 
