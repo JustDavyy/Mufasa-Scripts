@@ -30,13 +30,12 @@ public class Drop extends Task {
                 return true;
             }
             checkedTapToDrop = true;
+            return true;
         } else {
             Logger.debugLog("Stepping to collect tile while dropping");
             Walker.step(collectTile, this::dropItems);
             return true;
         }
-        shouldDrop = false;
-        return false;
     }
 
     private void dropItems() {

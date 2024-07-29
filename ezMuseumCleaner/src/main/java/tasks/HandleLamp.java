@@ -46,10 +46,11 @@ public class HandleLamp extends Task {
     }
 
     private void selectSkillAndSubmit() {
+        XpBar.getXP();
         Client.tap(selectedLampSkillRectangle);
-        Condition.sleep(generateRandomDelay(500, 1000));
+        Condition.sleep(generateRandomDelay(200, 400));
         Client.tap(submitButton);
-        Condition.sleep(generateRandomDelay(1200, 1500));
+        Condition.wait(() -> !Inventory.contains(ItemList.ANTIQUE_LAMP_4447, 0.80), 200, 20);
         XpBar.getXP();
     }
 }
