@@ -49,7 +49,7 @@ public class HandleLamp extends Task {
         Client.tap(selectedLampSkillRectangle);
         Condition.sleep(generateRandomDelay(500, 1000));
         Client.tap(submitButton);
-        Condition.sleep(generateRandomDelay(500, 700));
+        Condition.sleep(generateRandomDelay(800, 1200));
         XpBar.getXP();
     }
 }
