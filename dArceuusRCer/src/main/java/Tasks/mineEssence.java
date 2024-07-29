@@ -18,7 +18,8 @@ public class mineEssence extends Task {
 
     @Override
     public boolean execute() {
-        // Check if we have to hop first
+        // check invent open
+        GameTabs.openInventoryTab();
 
         if (!dArceuusRCer.initialCheckDone) {
             Paint.setStatus("Perform initial check");

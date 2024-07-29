@@ -21,6 +21,7 @@ public class venerateEssence extends Task {
     public boolean execute() {
         // Have the logic that needs to be executed with the task here
         Logger.log("Executing venerateEssence!");
+        GameTabs.openInventoryTab();
 
         Paint.setStatus("Find venerate altar");
         List<Point> foundPoints = Client.getPointsFromColorsInRect(dArceuusRCer.venerateAltarColors, new Rectangle(312, 164, 205, 163), 5);

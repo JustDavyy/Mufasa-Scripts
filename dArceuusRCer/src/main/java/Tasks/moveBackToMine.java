@@ -28,6 +28,7 @@ public class moveBackToMine extends Task {
     public boolean execute() {
         // Have the logic that needs to be executed with the task here
         Logger.log("Executing moveBackToMine!");
+        GameTabs.openInventoryTab();
         
         if (Player.within(dArceuusRCer.bloodAltarArea)) {
             // Check if we have to hop first

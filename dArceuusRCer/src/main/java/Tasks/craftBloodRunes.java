@@ -18,6 +18,7 @@ public class craftBloodRunes extends Task {
 
     @Override
     public boolean execute() {
+        GameTabs.openInventoryTab();
         // Check if we have to hop first
         Paint.setStatus("Check for hop");
         dArceuusRCer.hopActions();

@@ -21,6 +21,7 @@ public class craftSoulRunes extends Task {
 
     @Override
     public boolean execute() {
+        GameTabs.openInventoryTab();
         // Check if we have to hop first
         Paint.setStatus("Check hop timer");
         dArceuusRCer.hopActions();
