@@ -1,8 +1,15 @@
 package Tasks;
 
+import utils.StateUpdater;
 import utils.Task;
 
 public class HandlePouches extends Task {
+    private final StateUpdater stateUpdater;
+
+    public HandlePouches(StateUpdater stateUpdater) {
+        this.stateUpdater = stateUpdater;
+    }
+
     @Override
     public boolean activate() {
         return false;

@@ -5,6 +5,7 @@ import helpers.*;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.*;
+import utils.StateUpdater;
 import utils.Task;
 
 import java.util.Arrays;
@@ -56,6 +57,8 @@ import static helpers.Interfaces.*;
 )
 
 public class dmGOTR extends AbstractScript {
+    StateUpdater stateUpdater = new StateUpdater();
+
     // REGIONS
     public static RegionBox gameRegion = new RegionBox("mainGameArea", 54, 12, 504, 393);
     public static RegionBox airAltar = new RegionBox("airAltar", 1308, 537, 1512, 774);
@@ -115,18 +118,25 @@ public class dmGOTR extends AbstractScript {
     // Task list!
     List<Task> gotrTasks = Arrays.asList(
             new CheckGear(),
-            new BreakManager(),
-            new PreGame(),
-            new HandleAltars(),
-            new GoToAltar(),
-            new HandlePouches(),
-            new ProcessEssence(),
-            new MineEssence(),
-            new EnterGame()
+            new BreakManager(stateUpdater),
+            new PreGame(stateUpdater),
+            new HandleAltars(stateUpdater),
+            new GoToAltar(stateUpdater),
+            new HandlePouches(stateUpdater),
+            new ProcessEssence(stateUpdater),
+            new MineEssence(stateUpdater),
+            new EnterGame(stateUpdater)
     );
 
     @Override
     public void poll() {
+        if (!GameTabs.isInventoryTabOpen()) {
+            GameTabs.openInventoryTab();
+            Condition.wait(() -> GameTabs.isInventoryTabOpen(), 100, 20);
+        }
+
+        stateUpdater.updateAllStates();
+
         //Run tasks
         for (Task task : gotrTasks) {
             if (task.activate()) {
