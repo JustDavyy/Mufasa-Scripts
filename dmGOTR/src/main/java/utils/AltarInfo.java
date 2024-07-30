@@ -43,7 +43,7 @@ public class AltarInfo {
     // The areas are probably not correct, btw.
     public static final AltarInfo AIR_ALTAR = new AltarInfo(
             airAltar,
-            new Area(new Tile(302, 114), new Tile(315, 122)),
-            new Area(new Tile(292, 104), new Tile(323, 132))
+            new Area(new Tile(302, 114), new Tile(315, 122)), // An around for the "inside" of the altar where the actual altar is
+            new Area(new Tile(292, 104), new Tile(323, 132)) // An area for the outside, so we can check that we are WITHIN that altar area?.
     );
 }
