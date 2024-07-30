@@ -17,13 +17,13 @@ configurations.all {
 }
 
 dependencies {
-    implementation('com.github.Mufasa-SDK:SDKRepo:1.2.19') {
+    implementation('com.github.Mufasa-SDK:SDKRepo:1.2.21') {
         changing = true
     }
 }
 
 jar {
-    archiveFileName = 'dTempRestoreMaker.jar'
+    archiveFileName = 'dTempPoteMaker.jar'
     destinationDirectory = file('jar/')
 
     manifest {
