@@ -4,6 +4,8 @@ import helpers.utils.Area;
 import helpers.utils.RegionBox;
 import helpers.utils.Tile;
 
+import static main.dmGOTR.airAltar;
+
 public class AltarInfo {
     private RegionBox regionBox;
     private Area area1;
@@ -38,9 +40,10 @@ public class AltarInfo {
                 '}';
     }
 
+    // The areas are probably not correct, btw.
     public static final AltarInfo AIR_ALTAR = new AltarInfo(
-            new RegionBox(" ", 1, 1, 1, 1),
-            new Area(new Tile(1,1), new Tile(1,1)),
-            new Area(new Tile(1,1), new Tile(1,1))
+            airAltar,
+            new Area(new Tile(302, 114), new Tile(315, 122)),
+            new Area(new Tile(292, 104), new Tile(323, 132))
     );
 }
