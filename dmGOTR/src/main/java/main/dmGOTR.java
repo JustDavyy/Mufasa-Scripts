@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static helpers.Interfaces.*;
+
 @ScriptManifest(
         name = "dmGOTR",
         description = "Does Guardians of the Rift minigame.",
@@ -65,6 +67,7 @@ public class dmGOTR extends AbstractScript {
 
     // AREAS
     Area preGameMine = new Area(new Tile(118, 32), new Tile(134, 60));
+    Area regularMine = new Area(new Tile(70, 59), new Tile(87, 71));
     Area specialMine = new Area(new Tile(53, 33), new Tile(63, 59));
     Area middleOfGameArea = new Area(new Tile(79, 33), new Tile(106, 66));
 
@@ -73,9 +76,14 @@ public class dmGOTR extends AbstractScript {
     public static boolean doLaws;
     public static boolean doDeaths;
     public static boolean doBloods;
+    public static boolean usePreGameMineArea;
 
     // BOOLEANS
     public static boolean shouldDepositRunes;
+
+    // INTS
+    public static int agilityLevel;
+
     @Override
     public void onStart(){
         Map<String, String> configs = getConfigurations();
@@ -83,6 +91,20 @@ public class dmGOTR extends AbstractScript {
         doLaws = Boolean.parseBoolean(configs.get("Do Law runes?"));
         doDeaths = Boolean.parseBoolean(configs.get("Do Death runes?"));
         doBloods = Boolean.parseBoolean(configs.get("Do Blood runes?"));
+
+        if (!GameTabs.isStatsTabOpen()) {
+            GameTabs.openStatsTab();
+            Condition.wait(() -> GameTabs.isStatsTabOpen(), 100, 20);
+        }
+
+        if (GameTabs.isStatsTabOpen()) {
+            agilityLevel = Stats.getRealLevel(Skills.AGILITY); //Get the agi level
+        }
+
+        if (agilityLevel < 56) {
+            Logger.log("Agility level below 56, not using east mine in pre-game");
+            usePreGameMineArea = false;
+        }
     }
 
     // Task list!
