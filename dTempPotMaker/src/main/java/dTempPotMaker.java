@@ -14,7 +14,7 @@ import static helpers.Interfaces.Logout;
 @ScriptManifest(
         name = "dTempPotMaker",
         description = "Makes super restores/attacks in any of the dynamic banks.",
-        version = "1.1",
+        version = "1.2",
         guideLink = "",
         categories = {ScriptCategory.Herblore}
 )
@@ -182,14 +182,14 @@ public class dTempPotMaker extends AbstractScript {
 
         // Withdraw first set of items
         if (product.equals("Super Restore")) {
-            Bank.withdrawItem(ItemList.SNAPDRAGON_POTION_UNF_3004, 0.8);
+            Bank.withdrawItem(ItemList.SNAPDRAGON_POTION_UNF_3004, 0.7);
             Condition.sleep(generateDelay(250, 400));
-            Bank.withdrawItem(ItemList.RED_SPIDERS_EGGS_223, 0.8);
+            Bank.withdrawItem(ItemList.RED_SPIDERS_EGGS_223, 0.7);
             Condition.sleep(generateDelay(150, 225));
         } else {
-            Bank.withdrawItem(ItemList.IRIT_POTION_UNF_101, 0.8);
+            Bank.withdrawItem(ItemList.IRIT_POTION_UNF_101, 0.7);
             Condition.sleep(generateDelay(250, 400));
-            Bank.withdrawItem(ItemList.EYE_OF_NEWT_221, 0.8);
+            Bank.withdrawItem(ItemList.EYE_OF_NEWT_221, 0.7);
             Condition.sleep(generateDelay(150, 225));
         }
 
@@ -316,13 +316,13 @@ public class dTempPotMaker extends AbstractScript {
         Condition.sleep(generateDelay(300, 500));
 
         if (product.equals("Super Restore")) {
-            Bank.withdrawItem(ItemList.SNAPDRAGON_POTION_UNF_3004, 0.8);
+            Bank.withdrawItem(ItemList.SNAPDRAGON_POTION_UNF_3004, 0.7);
             Condition.sleep(generateDelay(250, 400));
-            Bank.withdrawItem(ItemList.RED_SPIDERS_EGGS_223, 0.8);
+            Bank.withdrawItem(ItemList.RED_SPIDERS_EGGS_223, 0.7);
         } else {
-            Bank.withdrawItem(ItemList.IRIT_POTION_UNF_101, 0.8);
+            Bank.withdrawItem(ItemList.IRIT_POTION_UNF_101, 0.7);
             Condition.sleep(generateDelay(250, 400));
-            Bank.withdrawItem(ItemList.EYE_OF_NEWT_221, 0.8);
+            Bank.withdrawItem(ItemList.EYE_OF_NEWT_221, 0.7);
         }
         Condition.sleep(generateDelay(150, 225));
 
