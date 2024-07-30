@@ -78,9 +78,6 @@ public class dmGOTR extends AbstractScript {
     public static boolean doBloods;
     public static boolean usePreGameMineArea;
 
-    // BOOLEANS
-    public static boolean shouldDepositRunes;
-
     // INTS
     public static int agilityLevel;
 
