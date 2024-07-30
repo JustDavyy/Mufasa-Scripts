@@ -1,8 +1,11 @@
 package utils;
 
+import static main.dmGOTR.usePouches;
+
 public class StateUpdater {
     boolean gameGoing;
     boolean shouldDepositRunes;
+    boolean shouldRepairPouches;
 
     public void updateAllStates() {
         // Update all states
@@ -11,11 +14,16 @@ public class StateUpdater {
     public void resetAllStates() {
         gameGoing = false;
         shouldDepositRunes = false;
+        shouldRepairPouches = false;
     }
 
     //Update each state
     public void updateGameGoing() {
         // CF Method I'm guessing to check if game is going.
+    }
+
+    public void updateShouldRepairPouches() {
+        // Checker to see if our pouches are destroyed? probably need to cache the pouch inventory locations and check for color.
     }
 
     //Set each state individually
@@ -27,6 +35,12 @@ public class StateUpdater {
         shouldDepositRunes = state;
     }
 
+    public void setShouldRepairPouches(boolean state) {
+        if (usePouches) {
+            shouldRepairPouches = state;
+        }
+    }
+
     //Getters for each state
     public boolean isGamineGoing() {
         return gameGoing;
@@ -34,5 +48,13 @@ public class StateUpdater {
 
     public boolean shouldDepositRunes() {
         return shouldDepositRunes;
+    }
+
+    public boolean shouldRepairPouches() {
+        if (usePouches) {
+            return shouldRepairPouches;
+        } else {
+            return false;
+        }
     }
 }

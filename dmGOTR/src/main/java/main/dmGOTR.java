@@ -23,6 +23,12 @@ import static helpers.Interfaces.*;
 @ScriptConfiguration.List(
         {
                 @ScriptConfiguration(
+                        name = "Use pouches?",
+                        description = "Do you want to use pouches?",
+                        defaultValue = "False",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
                         name = "Do Cosmic runes?",
                         description = "This requires having Lost City completed.",
                         defaultValue = "False",
@@ -77,6 +83,7 @@ public class dmGOTR extends AbstractScript {
     public static boolean doDeaths;
     public static boolean doBloods;
     public static boolean usePreGameMineArea;
+    public static boolean usePouches;
 
     // INTS
     public static int agilityLevel;
@@ -88,6 +95,7 @@ public class dmGOTR extends AbstractScript {
         doLaws = Boolean.parseBoolean(configs.get("Do Law runes?"));
         doDeaths = Boolean.parseBoolean(configs.get("Do Death runes?"));
         doBloods = Boolean.parseBoolean(configs.get("Do Blood runes?"));
+        usePouches = Boolean.parseBoolean(configs.get("Use pouches?"));
 
         if (!GameTabs.isStatsTabOpen()) {
             GameTabs.openStatsTab();
