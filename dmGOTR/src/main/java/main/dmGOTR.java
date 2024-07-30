@@ -1,13 +1,10 @@
 package main;
 
-import Tasks.PreGame;
+import Tasks.*;
 import helpers.*;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
-import helpers.utils.Area;
-import helpers.utils.OptionType;
-import helpers.utils.RegionBox;
-import helpers.utils.Tile;
+import helpers.utils.*;
 import utils.Task;
 
 import java.util.Arrays;
@@ -72,10 +69,13 @@ public class dmGOTR extends AbstractScript {
     Area middleOfGameArea = new Area(new Tile(79, 33), new Tile(106, 66));
 
     // SETTINGS
-    boolean doCosmics;
-    boolean doLaws;
-    boolean doDeaths;
-    boolean doBloods;
+    public static boolean doCosmics;
+    public static boolean doLaws;
+    public static boolean doDeaths;
+    public static boolean doBloods;
+
+    // BOOLEANS
+    public static boolean shouldDepositRunes;
     @Override
     public void onStart(){
         Map<String, String> configs = getConfigurations();
@@ -87,7 +87,14 @@ public class dmGOTR extends AbstractScript {
 
     // Task list!
     List<Task> gotrTasks = Arrays.asList(
-            new PreGame()
+            new CheckGear(),
+            new BreakManager(),
+            new PreGame(),
+            new HandleAltars(),
+            new GoToAltar(),
+            new HandlePouches(),
+            new ProcessEssence(),
+            new MineEssence()
     );
 
     @Override

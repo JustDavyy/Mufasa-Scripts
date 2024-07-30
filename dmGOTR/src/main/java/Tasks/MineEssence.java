@@ -2,13 +2,12 @@ package Tasks;
 
 import utils.Task;
 
-import static helpers.Interfaces.Logger;
+import static helpers.Interfaces.Inventory;
 
-public class PreGame extends Task {
-
+public class MineEssence extends Task {
     @Override
     public boolean activate() {
-        return false;
+        return !Inventory.isFull();
     }
 
     @Override
