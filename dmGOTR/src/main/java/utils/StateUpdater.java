@@ -9,7 +9,13 @@ public class StateUpdater {
     }
 
     public void resetAllStates() {
-        // Reset all states!
+        gameGoing = false;
+        shouldDepositRunes = false;
+    }
+
+    //Update each state
+    public void updateGameGoing() {
+        // CF Method I'm guessing to check if game is going.
     }
 
     //Set each state individually
