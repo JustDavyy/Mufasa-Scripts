@@ -10,10 +10,10 @@ public class AltarInfo {
     private Area area2;
 
     // Constructor
-    public AltarInfo(RegionBox regionBox, Area area1, Area area2) {
+    public AltarInfo(RegionBox regionBox, Area altarArea, Area entryArea) {
         this.regionBox = regionBox;
-        this.area1 = area1;
-        this.area2 = area2;
+        this.area1 = altarArea;
+        this.area2 = entryArea;
     }
 
     // Getters
