@@ -9,6 +9,8 @@ import static helpers.Interfaces.Script;
 
 public class CheckGear extends Task {
     boolean equipmentChecked = false;
+    boolean hasPickaxe = false;
+    boolean hasChisel = true;
 
     int[] pickaxeIDs = { //Reversed order to check highest pickaxes first instead of lower ones.
             ItemList._3RD_AGE_PICKAXE_20014,
@@ -44,8 +46,12 @@ public class CheckGear extends Task {
 
             if (GameTabs.isInventoryTabOpen()) {
                 if (Inventory.containsAny(pickaxeIDs, 0.75)) {
-                    equipmentChecked = true;
+                    hasPickaxe = true;
                     return true;
+                }
+
+                if (Inventory.contains(ItemList.CHISEL_1755, 0.80)) {
+                    hasChisel = true;
                 }
             }
         }
@@ -60,18 +66,20 @@ public class CheckGear extends Task {
                 for (int pickaxeID : pickaxeIDs) {
                     if (Equipment.itemAt(EquipmentSlot.WEAPON, pickaxeID)) {
                         Logger.log("Pickaxe equipped, continuing");
-                        equipmentChecked = true;
+                        hasPickaxe = true;
                         return true;
                     }
                 }
             }
         }
+        equipmentChecked = true;
 
-        if (!equipmentChecked) {
-            Logger.log("Pickaxe not found, stopping script");
+        if (!hasPickaxe || !hasChisel) {
+            Logger.log("Pickaxe or Chisel not found, stopping script");
             Script.stop();
             return false;
         }
+
     return false;
     }
 }
