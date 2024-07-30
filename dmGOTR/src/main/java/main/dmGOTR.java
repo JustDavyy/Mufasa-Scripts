@@ -116,7 +116,8 @@ public class dmGOTR extends AbstractScript {
             new GoToAltar(),
             new HandlePouches(),
             new ProcessEssence(),
-            new MineEssence()
+            new MineEssence(),
+            new EnterGame()
     );
 
     @Override
