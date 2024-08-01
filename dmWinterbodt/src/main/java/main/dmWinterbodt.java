@@ -198,6 +198,14 @@ public class dmWinterbodt extends AbstractScript {
             new Tile(624, 193),
             new Tile(652, 209)
     );
+    public static Area atDoorInside = new Area(
+            new Tile(629, 193),
+            new Tile(648, 199)
+    );
+    public static Area atDoorOutside =new Area(
+            new Tile(628, 200),
+            new Tile(647, 219)
+    );
     // <--
     public static Area leftWTArea = new Area(new Tile(609, 150), new Tile(630, 172));
     // -->

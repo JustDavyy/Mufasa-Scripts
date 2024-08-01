@@ -18,31 +18,33 @@ public class Bank extends Task {
 
     @Override
     public boolean activate() {
-        //Logger.debugLog("Inside Bank activate()");
         StateUpdater.updateIsGameGoing();
         return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing && !Player.leveledUp() || !isGameGoing && (Inventory.count(ItemList.SUPPLY_CRATE_20703, 0.8) >= 8) || foodAmountInInventory < foodAmountLeftToBank && Player.isTileWithinArea(currentLocation, outsideArea) || foodAmountInInventory < foodAmountLeftToBank && Player.isTileWithinArea(currentLocation, lobby) && (!isGameGoing || totalGameCount == 0);
     }
 
     @Override
     public boolean execute() {
-        Logger.debugLog("Inside Bank execute()");
         Logger.log("Banking!");
         checkFood = true;
+        currentLocation = Walker.getPlayerPosition();
 
         if (!GameTabs.isInventoryTabOpen()) {
             GameTabs.openInventoryTab();
         }
 
         if (walkToBankFromDoorInside()) {
+            Logger.log("Walk to bank from door inside");
             currentLocation = Walker.getPlayerPosition(WTRegion);
         } else if (walkToBankFromGame()) {
+            Logger.log("Walk to bank from game");
             currentLocation = Walker.getPlayerPosition(WTRegion);
         } else if (walkToBankFromOutsideArea()) {
+            Logger.log("walk to bank from outside");
             currentLocation = Walker.getPlayerPosition(WTRegion);
         }
 
         StateUpdater.resetAllStates();
-        if (!Player.isTileWithinArea(currentLocation, bankTentArea)) {
+        if (!Player.isTileWithinArea(currentLocation, bankTentArea) && Player.isTileWithinArea(currentLocation, outsideArea)) {
             if (Walker.isReachable(bankTile, WTRegion)) {
                 Walker.step(bankTile, WTRegion);
             } else {
@@ -300,32 +302,40 @@ public class Bank extends Task {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
             Paint.setStatus("Walking to the bank from game area");
             Walker.walkPath(WTRegion, gameToWTDoor);
-            Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
-            Client.tap(exitDoorRect);
-            if (totalGameCount == 0) {
-                Condition.sleep(generateRandomDelay(2000, 3000));
-                Client.sendKeystroke("KEYCODE_SPACE");
-                Condition.sleep(generateRandomDelay(4250, 5300));
-            } else {
-                Condition.sleep(generateRandomDelay(4250, 5300));
+            currentLocation = Walker.getPlayerPosition();
+            Condition.wait(() -> Player.within(atDoorInside, WTRegion), 100, 20);
+
+            if (Player.isTileWithinArea(currentLocation, atDoorInside)) {
+                Logger.debugLog("We are at the door, exiting!");
+                Client.tap(exitDoorRect);
+                Condition.sleep(generateRandomDelay(500, 1000));
+
+                if (Chatbox.findChatboxMenu() != null) {
+                    Client.sendKeystroke("KEYCODE_SPACE");
+                    Condition.wait(() -> Chatbox.findChatboxMenu() != null, 100, 10);
+                }
             }
-            if (Walker.isReachable(bankTile, WTRegion)) {
-                Walker.step(bankTile, WTRegion);
-            } else {
-                Walker.walkTo(new Tile(640, 221), WTRegion);
-                Condition.sleep(generateRandomDelay(900, 1350));
-                Walker.step(bankTile, WTRegion);
+
+            if (Player.within(outsideArea, WTRegion)) {
+                Logger.debugLog("We are outside, moving to bank");
+                if (Walker.isReachable(bankTile, WTRegion)) {
+                    Walker.step(bankTile, WTRegion);
+                } else {
+                    Walker.walkTo(new Tile(640, 221), WTRegion);
+                    Condition.sleep(generateRandomDelay(900, 1350));
+                    Walker.step(bankTile, WTRegion);
+                }
+                Condition.wait(() -> Player.within(bankTentArea, WTRegion), 250, 15);
+                Condition.sleep(generateRandomDelay(500, 1000));
+                currentLocation = Walker.getPlayerPosition(WTRegion);
+                return true;
             }
-            Condition.wait(() -> Player.within(bankTentArea, WTRegion), 250, 15);
-            Condition.sleep(generateRandomDelay(500, 1000));
-            currentLocation = Walker.getPlayerPosition(WTRegion);
-            return true;
         }
         return false;
     }
 
     private boolean walkToBankFromDoorInside() {
-        if (Player.isTileWithinArea(currentLocation, atDoor)) {
+        if (Player.isTileWithinArea(currentLocation, atDoorInside)) {
             Paint.setStatus("Walking to the bank from inside");
             Client.tap(exitDoorRect);
             Condition.sleep(generateRandomDelay(4250, 5300));
