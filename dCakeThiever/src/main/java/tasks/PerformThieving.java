@@ -6,34 +6,32 @@ import static helpers.Interfaces.*;
 import static main.dCakeThiever.*;
 
 public class PerformThieving extends Task {
-    private final Random random = new Random();
-
     @Override
     public boolean activate() {
-        return false;
+        return Player.atTile(stallTile, ardyRegion) && !Inventory.isFull();
     }
 
     @Override
     public boolean execute() {
-        if (!Player.tileEquals(currentLocation, stallTile)) {
+        if (!Player.atTile(stallTile, ardyRegion)) {
             moveToStall();
         } else {
+            Logger.log("Stealing.");
             performThieving();
         }
+        XpBar.getXP();
         return false;
     }
 
     private void moveToStall() {
         Walker.step(stallTile);
-        Condition.wait(() -> Player.atTile(stallTile), 250, 20);
-        currentLocation = stallTile;
+        Condition.wait(() -> Player.atTile(stallTile, ardyRegion), 250, 20);
     }
 
     private void performThieving() {
         usedInvent = Inventory.usedSlots();
         Client.tap(stallTapWindow);
-        int delay = 2600 + random.nextInt(151);
-        Condition.sleep(delay);
+        Condition.sleep(generateRandomDelay(2850, 3000));
         checkCaught();
     }
 
@@ -69,13 +67,11 @@ public class PerformThieving extends Task {
     private void runAway() {
         enableRunIfNeeded();
         Walker.walkPath(runAwayPath);
-        int delay = 500 + random.nextInt(1001);
-        Condition.sleep(delay);
     }
 
     private void runBack() {
         Walker.walkPath(runBackPath);
-        Condition.sleep(1250);
+        Player.waitTillNotMoving(13, ardyRegion);
         moveToStall();
     }
 

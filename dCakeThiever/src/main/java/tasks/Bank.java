@@ -8,7 +8,10 @@ public class Bank extends Task {
 
     @Override
     public boolean activate() {
-        return Player.isTileWithinArea(currentLocation, bankArea);
+        if (!bankYN) {
+            return false;
+        }
+        return Player.within(bankArea) && Inventory.isFull();
     }
 
     @Override
@@ -18,19 +21,18 @@ public class Bank extends Task {
     }
 
     private void bank() {
-        Logger.debugLog("Banking...");
+        Logger.log("Banking");
         moveToBankBooth();
 
-        if (Player.tileEquals(currentLocation, bankBoothTile)) {
+        if (Player.atTile(bankBoothTile, ardyRegion)) {
             interactWithBank();
         }
     }
 
     private void moveToBankBooth() {
-        if (!Player.tileEquals(currentLocation, bankBoothTile)) {
+        if (!Player.atTile(bankBoothTile, ardyRegion)) {
             Walker.step(bankBoothTile);
-            Condition.wait(() -> Player.atTile(bankBoothTile), 250, 20);
-            currentLocation = bankBoothTile;
+            Condition.wait(() -> Player.atTile(bankBoothTile, ardyRegion), 250, 20);
         }
     }
 
