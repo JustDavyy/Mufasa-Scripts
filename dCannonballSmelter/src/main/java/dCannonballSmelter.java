@@ -18,7 +18,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dCannonball Smelter",
         description = "Smelts steel bars into cannonballs at various locations. Supports hopping worlds.",
-        version = "1.4",
+        version = "1.5",
         guideLink = "https://wiki.mufasaclient.com/docs/dcannonball-smelter/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Moneymaking}
 )
@@ -345,6 +345,12 @@ public class dCannonballSmelter extends AbstractScript {
             Paint.setStatus("Set quantity all");
             Bank.tapQuantityAllButton();
         }
+        if (!Bank.isSelectedBankTab(banktab)) {
+            Paint.setStatus("Open tab " + banktab);
+            Bank.openTab(banktab);
+            Condition.sleep(750);
+        }
+
         Paint.setStatus("Withdraw steel bar");
         Bank.withdrawItem(steelbar, 0.9);
 
