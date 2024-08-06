@@ -18,7 +18,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dCannonball Smelter",
         description = "Smelts steel bars into cannonballs at various locations. Supports hopping worlds.",
-        version = "1.5",
+        version = "1.6",
         guideLink = "https://wiki.mufasaclient.com/docs/dcannonball-smelter/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Moneymaking}
 )
@@ -156,7 +156,7 @@ public class dCannonballSmelter extends AbstractScript {
     public void poll() {
 
         doSmelting();
-        bank();
+        bank(true);
 
     }
 
@@ -314,27 +314,59 @@ public class dCannonballSmelter extends AbstractScript {
         Logger.debugLog("Ending the initialSetup() method.");
     }
 
-    private void bank() {
+    private void bank(boolean fromFurnace) {
         Paint.setStatus("Bank");
         Logger.log("Banking.");
         Logger.debugLog("Starting bank() method.");
 
-        if (java.util.Objects.equals(location, "Edgeville")) {
-            Logger.debugLog("Tapping the " + location + " bank.");
-            Client.tap(edgeBankRect);
-            Condition.wait(() -> Bank.isOpen(), 250, 45);
-        } else if (java.util.Objects.equals(location, "Mount Karuulm")) {
-            Logger.debugLog("Tapping the " + location + " bank.");
-            Client.tap(karuulmBankRect);
-            Condition.wait(() -> Bank.isOpen(), 250, 55);
-        } else if (java.util.Objects.equals(location, "Neitiznot")) {
-            Logger.debugLog("Tapping the " + location + " bank.");
-            Client.tap(neitBankRect);
-            Condition.wait(() -> Bank.isOpen(), 250, 55);
-        } else if (java.util.Objects.equals(location, "Prifddinas")) {
-            Logger.debugLog("Tapping the " + location + " bank.");
-            Client.tap(priffBankRect);
-            Condition.wait(() -> Bank.isOpen(), 250, 55);
+        if (fromFurnace) {
+            if (java.util.Objects.equals(location, "Edgeville")) {
+                Logger.debugLog("Tapping the " + location + " bank.");
+                Client.tap(edgeBankRect);
+                Condition.wait(() -> Bank.isOpen(), 250, 45);
+            } else if (java.util.Objects.equals(location, "Mount Karuulm")) {
+                Logger.debugLog("Tapping the " + location + " bank.");
+                Client.tap(karuulmBankRect);
+                Condition.wait(() -> Bank.isOpen(), 250, 55);
+            } else if (java.util.Objects.equals(location, "Neitiznot")) {
+                Logger.debugLog("Tapping the " + location + " bank.");
+                Client.tap(neitBankRect);
+                Condition.wait(() -> Bank.isOpen(), 250, 55);
+            } else if (java.util.Objects.equals(location, "Prifddinas")) {
+                Logger.debugLog("Tapping the " + location + " bank.");
+                Client.tap(priffBankRect);
+                Condition.wait(() -> Bank.isOpen(), 250, 55);
+            }
+        } else {
+            if (java.util.Objects.equals(location, "Edgeville")) {
+                if (!Player.atTile(edgeBankTile)) {
+                    Walker.step(edgeBankTile);
+                }
+                Logger.debugLog("Tapping the " + location + " bank.");
+                Client.tap(openEdgeBankONCE);
+                Condition.wait(() -> Bank.isOpen(), 250, 45);
+            } else if (java.util.Objects.equals(location, "Mount Karuulm")) {
+                if (!Player.atTile(karuulmBankTile)) {
+                    Walker.step(karuulmBankTile);
+                }
+                Logger.debugLog("Tapping the " + location + " bank.");
+                Client.tap(openKaruulmBankONCE);
+                Condition.wait(() -> Bank.isOpen(), 250, 55);
+            } else if (java.util.Objects.equals(location, "Neitiznot")) {
+                if (!Player.atTile(neitBankTile)) {
+                    Walker.step(neitBankTile);
+                }
+                Logger.debugLog("Tapping the " + location + " bank.");
+                Client.tap(openNeitBankONCE);
+                Condition.wait(() -> Bank.isOpen(), 250, 55);
+            } else if (java.util.Objects.equals(location, "Prifddinas")) {
+                if (!Player.atTile(priffBankTile1) || !Player.atTile(priffBankTile2) || !Player.atTile(priffBankTile3)) {
+                    Walker.step(priffBankTile2);
+                }
+                Logger.debugLog("Tapping the " + location + " bank.");
+                Client.tap(openPriffBankONCE);
+                Condition.wait(() -> Bank.isOpen(), 250, 55);
+            }
         }
 
         if (Bank.isBankPinNeeded()) {
@@ -376,10 +408,10 @@ public class dCannonballSmelter extends AbstractScript {
 
         if (!Inventory.contains(steelbar, 0.9)) {
             Logger.debugLog("No steel bars found in inventory, did we run out?");
-            bank();
+            bank(false);
             if (!Inventory.contains(steelbar, 0.9)) {
                 Logger.debugLog("No steel bars found in inventory, did we run out? Doing one more check before stopping the script.");
-                bank();
+                bank(false);
                 if (!Inventory.contains(steelbar, 0.9)) {
                     Logger.debugLog("No steel bars found in inventory, we ran out. Stopping script.");
                     Logout.logout();
