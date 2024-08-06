@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAnglerFisher",
         description = "Fishes Anglerfish at Port Piscarilius",
-        version = "1.0",
+        version = "1.1",
         categories = {ScriptCategory.Fishing},
         guideLink = ""
 )

@@ -6,10 +6,7 @@ import dAnglerFisher.dAnglerFisher;
 
 
 import java.awt.*;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.time.Instant;
-import java.util.Locale;
 import java.util.Random;
 
 import static helpers.Interfaces.*;
@@ -48,7 +45,7 @@ public class Fish extends Task {
         if (fishSquare != null) {
             Paint.setStatus("Tap fishing spot");
             Point center = calculatePolygonCenter(fishSquare);
-            Point randomizedPoint = randomizePoint(center, -2, 2);
+            Point randomizedPoint = randomizePoint(center);
             Client.tap(randomizedPoint);
             dAnglerFisher.lastXpGainTime = Instant.now();
             dAnglerFisher.lastActionTime = Instant.now();
@@ -73,9 +70,9 @@ public class Fish extends Task {
     }
 
     // Randomize the point within a given range
-    private Point randomizePoint(Point point, int minOffset, int maxOffset) {
-        int randomizedX = point.x + random.nextInt(maxOffset - minOffset + 1) + minOffset;
-        int randomizedY = point.y + random.nextInt(maxOffset - minOffset + 1) + minOffset;
+    private Point randomizePoint(Point point) {
+        int randomizedX = point.x + random.nextInt(2 - -2 + 1) + -2;
+        int randomizedY = point.y + random.nextInt(2 - -2 + 1) + -2;
         return new Point(randomizedX, randomizedY);
     }
 

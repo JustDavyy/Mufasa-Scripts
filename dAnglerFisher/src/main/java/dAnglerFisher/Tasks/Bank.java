@@ -5,6 +5,8 @@ import helpers.utils.Tile;
 import dAnglerFisher.Task;
 import dAnglerFisher.dAnglerFisher;
 
+import java.time.Instant;
+
 import static helpers.Interfaces.*;
 
 public class Bank extends Task {
@@ -40,10 +42,11 @@ public class Bank extends Task {
         Paint.setStatus("Move to fishing spots");
         moveToSpots();
         dAnglerFisher.anglerInventCount = 0;
+        dAnglerFisher.lastXpGainTime = Instant.now().minusSeconds(90);
         return false;
     }
 
-    private boolean bank() {
+    private void bank() {
         if (!Player.atTile(dAnglerFisher.bankTile)) {
             Walker.step(dAnglerFisher.bankTile);
         }
@@ -74,10 +77,6 @@ public class Bank extends Task {
             if (Bank.isOpen()) {
                 Bank.close();
             }
-            return false;
-        } else {
-            // early exit, as bank is not open
-            return false;
         }
     }
 

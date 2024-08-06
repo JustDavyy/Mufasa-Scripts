@@ -24,7 +24,7 @@ public class AntiAFK extends Task {
         long timeSinceLastActivation = currentTime - lastActivationTime;
         int randomInterval = 10000 + random.nextInt(5000); // Randomize between 10-15 seconds
 
-        if (timeSinceLastActivation >= randomInterval || timeSinceLastActivation >= 15000) {
+        if (timeSinceLastActivation >= randomInterval) {
             lastActivationTime = currentTime; // Update last activation time
             Game.antiAFK();
             GameTabs.openInventoryTab();
