@@ -16,8 +16,6 @@ public class Fish extends Task {
     private final Random random = new Random();
     Rectangle rightRect = new Rectangle(451, 263, 30, 13);
     Rectangle bottomRect = new Rectangle(439, 275, 10, 25);
-    Tile stepTile = new Tile(905, 448);
-    Rectangle screenROI = new Rectangle(172, 214, 464, 321);
     boolean inventoryFull = false;
     public Fish(dAnglerFisher main){
         super();
@@ -32,9 +30,6 @@ public class Fish extends Task {
 
     @Override //the code to execute if criteria met
     public boolean execute() {
-        if (!Player.within(dAnglerFisher.fishingArea)) {
-            Walker.step(stepTile);
-        }
         Logger.log("Fishing.");
         GameTabs.openInventoryTab();
         performFish();
@@ -46,27 +41,15 @@ public class Fish extends Task {
 
     private void performFish() {
         Paint.setStatus("Find fishing spot");
-        Rectangle fishingSpot = Overlay.findNearestFishing(screenROI);
-        if (fishingSpot != null) {
+        Polygon fishSquare = Overlay.findNearest(OverlayColor.FISHING);
+        if (fishSquare != null) {
             Paint.setStatus("Tap fishing spot");
-
-            // Calculate the center of the rectangle
-            int centerX = fishingSpot.x + fishingSpot.width / 2;
-            int centerY = fishingSpot.y + fishingSpot.height / 2;
-            Point center = new Point(centerX, centerY);
-
-            // Randomize the point for a more human-like interaction
+            Point center = calculatePolygonCenter(fishSquare);
             Point randomizedPoint = randomizePoint(center);
-
-            // Tap the randomized point in the client
             Client.tap(randomizedPoint);
             dAnglerFisher.lastXpGainTime = Instant.now();
             dAnglerFisher.lastActionTime = Instant.now();
-
-            // Wait for a condition to be met, simulating checking if the spot is still valid
             Condition.wait(() -> isSpotAgainstUs(false), 300, 40);
-
-            // Sleep after the action to simulate human delay
             Condition.sleep(8000);
         } else {
             Logger.log("Could not locate the nearest fishing spot, retrying.");
