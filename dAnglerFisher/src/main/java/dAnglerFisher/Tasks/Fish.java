@@ -17,6 +17,7 @@ public class Fish extends Task {
     Rectangle rightRect = new Rectangle(451, 263, 30, 13);
     Rectangle bottomRect = new Rectangle(439, 275, 10, 25);
     boolean inventoryFull = false;
+    Tile stepTile = new Tile(905, 448);
     public Fish(dAnglerFisher main){
         super();
         super.name = "Fish";
@@ -30,6 +31,9 @@ public class Fish extends Task {
 
     @Override //the code to execute if criteria met
     public boolean execute() {
+        if (!Player.within(dAnglerFisher.fishingArea)) {
+            Walker.step(stepTile);
+        }
         Logger.log("Fishing.");
         GameTabs.openInventoryTab();
         performFish();
