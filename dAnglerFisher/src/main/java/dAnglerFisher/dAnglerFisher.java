@@ -22,9 +22,9 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAnglerFisher",
         description = "Fishes Anglerfish at Port Piscarilius",
-        version = "1.3",
+        version = "1.4",
         categories = {ScriptCategory.Fishing},
-        guideLink = ""
+        guideLink = "https://wiki.mufasaclient.com/docs/danglerfisher/"
 )
 @ScriptConfiguration.List(
         {
@@ -57,6 +57,10 @@ public class dAnglerFisher extends AbstractScript {
     public static Area fishingArea = new Area(
             new Tile(886, 447),
             new Tile(920, 464)
+    );
+    public static Area upperFishSpotArea = new Area(
+            new Tile(908, 447),
+            new Tile(918, 455)
     );
 
     // Walker stuff
