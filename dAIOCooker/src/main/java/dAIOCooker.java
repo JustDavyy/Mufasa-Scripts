@@ -16,7 +16,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAIOCooker",
         description = "The cooker script to cook all your raw fish (or seaweed) at various different places.",
-        version = "1.022",
+        version = "1.03",
         guideLink = "https://wiki.mufasaclient.com/docs/dcooker/",
         categories = {ScriptCategory.Cooking}
 )
@@ -29,6 +29,7 @@ import static helpers.Interfaces.*;
                         allowedValues = {
                                 @AllowedValue(optionIcon = "401", optionName = "Seaweed"),
                                 @AllowedValue(optionIcon = "21504", optionName = "Giant seaweed"),
+                                @AllowedValue(optionIcon = "321", optionName = "Raw anchovies"),
                                 @AllowedValue(optionIcon = "317", optionName = "Raw shrimps"),
                                 @AllowedValue(optionIcon = "327", optionName = "Raw sardine"),
                                 @AllowedValue(optionIcon = "345", optionName = "Raw herring"),
@@ -40,6 +41,7 @@ import static helpers.Interfaces.*;
                                 @AllowedValue(optionIcon = "3142", optionName = "Raw karambwan"),
                                 @AllowedValue(optionIcon = "359", optionName = "Raw tuna"),
                                 @AllowedValue(optionIcon = "377", optionName = "Raw lobster"),
+                                @AllowedValue(optionIcon = "363", optionName = "Raw bass"),
                                 @AllowedValue(optionIcon = "371", optionName = "Raw swordfish"),
                                 @AllowedValue(optionIcon = "7944", optionName = "Raw monkfish"),
                                 @AllowedValue(optionIcon = "383", optionName = "Raw shark"),
@@ -344,6 +346,11 @@ Tile playerPos;
                 productName = "Shrimps";
                 cookedProductID = ItemList.SHRIMPS_315;
                 break;
+            case "Raw anchovies":
+                productID = "321";
+                productName = "Anchovies";
+                cookedProductID = ItemList.ANCHOVIES_319;
+                break;
             case "Raw sardine":
                 productID = "327";
                 productName = "Sardine";
@@ -393,6 +400,11 @@ Tile playerPos;
                 productID = "377";
                 productName = "Lobster";
                 cookedProductID = ItemList.LOBSTER_379;
+                break;
+            case "Raw bass":
+                productID = "363";
+                productName = "Lobster";
+                cookedProductID = ItemList.BASS_365;
                 break;
             case "Raw swordfish":
                 productID = "371";
@@ -625,6 +637,43 @@ Tile playerPos;
             boolean timeCheck = (System.currentTimeMillis() - startTime) >= timeout;
             return inventoryCheck || levelUpCheck || timeCheck;
         }, 200, 325);
+
+        if (Player.leveledUp()) {
+            Logger.log("Cooking.");
+            Paint.setStatus("Re-cook after level up");
+            switch (location) {
+                case "Catherby range":
+                    Client.tap(new Rectangle(448, 231, 35, 23));
+                    break;
+                case "Hosidius kitchen":
+                    Client.tap(new Rectangle(441, 229, 17, 19));
+                    break;
+                case "Nardah oven":
+                    Client.tap(new Rectangle(449, 292, 19, 18));
+                    break;
+            }
+
+            Condition.wait(() -> Chatbox.isMakeMenuVisible(), 200, 75);
+            Paint.setStatus("Press make option 1");
+            Chatbox.makeOption(1);
+            Logger.log("Waiting for cooking to finish...");
+
+            if (!GameTabs.isInventoryTabOpen()) {
+                Paint.setStatus("Open inventory");
+                GameTabs.openInventoryTab();
+            }
+
+            Paint.setStatus("Waiting for cooking to finish");
+            long finalStartTime = System.currentTimeMillis();
+            long finalTimeout = timeout;
+            Condition.wait(() -> {
+                readXP();
+                boolean inventoryCheck = !Inventory.contains(productID, 0.88);
+                boolean levelUpCheck = Player.leveledUp();
+                boolean timeCheck = (System.currentTimeMillis() - finalStartTime) >= finalTimeout;
+                return inventoryCheck || levelUpCheck || timeCheck;
+            }, 200, 325);
+        }
 
         Logger.debugLog("Cooking finished, player leveled up, or timeout reached.");
         Paint.setStatus("Updating paint statistics");
