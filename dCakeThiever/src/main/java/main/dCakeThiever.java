@@ -3,10 +3,7 @@ package main;
 import helpers.*;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
-import helpers.utils.Area;
-import helpers.utils.OptionType;
-import helpers.utils.RegionBox;
-import helpers.utils.Tile;
+import helpers.utils.*;
 import tasks.*;
 import utils.Task;
 
@@ -18,12 +15,11 @@ import java.util.Map;
 import static helpers.Interfaces.*;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 @ScriptManifest(
         name = "dCakeThiever",
         description = "Steals from the bakery stall at Ardougne market. Supports world hopping and banking. Detects being caught, runs away if needed.",
-        version = "2.0",
+        version = "2.1",
         guideLink = "https://wiki.mufasaclient.com/docs/dcake-thiever/",
         categories = {ScriptCategory.Thieving}
 )
@@ -52,61 +48,53 @@ public class dCakeThiever extends AbstractScript {
     Boolean useWDH;
     public static Boolean bankYN;
 
-    public static RegionBox ardyRegion = new RegionBox(
-            "ardyRegion",
-            5808, 3138,
-            6270, 3447
-    );
-
     public static Area scriptArea = new Area(
-            new Tile(2015, 1063),
-            new Tile(2030, 1080)
+            new Tile(10556, 13295, 0),
+            new Tile(10747, 13550, 0)
     );
     public static int chocSlice = 1901;
-    public static  Tile stallTile = new Tile(2023, 1070);
-    public static Tile bankBoothTile = new Tile(2004, 1102);
+    public static  Tile stallTile = new Tile(10675, 13123, 0);
+    public static Tile bankBoothTile = new Tile(10619, 13219, 0);
     public static Tile[] pathToStall = new Tile[] {
-            new Tile(2004, 1102),
-            new Tile(2007, 1097),
-            new Tile(2015, 1096),
-            new Tile(2019, 1089),
-            new Tile(2023, 1085),
-            new Tile(2024, 1078),
-            new Tile(2023, 1070)
+            new Tile(10600, 13233, 0),
+            new Tile(10578, 13224, 0),
+            new Tile(10572, 13184, 0),
+            new Tile(10574, 13155, 0),
+            new Tile(10596, 13143, 0),
+            new Tile(10631, 13137, 0),
+            new Tile(10656, 13142, 0),
+            new Tile(10675, 13148, 0),
+            new Tile(10683, 13135, 0)
     };
 
     public static  Rectangle stallTapWindow = new Rectangle(383, 269, 17, 14);
     public static Rectangle bankBooth = new Rectangle(483, 250, 25, 26);
     public static Area bankArea = new Area(
-            new Tile(1999, 1099),
-            new Tile(2009, 1110)
+            new Tile(10596, 13217, 0),
+            new Tile(10636, 13248, 0)
     );
     public static Tile[] pathToBank = new Tile[] {
-            new Tile(2023, 1070),
-            new Tile(2024, 1078),
-            new Tile(2023, 1085),
-            new Tile(2019, 1089),
-            new Tile(2015, 1096),
-            new Tile(2007, 1097),
-            new Tile(2004, 1102)
+            new Tile(10684, 13152, 0),
+            new Tile(10670, 13176, 0),
+            new Tile(10658, 13198, 0),
+            new Tile(10629, 13211, 0),
+            new Tile(10603, 13211, 0),
+            new Tile(10579, 13213, 0),
+            new Tile(10587, 13232, 0),
+            new Tile(10614, 13225, 0)
     };
 
     public static Tile[] runAwayPath = new Tile[] {
-            new Tile(2024, 1073),
-            new Tile(2025, 1076),
-            new Tile(2029, 1077),
-            new Tile(2036, 1078),
-            new Tile(2041, 1078),
-            new Tile(2049, 1078)
+            new Tile(10694, 13119, 0),
+            new Tile(10720, 13122, 0),
+            new Tile(10735, 13135, 0),
+            new Tile(10747, 13147, 0)
     };
 
     public static Tile[] runBackPath = new Tile[] {
-            new Tile(2049, 1078),
-            new Tile(2041, 1078),
-            new Tile(2036, 1078),
-            new Tile(2029, 1077),
-            new Tile(2025, 1076),
-            new Tile(2024, 1073)
+            new Tile(10729, 13147, 0),
+            new Tile(10697, 13147, 0),
+            new Tile(10681, 13132, 0)
     };
 
     public static boolean droppedChocSlice = false;
@@ -126,8 +114,11 @@ public class dCakeThiever extends AbstractScript {
         Logger.log("Thank you for using the dCakeThiever script!\nSetting up everything for your gains now...");
         Logger.debugLog("Selected hopProfile: " + hopProfile);
 
-        // Set the walker to use ardy region
-        Walker.setup(ardyRegion);
+        // Create the MapChunk with chunks of our location
+        MapChunk chunks = new MapChunk(new String[]{"41-51"}, "0");
+
+        // Set up the walker with the created MapChunk
+        Walker.setup(chunks);
 
         hopActions();
         initialSetup();

@@ -24,15 +24,15 @@ public class Bank extends Task {
         Logger.log("Banking");
         moveToBankBooth();
 
-        if (Player.atTile(bankBoothTile, ardyRegion)) {
+        if (Player.atTile(bankBoothTile)) {
             interactWithBank();
         }
     }
 
     private void moveToBankBooth() {
-        if (!Player.atTile(bankBoothTile, ardyRegion)) {
+        if (!Player.atTile(bankBoothTile)) {
             Walker.step(bankBoothTile);
-            Condition.wait(() -> Player.atTile(bankBoothTile, ardyRegion), 250, 20);
+            Condition.wait(() -> Player.atTile(bankBoothTile), 250, 20);
         }
     }
 
