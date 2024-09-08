@@ -14,7 +14,7 @@ import static helpers.Interfaces.Logout;
 @ScriptManifest(
         name = "dTempPotMaker",
         description = "Makes super restores/attacks in any of the dynamic banks.",
-        version = "1.3",
+        version = "1.31",
         guideLink = "",
         categories = {ScriptCategory.Herblore}
 )

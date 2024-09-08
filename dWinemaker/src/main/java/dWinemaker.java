@@ -12,7 +12,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dWinemaker",
         description = "Creates well fermented wine for those juicy cooking gains. Supports dynamic banking.",
-        version = "1.08",
+        version = "1.09",
         guideLink = "https://wiki.mufasaclient.com/docs/dwinemaker/",
         categories = {ScriptCategory.Cooking}
 )
