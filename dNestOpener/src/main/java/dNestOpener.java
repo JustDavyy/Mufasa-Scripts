@@ -16,7 +16,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dNestOpener",
         description = "Opens bird nests (both seeds and rings). Supports dynamic banking.",
-        version = "1.2",
+        version = "1.3",
         guideLink = "https://wiki.mufasaclient.com/docs/dnestopener/",
         categories = {ScriptCategory.Herblore}
 )
