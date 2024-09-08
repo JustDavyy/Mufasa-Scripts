@@ -14,7 +14,7 @@ import static helpers.Interfaces.Logout;
 @ScriptManifest(
         name = "dTempPotMaker",
         description = "Makes super restores/attacks in any of the dynamic banks.",
-        version = "1.2",
+        version = "1.3",
         guideLink = "",
         categories = {ScriptCategory.Herblore}
 )
@@ -56,8 +56,8 @@ public class dTempPotMaker extends AbstractScript {
     int banktab;
     int processCount = 0;
     int productIndex;
-    int[] reqItemsRest = new int[]{ItemList.SNAPDRAGON_POTION_UNF_3004, ItemList.RED_SPIDERS_EGGS_223};
-    int[] reqItemsAttk = new int[]{ItemList.IRIT_POTION_UNF_101, ItemList.EYE_OF_NEWT_221};
+    int[] reqItemsRest = new int[]{ItemList.SNAPDRAGON_POTION__UNF__3004, ItemList.RED_SPIDERS__EGGS_223};
+    int[] reqItemsAttk = new int[]{ItemList.IRIT_POTION__UNF__101, ItemList.EYE_OF_NEWT_221};
 
     // This is the onStart, and only gets ran once.
     @Override
@@ -78,9 +78,9 @@ public class dTempPotMaker extends AbstractScript {
 
         // Create a single image box, to show the amount of processed bows
         if (product.equals("Super Restore")) {
-            productIndex = Paint.createBox("Super Restore", ItemList.SUPER_RESTORE3_3026, processCount);
+            productIndex = Paint.createBox("Super Restore", ItemList.SUPER_RESTORE_3__3026, processCount);
         } else {
-            productIndex = Paint.createBox("Super Attack", ItemList.SUPER_ATTACK3_145, processCount);
+            productIndex = Paint.createBox("Super Attack", ItemList.SUPER_ATTACK_3__145, processCount);
         }
 
 
@@ -182,12 +182,12 @@ public class dTempPotMaker extends AbstractScript {
 
         // Withdraw first set of items
         if (product.equals("Super Restore")) {
-            Bank.withdrawItem(ItemList.SNAPDRAGON_POTION_UNF_3004, 0.7);
+            Bank.withdrawItem(ItemList.SNAPDRAGON_POTION__UNF__3004, 0.7);
             Condition.sleep(generateDelay(250, 400));
-            Bank.withdrawItem(ItemList.RED_SPIDERS_EGGS_223, 0.7);
+            Bank.withdrawItem(ItemList.RED_SPIDERS__EGGS_223, 0.7);
             Condition.sleep(generateDelay(150, 225));
         } else {
-            Bank.withdrawItem(ItemList.IRIT_POTION_UNF_101, 0.7);
+            Bank.withdrawItem(ItemList.IRIT_POTION__UNF__101, 0.7);
             Condition.sleep(generateDelay(250, 400));
             Bank.withdrawItem(ItemList.EYE_OF_NEWT_221, 0.7);
             Condition.sleep(generateDelay(150, 225));
@@ -225,11 +225,11 @@ public class dTempPotMaker extends AbstractScript {
 
         // Starting to process items
         if (product.equals("Super Restore")) {
-            Inventory.tapItem(ItemList.SNAPDRAGON_POTION_UNF_3004, 0.75);
+            Inventory.tapItem(ItemList.SNAPDRAGON_POTION__UNF__3004, 0.75);
             Condition.sleep(generateDelay(200, 350));
-            Inventory.tapItem(ItemList.RED_SPIDERS_EGGS_223, 0.75);
+            Inventory.tapItem(ItemList.RED_SPIDERS__EGGS_223, 0.75);
         } else {
-            Inventory.tapItem(ItemList.IRIT_POTION_UNF_101, 0.75);
+            Inventory.tapItem(ItemList.IRIT_POTION__UNF__101, 0.75);
             Condition.sleep(generateDelay(200, 350));
             Inventory.tapItem(ItemList.EYE_OF_NEWT_221, 0.75);
         }
@@ -251,9 +251,9 @@ public class dTempPotMaker extends AbstractScript {
                 if (Player.leveledUp()) {
                     startTime = System.currentTimeMillis();
                     // Starting to process items
-                    Inventory.tapItem(ItemList.SNAPDRAGON_POTION_UNF_3004, 0.75);
+                    Inventory.tapItem(ItemList.SNAPDRAGON_POTION__UNF__3004, 0.75);
                     Condition.sleep(generateDelay(200, 350));
-                    Inventory.tapItem(ItemList.RED_SPIDERS_EGGS_223, 0.75);
+                    Inventory.tapItem(ItemList.RED_SPIDERS__EGGS_223, 0.75);
                     Logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
                     Condition.wait(() -> Chatbox.isMakeMenuVisible(), 200, 12);
                     Chatbox.makeOption(1);
@@ -274,7 +274,7 @@ public class dTempPotMaker extends AbstractScript {
                 if (Player.leveledUp()) {
                     startTime = System.currentTimeMillis();
                     // Starting to process items
-                    Inventory.tapItem(ItemList.IRIT_POTION_UNF_101, 0.75);
+                    Inventory.tapItem(ItemList.IRIT_POTION__UNF__101, 0.75);
                     Condition.sleep(generateDelay(200, 350));
                     Inventory.tapItem(ItemList.EYE_OF_NEWT_221, 0.75);
                     Logger.debugLog("Waiting for the chatbox Make Menu to be visible...");
@@ -316,11 +316,11 @@ public class dTempPotMaker extends AbstractScript {
         Condition.sleep(generateDelay(300, 500));
 
         if (product.equals("Super Restore")) {
-            Bank.withdrawItem(ItemList.SNAPDRAGON_POTION_UNF_3004, 0.7);
+            Bank.withdrawItem(ItemList.SNAPDRAGON_POTION__UNF__3004, 0.7);
             Condition.sleep(generateDelay(250, 400));
-            Bank.withdrawItem(ItemList.RED_SPIDERS_EGGS_223, 0.7);
+            Bank.withdrawItem(ItemList.RED_SPIDERS__EGGS_223, 0.7);
         } else {
-            Bank.withdrawItem(ItemList.IRIT_POTION_UNF_101, 0.7);
+            Bank.withdrawItem(ItemList.IRIT_POTION__UNF__101, 0.7);
             Condition.sleep(generateDelay(250, 400));
             Bank.withdrawItem(ItemList.EYE_OF_NEWT_221, 0.7);
         }
