@@ -20,7 +20,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dTeleportAlcher",
         description = "Uses alchemy in combination with camelot or ardougne teleport for high XP rates.",
-        version = "1.00",
+        version = "1.01",
         guideLink = "",
         categories = {ScriptCategory.Magic}
 )
