@@ -51,6 +51,7 @@ public class dTeaYoinker extends AbstractScript {
     Tile bankTile1 = new Tile(5335, 15243, 0);
     Tile bankTile2 = new Tile(5339, 15243, 0);
     Tile bankTile3 = new Tile(5343, 15243, 0);
+    Tile middleTile = new Tile(13055, 13718, 0);
     Rectangle boothArea = new Rectangle(432, 307, 19, 24);
     Rectangle stallTapWindow = new Rectangle(493, 212, 56, 75);
     int pollsSinceLastDrop = 0;
@@ -159,8 +160,7 @@ public class dTeaYoinker extends AbstractScript {
             // Check if we're at stall, if not move there.
             if (!Player.atTile(stallTile)) {
                 Logger.debugLog("Not at stall, moving there!");
-                Walker.step(stallTile);
-                Condition.wait(() -> Player.atTile(stallTile), 250, 20);
+                movetoStall();
             }
 
         } else {
@@ -201,6 +201,9 @@ public class dTeaYoinker extends AbstractScript {
         int randomIndex = ThreadLocalRandom.current().nextInt(1, 4); // Generates 1, 2, or 3
 
         Logger.debugLog("Walking to a randomly chosen bank booth.");
+
+        Walker.walkTo(middleTile);
+        Player.waitTillNotMoving(7);
 
         switch (randomIndex) {
             case 1:
@@ -248,6 +251,9 @@ public class dTeaYoinker extends AbstractScript {
 
     private void movetoStall() {
         Logger.debugLog("Starting movetoStall() method.");
+
+        Walker.walkTo(middleTile);
+        Player.waitTillNotMoving(7);
 
         // Initial attempt to walk to the stall
         Walker.step(stallTile);
