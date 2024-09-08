@@ -15,7 +15,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dHide Crafter",
         description = "Crafts tanned dragon hides into any product. Supports all options and dynamic banking.",
-        version = "1.032",
+        version = "1.04",
         guideLink = "https://wiki.mufasaclient.com/docs/dhide-crafter/",
         categories = {ScriptCategory.Crafting}
 )
