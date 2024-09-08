@@ -48,9 +48,9 @@ public class dTeaYoinker extends AbstractScript {
     int tea = 712;
 
     Tile stallTile = new Tile(13071, 13747, 0);
-    Tile bankTile1 = new Tile(5335, 15243, 0);
-    Tile bankTile2 = new Tile(5339, 15243, 0);
-    Tile bankTile3 = new Tile(5343, 15243, 0);
+    Tile bankTile1 = new Tile(13015, 13707, 0);
+    Tile bankTile2 = new Tile(13019, 13707, 0);
+    Tile bankTile3 = new Tile(13023, 13707, 0);
     Tile middleTile = new Tile(13055, 13718, 0);
     Rectangle boothArea = new Rectangle(432, 307, 19, 24);
     Rectangle stallTapWindow = new Rectangle(493, 212, 56, 75);
