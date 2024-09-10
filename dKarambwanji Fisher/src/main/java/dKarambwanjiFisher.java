@@ -14,7 +14,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dKarambwanji Fisher",
         description = "Fishes Karambwanji at Karamja to use as bait for Karambwans. Has a safe option for low HP accounts (keep in mind, this slows down the catch rate).",
-        version = "1.06",
+        version = "1.07",
         guideLink = "https://wiki.mufasaclient.com/docs/dkarambwanji-fisher/",
         categories = {ScriptCategory.Fishing}
 )
@@ -40,8 +40,8 @@ String hopProfile;
 Boolean hopEnabled;
 Boolean useWDH;
 Area FishingArea = new Area(
-        new Tile(11103, 12100, 0),
-        new Tile(11300, 12286, 0)
+        new Tile(11109, 11740, 0),
+        new Tile(11279, 11875, 0)
 );
 String FishingSpot;
 Boolean SafeModeOn;
@@ -50,10 +50,11 @@ int previousXP;
 int newXP;
 int karambwanjiStartCount = 0;
 int karambwanjiGainedCount = 0;
-Tile SouthSpot = new Tile(11204, 12279, 0);
-Tile NorthEastSpot = new Tile(11227, 12227, 0);
-Tile NorthWestSpot = new Tile(11163, 12235, 0);
-Tile EastSpot = new Tile(11243, 12247, 0);
+Tile SouthSpot = new Tile(11203, 11785, 0);
+Tile NorthEastSpot = new Tile(11231, 11833, 0);
+Tile NorthWestSpot = new Tile(11163, 11829, 0);
+Tile EastSpot = new Tile(11243, 11817, 0);
+
 Tile[] fishingSpots = new Tile[] {NorthEastSpot, EastSpot, NorthWestSpot, SouthSpot};
 private Instant lastActionTime = Instant.now();
 
