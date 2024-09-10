@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @ScriptManifest(
         name = "dTeaYoinker",
         description = "Steals from the tea stall in east Varrock. Supports world hopping and banking the tea.",
-        version = "1.05",
+        version = "1.06",
         guideLink = "https://wiki.mufasaclient.com/docs/dtea-yoinker/",
         categories = {ScriptCategory.Thieving}
 )
@@ -47,11 +47,11 @@ public class dTeaYoinker extends AbstractScript {
     Tile playerPos;
     int tea = 712;
 
-    Tile stallTile = new Tile(13071, 13747, 0);
-    Tile bankTile1 = new Tile(13015, 13707, 0);
-    Tile bankTile2 = new Tile(13019, 13707, 0);
-    Tile bankTile3 = new Tile(13023, 13707, 0);
-    Tile middleTile = new Tile(13055, 13718, 0);
+    Tile stallTile = new Tile(13071, 13389, 0);
+    Tile bankTile1 = new Tile(13007, 13429, 0);
+    Tile bankTile2 = new Tile(13011, 13429, 0);
+    Tile bankTile3 = new Tile(13015, 13429, 0);
+    Tile middleTile = new Tile(13051, 13425, 0);
     Rectangle boothArea = new Rectangle(432, 307, 19, 24);
     Rectangle stallTapWindow = new Rectangle(493, 212, 56, 75);
     int pollsSinceLastDrop = 0;
@@ -119,8 +119,8 @@ public class dTeaYoinker extends AbstractScript {
         Logger.debugLog("Starting initialSetup() method.");
 
         Area scriptArea = new Area(
-                new Tile(12964, 13645, 0),
-                new Tile(13123, 13774, 0)
+                new Tile(12955, 13374, 0),
+                new Tile(13098, 13490, 0)
         );
 
         // Check if we are within the script area, otherwise stop the script.
