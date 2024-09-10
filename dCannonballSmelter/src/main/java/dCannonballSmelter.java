@@ -15,7 +15,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dCannonball Smelter",
         description = "Smelts steel bars into cannonballs at various locations. Supports hopping worlds.",
-        version = "1.8",
+        version = "1.81",
         guideLink = "https://wiki.mufasaclient.com/docs/dcannonball-smelter/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Moneymaking}
 )
@@ -61,12 +61,12 @@ public class dCannonballSmelter extends AbstractScript {
     Boolean runEnabled;
 
     // Tiles
-    Tile edgeBankTile = new Tile(12383, 13923, 0);
-    Tile edgeFurnaceTile = new Tile(12435, 13903, 0);
-    Tile karuulmFurnaceTile = new Tile(5295, 15223, 0);
-    Tile karuulmBankTile = new Tile(5295, 15163, 0);
-    Tile neitFurnaceTile = new Tile(9375, 15219, 0);
-    Tile neitBankTile = new Tile(9347, 15227, 0);
+    Tile edgeBankTile = new Tile(12383, 13725, 0);
+    Tile edgeFurnaceTile = new Tile(12435, 13745, 0);
+    Tile karuulmFurnaceTile = new Tile(5295, 14985, 0);
+    Tile karuulmBankTile = new Tile(5295, 15045, 0);
+    Tile neitFurnaceTile = new Tile(9375, 14989, 0);
+    Tile neitBankTile = new Tile(9347, 14981, 0);
 
     // Furnace Rectangles (always calculated from the bank tile)
     Rectangle edgeFurnaceRect = new Rectangle(657, 191, 13, 13);
