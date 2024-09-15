@@ -19,7 +19,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dCakeThiever",
         description = "Steals from the bakery stall at Ardougne market. Supports world hopping and banking. Detects being caught, runs away if needed.",
-        version = "2.1",
+        version = "2.11",
         guideLink = "https://wiki.mufasaclient.com/docs/dcake-thiever/",
         categories = {ScriptCategory.Thieving}
 )
@@ -49,52 +49,53 @@ public class dCakeThiever extends AbstractScript {
     public static Boolean bankYN;
 
     public static Area scriptArea = new Area(
-            new Tile(10556, 13295, 0),
-            new Tile(10747, 13550, 0)
+            new Tile(10527, 12793, 0),
+            new Tile(10764, 13062, 0)
     );
     public static int chocSlice = 1901;
-    public static  Tile stallTile = new Tile(10675, 13123, 0);
-    public static Tile bankBoothTile = new Tile(10619, 13219, 0);
+    public static  Tile stallTile = new Tile(10675, 12989, 0);
+    public static Tile bankBoothTile = new Tile(10619, 12893, 0);
     public static Tile[] pathToStall = new Tile[] {
-            new Tile(10600, 13233, 0),
-            new Tile(10578, 13224, 0),
-            new Tile(10572, 13184, 0),
-            new Tile(10574, 13155, 0),
-            new Tile(10596, 13143, 0),
-            new Tile(10631, 13137, 0),
-            new Tile(10656, 13142, 0),
-            new Tile(10675, 13148, 0),
-            new Tile(10683, 13135, 0)
+            new Tile(10597, 12880, 0),
+            new Tile(10574, 12895, 0),
+            new Tile(10582, 12916, 0),
+            new Tile(10576, 12946, 0),
+            new Tile(10579, 12958, 0),
+            new Tile(10600, 12970, 0),
+            new Tile(10626, 12972, 0),
+            new Tile(10652, 12971, 0),
+            new Tile(10675, 12972, 0)
     };
 
     public static  Rectangle stallTapWindow = new Rectangle(383, 269, 17, 14);
     public static Rectangle bankBooth = new Rectangle(483, 250, 25, 26);
     public static Area bankArea = new Area(
-            new Tile(10596, 13217, 0),
-            new Tile(10636, 13248, 0)
+            new Tile(10596, 12862, 0),
+            new Tile(10636, 12896, 0)
     );
     public static Tile[] pathToBank = new Tile[] {
-            new Tile(10684, 13152, 0),
-            new Tile(10670, 13176, 0),
-            new Tile(10658, 13198, 0),
-            new Tile(10629, 13211, 0),
-            new Tile(10603, 13211, 0),
-            new Tile(10579, 13213, 0),
-            new Tile(10587, 13232, 0),
-            new Tile(10614, 13225, 0)
+            new Tile(10673, 12966, 0),
+            new Tile(10659, 12949, 0),
+            new Tile(10654, 12922, 0),
+            new Tile(10636, 12905, 0),
+            new Tile(10607, 12904, 0),
+            new Tile(10579, 12904, 0),
+            new Tile(10572, 12889, 0),
+            new Tile(10589, 12878, 0),
+            new Tile(10611, 12881, 0)
     };
 
     public static Tile[] runAwayPath = new Tile[] {
-            new Tile(10694, 13119, 0),
-            new Tile(10720, 13122, 0),
-            new Tile(10735, 13135, 0),
-            new Tile(10747, 13147, 0)
+            new Tile(10690, 12991, 0),
+            new Tile(10709, 12991, 0),
+            new Tile(10719, 12980, 0),
+            new Tile(10741, 12966, 0)
     };
 
     public static Tile[] runBackPath = new Tile[] {
-            new Tile(10729, 13147, 0),
-            new Tile(10697, 13147, 0),
-            new Tile(10681, 13132, 0)
+            new Tile(10720, 12964, 0),
+            new Tile(10697, 12963, 0),
+            new Tile(10685, 12977, 0)
     };
 
     public static boolean droppedChocSlice = false;
