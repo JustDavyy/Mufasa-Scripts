@@ -38,7 +38,7 @@ public class CleanFinds extends Task {
 
         if (!Player.tileEquals(currentLocation, cleanTile)) {
             Logger.debugLog("stepping to cleaning bench");
-            Walker.step(cleanTile, museumRegion);
+            Walker.step(cleanTile);
             currentLocation = cleanTile;
         }
 
