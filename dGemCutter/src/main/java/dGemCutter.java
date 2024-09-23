@@ -15,7 +15,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dGem Cutter",
         description = "Cuts any uncut into their cut variants, supports dynamic banking and world hops.",
-        version = "1.023",
+        version = "1.024",
         guideLink = "https://wiki.mufasaclient.com/docs/dgem-cutter/",
         categories = {ScriptCategory.Crafting}
 )
@@ -337,6 +337,8 @@ public class dGemCutter extends AbstractScript {
         Logger.debugLog("Closed bank interface.");
 
         Logger.debugLog("Ending the initialSetup() method.");
+
+        Condition.sleep(generateDelay(1500,2250));
     }
 
     private void executeCutting() {
@@ -419,6 +421,7 @@ public class dGemCutter extends AbstractScript {
         Logger.debugLog("Closed the bank.");
 
         Logger.debugLog("Ending the bank() method.");
+        Condition.sleep(generateDelay(1500,2250));
     }
 
     private void checkInventOpen() {
@@ -435,14 +438,14 @@ public class dGemCutter extends AbstractScript {
         // Check if we have both a chisel and uncuts in the inventory.
         if (!Inventory.containsAll(items, 0.75)) {
             Logger.log("1st check failed for a chisel and uncuts in our inventory, going back to banking!");
-            Logout.logout();
-            Script.stop();
+            bank();
         }
 
         // Check if we have both a chisel and uncuts in the inventory.
         if (!Inventory.containsAll(items, 0.75)) {
             Logger.log("2nd check failed for a chisel and uncuts in our inventory, logging out and aborting script!");
-
+            Logout.logout();
+            Script.stop();
         }
     }
 
