@@ -246,11 +246,11 @@ public class dGemCutter extends AbstractScript {
         Condition.sleep(generateDelay(1500, 2000));
         Paint.setStatus("Withdraw chisel");
         Bank.withdrawItem(chisel, 0.75);
-        Condition.sleep(generateDelay(300, 500));
+        Condition.sleep(generateDelay(600, 800));
         Logger.debugLog("Withdrew chisel from the bank.");
 
-        Client.sendKeystroke("KEYCODE_ENTER");
-        Condition.sleep(generateDelay(300, 500));
+        Bank.tapSearchButton();
+        Condition.sleep(generateDelay(500, 1000));
         Logger.debugLog("Closed search interface.");
 
         // Check if we have the chisel in the inventory, otherwise stop script.
@@ -263,6 +263,13 @@ public class dGemCutter extends AbstractScript {
             }
             Logout.logout();
             Script.stop();
+        }
+
+        // Selecting the right bank tab again if needed
+        if (!Bank.isSelectedBankTab(banktab)) {
+            Paint.setStatus("Open tab " + banktab);
+            Bank.openTab(banktab);
+            Logger.debugLog("Opened bank tab " + banktab);
         }
 
         // Grabbing the first uncuts to process
@@ -296,6 +303,14 @@ public class dGemCutter extends AbstractScript {
                 Script.stop();
             }
         } else {
+            // Selecting the right bank tab again if needed
+            if (!Bank.isSelectedBankTab(banktab)) {
+                Paint.setStatus("Open tab " + banktab);
+                Bank.openTab(banktab);
+                Logger.debugLog("Opened bank tab " + banktab);
+                Condition.sleep(750);
+            }
+
             // Withdraw first set of items
             Paint.setStatus("Withdraw " + product);
             Bank.withdrawItem(unprocessedItemID, 0.75);
