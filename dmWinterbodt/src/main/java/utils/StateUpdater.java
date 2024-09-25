@@ -83,7 +83,7 @@ public class StateUpdater {
 
     public static void updateStates(WTStates[] states) {
         //Update our position
-        currentLocation = Walker.getPlayerPosition(WTRegion);
+        currentLocation = Walker.getPlayerPosition();
 
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
             for (WTStates state : states) {

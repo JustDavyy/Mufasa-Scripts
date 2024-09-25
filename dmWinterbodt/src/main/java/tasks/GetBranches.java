@@ -31,16 +31,16 @@ public class GetBranches extends Task {
         }
 
         Logger.debugLog("Inside GetBranches execute()");
-        if (!Player.atTile(SideManager.getBranchTile(), WTRegion)) {
+        if (!Player.atTile(SideManager.getBranchTile())) {
             Paint.setStatus("Stepping to branch tile");
             Logger.log("Stepping to branch tile!");
-            Walker.step(SideManager.getBranchTile(), WTRegion);
+            Walker.step(SideManager.getBranchTile());
             lastActivity = System.currentTimeMillis();
-            currentLocation = Walker.getPlayerPosition(WTRegion);
+            currentLocation = Walker.getPlayerPosition();
             return true;
         }
 
-        if (Player.atTile(SideManager.getBranchTile(), WTRegion)) {
+        if (Player.atTile(SideManager.getBranchTile())) {
             Paint.setStatus("Initiating chop action");
             Logger.log("Initiating chop action!");
             Client.tap(SideManager.getBranchRect());

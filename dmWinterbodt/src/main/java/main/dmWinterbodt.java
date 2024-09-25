@@ -145,102 +145,100 @@ public class dmWinterbodt extends AbstractScript {
     public static int totalCrateCount = 0;
     public static int totalRepairCount = 0;
     public static int totalRelightCount = 0;
-    public static RegionBox WTRegion = new RegionBox("WTRegion", 1701, 264, 2157, 846);
-    public static Area lobby = new Area(new Tile(630, 168), new Tile(646, 191));
-    public static Area LeftTopWTArea = new Area(new Tile(601, 111), new Tile(634, 150));
-    public static Area RightTopWTArea = new Area(new Tile(640, 111), new Tile(670, 153));
-    public static Tile[] LeftTopToStart = new Tile[] {
-            new Tile(630, 122),
-            new Tile(623, 127),
-            new Tile(618, 134),
-            new Tile(617, 145),
-            new Tile(618, 151),
-            new Tile(619, 158),
-            new Tile(624, 163),
-            new Tile(630, 164),
-            new Tile(638, 165)
-    };
-    public static Tile[] RightTopToStart = new Tile[] {
-            new Tile(644, 123),
-            new Tile(650, 126),
-            new Tile(655, 132),
-            new Tile(658, 139),
-            new Tile(659, 147),
-            new Tile(658, 154),
-            new Tile(653, 161),
-            new Tile(647, 164),
-            new Tile(639, 165)
-    };
-    public static Tile bankTile = new Tile(651, 230);
-    public static Area bankTentArea = new Area(
-            new Tile(647, 224),
-            new Tile(654, 232)
+    public static Area lobby = new Area(
+            new Tile(6501, 15655, 0),
+            new Tile(6544, 15690, 0)
     );
-    public static Tile[] outsideToBankPath = new Tile[]{
-            new Tile(638, 212),
-            new Tile(645, 225)
+    public static Area LeftTopWTArea = new Area(
+            new Tile(6440, 15753, 0),
+            new Tile(6473, 15816, 0)
+    );
+    public static Area RightTopWTArea = new Area(
+            new Tile(6570, 15746, 0),
+            new Tile(6605, 15808, 0)
+    );
+    public static Tile[] LeftTopToStart = new Tile[] {
+            new Tile(6469, 15813, 0),
+            new Tile(6463, 15789, 0),
+            new Tile(6462, 15764, 0),
+            new Tile(6464, 15741, 0),
+            new Tile(6471, 15728, 0),
+            new Tile(6484, 15719, 0),
+            new Tile(6501, 15706, 0),
+            new Tile(6520, 15694, 0)
+    };
+    public static Tile[] RightTopToStart =  new Tile[] {
+            new Tile(6564, 15827, 0),
+            new Tile(6578, 15806, 0),
+            new Tile(6588, 15789, 0),
+            new Tile(6585, 15756, 0),
+            new Tile(6581, 15739, 0),
+            new Tile(6567, 15723, 0),
+            new Tile(6549, 15707, 0),
+            new Tile(6533, 15691, 0)
+    };
+    public static Tile bankTile = new Tile(6559, 15521, 0);
+    public static Area bankTentArea = new Area(
+            new Tile(6550, 15508, 0),
+            new Tile(6570, 15531, 0)
+    );
+    public static Tile[] outsideToBankPath =  new Tile[] {
+            new Tile(6527, 15549, 0),
+            new Tile(6558, 15519, 0)
     };
     public static Rectangle enterDoorRect = new Rectangle(323, 75, 307, 122);
     public static Rectangle exitDoorRect = new Rectangle(379, 260, 176, 116);
     public static Area insideArea = new Area(
-            new Tile(605, 152),
-            new Tile(666, 199)
+            new Tile(6401, 15633, 0),
+            new Tile(6645, 15873, 0)
     );
     public static Area insideDoorArea = new Area(
-            new Tile(628, 185),
-            new Tile(649, 199)
+            new Tile(6492, 15610, 0),
+            new Tile(6557, 15631, 0)
     );
     public static Area outsideArea = new Area(
-            new Tile(599, 201),
-            new Tile(679, 255)
+            new Tile(6468, 15473, 0),
+            new Tile(6609, 15598, 0)
     );
-    public static Area atDoor = new Area( //this one is both at door from inside & outside
-            new Tile(624, 193),
-            new Tile(652, 209)
-    );
+    public static Area atDoor = new Area(
+            new Tile(6484, 15572, 0),
+            new Tile(6566, 15631, 0)
+    ); //this one is both at door from inside & outside
     public static Area atDoorInside = new Area(
-            new Tile(629, 193),
-            new Tile(648, 199)
+            new Tile(6492, 15609, 0),
+            new Tile(6552, 15626, 0)
     );
-    public static Area atDoorOutside =new Area(
-            new Tile(628, 200),
-            new Tile(647, 219)
+    public static Area leftWTArea = new Area(
+            new Tile(6440, 15695, 0),
+            new Tile(6498, 15751, 0)
     );
-    // <--
-    public static Area leftWTArea = new Area(new Tile(609, 150), new Tile(630, 172));
-    // -->
-    public static Area rightWTArea = new Area(new Tile(645, 150), new Tile(669, 176));
+    public static Area rightWTArea = new Area(
+            new Tile(6545, 15695, 0),
+            new Tile(6583, 15748, 0)
+    );
     // Paths
-    public static Tile[] wtDoorToBank = new Tile[]{
-            new Tile(637, 204),
-            new Tile(639, 217),
-            new Tile(645, 228),
-            new Tile(650, 228)
+    public static Tile[] wtDoorToBank = new Tile[] {
+            new Tile(6523, 15563, 0),
+            new Tile(6556, 15521, 0)
     };
-    public static Tile[] gameToWTDoor = new Tile[]{
-            new Tile(638, 167),
-            new Tile(637, 175),
-            new Tile(637, 185),
-            new Tile(637, 195)
+    public static Tile[] gameToWTDoor = new Tile[] {
+            new Tile(6522, 15701, 0),
+            new Tile(6523, 15666, 0),
+            new Tile(6525, 15620, 0)
     };
-    public static Tile[] wtDoorToRightSide = new Tile[]{
-            new Tile(638, 185),
-            new Tile(639, 175),
-            new Tile(650, 165)
+    public static Tile[] wtDoorToRightSide = new Tile[] {
+            new Tile(6525, 15648, 0),
+            new Tile(6523, 15691, 0),
+            new Tile(6562, 15714, 0)
     };
-    public static Tile[] wtDoorToLeftSide = new Tile[]{
-            new Tile(637, 186),
-            new Tile(637, 173),
-            new Tile(625, 165)
+    public static Tile[] wtDoorToLeftSide =  new Tile[] {
+            new Tile(6519, 15657, 0),
+            new Tile(6518, 15711, 0),
+            new Tile(6477, 15718, 0)
     };
-    public static Tile[] LowerRightToLeft = new Tile[]{
-            new Tile(648, 165),
-            new Tile(638, 165),
-            new Tile(626, 165)
-    };
-    public static Tile[] fromEitherSideToGameLobby = new Tile[]{
-            new Tile(637, 166),
-            new Tile(637, 177)
+    public static Tile[] fromEitherSideToGameLobby = new Tile[] {
+            new Tile(6521, 15709, 0),
+            new Tile(6522, 15671, 0)
     };
     // Location static
     public static Tile currentLocation;
@@ -301,6 +299,8 @@ public class dmWinterbodt extends AbstractScript {
         pickedSide = configs.get("Side");
         bankTab = Integer.parseInt(configs.get("BankTab"));
         burnOnly = Boolean.parseBoolean(configs.get("Burn only?"));
+
+        Walker.setup(new MapChunk(new String[]{"24-63", "26-61"}, "0"));
 
         // Creating the Paint object
         Logger.debugLog("Creating paint object.");

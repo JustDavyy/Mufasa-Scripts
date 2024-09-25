@@ -40,12 +40,12 @@ public class PreGame extends Task {
         // Check if we are at the burn tile, otherwise move there
         if (BreakManager.shouldBreakNow && !Player.isTileWithinArea(currentLocation, lobby)) {
             Paint.setStatus("Moving to burn tile");
-            Walker.walkPath(WTRegion, fromEitherSideToGameLobby);
-            currentLocation = Walker.getPlayerPosition(WTRegion);
+            Walker.walkPath(fromEitherSideToGameLobby);
+            currentLocation = Walker.getPlayerPosition();
             return true;
         } else if (!Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
             Paint.setStatus("Stepping to burn tile");
-            Walker.step(SideManager.getBurnTile(), WTRegion);
+            Walker.step(SideManager.getBurnTile());
         }
 
         // If at burn tile, update current location and lock ourselves to this task
@@ -97,7 +97,7 @@ public class PreGame extends Task {
 
                         // Move to the branch tile
                         Paint.setStatus("Stepping to branch tile");
-                        Walker.step(SideManager.getBranchTile(), WTRegion);
+                        Walker.step(SideManager.getBranchTile());
                         lastActivity = System.currentTimeMillis();
                         currentLocation = SideManager.getBranchTile();
 

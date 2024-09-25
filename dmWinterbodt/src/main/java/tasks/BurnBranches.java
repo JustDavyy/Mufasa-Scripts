@@ -55,9 +55,9 @@ public class BurnBranches extends Task {
                 Client.sendKeystroke("KEYCODE_SPACE");
                 Condition.sleep(generateRandomDelay(1000, 2000));
             }
-            Walker.step(new Tile(638, 174), WTRegion);
-            Condition.wait(() -> Player.within(lobby, WTRegion), 100, 20);
-            currentLocation = Walker.getPlayerPosition(WTRegion);
+            Walker.step(new Tile(6519, 15685, 0));
+            Condition.wait(() -> Player.within(lobby), 100, 20);
+            currentLocation = Walker.getPlayerPosition();
             lastWalkToSafety = System.currentTimeMillis();
             return false;
         } else if (!inventoryHasLogs && !inventoryHasKindlings && isGameGoing && Player.isTileWithinArea(currentLocation, lobby) && gameAt13Percent) {
@@ -66,14 +66,14 @@ public class BurnBranches extends Task {
             return false;
         }
 
-        if (!Player.atTile(SideManager.getBurnTile(), WTRegion) && isGameGoing) {
+        if (!Player.atTile(SideManager.getBurnTile()) && isGameGoing) {
             Paint.setStatus("Stepping to burn tile");
             Logger.log("Stepping to burn tile!");
-            Walker.step(SideManager.getBurnTile(), WTRegion);
-            currentLocation = Walker.getPlayerPosition(WTRegion);
+            Walker.step(SideManager.getBurnTile());
+            currentLocation = Walker.getPlayerPosition();
         }
 
-        if (Player.atTile(SideManager.getBurnTile(), WTRegion) && isGameGoing) {
+        if (Player.atTile(SideManager.getBurnTile()) && isGameGoing) {
             Paint.setStatus("Initiating burn action");
             Logger.log("Initiating burn action!");
             Client.tap(SideManager.getBurnRect());

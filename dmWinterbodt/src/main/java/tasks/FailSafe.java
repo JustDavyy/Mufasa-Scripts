@@ -18,7 +18,7 @@ public class FailSafe extends Task {
             }
 
             // Check if we died
-            weDied = !Player.isTileWithinRegionbox(currentLocation, WTRegion);
+            weDied = !Player.isTileWithinRegionbox(currentLocation);
         }
 
         return Player.isTileWithinArea(currentLocation, LeftTopWTArea) || Player.isTileWithinArea(currentLocation, RightTopWTArea) || weDied;
@@ -33,22 +33,22 @@ public class FailSafe extends Task {
         // FailSafe for if we are at the top left of the WT area
         if (Player.isTileWithinArea(currentLocation, LeftTopWTArea)) {
             Paint.setStatus("FailSafe top left activated");
-            Walker.walkPath(WTRegion, LeftTopToStart);
-            Player.waitTillNotMoving(4, WTRegion);
+            Walker.walkPath(LeftTopToStart);
+            Player.waitTillNotMoving(4);
             Walker.step(SideManager.getBranchTile());
             lastActivity = System.currentTimeMillis();
-            currentLocation = Walker.getPlayerPosition(WTRegion);
+            currentLocation = Walker.getPlayerPosition();
             return false;
         }
 
         //FailSafe for if we are at the top right of the WT area
         if (Player.isTileWithinArea(currentLocation, RightTopWTArea)) {
             Paint.setStatus("FailSafe top right activated");
-            Walker.walkPath(WTRegion, RightTopToStart);
-            Player.waitTillNotMoving(4, WTRegion);
+            Walker.walkPath(RightTopToStart);
+            Player.waitTillNotMoving(4);
             Walker.step(SideManager.getBranchTile());
             lastActivity = System.currentTimeMillis();
-            currentLocation = Walker.getPlayerPosition(WTRegion);
+            currentLocation = Walker.getPlayerPosition();
             return false;
         }
 

@@ -25,11 +25,11 @@ public class CheckGear extends Task {
 
             // Odd axes, just added to be able to detect and support them, but low in priority.
             ItemList.CRYSTAL_AXE_23673,
-            ItemList.CRYSTAL_AXE_UNCHARGED_23675,
+            ItemList.CRYSTAL_AXE__INACTIVE__23675,
             ItemList.CRYSTAL_FELLING_AXE_28220,
-            ItemList.CRYSTAL_FELLING_AXE_UNCHARGED_28223,
+            ItemList.CRYSTAL_FELLING_AXE__INACTIVE__28223,
             ItemList.INFERNAL_AXE_13241,
-            ItemList.INFERNAL_AXE_UNCHARGED_13242,
+            ItemList.INFERNAL_AXE__UNCHARGED__13242,
             ItemList._3RD_AGE_AXE_20011,
             ItemList._3RD_AGE_FELLING_AXE_28226,
             ItemList.DRAGON_FELLING_AXE_28217,
