@@ -2,8 +2,6 @@ package Tasks;
 
 import utils.Task;
 
-import java.awt.*;
-
 import static helpers.Interfaces.*;
 
 public class CheckAutoRetaliate extends Task {
