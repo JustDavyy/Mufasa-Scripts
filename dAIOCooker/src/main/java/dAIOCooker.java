@@ -16,7 +16,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAIOCooker",
         description = "The cooker script to cook all your raw fish (or seaweed) at various different places.",
-        version = "1.03",
+        version = "1.04",
         guideLink = "https://wiki.mufasaclient.com/docs/dcooker/",
         categories = {ScriptCategory.Cooking}
 )
@@ -92,44 +92,26 @@ int processCount = 0;
 String product;
 String location;
 
-// Area, regions and tiles
-
-RegionBox hosidiusRegion = new RegionBox(
-        "Hosidius",
-        2016, 1896,
-        2205, 2118
-);
+// Area and tiles
 Area hosidiusKitchenArea = new Area(
-        new Tile(695, 656),
-        new Tile(712, 670)
+        new Tile(6672, 14168, 0),
+        new Tile(6767, 14262, 0)
 );
-Tile hosidiusStartTile = new Tile(699, 667);
+Tile hosidiusStartTile = new Tile(6699, 14213, 0);
 Rectangle hosidiusStartRangeRect = new Rectangle(462, 102, 13, 19);
-
-RegionBox nardahRegion = new RegionBox(
-        "Nardah",
-        8796, 4545,
-        9402, 5040
-);
 Area nardahArea = new Area(
-        new Tile(3026, 1621),
-        new Tile(3050, 1641)
+        new Tile(13676, 11259, 0),
+        new Tile(13803, 11367, 0)
 );
-Tile nardahStartTile = new Tile(3034, 1628);
-Rectangle nardahStartOvenRect = new Rectangle(560, 363, 20, 21);
+Tile nardahStartTile = new Tile(13707, 11313, 0);
+Rectangle nardahStartOvenRect = new Rectangle(559, 362, 19, 22);
 
 Area catherbyArea = new Area(
-        new Tile(2202, 885),
-        new Tile(2225, 904)
+        new Tile(11199, 13474, 0),
+        new Tile(11294, 13552, 0)
 );
-
-RegionBox catherbyRegion = new RegionBox(
-        "Catherby",
-        6549, 2613,
-        6726, 2760
-);
-Tile catherbyStartTile = new Tile(2210, 895);
-Rectangle catherbyStartRangeRect = new Rectangle(663, 181, 32, 22);
+Tile catherbyStartTile = new Tile(11235, 13513, 0);
+Rectangle catherbyStartRangeRect = new Rectangle(658, 184, 33, 22);
 
 // Banks and range rectangles
 private Map<String, List<RectanglePair>> bankRectangles = new HashMap<>();
@@ -162,6 +144,12 @@ Tile playerPos;
         } else {
             Logger.debugLog("Hopping is disabled for this run!");
         }
+
+        // Create the MapChunk with chunks of our location
+        MapChunk chunks = new MapChunk(new String[]{"43-53", "43-54", "44-54", "44-53", "26-56", "25-56", "53-45", "53-44"}, "0");
+
+        // Set up the walker with the created MapChunk
+        Walker.setup(chunks);
 
         // Debug prints for chosen settings (in case we ever need this)
         Logger.debugLog("We're using bank tab: " + banktab);
@@ -253,13 +241,13 @@ Tile playerPos;
         Logger.debugLog("Checking which area we are in, and moving to the start tile.");
         switch (location) {
             case "Catherby range":
-                checkLocation(catherbyRegion, catherbyArea, catherbyStartTile);
+                checkLocation(catherbyArea, catherbyStartTile);
                 break;
             case "Hosidius kitchen":
-                checkLocation(hosidiusRegion, hosidiusKitchenArea, hosidiusStartTile);
+                checkLocation(hosidiusKitchenArea, hosidiusStartTile);
                 break;
             case "Nardah oven":
-                checkLocation(nardahRegion, nardahArea, nardahStartTile);
+                checkLocation(nardahArea, nardahStartTile);
                 break;
         }
     }
@@ -449,33 +437,32 @@ Tile playerPos;
         }
     }
 
-    private void checkLocation(RegionBox region, Area area, Tile tile) {
-        playerPos = Walker.getPlayerPosition(region);
-        if (Player.isTileWithinArea(playerPos, area)) {
-            if (!Player.atTile(tile, region)) {
+    private void checkLocation(Area area, Tile tile) {
+        if (Player.within(area)) {
+            if (!Player.atTile(tile)) {
                 Logger.debugLog("Walking to the " + location + " start tile.");
-                Walker.step(tile, region);
-                Condition.wait(() -> Player.atTile(tile, region), 200, 20);
-                if (!Player.atTile(tile, region)) {
+                Walker.step(tile);
+                Condition.wait(() -> Player.atTile(tile), 200, 20);
+                if (!Player.atTile(tile)) {
                     Logger.debugLog("Walking to the " + location + " start tile.");
-                    Walker.step(tile, region);
-                    Condition.wait(() -> Player.atTile(tile, region), 200, 20);
-                    if (!Player.atTile(tile, region)) {
+                    Walker.step(tile);
+                    Condition.wait(() -> Player.atTile(tile), 200, 20);
+                    if (!Player.atTile(tile)) {
                         Logger.debugLog("Walking to the " + location + " start tile.");
-                        Walker.step(tile, region);
-                        Condition.wait(() -> Player.atTile(tile, region), 200, 20);
-                        if (!Player.atTile(tile, region)) {
+                        Walker.step(tile);
+                        Condition.wait(() -> Player.atTile(tile), 200, 20);
+                        if (!Player.atTile(tile)) {
                             Logger.debugLog("Walking to the " + location + " start tile.");
-                            Walker.step(tile, region);
-                            Condition.wait(() -> Player.atTile(tile, region), 200, 20);
-                            if (!Player.atTile(tile, region)) {
+                            Walker.step(tile);
+                            Condition.wait(() -> Player.atTile(tile), 200, 20);
+                            if (!Player.atTile(tile)) {
                                 Logger.debugLog("Walking to the " + location + " start tile.");
-                                Walker.step(tile, region);
-                                Condition.wait(() -> Player.atTile(tile, region), 200, 20);
-                                if (!Player.atTile(tile, region)) {
+                                Walker.step(tile);
+                                Condition.wait(() -> Player.atTile(tile), 200, 20);
+                                if (!Player.atTile(tile)) {
                                     Logger.debugLog("Walking to the " + location + " start tile.");
-                                    Walker.step(tile, region);
-                                    Condition.wait(() -> Player.atTile(tile, region), 200, 20);
+                                    Walker.step(tile);
+                                    Condition.wait(() -> Player.atTile(tile), 200, 20);
                                 }
                             }
                         }
