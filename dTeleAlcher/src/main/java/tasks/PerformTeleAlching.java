@@ -20,7 +20,7 @@ public class PerformTeleAlching extends Task {
 
     @Override
     public boolean execute() {
-        if (!Inventory.contains(itemID, 0.80) && Inventory.contains(ItemList.LAW_RUNE_563, 0.8) && GameTabs.isInventoryTabOpen()) {
+        if (!Inventory.contains(itemID, 0.69) && Inventory.contains(ItemList.LAW_RUNE_563, 0.8) && GameTabs.isInventoryTabOpen()) {
             Logger.log("Ran out of items to alch or law runes, stopping script");
             Logout.logout();
             Script.stop();
