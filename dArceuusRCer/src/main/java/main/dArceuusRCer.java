@@ -68,9 +68,9 @@ public class dArceuusRCer extends AbstractScript {
             new Tile(6877, 15274, 0)
     };
 
-    public static Tile venerateAltarTile = new Tile(152, 104);
-    public static Tile obstacleOutsideTile = new Tile(210, 112);
-    public static Tile obstacleInsideTile = new Tile(210, 114);
+    public static Tile venerateAltarTile = new Tile(6871, 15273, 0);
+    public static Tile obstacleOutsideTile = new Tile(7043, 15245, 0);
+    public static Tile obstacleInsideTile = new Tile(7043, 15238, 0);
     public static Area BloodArea1 = new Area(
             new Tile(57, 77),
             new Tile(146, 149)
@@ -181,8 +181,8 @@ public class dArceuusRCer extends AbstractScript {
             new Tile(6851, 15250, 0),
             new Tile(6889, 15291, 0)
     );
-    public static Tile bloodAltarTile = new Tile(152,174);
-    public static Tile soulAltarTile = new Tile(289, 132);
+    public static Tile bloodAltarTile = new Tile(6875, 15061, 0);
+    public static Tile soulAltarTile = new Tile(7259, 15169, 0);
     public static Rectangle venerateAltar = new Rectangle(401, 238, 16, 17);
     public static Tile[] venerateToBloodAltarPath = new Tile[] {
             new Tile(6844, 15275, 0),
@@ -280,8 +280,8 @@ public class dArceuusRCer extends AbstractScript {
             new Tile(6884, 15283, 0),
             new Tile(6879, 15265, 0)
     };
-    public static Tile southDenseRunestone = new Tile(211, 148);
-    public static Tile northDenseRunestone = new Tile(211, 140);
+    public static Tile southDenseRunestone = new Tile(7047, 15149, 0);
+    public static Tile northDenseRunestone = new Tile(7047, 15169, 0);
     public static Rectangle tapNorthRuneStoneSOUTH = new Rectangle(462, 157, 28, 16);
     public static Rectangle tapSouthRuneStoneSOUTH = new Rectangle(466, 290, 51, 52);
     public static Rectangle tapNorthRuneStoneNORTH = new Rectangle(462, 194, 44, 39);
@@ -293,8 +293,8 @@ public class dArceuusRCer extends AbstractScript {
     public static Rectangle essenceCachedLoc;
     public static Integer essenceToProcess = 0;
     public static Integer essenceCount = 0;
-    public static Tile obstacleBackToMineFromBloodInTile = new Tile(185, 141);
-    public static Tile obstacleNorthBackFromSoulAltarTile = new Tile(231, 100);
+    public static Tile obstacleBackToMineFromBloodInTile = new Tile(6967, 15165, 0);
+    public static Tile obstacleNorthBackFromSoulAltarTile = new Tile(7103, 15281, 0);
     public static Area miningArea = new Area(
             new Tile(7032, 15108, 0),
             new Tile(7084, 15202, 0)
