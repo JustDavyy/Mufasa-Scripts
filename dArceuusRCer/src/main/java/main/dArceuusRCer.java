@@ -23,7 +23,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dArceuus RCer",
         description = "Crafts blood or soul runes at Arceuus, supports using blood essence and hopping worlds. DISCLAIMER: This script is NOT fully safe for 10HP accounts, use at own risk!",
-        version = "2.05",
+        version = "2.06",
         guideLink = "https://wiki.mufasaclient.com/docs/darceuus-rcer/",
         categories = {ScriptCategory.Runecrafting, ScriptCategory.Moneymaking}
 )
@@ -72,82 +72,40 @@ public class dArceuusRCer extends AbstractScript {
     public static Tile obstacleOutsideTile = new Tile(7043, 15245, 0);
     public static Tile obstacleInsideTile = new Tile(7043, 15238, 0);
     public static Area BloodArea1 = new Area(
-            new Tile(57, 77),
-            new Tile(146, 149)
+            new Tile(6608, 15322, 0),
+            new Tile(6848, 15118, 0)
     );
     public static Area BloodArea2 = new Area(
-            new Tile(146, 128),
-            new Tile(184, 157)
+            new Tile(6828, 15202, 0),
+            new Tile(6972, 15086, 0)
     );
     public static Area BloodArea3 = new Area(
-            new Tile(153, 154),
-            new Tile(186, 184)
+            new Tile(6892, 15094, 0),
+            new Tile(6960, 15026, 0)
     );
     public static Area veneratePathArea = new Area(
-            new Tile(152, 97),
-            new Tile(211, 114)
+            new Tile(6912, 15270, 0),
+            new Tile(7000, 15222, 0)
     );
     public static Area mineFailSafeArea1 = new Area(
-            new Tile(216, 112),
-            new Tile(245, 160)
+            new Tile(7056, 15230, 0),
+            new Tile(7100, 15198, 0)
     );
     public static Area mineFailSafeArea2 = new Area(
-            new Tile(197, 121),
-            new Tile(209, 155)
+            new Tile(7088, 15230, 0),
+            new Tile(7156, 15086, 0)
     );
     public static Area mineFailSafeArea3 = new Area(
-            new Tile(199, 116),
-            new Tile(221, 123)
+            new Tile(7108, 15266, 0),
+            new Tile(7152, 15226, 0)
     );
-    public static Tile[] mineFailSafe1Path = new Tile[] {
-            new Tile(223, 107),
-            new Tile(232, 111),
-            new Tile(239, 117),
-            new Tile(243, 127),
-            new Tile(243, 138),
-            new Tile(241, 145),
-            new Tile(239, 153),
-            new Tile(234, 154),
-            new Tile(229, 148),
-            new Tile(231, 143),
-            new Tile(232, 135),
-            new Tile(232, 127),
-            new Tile(226, 122),
-            new Tile(221, 119),
-            new Tile(213, 118),
-            new Tile(204, 122),
-            new Tile(201, 130),
-            new Tile(199, 135),
-            new Tile(201, 142),
-            new Tile(205, 147),
-            new Tile(211, 140)
-    };
-    public static Tile[] mineFailSafe2Path = new Tile[] {
-            new Tile(202, 123),
-            new Tile(200, 131),
-            new Tile(199, 137),
-            new Tile(201, 142),
-            new Tile(204, 145),
-            new Tile(210, 141)
-    };
-    public static Tile[] mineFailSafe3Path = new Tile[] {
-            new Tile(218, 118),
-            new Tile(212, 118),
-            new Tile(206, 120),
-            new Tile(202, 124),
-            new Tile(200, 130),
-            new Tile(199, 136),
-            new Tile(201, 141),
-            new Tile(204, 144),
-            new Tile(210, 141)
-    };
     public static Area SoulArea1 = new Area(
-            new Tile(245, 67),
-            new Tile(353, 200)
+            new Tile(6880, 15354, 0),
+            new Tile(7216, 15274, 0)
     );
     public static Area SoulArea2 = new Area(
-            new Tile(149, 63),
-            new Tile(303, 95)
+            new Tile(7192, 15354, 0),
+            new Tile(7356, 15178, 0)
     );
     public static Area soulAltarArea = new Area(
             new Tile(7238, 15137, 0),
@@ -158,24 +116,12 @@ public class dArceuusRCer extends AbstractScript {
             new Tile(6884, 15075, 0)
     );
     public static Area beforeObstacleOutArea = new Area(
-            new Tile(201, 115),
-            new Tile(208, 122)
+            new Tile(7020, 15226, 0),
+            new Tile(7056, 15206, 0)
     );
     public static Area beforeObstacleInArea = new Area(
-            new Tile(197, 101),
-            new Tile(221, 114)
-    );
-    public static Area successObstacleOUTArea = new Area(
-            new Tile(196, 102),
-            new Tile(221, 113)
-    );
-    public static Area successObstacleBloodToMineArea = new Area(
-            new Tile(192, 132),
-            new Tile(206, 150)
-    );
-    public static Area successObstacleSoulToMineArea = new Area(
-            new Tile(215, 103),
-            new Tile(239, 117)
+            new Tile(7016, 15262, 0),
+            new Tile(7056, 15242, 0)
     );
     public static Area venerateAlterArea = new Area(
             new Tile(6851, 15250, 0),

@@ -15,6 +15,9 @@ import java.util.List;
 
 public class moveBackToMine extends Task {
 
+    Tile bloodRockObstacleSuccess = new Tile(7007, 15161, 0);
+    Tile soulRockObstacleSuccess = new Tile(7103, 15265, 0);
+
     @Override
     public boolean activate() {
         return (Player.within(dArceuusRCer.bloodAltarArea) && !Inventory.containsAny(new int[]{ItemList.DARK_ESSENCE_BLOCK_13446, ItemList.DARK_ESSENCE_FRAGMENTS_7938}, 0.8))
@@ -82,7 +85,7 @@ public class moveBackToMine extends Task {
             dArceuusRCer.playerPos = dArceuusRCer.northDenseRunestone;
         } else if (Player.within(dArceuusRCer.mineFailSafeArea1)) {
             Paint.setStatus("Mine FailSafe1");
-            Walker.walkPath(dArceuusRCer.mineFailSafe1Path);
+            Walker.webWalk(dArceuusRCer.southDenseRunestone);
             Condition.sleep(dArceuusRCer.generateRandomDelay(3000, 5000));
             Walker.step(dArceuusRCer.southDenseRunestone);
             dArceuusRCer.playerPos = Walker.getPlayerPosition();
@@ -92,7 +95,7 @@ public class moveBackToMine extends Task {
             dArceuusRCer.currentLoc = "south";
         } else if (Player.within(dArceuusRCer.mineFailSafeArea2)) {
             Paint.setStatus("Mine FailSafe2");
-            Walker.walkPath(dArceuusRCer.mineFailSafe2Path);
+            Walker.webWalk(dArceuusRCer.southDenseRunestone);
             Condition.sleep(dArceuusRCer.generateRandomDelay(3000, 5000));
             Walker.step(dArceuusRCer.southDenseRunestone);
             dArceuusRCer.playerPos = Walker.getPlayerPosition();
@@ -102,7 +105,7 @@ public class moveBackToMine extends Task {
             dArceuusRCer.currentLoc = "south";
         } else if (Player.within(dArceuusRCer.mineFailSafeArea3)) {
             Paint.setStatus("Mine FailSafe3");
-            Walker.walkPath(dArceuusRCer.mineFailSafe3Path);
+            Walker.webWalk(dArceuusRCer.southDenseRunestone);
             Condition.sleep(dArceuusRCer.generateRandomDelay(3000, 5000));
             Walker.step(dArceuusRCer.southDenseRunestone);
             dArceuusRCer.playerPos = Walker.getPlayerPosition();
@@ -143,9 +146,9 @@ public class moveBackToMine extends Task {
         if (!foundPoints.isEmpty()) {
             Logger.debugLog("Located the obstacle using the color finder, tapping.");
             Client.tap(foundPoints, true);
-            Condition.wait(() -> Player.within(dArceuusRCer.successObstacleBloodToMineArea), 250, 48);
+            Condition.wait(() -> Player.atTile(bloodRockObstacleSuccess), 250, 48);
 
-            if (!Player.within(dArceuusRCer.successObstacleBloodToMineArea)) {
+            if (!Player.atTile(bloodRockObstacleSuccess)) {
                 Logger.debugLog("Looks like we failed the obstacle, what a shame... Last attempt now....");
                 Walker.step(dArceuusRCer.obstacleBackToMineFromBloodInTile);
                 waitTillStopped(6);
@@ -154,7 +157,7 @@ public class moveBackToMine extends Task {
 
                 if (!foundPoints2.isEmpty()) {
                     Client.tap(foundPoints2, true);
-                    Condition.wait(() -> Player.within(dArceuusRCer.successObstacleBloodToMineArea), 250, 48);
+                    Condition.wait(() -> Player.atTile(bloodRockObstacleSuccess), 250, 48);
                 }
             }
         } else {
@@ -180,7 +183,7 @@ public class moveBackToMine extends Task {
 
                 if (!foundPoints2.isEmpty()) {
                     Client.tap(foundPoints2, true);
-                    Condition.wait(() -> Player.within(dArceuusRCer.successObstacleBloodToMineArea), 250, 48);
+                    Condition.wait(() -> Player.atTile(bloodRockObstacleSuccess), 250, 48);
                 }
             }
         }
@@ -225,7 +228,7 @@ public class moveBackToMine extends Task {
                     Client.tap(new Rectangle(442, 284, 13, 10));
                     waitTillStopped(3);
 
-                    if (Player.within(dArceuusRCer.successObstacleSoulToMineArea)) {
+                    if (Player.atTile(soulRockObstacleSuccess)) {
                         Logger.debugLog("Successfully traversed the obstacle this time!");
                         return;
                     }
@@ -236,14 +239,14 @@ public class moveBackToMine extends Task {
                 Client.tap(new Rectangle(442, 284, 13, 10));
                 waitTillStopped(8);
 
-                if (!Player.within(dArceuusRCer.successObstacleSoulToMineArea)) {
+                if (!Player.atTile(soulRockObstacleSuccess)) {
                     Logger.debugLog("Looks like we failed the obstacle, what a shame... Retrying!");
                     Walker.step(dArceuusRCer.obstacleNorthBackFromSoulAltarTile);
                     waitTillStopped(8);
 
                     Client.tap(new Rectangle(442, 284, 13, 10));
                     waitTillStopped(8);
-                    if (!Player.within(dArceuusRCer.successObstacleSoulToMineArea)) {
+                    if (!Player.atTile(soulRockObstacleSuccess)) {
                         Logger.debugLog("Looks like we failed the obstacle again, what a shame... Retrying!");
                         Walker.step(dArceuusRCer.obstacleNorthBackFromSoulAltarTile);
                         waitTillStopped(8);
@@ -251,7 +254,7 @@ public class moveBackToMine extends Task {
                         Client.tap(new Rectangle(442, 284, 13, 10));
                         waitTillStopped(8);
 
-                        if (!Player.within(dArceuusRCer.successObstacleSoulToMineArea)) {
+                        if (!Player.atTile(soulRockObstacleSuccess)) {
                             Logger.debugLog("Seems like we failed to use the soul obstacle multiple times, we'll walk back via the venerate altar instead.");
                             Walker.walkPath(dArceuusRCer.soulObstacleBackViaVenerate);
                             waitTillStopped(4);
