@@ -18,7 +18,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dMinnows Fisher",
         description = "Fishes Minnows at Kylie Minnow's fishing platform at the Fishing Guild. The angler's outfit is needed to unlock the platform.",
-        version = "1.02",
+        version = "1.03",
         guideLink = "https://wiki.mufasaclient.com/docs/dminnows-fisher/",
         categories = {ScriptCategory.Fishing}
 )
@@ -95,9 +95,10 @@ Random random = new Random();
         }
 
         if(!Inventory.contains("303", 0.90)) {
-            Logger.log("No small fishing net was found in the inventory, please grab it and restart the script.");
-            Logout.logout();
-            Script.stop();
+            //Logger.log("No small fishing net was found in the inventory, please grab it and restart the script.");
+            //Logout.logout();
+            //Script.stop();
+            Logger.log("No net was found, check is disabled by Davyy for now.");
         } else {
             Logger.debugLog("Fishing net is present in the inventory, we're good to go!");
             GameTabs.closeInventoryTab();
