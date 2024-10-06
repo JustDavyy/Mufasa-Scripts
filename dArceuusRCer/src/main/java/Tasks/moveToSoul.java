@@ -34,6 +34,7 @@ public class moveToSoul extends Task {
         Logger.debugLog("Now walking from Venerate altar to Soul Altar.");
         Walker.walkPath(dArceuusRCer.venerateToSoulAltarPath);
         waitTillStopped(5);
+        Walker.step(dArceuusRCer.soulAltarTile);
 
         if (dArceuusRCer.essenceCachedLoc == null) {
             Logger.debugLog("Last inventory spot for dark essence has not yet been cached, caching now!");

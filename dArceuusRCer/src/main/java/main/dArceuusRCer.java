@@ -108,8 +108,8 @@ public class dArceuusRCer extends AbstractScript {
             new Tile(7356, 15178, 0)
     );
     public static Area soulAltarArea = new Area(
-            new Tile(7238, 15137, 0),
-            new Tile(7280, 15179, 0)
+            new Tile(7226, 15137, 0),
+            new Tile(7286, 15191, 0)
     );
     public static Area bloodAltarArea = new Area(
             new Tile(6850, 15040, 0),
@@ -128,7 +128,7 @@ public class dArceuusRCer extends AbstractScript {
             new Tile(6889, 15291, 0)
     );
     public static Tile bloodAltarTile = new Tile(6875, 15061, 0);
-    public static Tile soulAltarTile = new Tile(7259, 15169, 0);
+    public static Tile soulAltarTile = new Tile(7267, 15165, 0);
     public static Rectangle venerateAltar = new Rectangle(401, 238, 16, 17);
     public static Tile[] venerateToBloodAltarPath = new Tile[] {
             new Tile(6844, 15275, 0),
@@ -235,7 +235,7 @@ public class dArceuusRCer extends AbstractScript {
     public static Rectangle northRuneStoneROI = new Rectangle(448, 176, 73, 73);
     public static Rectangle southRuneStoneROI = new Rectangle(458, 282, 70, 77);
     public static Rectangle bloodAltarStaticRect = new Rectangle(447, 220, 16, 16);
-    public static Rectangle soulAltarStaticRect = new Rectangle(316, 368, 17, 18);
+    public static Rectangle soulAltarStaticRect = new Rectangle(379, 275, 41, 27);
     public static Rectangle essenceCachedLoc;
     public static Integer essenceToProcess = 0;
     public static Integer essenceCount = 0;
