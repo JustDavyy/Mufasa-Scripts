@@ -215,9 +215,18 @@ public class moveBackToMine extends Task {
 
         List<Point> foundPoints = Client.getPointsFromColorsInRect(dArceuusRCer.obstacleColors, new Rectangle(340, 196, 248, 208), 3);
 
+        // Calculate the centroid of the points
+        Point centroid = calculateCentroid(foundPoints);
+
+        // Sort points by distance to the centroid
+        foundPoints.sort(Comparator.comparingDouble(p -> distance(p, centroid)));
+
+        // Select the top 4-5 most central points
+        List<Point> mostCentralPoints = foundPoints.subList(0, Math.min(5, foundPoints.size()));
+
         if (!foundPoints.isEmpty()) {
             Logger.debugLog("Located the obstacle using the color finder, tapping.");
-            Client.tap(foundPoints, true);
+            Client.tap(mostCentralPoints, false);
             waitTillStopped(8);
 
         } else {
