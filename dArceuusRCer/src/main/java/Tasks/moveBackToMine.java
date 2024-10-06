@@ -18,6 +18,7 @@ public class moveBackToMine extends Task {
     Tile bloodRockObstacleSuccess = new Tile(7007, 15161, 0);
     Tile soulRockObstacleSuccess = new Tile(7103, 15265, 0);
 
+
     @Override
     public boolean activate() {
         return (Player.within(dArceuusRCer.bloodAltarArea) && !Inventory.containsAny(new int[]{ItemList.DARK_ESSENCE_BLOCK_13446, ItemList.DARK_ESSENCE_FRAGMENTS_7938}, 0.8))
@@ -69,6 +70,10 @@ public class moveBackToMine extends Task {
             traverseSoulShortcutIn();
             // Sleep to be sure, we finished traveling
             Condition.sleep(dArceuusRCer.generateRandomDelay(2000,2500));
+            // Check if we're still at the first obstacle, re-do if needed in case we missclicked.
+            if (!Player.atTile(soulRockObstacleSuccess)) {
+                traverseSoulShortcutIn();
+            }
             // Southern shortcut
             traverseSoulShortcutIn2();
             dArceuusRCer.lastEmptySlots = Inventory.emptySlots();
@@ -201,7 +206,7 @@ public class moveBackToMine extends Task {
         }
         Logger.debugLog("Now walking from Soul Altar to the agility shortcut.");
         Walker.walkPath(dArceuusRCer.soulBackToObstaclePath);
-        waitTillStopped(3);
+        waitTillStopped(8);
     }
 
     private void traverseSoulShortcutIn() {
@@ -347,6 +352,11 @@ public class moveBackToMine extends Task {
         walkVenerateToShortcut();
         traverseShortcutIn();
 
+        // Check if we are still at the outside part of the obstacle (in case we had our chisel selected for example)
+        if (Player.atTile(dArceuusRCer.obstacleOutsideTile)) {
+            traverseShortcutIn();
+        }
+
         // Instantly tap the north RuneStone
         Client.tap(new Rectangle(497, 515, 33, 18));
 
@@ -426,8 +436,8 @@ public class moveBackToMine extends Task {
             Logger.debugLog("Essence to process: " + dArceuusRCer.essenceToProcess);
         }
 
-        // Process a block in the inventory if we still have them
-        if (!(dArceuusRCer.essenceToProcess == 0)) {
+        // Process a block in the inventory if we still have them (and they are dark)
+        if (!(dArceuusRCer.essenceToProcess == 0) && doneVenerating()) {
             Inventory.tapItem(1755, true, 0.80);
             dArceuusRCer.generateRandomDelay(100, 150);
             Client.tap(dArceuusRCer.essenceCachedLoc);
