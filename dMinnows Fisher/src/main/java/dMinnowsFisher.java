@@ -8,6 +8,7 @@ import helpers.utils.Area;
 
 import java.awt.*;
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.time.Instant;
 import java.util.Random;
@@ -17,7 +18,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dMinnows Fisher",
         description = "Fishes Minnows at Kylie Minnow's fishing platform at the Fishing Guild. The angler's outfit is needed to unlock the platform.",
-        version = "1.012",
+        version = "1.02",
         guideLink = "https://wiki.mufasaclient.com/docs/dminnows-fisher/",
         categories = {ScriptCategory.Fishing}
 )
@@ -159,9 +160,23 @@ Random random = new Random();
 
     private void fishMinnows() {
         Polygon fishSquare = Overlay.findNearest(FishSpotColor);
+
         if (fishSquare != null) {
+            // Calculate the approximate center of the polygon
+            Rectangle bounds = fishSquare.getBounds();
+            int centerX = bounds.x + bounds.width / 2;
+            int centerY = bounds.y + bounds.height / 2;
+
+            // Add some random offset to make it less predictable
+            int offsetX = (int) (Math.random() * 4) + 1; // Random value between 1 and 4
+            int offsetY = (int) (Math.random() * 4) + 1; // Random value between 1 and 4
+
+            // Randomly decide whether to add or subtract the offset
+            centerX += Math.random() < 0.5 ? -offsetX : offsetX;
+            centerY += Math.random() < 0.5 ? -offsetY : offsetY;
+
             Logger.debugLog("Switching to a new Minnow spot.");
-            Client.tap(fishSquare);
+            Client.tap(new Point(centerX, centerY)); // Tap around the randomized center
             lastXpGainTime = Instant.now().plusSeconds(5);
         } else {
             Logger.debugLog("Could not locate the nearest fishing spot...");
@@ -217,6 +232,15 @@ Random random = new Random();
         } else {
             return false;
         }
+    }
+
+    private static Point calculateCentroid(List<Point> points) {
+        int sumX = 0, sumY = 0;
+        for (Point p : points) {
+            sumX += p.x;
+            sumY += p.y;
+        }
+        return new Point(sumX / points.size(), sumY / points.size());
     }
 
     private void hopActions() {
