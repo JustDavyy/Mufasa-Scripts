@@ -409,12 +409,20 @@ public class dArceuusRCer extends AbstractScript {
 
     @Override
     public void poll() {
-        //Run tasks
+        boolean anyTaskActivated = false; // Track if any task was activated
+
+        // Run tasks
         for (Task task : RCTasks) {
             if (task.activate()) {
+                anyTaskActivated = true; // Set flag to true if a task activates
                 task.execute();
-                return;
+                return; // Execute only one task per poll
             }
+        }
+
+        if (!anyTaskActivated) {
+            Logger.debugLog("Not a single task was activated for some reason... Failsafe kicking in and webwalking to the mine!");
+            Walker.webWalk(southDenseRunestone);
         }
     }
 
