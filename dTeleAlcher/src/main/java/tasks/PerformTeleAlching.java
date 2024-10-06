@@ -31,7 +31,7 @@ public class PerformTeleAlching extends Task {
         if (!GameTabs.isMagicTabOpen()) {
             Logger.log("Opening Magic tab");
             GameTabs.openMagicTab();
-            Condition.wait(GameTabs::isMagicTabOpen, 100, 10);
+            Condition.wait(GameTabs::isMagicTabOpen, 100, 25);
         }
 
         // Tap alchemy spell based on the chosen teleport spell
