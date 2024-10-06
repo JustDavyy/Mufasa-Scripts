@@ -147,6 +147,7 @@ public class moveBackToMine extends Task {
             Logger.debugLog("Located the obstacle using the color finder, tapping.");
             Client.tap(foundPoints, true);
             Condition.wait(() -> Player.atTile(bloodRockObstacleSuccess), 250, 48);
+            Condition.sleep(dArceuusRCer.generateRandomDelay(1750, 2250));
 
             if (!Player.atTile(bloodRockObstacleSuccess)) {
                 Logger.debugLog("Looks like we failed the obstacle, what a shame... Last attempt now....");
@@ -158,6 +159,7 @@ public class moveBackToMine extends Task {
                 if (!foundPoints2.isEmpty()) {
                     Client.tap(foundPoints2, true);
                     Condition.wait(() -> Player.atTile(bloodRockObstacleSuccess), 250, 48);
+                    Condition.sleep(dArceuusRCer.generateRandomDelay(1750, 2250));
                 }
             }
         } else {
@@ -184,6 +186,7 @@ public class moveBackToMine extends Task {
                 if (!foundPoints2.isEmpty()) {
                     Client.tap(foundPoints2, true);
                     Condition.wait(() -> Player.atTile(bloodRockObstacleSuccess), 250, 48);
+                    Condition.sleep(dArceuusRCer.generateRandomDelay(1750, 2250));
                 }
             }
         }
@@ -352,7 +355,7 @@ public class moveBackToMine extends Task {
             processEssence();
         }
 
-        waitTillStopped(6);
+        Condition.wait(() -> Player.atTile(dArceuusRCer.northDenseRunestone), 200, 40);
         dArceuusRCer.currentLoc = "north";
         dArceuusRCer.lastEmptySlots = Inventory.emptySlots();
         Client.tap(dArceuusRCer.tapNorthRuneStoneNORTH);
@@ -382,6 +385,7 @@ public class moveBackToMine extends Task {
             Logger.debugLog("Located the obstacle using the color finder, tapping.");
             Client.tap(mostCentralPoints, false);
             waitTillStopped(8);
+            Condition.sleep(dArceuusRCer.generateRandomDelay(1750, 2250));
         } else {
             Logger.debugLog("Couldn't locate the obstacle with the color finder, using fallback method.");
 
@@ -407,6 +411,7 @@ public class moveBackToMine extends Task {
                     Logger.debugLog("Located the obstacle using the color finder, tapping.");
                     Client.tap(foundPoints2, true);
                     waitTillStopped(6);
+                    Condition.sleep(dArceuusRCer.generateRandomDelay(1750, 2250));
                 }
             }
         }
