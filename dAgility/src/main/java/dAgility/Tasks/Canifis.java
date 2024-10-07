@@ -32,6 +32,10 @@ public class Canifis extends Task {
             if (Player.isTileWithinArea(currentLocation, obstacle.area)) {
                 boolean markHandled = false;
 
+                if (obstacle.name.equals("Obstacle 4")) {
+                    Condition.sleep(generateRandomDelay(600, 850));
+                }
+
                 if (obstacle.checkForMark && obstacle.markHandling != null) {
                     for (MarkHandling mark : obstacle.markHandling) {
                         if (mark.isMarkPresent(mark.checkArea, mark.targetColor)) {
