@@ -586,7 +586,7 @@ public class dAgility extends AbstractScript {
         public void pickUpMark(Rectangle mogRectangle, Rectangle nextObstacleRectangle, Tile endTile) {
             Paint.setStatus("Pick up MoG");
             Client.tap(mogRectangle);
-            Player.waitTillNotMoving(10);
+            Player.waitTillNotMoving(30);
             mogTotal++;
             mogCount = mogTotal;
             Paint.updateBox(MoGIndex, mogCount);
