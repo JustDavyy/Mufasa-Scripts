@@ -102,7 +102,9 @@ import static helpers.Interfaces.*;
 )
 
 public class dAgility extends AbstractScript {
-    MarkHandling noMarks = new MarkHandling(new Rectangle(1, 1, 1, 1), new Color(203, 137, 25), new Rectangle(1, 1, 1 ,1), new Tile(1, 1, 0));
+    List<MarkHandling> noMarks = Arrays.asList(
+            new MarkHandling(new Rectangle(1, 1, 1, 1), new Color(203, 137, 25), new Rectangle(1, 1, 1, 1), new Tile(1, 1, 0))
+    );
     public static final List<Obstacle> obstacles = new ArrayList<dAgility.Obstacle>();
     private static final Random random = new Random();
     private final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
@@ -129,7 +131,8 @@ public class dAgility extends AbstractScript {
     private final List<Task> agilityTasks = Arrays.asList(
             new Run(),
             new Eat(),
-            new Gnome()
+            new Gnome(),
+            new Draynor()
     );
 
     @Override
@@ -182,6 +185,8 @@ public class dAgility extends AbstractScript {
             Paint.setStatus("Set teleport to TRUE");
             useSeersTeleport = true;
         }
+
+        GameTabs.closeInventoryTab();
 
         // Logs for debugging purposes
         Logger.log("Chosen agility course: " + courseChosen);
@@ -256,8 +261,8 @@ public class dAgility extends AbstractScript {
     private void setupWalker() {
         switch (courseChosen) {
             case "Gnome":
-                MapChunk chunks = new MapChunk(new String[]{"38-53", "39-53"}, "0", "1", "2");
-                Walker.setup(chunks);
+                MapChunk gnomeChunks = new MapChunk(new String[]{"38-53", "39-53"}, "0", "1", "2");
+                Walker.setup(gnomeChunks);
                 break;
             case "Al Kharid":
                 break;
@@ -272,6 +277,8 @@ public class dAgility extends AbstractScript {
             case "Ardougne":
                 break;
             case "Draynor":
+                MapChunk draynorChunks = new MapChunk(new String[]{"48-51"}, "0", "3");
+                Walker.setup(draynorChunks);
                 break;
             case "Pollnivneach":
                 break;
@@ -290,7 +297,9 @@ public class dAgility extends AbstractScript {
                 // Mark of Grace ground color
                 Color gnomeMogColor = new Color(Integer.parseInt("cb8919", 16));
                 // Mark of Graces
-                MarkHandling gnomeObstacle5Mark = new MarkHandling(new Rectangle(493, 265, 10, 11), gnomeMogColor, new Rectangle(469, 279, 20, 17), new Tile(9947, 13429, 0));
+                List<MarkHandling> gnomeObstacle5Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(493, 265, 10, 11), gnomeMogColor, new Rectangle(469, 279, 20, 17), new Tile(9947, 13429, 0))
+                );
                 // Obstacles
                 obstacles.add(new Obstacle("Obstacle 1",
                         new Area(new Tile(9877, 13481, 0), new Tile(9960, 13512, 0)),
@@ -346,6 +355,64 @@ public class dAgility extends AbstractScript {
             case "Ardougne":
                 break;
             case "Draynor":
+                // Mark of Grace ground color
+                Color draynorMogColor = new Color(Integer.parseInt("d38f1a", 16));
+                // Mark of Graces
+                List<MarkHandling> draynorObstacle2Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(247, 174, 19, 16), draynorMogColor, new Rectangle(427, 455, 29, 28), new Tile(12359, 12853, 3))
+                );
+                List<MarkHandling> draynorObstacle3Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(381, 364, 23, 16), draynorMogColor, new Rectangle(559, 195, 25, 22), new Tile(12367, 12813, 3))
+                );
+                List<MarkHandling> draynorObstacle4Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(535, 273, 27, 25), draynorMogColor, new Rectangle(216, 375, 26, 21), new Tile(12351, 12793, 3))
+                );
+                List<MarkHandling> draynorObstacle7Marks = Arrays.asList(
+                        new MarkHandling(new Rectangle(619, 220, 21, 16), draynorMogColor, new Rectangle(497, 41, 97, 59), new Tile(12411, 12793, 0)),
+                        new MarkHandling(new Rectangle(485, 142, 20, 16), draynorMogColor, new Rectangle(631, 131, 32, 63), new Tile(12411, 12793, 0))
+                );
+                // Obstacles
+                obstacles.add(new Obstacle("Obstacle 1",
+                        new Area(new Tile(12405, 12848, 0), new Tile(12443, 12879, 0)),
+                        new Tile(12415, 12865, 0), new Tile(12407, 12865, 3),
+                        new Rectangle(375, 245, 4, 19), null,
+                        new Tile(12411, 12793, 0), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 2",
+                        new Area(new Tile(12384, 12848, 3), new Tile(12417, 12879, 3)),
+                        new Tile(12395, 12857, 3), new Tile(12359, 12853, 3),
+                        new Rectangle(388, 281, 23, 24), new Rectangle(238, 346, 27, 25),
+                        new Tile(12407, 12865, 3), draynorObstacle2Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 3",
+                        new Area(new Tile(12340, 12829, 3), new Tile(12381, 12868, 3)),
+                        new Tile(12363, 12853, 3), new Tile(12367, 12813, 3),
+                        new Rectangle(486, 275, 23, 20), new Rectangle(519, 273, 26, 25),
+                        new Tile(12359, 12853, 3), draynorObstacle3Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 4",
+                        new Area(new Tile(12352, 12801, 3), new Tile(12385, 12824, 3)),
+                        new Tile(12355, 12809, 3), new Tile(12351, 12793, 3),
+                        new Rectangle(429, 323, 27, 29), new Rectangle(304, 370, 30, 29),
+                        new Tile(12367, 12813, 3), draynorObstacle4Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 5",
+                        new Area(new Tile(12344, 12770, 3), new Tile(12362, 12796, 3)),
+                        new Tile(12351, 12777, 3), new Tile(12351, 12769, 3),
+                        new Rectangle(421, 294, 43, 25), new Rectangle(421, 495, 38, 32),
+                        new Tile(12351, 12793, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 6",
+                        new Area(new Tile(12345, 12761, 3), new Tile(12383, 12770, 3)),
+                        new Tile(12375, 12769, 3), new Tile(12383, 12773, 3),
+                        new Rectangle(479, 267, 36, 30), new Rectangle(741, 270, 18, 27),
+                        new Tile(12351, 12769, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 7",
+                        new Area(new Tile(12382, 12767, 3), new Tile(12412, 12796, 3)),
+                        new Tile(12403, 12793, 3), new Tile(12411, 12793, 0),
+                        new Rectangle(485, 193, 71, 74), new Rectangle(668, 3, 24, 20),
+                        new Tile(12383, 12773, 3), draynorObstacle7Marks, true));
                 break;
             case "Pollnivneach":
                 break;
@@ -477,11 +544,11 @@ public class dAgility extends AbstractScript {
         public Rectangle pressArea;
         public Rectangle instantPressArea;
         public Tile prevEndTile;
-        public MarkHandling markHandling;
+        public List<MarkHandling> markHandling; // Change to a list of MarkHandling
         public boolean checkForMark;
 
         Obstacle(String name, Area area, Tile startTile, Tile endTile, Rectangle pressArea,
-                 Rectangle instantPressArea, Tile prevEndTile, MarkHandling markHandling, boolean checkForMark) {
+                 Rectangle instantPressArea, Tile prevEndTile, List<MarkHandling> markHandling, boolean checkForMark) {
             this.name = name;
             this.area = area;
             this.startTile = startTile;
