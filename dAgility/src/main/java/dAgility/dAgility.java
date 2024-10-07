@@ -574,7 +574,7 @@ public class dAgility extends AbstractScript {
                 break;
             case "Falador":
                 // Mark of Grace ground color
-                Color faladorMogColor = new Color(Integer.parseInt("CB8919", 16));
+                Color faladorMogColor = new Color(Integer.parseInt("cb8a19", 16));
                 // Mark of Graces
                 List<MarkHandling> faladorObstacle3Mark = Arrays.asList(
                         new MarkHandling(new Rectangle(404, 249, 14, 15), faladorMogColor, new Rectangle(531, 171, 4, 11), new Tile(12199, 13177, 3))
@@ -584,6 +584,9 @@ public class dAgility extends AbstractScript {
                 );
                 List<MarkHandling> faladorObstacle9Mark = Arrays.asList(
                         new MarkHandling(new Rectangle(419, 279, 12, 14), faladorMogColor, new Rectangle(389, 313, 5, 6), new Tile(12055, 13133, 3))
+                );
+                List<MarkHandling> faladorObstacle12Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(475, 268, 8, 7), faladorMogColor, new Rectangle(475, 263, 16, 10), new Tile(12075, 13081, 3))
                 );
                 // Obstacles
                 obstacles.add(new Obstacle("Obstacle 1",
@@ -656,7 +659,7 @@ public class dAgility extends AbstractScript {
                         new Area(new Tile(12045, 13065, 3), new Tile(12073, 13083, 3)),
                         new Tile(12063, 13081, 3), new Tile(12075, 13081, 3),
                         new Rectangle(458, 260, 16, 14), new Rectangle(506, 260, 17, 12),
-                        new Tile(12051, 13081, 3), noMarks, false));
+                        new Tile(12051, 13081, 3), faladorObstacle12Mark, true));
 
                 obstacles.add(new Obstacle("Obstacle 13",
                         new Area(new Tile(12074, 13070, 3), new Tile(12118, 13091, 3)),
