@@ -135,7 +135,8 @@ public class dAgility extends AbstractScript {
             new Gnome(),
             new Draynor(),
             new Alkharid(),
-            new Varrock()
+            new Varrock(),
+            new Canifis()
     );
 
     @Override
@@ -276,6 +277,8 @@ public class dAgility extends AbstractScript {
                 Walker.setup(varrockChunks);
                 break;
             case "Canifis":
+                MapChunk canifisChunks = new MapChunk(new String[]{"54-54"}, "0", "2", "3");
+                Walker.setup(canifisChunks);
                 break;
             case "Falador":
                 break;
@@ -499,6 +502,72 @@ public class dAgility extends AbstractScript {
                         new Tile(12943, 13389, 3), noMarks, false));
                 break;
             case "Canifis":
+                // Mark of Grace ground color
+                Color canifisMogColor = new Color(Integer.parseInt("cb8a19", 16));
+                // Mark of Graces
+                List<MarkHandling> canifisObstacle2Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(445, 225, 5, 5), canifisMogColor, new Rectangle(415, 218, 15, 11), new Tile(14007, 13765, 2))
+                );
+                List<MarkHandling> canifisObstacle3Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(428, 253, 8, 7), canifisMogColor, new Rectangle(359, 269, 17, 20), new Tile(13968, 13765, 2))
+                );
+                List<MarkHandling> canifisObstacle4Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(405, 319, 7, 6), canifisMogColor, new Rectangle(359, 293, 13, 15), new Tile(13915, 13745, 3))
+                );
+                List<MarkHandling> canifisObstacle5Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(425, 321, 5, 5), canifisMogColor, new Rectangle(436, 334, 17, 31), new Tile(13911, 13693, 2))
+                );
+                List<MarkHandling> canifisObstacle6Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(444, 307, 5, 5), canifisMogColor, new Rectangle(480, 289, 5, 2), new Tile(13955, 13653, 3))
+                );
+                // Obstacles
+                obstacles.add(new Obstacle("Obstacle 1",
+                        new Area(new Tile(14009, 13674, 0), new Tile(14054, 13717, 0)),
+                        new Tile(14031, 13697, 0), new Tile(14023, 13717, 2),
+                        new Rectangle(384, 205, 6, 10), new Rectangle(370, 171, 17, 7),
+                        new Tile(14039, 13689, 0), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 2",
+                        new Area(new Tile(14008, 13702, 2), new Tile(14056, 13749, 2)),
+                        new Tile(14023, 13733, 2), new Tile(14007, 13765, 2),
+                        new Rectangle(432, 231, 12, 13), new Rectangle(433, 180, 11, 12),
+                        new Tile(14023, 13717, 2), canifisObstacle2Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 3",
+                        new Area(new Tile(13979, 13749, 2), new Tile(14027, 13789, 2)),
+                        new Tile(13991, 13765, 2), new Tile(13968, 13765, 2),
+                        new Rectangle(414, 255, 14, 18), new Rectangle(346, 259, 15, 22),
+                        new Tile(14007, 13765, 2), canifisObstacle3Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 4",
+                        new Area(new Tile(13927, 13730, 2), new Tile(13982, 13786, 2)),
+                        new Tile(13947, 13745, 2), new Tile(13915, 13745, 3),
+                        new Rectangle(413, 260, 14, 17), new Rectangle(311, 346, 18, 21),
+                        new Tile(13968, 13765, 2), canifisObstacle4Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 5",
+                        new Area(new Tile(13885, 13702, 3), new Tile(13933, 13756, 3)),
+                        new Tile(13911, 13721, 3), new Tile(13911, 13693, 2),
+                        new Rectangle(440, 277, 12, 31), new Rectangle(414, 391, 18, 41),
+                        new Tile(13915, 13745, 3), canifisObstacle5Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 6",
+                        new Area(new Tile(13894, 13658, 2), new Tile(13950, 13716, 2)),
+                        new Tile(13915, 13685, 2), new Tile(13955, 13653, 3),
+                        new Rectangle(462, 288, 5, 4), new Rectangle(476, 321, 7, 3),
+                        new Tile(13911, 13693, 2), canifisObstacle6Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 7",
+                        new Area(new Tile(13939, 13606, 3), new Tile(14038, 13680, 3)),
+                        new Tile(14007, 13653, 3), new Tile(14039, 13653, 2),
+                        new Rectangle(468, 255, 13, 23), new Rectangle(685, 256, 24, 22),
+                        new Tile(13955, 13653, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 8",
+                        new Area(new Tile(14020, 13633, 2), new Tile(14078, 13694, 2)),
+                        new Tile(14039, 13677, 2), new Tile(14039, 13689, 0),
+                        new Rectangle(441, 243, 13, 14), new Rectangle(441, 169, 13, 10),
+                        new Tile(14039, 13653, 2), noMarks, false));
                 break;
             case "Falador":
                 break;
