@@ -102,7 +102,7 @@ import static helpers.Interfaces.*;
 )
 
 public class dAgility extends AbstractScript {
-    MarkHandling noMarks = new MarkHandling(new Rectangle(1, 1, 1, 1), new Color(203, 137, 25), new Rectangle(1, 1, 1 ,1));
+    MarkHandling noMarks = new MarkHandling(new Rectangle(1, 1, 1, 1), new Color(203, 137, 25), new Rectangle(1, 1, 1 ,1), new Tile(1, 1, 0));
     public static final List<Obstacle> obstacles = new ArrayList<dAgility.Obstacle>();
     private static final Random random = new Random();
     private final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
@@ -129,16 +129,7 @@ public class dAgility extends AbstractScript {
     private final List<Task> agilityTasks = Arrays.asList(
             new Run(),
             new Eat(),
-            new Gnome(),
-            new Draynor(),
-            new AlKharid(),
-            new Varrock(),
-            new Canifis(),
-            new Falador(),
-            new Seers(),
-            new Pollnivneach(),
-            new Rellekka(),
-            new Ardougne()
+            new Gnome()
     );
 
     @Override
@@ -203,8 +194,6 @@ public class dAgility extends AbstractScript {
         // Looped tasks go here.
         hopActions();
         updateStatLabel();
-
-        currentLocation = Walker.getPlayerPosition();
 
         for (Task task : agilityTasks) {
             if (task.activate()) {
@@ -298,8 +287,10 @@ public class dAgility extends AbstractScript {
     private void setupObstacles() {
         switch (courseChosen) {
             case "Gnome":
+                // Mark of Grace ground color
+                Color gnomeMogColor = new Color(Integer.parseInt("cb8919", 16));
                 // Mark of Graces
-
+                MarkHandling gnomeObstacle5Mark = new MarkHandling(new Rectangle(493, 265, 10, 11), gnomeMogColor, new Rectangle(469, 279, 20, 17), new Tile(9947, 13429, 0));
                 // Obstacles
                 obstacles.add(new Obstacle("Obstacle 1",
                         new Area(new Tile(9877, 13481, 0), new Tile(9960, 13512, 0)),
@@ -309,7 +300,7 @@ public class dAgility extends AbstractScript {
                 obstacles.add(new Obstacle("Obstacle 2",
                         new Area(new Tile(9870, 13439, 0), new Tile(9915, 13472, 0)),
                         new Tile(9895, 13453, 0), new Tile(9891, 13441, 1),
-                        new Rectangle(404, 282, 50, 13), new Rectangle(401, 370, 51, 12),
+                        new Rectangle(404, 282, 50, 13), new Rectangle(441, 381, 19, 9),
                         new Tile(9895, 13465, 0), noMarks, false));
 
                 obstacles.add(new Obstacle("Obstacle 3",
@@ -319,16 +310,16 @@ public class dAgility extends AbstractScript {
                         new Tile(9891, 13441, 1), noMarks, false));
 
                 obstacles.add(new Obstacle("Obstacle 4",
-                        new Area(new Tile(9864, 13450, 2), new Tile(9920, 13406, 2)),
+                        new Area(new Tile(9874, 13410, 2), new Tile(9925, 13447, 2)),
                         new Tile(9907, 13429, 2), new Tile(9931, 13429, 2),
                         new Rectangle(465, 276, 25, 2), new Rectangle(573, 275, 24, 3),
                         new Tile(9891, 13429, 2), noMarks, false));
 
                 obstacles.add(new Obstacle("Obstacle 5",
-                        new Area(new Tile(9924, 13446, 2), new Tile(9968, 13402, 2)),
+                        new Area(new Tile(9927, 13408, 2), new Tile(9970, 13446, 2)),
                         new Tile(9931, 13429, 2), new Tile(9947, 13429, 0),
                         new Rectangle(525, 283, 24, 19), new Rectangle(525, 283, 24, 19),
-                        new Tile(9931, 13429, 2), noMarks, false));
+                        new Tile(9931, 13429, 2), gnomeObstacle5Mark, true));
 
                 obstacles.add(new Obstacle("Obstacle 6",
                         new Area(new Tile(9925, 13403, 0), new Tile(9963, 13450, 0)),
@@ -479,11 +470,11 @@ public class dAgility extends AbstractScript {
     }
 
     public static class Obstacle {
-        String name;
+        public String name;
         public Area area;
-        Tile startTile;
-        Tile endTile;
-        Rectangle pressArea;
+        public Tile startTile;
+        public Tile endTile;
+        public Rectangle pressArea;
         public Rectangle instantPressArea;
         public Tile prevEndTile;
         public MarkHandling markHandling;
@@ -506,12 +497,14 @@ public class dAgility extends AbstractScript {
     public static class MarkHandling {
         public final Rectangle checkArea;
         public final Color targetColor;
-        private final Rectangle tapArea;
+        public final Rectangle tapArea;
+        public final Tile endTile;
 
-        MarkHandling(Rectangle checkArea, Color targetColor, Rectangle tapArea) {
+        MarkHandling(Rectangle checkArea, Color targetColor, Rectangle tapArea, Tile endTile) {
             this.checkArea = checkArea;
             this.targetColor = targetColor;
             this.tapArea = tapArea;
+            this.endTile = endTile;
         }
 
         public boolean isMarkPresent(Rectangle mogRectangle, Color mogColor) {
@@ -523,7 +516,7 @@ public class dAgility extends AbstractScript {
             }
         }
 
-        public void pickUpMark(Rectangle mogRectangle, Rectangle nextObstacleRectangle) {
+        public void pickUpMark(Rectangle mogRectangle, Rectangle nextObstacleRectangle, Tile endTile) {
             Paint.setStatus("Pick up MoG");
             Client.tap(mogRectangle);
             Player.waitTillNotMoving(10);
@@ -532,28 +525,34 @@ public class dAgility extends AbstractScript {
             Paint.updateBox(MoGIndex, mogCount);
             Logger.log("Total Marks of grace gathered so far: " + mogTotal);
             Client.tap(nextObstacleRectangle);
-            Player.waitTillNotMoving(10);
+            Condition.wait(() -> Player.atTile(endTile), 100, 110);
+            Condition.sleep(generateRandomDelay(400, 600));
         }
     }
 
     public static void traverseWithInstantTap(Obstacle obstacle) {
+        Logger.log("Traversing obstacle " + obstacle.name);
         Logger.debugLog("Traversing " + obstacle.name + " with instant tap.");
         Paint.setStatus("Traverse " + obstacle.name);
         Client.tap(obstacle.instantPressArea);
         Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 110);
+        Condition.sleep(generateRandomDelay(400, 600));
     }
 
     public static void traverseObstacle(Obstacle obstacle) {
         Paint.setStatus("Traverse " + obstacle.name);
+        Logger.log("Traversing obstacle " + obstacle.name);
         if (!Player.atTile(obstacle.startTile)) {
             Logger.debugLog("Moving to start of " + obstacle.name);
             Walker.step(obstacle.startTile);
             Condition.wait(() -> Player.atTile(obstacle.startTile), 100, 110);
+            Condition.sleep(generateRandomDelay(400, 600));
         }
         if (Player.atTile(obstacle.startTile)) {
             Logger.debugLog("At start of " + obstacle.name);
             Client.tap(obstacle.pressArea);
             Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 110);
+            Condition.sleep(generateRandomDelay(400, 600));
         }
     }
 
