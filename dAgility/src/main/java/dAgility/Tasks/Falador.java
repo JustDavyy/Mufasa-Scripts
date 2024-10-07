@@ -8,18 +8,18 @@ import helpers.utils.Tile;
 import static dAgility.dAgility.*;
 import static helpers.Interfaces.*;
 
-public class Canifis extends Task {
+public class Falador extends Task {
 
-    Tile startTile = new Tile(12887, 13405, 0);
-    Area canifisArea = new Area(new Tile(13835, 13588, 0), new Tile(14096, 13822, 0));
+    Tile startTile = new Tile(12143, 13109, 0);
+    Area faladorArea = new Area(new Tile(11983, 13033, 0), new Tile(12279, 13306, 0));
 
-    public Canifis(){
+    public Falador(){
         super();
-        super.name = "Canifis";
+        super.name = "Falador";
     }
     @Override
     public boolean activate() {
-        return (dAgility.courseChosen.equals("Canifis"));
+        return (dAgility.courseChosen.equals("Falador"));
     }
 
     @Override
@@ -31,10 +31,6 @@ public class Canifis extends Task {
         for (Obstacle obstacle : obstacles) {
             if (Player.isTileWithinArea(currentLocation, obstacle.area)) {
                 boolean markHandled = false;
-
-                if (obstacle.name.equals("Obstacle 4")) {
-                    Condition.sleep(generateRandomDelay(600, 850));
-                }
 
                 if (obstacle.checkForMark && obstacle.markHandling != null) {
                     for (MarkHandling mark : obstacle.markHandling) {
@@ -61,7 +57,7 @@ public class Canifis extends Task {
         }
 
         // Block that assumes we are not within any of those areas, which means we've fallen or wandered off somewhere?
-        if (Player.isTileWithinArea(currentLocation, canifisArea)) {
+        if (Player.isTileWithinArea(currentLocation, faladorArea)) {
             Logger.debugLog("Not within any obstacle area, webwalking back to start obstacle");
             Paint.setStatus("Recover after fall/failure");
             Walker.webWalk(startTile);

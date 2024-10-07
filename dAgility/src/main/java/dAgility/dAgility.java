@@ -136,7 +136,8 @@ public class dAgility extends AbstractScript {
             new Draynor(),
             new Alkharid(),
             new Varrock(),
-            new Canifis()
+            new Canifis(),
+            new Falador()
     );
 
     @Override
@@ -281,6 +282,8 @@ public class dAgility extends AbstractScript {
                 Walker.setup(canifisChunks);
                 break;
             case "Falador":
+                MapChunk faladorChunks = new MapChunk(new String[]{"47-52"}, "0", "3");
+                Walker.setup(faladorChunks);
                 break;
             case "Rellekka":
                 break;
@@ -570,6 +573,96 @@ public class dAgility extends AbstractScript {
                         new Tile(14039, 13653, 2), noMarks, false));
                 break;
             case "Falador":
+                // Mark of Grace ground color
+                Color faladorMogColor = new Color(Integer.parseInt("CB8919", 16));
+                // Mark of Graces
+                List<MarkHandling> faladorObstacle3Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(404, 249, 14, 15), faladorMogColor, new Rectangle(531, 171, 4, 11), new Tile(12199, 13177, 3))
+                );
+                List<MarkHandling> faladorObstacle4Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(421, 267, 15, 11), faladorMogColor, new Rectangle(426, 232, 6, 7), new Tile(12191, 13193, 3))
+                );
+                List<MarkHandling> faladorObstacle9Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(419, 279, 12, 14), faladorMogColor, new Rectangle(389, 313, 5, 6), new Tile(12055, 13133, 3))
+                );
+                // Obstacles
+                obstacles.add(new Obstacle("Obstacle 1",
+                        new Area(new Tile(12096, 13066, 0), new Tile(12177, 13130, 0)),
+                        new Tile(12143, 13109, 0), new Tile(12143, 13117, 3),
+                        new Rectangle(444, 240, 8, 8), new Rectangle(552, 142, 5, 9),
+                        new Tile(12115, 13081, 0), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 2",
+                        new Area(new Tile(12131, 13105, 3), new Tile(12170, 13145, 3)),
+                        new Tile(12155, 13121, 3), new Tile(12187, 13125, 3),
+                        new Rectangle(462, 266, 8, 7), new Rectangle(512, 247, 10, 7),
+                        new Tile(12143, 13117, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 3",
+                        new Area(new Tile(12168, 13099, 3), new Tile(12223, 13156, 3)),
+                        new Tile(12199, 13141, 3), new Tile(12199, 13177, 3),
+                        new Rectangle(444, 196, 14, 23), new Rectangle(494, 144, 13, 18),
+                        new Tile(12187, 13125, 3), faladorObstacle3Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 4",
+                        new Area(new Tile(12187, 13167, 3), new Tile(12208, 13185, 3)),
+                        new Tile(12195, 13181, 3), new Tile(12191, 13193, 3),
+                        new Rectangle(421, 244, 16, 13), new Rectangle(405, 229, 11, 15),
+                        new Tile(12199, 13177, 3), faladorObstacle4Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 5",
+                        new Area(new Tile(12173, 13184, 3), new Tile(12201, 13226, 3)),
+                        new Tile(12179, 13193, 3), new Tile(12163, 13193, 3),
+                        new Rectangle(421, 261, 12, 19), new Rectangle(373, 245, 13, 28),
+                        new Tile(12191, 13193, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 6",
+                        new Area(new Tile(12128, 13181, 3), new Tile(12172, 13212, 3)),
+                        new Tile(12139, 13193, 3), new Tile(12111, 13165, 3),
+                        new Rectangle(423, 257, 10, 11), new Rectangle(321, 259, 11, 12),
+                        new Tile(12163, 13193, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 7",
+                        new Area(new Tile(12098, 13148, 3), new Tile(12128, 13174, 3)),
+                        new Tile(12107, 13161, 3), new Tile(12079, 13161, 3),
+                        new Rectangle(424, 269, 8, 10), new Rectangle(407, 285, 9, 8),
+                        new Tile(12111, 13165, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 8",
+                        new Area(new Tile(12029, 13149, 3), new Tile(12096, 13189, 3)),
+                        new Tile(12071, 13161, 3), new Tile(12071, 13145, 3),
+                        new Rectangle(441, 274, 13, 4), new Rectangle(401, 274, 17, 5),
+                        new Tile(12079, 13161, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 9",
+                        new Area(new Tile(12062, 13114, 3), new Tile(12095, 13146, 3)),
+                        new Tile(12067, 13133, 3), new Tile(12055, 13133, 3),
+                        new Rectangle(402, 284, 16, 10), new Rectangle(396, 322, 12, 8),
+                        new Tile(12071, 13145, 3), faladorObstacle9Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 10",
+                        new Area(new Tile(12035, 13120, 3), new Tile(12063, 13145, 3)),
+                        new Tile(12051, 13125, 3), new Tile(12051, 13117, 3),
+                        new Rectangle(433, 278, 21, 9), new Rectangle(406, 311, 25, 13),
+                        new Tile(12055, 13133, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 11",
+                        new Area(new Tile(12028, 13083, 3), new Tile(12060, 13121, 3)),
+                        new Tile(12051, 13089, 3), new Tile(12051, 13081, 3),
+                        new Rectangle(438, 282, 15, 18), new Rectangle(436, 416, 17, 17),
+                        new Tile(12051, 13117, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 12",
+                        new Area(new Tile(12045, 13065, 3), new Tile(12073, 13083, 3)),
+                        new Tile(12063, 13081, 3), new Tile(12075, 13081, 3),
+                        new Rectangle(458, 260, 16, 14), new Rectangle(506, 260, 17, 12),
+                        new Tile(12051, 13081, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 13",
+                        new Area(new Tile(12074, 13070, 3), new Tile(12118, 13091, 3)),
+                        new Tile(12087, 13081, 3), new Tile(12115, 13081, 0),
+                        new Rectangle(482, 261, 14, 16), new Rectangle(536, 259, 15, 16),
+                        new Tile(12075, 13081, 3), noMarks, false));
                 break;
             case "Rellekka":
                 break;
