@@ -134,7 +134,8 @@ public class dAgility extends AbstractScript {
             new Eat(),
             new Gnome(),
             new Draynor(),
-            new Alkharid()
+            new Alkharid(),
+            new Varrock()
     );
 
     @Override
@@ -271,6 +272,8 @@ public class dAgility extends AbstractScript {
                 Walker.setup(alkharidChunks);
                 break;
             case "Varrock":
+                MapChunk varrockChunks = new MapChunk(new String[]{"50-53"}, "0", "1", "3");
+                Walker.setup(varrockChunks);
                 break;
             case "Canifis":
                 break;
@@ -422,6 +425,78 @@ public class dAgility extends AbstractScript {
                 );
                 break;
             case "Varrock":
+                // Mark of Grace ground color
+                Color varrockMogColor = new Color(Integer.parseInt("c98718", 16));
+                // Mark of Graces
+                List<MarkHandling> varrockObstacle4Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(408, 267, 10, 8), varrockMogColor, new Rectangle(368, 262, 31, 31), new Tile(12767, 13373, 3))
+                );
+                List<MarkHandling> varrockObstacle6Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(316, 319, 8, 8), varrockMogColor, new Rectangle(800, 219, 16, 29), new Tile(12871, 13345, 3))
+                );
+                List<MarkHandling> varrockObstacle8Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(472, 193, 9, 7), varrockMogColor, new Rectangle(406, 230, 85, 32), new Tile(12943, 13389, 3))
+                );
+                // Obstacles
+                obstacles.add(new Obstacle("Obstacle 1",
+                        new Area(new Tile(12842, 13383, 0), new Tile(12975, 13453, 0)),
+                        new Tile(12887, 13405, 0), new Tile(12875, 13405, 3),
+                        new Rectangle(419, 262, 3, 10), new Rectangle(149, 312, 11, 9),
+                        new Tile(12943, 13417, 0), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 2",
+                        new Area(new Tile(12843, 13378, 3), new Tile(12894, 13440, 3)),
+                        new Tile(12855, 13405, 3), new Tile(12831, 13405, 3),
+                        new Rectangle(422, 262, 13, 13), new Rectangle(338, 266, 10, 13),
+                        new Tile(12875, 13405, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 3",
+                        new Area(new Tile(12795, 13387, 3), new Tile(12846, 13441, 3)),
+                        new Tile(12803, 13413, 3), new Tile(12787, 13413, 1),
+                        new Rectangle(419, 244, 13, 28), new Rectangle(302, 215, 17, 25),
+                        new Tile(12831, 13405, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 4",
+                        new Area(new Tile(12728, 13375, 1), new Tile(12805, 13429, 1)),
+                        new Tile(12775, 13413, 1), new Tile(12767, 13373, 3),
+                        new Rectangle(388, 266, 28, 24), new Rectangle(339, 265, 27, 27),
+                        new Tile(12787, 13413, 1), varrockObstacle4Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 5",
+                        new Area(new Tile(12754, 13346, 3), new Tile(12783, 13385, 3)),
+                        new Tile(12771, 13357, 3), new Tile(12771, 13341, 3),
+                        new Rectangle(443, 278, 18, 14), new Rectangle(460, 351, 22, 16),
+                        new Tile(12767, 13373, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 6",
+                        new Area(new Tile(12720, 13258, 3), new Tile(12843, 13347, 3)),
+                        new Tile(12831, 13337, 3), new Tile(12871, 13345, 3),
+                        new Rectangle(460, 261, 14, 19), new Rectangle(719, 274, 16, 21),
+                        new Tile(12771, 13341, 3), varrockObstacle6Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 6-2",
+                        new Area(new Tile(12803, 13310, 3), new Tile(12844, 13370, 3)),
+                        new Tile(12831, 13337, 3), new Tile(12871, 13345, 3),
+                        new Rectangle(460, 261, 14, 19), new Rectangle(719, 274, 16, 21),
+                        new Tile(12771, 13341, 3), varrockObstacle6Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 7",
+                        new Area(new Tile(12851, 13306, 3), new Tile(12939, 13372, 3)),
+                        new Tile(12923, 13357, 3), new Tile(12943, 13361, 3),
+                        new Rectangle(467, 244, 18, 18), new Rectangle(676, 204, 12, 13),
+                        new Tile(12871, 13345, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 8",
+                        new Area(new Tile(12936, 13350, 3), new Tile(12973, 13379, 3)),
+                        new Tile(12943, 13381, 3), new Tile(12943, 13389, 3),
+                        new Rectangle(444, 225, 19, 27), new Rectangle(446, 156, 28, 29),
+                        new Tile(12943, 13361, 3), varrockObstacle8Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 9",
+                        new Area(new Tile(12936, 13381, 3), new Tile(12969, 13418, 3)),
+                        new Tile(12943, 13409, 3), new Tile(12943, 13417, 0),
+                        new Rectangle(439, 255, 15, 5), new Rectangle(441, 186, 15, 10),
+                        new Tile(12943, 13389, 3), noMarks, false));
                 break;
             case "Canifis":
                 break;

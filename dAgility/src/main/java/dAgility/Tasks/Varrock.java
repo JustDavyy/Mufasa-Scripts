@@ -8,27 +8,18 @@ import helpers.utils.Tile;
 import static dAgility.dAgility.*;
 import static helpers.Interfaces.*;
 
-public class Alkharid extends Task {
+public class Varrock extends Task {
 
-    Tile startTile = new Tile(13091, 12533, 0);
-    Tile obs1EndTile = new Tile(13091, 12517, 3);
-    Area alkharidArea = new Area(new Tile(13041, 12317, 0), new Tile(13324, 12606, 0));
-    Area obstacle8EndArea = new Area(new Tile(13179, 12499, 0), new Tile(13213, 12534, 0));
-    Tile[] pathToStart = new Tile[] {
-            new Tile(13183, 12523, 0),
-            new Tile(13160, 12522, 0),
-            new Tile(13139, 12531, 0),
-            new Tile(13117, 12532, 0),
-            new Tile(13100, 12537, 0)
-    };
+    Tile startTile = new Tile(12887, 13405, 0);
+    Area varrockArea = new Area(new Tile(12731, 13275, 0), new Tile(13101, 13571, 0));
 
-    public Alkharid(){
+    public Varrock(){
         super();
-        super.name = "Al Kharid";
+        super.name = "Varrock";
     }
     @Override
     public boolean activate() {
-        return (dAgility.courseChosen.equals("Al Kharid"));
+        return (dAgility.courseChosen.equals("Varrock"));
     }
 
     @Override
@@ -36,27 +27,6 @@ public class Alkharid extends Task {
         Paint.setStatus("Fetch player position");
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
-
-        // Block that assumes we are at the end of the last obstacle
-        if (Player.isTileWithinArea(currentLocation, obstacle8EndArea)) {
-            Logger.debugLog("Walking back to the start obstacle");
-            Paint.setStatus("Walk to start obstacle");
-            Walker.walkPath(pathToStart);
-            Player.waitTillNotMoving(20);
-        }
-
-        currentLocation = Walker.getPlayerPosition();
-        // Handle most of the start tiles without using color finder for speed
-        for (dAgility.startTileStorage tileTap : startTiles) {
-            if (Player.tileEquals(currentLocation, tileTap.getTile())) {
-                Logger.debugLog("Player is on tile: " + tileTap.getTile());
-                Paint.setStatus("Tap start obstacle");
-                Client.tap(tileTap.getTapRectangle());
-                Condition.wait(() -> Player.atTile(obs1EndTile), 200, 40);
-                currentLocation = Walker.getPlayerPosition();
-                break;
-            }
-        }
 
         for (Obstacle obstacle : obstacles) {
             if (Player.isTileWithinArea(currentLocation, obstacle.area)) {
@@ -77,7 +47,7 @@ public class Alkharid extends Task {
                 if (!markHandled) {
                     Paint.setStatus("Traverse obstacle " + obstacle.name);
                     proceedWithTraversal(obstacle, currentLocation);
-                    if (obstacle.name.equals("Obstacle 8")) {
+                    if (obstacle.name.equals("Obstacle 9")) {
                         lapCount++;
                     }
                 }
@@ -87,7 +57,7 @@ public class Alkharid extends Task {
         }
 
         // Block that assumes we are not within any of those areas, which means we've fallen or wandered off somewhere?
-        if (Player.isTileWithinArea(currentLocation, alkharidArea)) {
+        if (Player.isTileWithinArea(currentLocation, varrockArea)) {
             Logger.debugLog("Not within any obstacle area, webwalking back to start obstacle");
             Paint.setStatus("Recover after fall/failure");
             Walker.webWalk(startTile);
