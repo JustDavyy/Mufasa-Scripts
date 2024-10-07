@@ -133,7 +133,8 @@ public class dAgility extends AbstractScript {
             new Run(),
             new Eat(),
             new Gnome(),
-            new Draynor()
+            new Draynor(),
+            new Alkharid()
     );
 
     @Override
@@ -266,6 +267,8 @@ public class dAgility extends AbstractScript {
                 Walker.setup(gnomeChunks);
                 break;
             case "Al Kharid":
+                MapChunk alkharidChunks = new MapChunk(new String[]{"51-49"}, "0", "1", "2", "3");
+                Walker.setup(alkharidChunks);
                 break;
             case "Varrock":
                 break;
@@ -344,6 +347,79 @@ public class dAgility extends AbstractScript {
                         new Tile(9939, 13461, 0), noMarks, false));
                 break;
             case "Al Kharid":
+                // Mark of Grace ground color
+                Color alkharidMogColor = new Color(Integer.parseInt("c98818", 16));
+                // Mark of Graces
+                List<MarkHandling> alkharidObstacle2Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(517, 377, 9, 10), alkharidMogColor, new Rectangle(349, 359, 9, 10), new Tile(13087, 12437, 3))
+                );
+                List<MarkHandling> alkharidObstacle3Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(312, 445, 10, 9), alkharidMogColor, new Rectangle(494, 219, 7, 8), new Tile(13087, 12437, 3))
+                );
+                List<MarkHandling> alkharidObstacle4Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(491, 210, 8, 7), alkharidMogColor, new Rectangle(769, 390, 33, 19), new Tile(13087, 12437, 3))
+                );
+                // Obstacles
+                obstacles.add(new Obstacle("Obstacle 1",
+                        new Area(new Tile(13070, 12501, 0), new Tile(13214, 12544, 0)),
+                        new Tile(13091, 12533, 0), new Tile(13091, 12517, 3),
+                        new Rectangle(444, 289, 9, 6), null,
+                        new Tile(13195, 12525, 0), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 2",
+                        new Area(new Tile(13071, 12459, 3), new Tile(13121, 12526, 3)),
+                        new Tile(13087, 12477, 3), new Tile(13087, 12437, 3),
+                        new Rectangle(441, 285, 12, 9), new Rectangle(416, 497, 12, 14),
+                        new Tile(13091, 12517, 3), alkharidObstacle2Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 3",
+                        new Area(new Tile(13051, 12384, 3), new Tile(13101, 12449, 3)),
+                        new Tile(13067, 12413, 3), new Tile(13135, 12413, 3),
+                        new Rectangle(483, 253, 7, 18), new Rectangle(367, 372, 19, 12),
+                        new Tile(13087, 12437, 3), alkharidObstacle3Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 4",
+                        new Area(new Tile(13127, 12377, 3), new Tile(13227, 12458, 3)),
+                        new Tile(13203, 12401, 3), new Tile(13259, 12401, 1),
+                        new Rectangle(477, 259, 16, 16), new Rectangle(796, 309, 26, 17),
+                        new Tile(13135, 12413, 3), alkharidObstacle4Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 5",
+                        new Area(new Tile(13238, 12372, 1), new Tile(13289, 12420, 1)),
+                        new Tile(13271, 12409, 1), new Tile(13267, 12445, 2),
+                        new Rectangle(441, 233, 15, 21), new Rectangle(490, 204, 15, 24),
+                        new Tile(13259, 12401, 1), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 6",
+                        new Area(new Tile(13231, 12430, 2), new Tile(13290, 12508, 2)),
+                        new Tile(13263, 12465, 2), new Tile(13263, 12469, 3),
+                        new Rectangle(438, 258, 14, 4), new Rectangle(423, 185, 13, 2),
+                        new Tile(13267, 12445, 2), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 7",
+                        new Area(new Tile(13237, 12451, 3), new Tile(13296, 12520, 3)),
+                        new Tile(13251, 12489, 3), new Tile(13207, 12497, 3),
+                        new Rectangle(441, 249, 10, 10), new Rectangle(396, 184, 9, 7),
+                        new Tile(13263, 12469, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 8",
+                        new Area(new Tile(13177, 12479, 3), new Tile(13231, 12538, 3)),
+                        new Tile(13203, 12517, 3), new Tile(13195, 12525, 0),
+                        new Rectangle(422, 246, 13, 12), new Rectangle(411, 177, 13, 12),
+                        new Tile(13207, 12497, 3), noMarks, false));
+
+                // Start tiles
+                startTiles = Arrays.asList(
+                        new startTileStorage(new Tile(13095, 12541, 0), new Rectangle(423, 325, 9, 4)),
+                        new startTileStorage(new Tile(13091, 12545, 0), new Rectangle(443, 344, 9, 5)),
+                        new startTileStorage(new Tile(13095, 12545, 0), new Rectangle(426, 344, 7, 3)),
+                        new startTileStorage(new Tile(13099, 12545, 0), new Rectangle(408, 343, 10, 3)),
+                        new startTileStorage(new Tile(13099, 12541, 0), new Rectangle(408, 329, 11, 3)),
+                        new startTileStorage(new Tile(13099, 12537, 0), new Rectangle(408, 308, 11, 5)),
+                        new startTileStorage(new Tile(13095, 12537, 0), new Rectangle(424, 308, 9, 3)),
+                        new startTileStorage(new Tile(13091, 12537, 0), new Rectangle(442, 308, 10, 4)),
+                        new startTileStorage(new Tile(13087, 12537, 0), new Rectangle(459, 308, 11, 6))
+                );
                 break;
             case "Varrock":
                 break;
@@ -613,7 +689,7 @@ public class dAgility extends AbstractScript {
             Paint.updateBox(MoGIndex, mogCount);
             Logger.log("Total Marks of grace gathered so far: " + mogTotal);
             Client.tap(nextObstacleRectangle);
-            Condition.wait(() -> Player.atTile(endTile), 100, 110);
+            Condition.wait(() -> Player.atTile(endTile), 100, 250);
             Condition.sleep(generateRandomDelay(400, 600));
         }
     }
@@ -623,7 +699,7 @@ public class dAgility extends AbstractScript {
         Logger.debugLog("Traversing " + obstacle.name + " with instant tap.");
         Paint.setStatus("Traverse " + obstacle.name);
         Client.tap(obstacle.instantPressArea);
-        Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 110);
+        Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 250);
         Condition.sleep(generateRandomDelay(400, 600));
     }
 
@@ -633,13 +709,13 @@ public class dAgility extends AbstractScript {
         if (!Player.atTile(obstacle.startTile)) {
             Logger.debugLog("Moving to start of " + obstacle.name);
             Walker.step(obstacle.startTile);
-            Condition.wait(() -> Player.atTile(obstacle.startTile), 100, 110);
+            Condition.wait(() -> Player.atTile(obstacle.startTile), 100, 250);
             Condition.sleep(generateRandomDelay(550, 700));
         }
         if (Player.atTile(obstacle.startTile)) {
             Logger.debugLog("At start of " + obstacle.name);
             Client.tap(obstacle.pressArea);
-            Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 110);
+            Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 250);
             Condition.sleep(generateRandomDelay(550, 700));
         }
     }
