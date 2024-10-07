@@ -47,7 +47,7 @@ public class Falador extends Task {
                 if (!markHandled) {
                     Paint.setStatus("Traverse obstacle " + obstacle.name);
                     proceedWithTraversal(obstacle, currentLocation);
-                    if (obstacle.name.equals("Obstacle 9")) {
+                    if (obstacle.name.equals("Obstacle 13")) {
                         lapCount++;
                     }
                 }
