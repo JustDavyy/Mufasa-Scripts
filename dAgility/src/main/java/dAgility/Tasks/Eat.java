@@ -1,0 +1,80 @@
+package dAgility.Tasks;
+
+import dAgility.utils.Task;
+
+import static helpers.Interfaces.*;
+import static dAgility.dAgility.*;
+
+public class Eat extends Task {
+
+    public Eat(){
+        super();
+        super.name = "Eat";
+    }
+    @Override
+    public boolean activate() {
+        // Criteria that needs to be met for this class to run
+        currentHP = Player.getHP();
+        return (currentHP <= eatHP && currentHP != -1);
+    }
+
+    @Override //the code to execute if criteria met
+    public boolean execute() {
+        Paint.setStatus("Eating");
+        currentHP = Player.getHP();
+        Logger.debugLog("HP: " + currentHP);
+        if (foodID.equals("None")) {
+            Logger.log("Below HP threshold, no food chosen. Stopping script...");
+            Logout.logout();
+            Script.stop();
+        }
+
+        else {
+            Logger.log("Below HP threshold, eating food.");
+            if (!GameTabs.isInventoryTabOpen()) {
+                GameTabs.openInventoryTab();
+                Condition.sleep(1500);
+            }
+            Logger.debugLog("Eating food til above threshold.");
+            if (foodID.equals("Cake")) {
+                if (Inventory.contains("1895", 0.8)) { // 1/3 cake
+                    eat("1895");
+                }
+                else if (Inventory.contains("1893", 0.8)) { // 2/3 cake
+                    eat("1893");
+                }
+                else if (Inventory.contains("1891", 0.8)) { // 3/3 cake
+                    eat("1891");
+                }
+                else {
+                    Logger.log("No more food, stopping script.");
+                    Logout.logout();
+                    Script.stop();
+                }
+            } else {
+                if (Inventory.count(foodID, 0.8) > 0) {
+                    eat(foodID);
+                } else {
+                    Logger.log("No more food, stopping script.");
+                    Logout.logout();
+                    Script.stop();
+                }
+            }
+
+        Logger.log("Done eating food.");
+        return true;
+        }
+        return false;
+    }
+    public void eat(String food){
+        Logger.debugLog("Eating food now.");
+        Inventory.eat(food, 0.8);
+        Condition.sleep(3000);
+        currentHP = Player.getHP();
+        GameTabs.closeInventoryTab();
+        Condition.wait(() -> !GameTabs.isInventoryTabOpen(), 250, 20);
+        if (GameTabs.isInventoryTabOpen()) {
+            GameTabs.closeInventoryTab();
+        }
+    }
+}
