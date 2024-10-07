@@ -7,10 +7,12 @@ import helpers.utils.Tile;
 
 import static dAgility.dAgility.*;
 import static helpers.Interfaces.*;
+import static dAgility.dAgility.startTileStorage.*;
 
 public class Draynor extends Task {
 
     Tile startTile = new Tile(12415, 12865, 0);
+    Tile obs1EndTile = new Tile(12407, 12865, 3);
     Area draynorArea = new Area(new Tile(12275, 12663, 0), new Tile(12540, 12981, 0));
     Area obstacle7EndArea = new Area(new Tile(12400, 12765, 0), new Tile(12432, 12846, 0));
     Tile[] pathToStart = new Tile[] {
@@ -41,6 +43,19 @@ public class Draynor extends Task {
             Paint.setStatus("Walk to start obstacle");
             Walker.walkPath(pathToStart);
             Player.waitTillNotMoving(20);
+        }
+
+        currentLocation = Walker.getPlayerPosition();
+        // Handle most of the start tiles without using color finder for speed
+        for (dAgility.startTileStorage tileTap : startTiles) {
+            if (Player.tileEquals(currentLocation, tileTap.getTile())) {
+                Logger.debugLog("Player is on tile: " + tileTap.getTile());
+                Paint.setStatus("Tap start obstacle");
+                Client.tap(tileTap.getTapRectangle());
+                Condition.wait(() -> Player.atTile(obs1EndTile), 200, 40);
+                currentLocation = Walker.getPlayerPosition();
+                break;
+            }
         }
 
         for (Obstacle obstacle : obstacles) {

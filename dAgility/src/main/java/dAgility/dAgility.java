@@ -105,6 +105,7 @@ public class dAgility extends AbstractScript {
     List<MarkHandling> noMarks = Arrays.asList(
             new MarkHandling(new Rectangle(1, 1, 1, 1), new Color(203, 137, 25), new Rectangle(1, 1, 1, 1), new Tile(1, 1, 0))
     );
+    public static List<startTileStorage> startTiles = Arrays.asList();
     public static final List<Obstacle> obstacles = new ArrayList<dAgility.Obstacle>();
     private static final Random random = new Random();
     private final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
@@ -413,6 +414,26 @@ public class dAgility extends AbstractScript {
                         new Tile(12403, 12793, 3), new Tile(12411, 12793, 0),
                         new Rectangle(485, 193, 71, 74), new Rectangle(668, 3, 24, 20),
                         new Tile(12383, 12773, 3), draynorObstacle7Marks, true));
+
+                // Start tiles
+                startTiles = Arrays.asList(
+                        new startTileStorage(new Tile(12415, 12873, 0), new Rectangle(371, 332, 2, 20)),
+                        new startTileStorage(new Tile(12419, 12873, 0), new Rectangle(331, 338, 3, 18)),
+                        new startTileStorage(new Tile(12423, 12873, 0), new Rectangle(280, 336, 7, 23)),
+                        new startTileStorage(new Tile(12427, 12873, 0), new Rectangle(233, 340, 8, 26)),
+                        new startTileStorage(new Tile(12427, 12869, 0), new Rectangle(239, 311, 7, 16)),
+                        new startTileStorage(new Tile(12423, 12869, 0), new Rectangle(274, 303, 6, 21)),
+                        new startTileStorage(new Tile(12419, 12869, 0), new Rectangle(321, 299, 6, 23)),
+                        new startTileStorage(new Tile(12415, 12869, 0), new Rectangle(373, 302, 4, 19)),
+                        new startTileStorage(new Tile(12415, 12865, 0), new Rectangle(374, 253, 5, 20)),
+                        new startTileStorage(new Tile(12419, 12865, 0), new Rectangle(338, 257, 5, 17)),
+                        new startTileStorage(new Tile(12423, 12865, 0), new Rectangle(290, 262, 8, 19)),
+                        new startTileStorage(new Tile(12427, 12865, 0), new Rectangle(244, 265, 8, 18)),
+                        new startTileStorage(new Tile(12427, 12861, 0), new Rectangle(249, 225, 9, 20)),
+                        new startTileStorage(new Tile(12423, 12861, 0), new Rectangle(295, 221, 7, 17)),
+                        new startTileStorage(new Tile(12419, 12861, 0), new Rectangle(329, 216, 6, 20)),
+                        new startTileStorage(new Tile(12415, 12861, 0), new Rectangle(376, 213, 3, 20))
+                );
                 break;
             case "Pollnivneach":
                 break;
@@ -613,13 +634,13 @@ public class dAgility extends AbstractScript {
             Logger.debugLog("Moving to start of " + obstacle.name);
             Walker.step(obstacle.startTile);
             Condition.wait(() -> Player.atTile(obstacle.startTile), 100, 110);
-            Condition.sleep(generateRandomDelay(400, 600));
+            Condition.sleep(generateRandomDelay(550, 700));
         }
         if (Player.atTile(obstacle.startTile)) {
             Logger.debugLog("At start of " + obstacle.name);
             Client.tap(obstacle.pressArea);
             Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 110);
-            Condition.sleep(generateRandomDelay(400, 600));
+            Condition.sleep(generateRandomDelay(550, 700));
         }
     }
 
@@ -630,4 +651,23 @@ public class dAgility extends AbstractScript {
             traverseObstacle(obstacle);
         }
     }
+
+    public class startTileStorage {
+        public final Tile tile;
+        public final Rectangle tapRectangle;
+
+        public startTileStorage(Tile tile, Rectangle tapRectangle) {
+            this.tile = tile;
+            this.tapRectangle = tapRectangle;
+        }
+
+        public Tile getTile() {
+            return tile;
+        }
+
+        public Rectangle getTapRectangle() {
+            return tapRectangle;
+        }
+    }
+
 }
