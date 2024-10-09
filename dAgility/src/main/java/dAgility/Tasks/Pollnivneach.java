@@ -7,28 +7,29 @@ import helpers.utils.Tile;
 
 import static dAgility.dAgility.*;
 import static helpers.Interfaces.*;
-import static dAgility.dAgility.startTileStorage.*;
 
-public class Draynor extends Task {
+public class Pollnivneach extends Task {
 
-    Tile startTile = new Tile(12415, 12865, 0);
-    Tile obs1EndTile = new Tile(12407, 12865, 3);
-    Area draynorArea = new Area(new Tile(12275, 12663, 0), new Tile(12540, 12981, 0));
-    Area obstacle7EndArea = new Area(new Tile(12400, 12765, 0), new Tile(12432, 12846, 0));
+    Tile startTile = new Tile(13403, 11593, 0);
+    Tile obs1EndTile = new Tile(13403, 11605, 1 );
+    Area pollyArea = new Area(new Tile(13310, 11500, 0), new Tile(13552, 11794, 0));
+    Area obstacle9EndArea = new Area(new Tile(13441, 11717, 0), new Tile(13477, 11752, 0));
     Tile[] pathToStart = new Tile[] {
-            new Tile(12417, 12802, 0),
-            new Tile(12419, 12822, 0),
-            new Tile(12419, 12838, 0),
-            new Tile(12422, 12858, 0)
+            new Tile(13449, 11727, 0),
+            new Tile(13450, 11692, 0),
+            new Tile(13444, 11664, 0),
+            new Tile(13433, 11637, 0),
+            new Tile(13426, 11613, 0),
+            new Tile(13411, 11601, 0)
     };
 
-    public Draynor(){
+    public Pollnivneach(){
         super();
-        super.name = "Draynor";
+        super.name = "Pollnivneach";
     }
     @Override
     public boolean activate() {
-        return (dAgility.courseChosen.equals("Draynor"));
+        return (dAgility.courseChosen.equals("Pollnivneach"));
     }
 
     @Override
@@ -38,11 +39,11 @@ public class Draynor extends Task {
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
 
         // Block that assumes we are at the end of the last obstacle
-        if (Player.isTileWithinArea(currentLocation, obstacle7EndArea)) {
+        if (Player.isTileWithinArea(currentLocation, obstacle9EndArea)) {
             Logger.debugLog("Walking back to the start obstacle");
             Paint.setStatus("Walk to start obstacle");
             Walker.walkPath(pathToStart);
-            Player.waitTillNotMoving(20);
+            Player.waitTillNotMoving(18);
         }
 
         currentLocation = Walker.getPlayerPosition();
@@ -66,6 +67,9 @@ public class Draynor extends Task {
                 if (obstacle.checkForMark && obstacle.markHandling != null) {
                     for (MarkHandling mark : obstacle.markHandling) {
                         if (mark.isMarkPresent(mark.checkArea, mark.targetColor)) {
+                            if (obstacle.name.equals("Obstacle 8")) {
+                                Condition.sleep(generateRandomDelay(850, 1100));
+                            }
                             Paint.setStatus("Pick up mark of grace");
                             Logger.log("Mark of grace detected, picking it up!");
                             mark.pickUpMark(mark.checkArea, mark.tapArea, mark.endTile);
@@ -76,9 +80,12 @@ public class Draynor extends Task {
                 }
 
                 if (!markHandled) {
+                    if (obstacle.name.equals("Obstacle 8")) {
+                        Condition.sleep(generateRandomDelay(850, 1100));
+                    }
                     Paint.setStatus("Traverse obstacle " + obstacle.name);
                     proceedWithTraversal(obstacle, currentLocation);
-                    if (obstacle.name.equals("Obstacle 7")) {
+                    if (obstacle.name.equals("Obstacle 9")) {
                         lapCount++;
                     }
                 }
@@ -88,7 +95,7 @@ public class Draynor extends Task {
         }
 
         // Block that assumes we are not within any of those areas, which means we've fallen or wandered off somewhere?
-        if (Player.isTileWithinArea(currentLocation, draynorArea)) {
+        if (Player.isTileWithinArea(currentLocation, pollyArea)) {
             Logger.debugLog("Not within any obstacle area, webwalking back to start obstacle");
             Paint.setStatus("Recover after fall/failure");
             Walker.webWalk(startTile);

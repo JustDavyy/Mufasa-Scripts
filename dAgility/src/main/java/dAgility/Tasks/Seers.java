@@ -56,6 +56,7 @@ public class Seers extends Task {
         }
 
         currentLocation = Walker.getPlayerPosition();
+        Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
         // Handle most of the start tiles without using color finder for speed
         for (dAgility.startTileStorage tileTap : startTiles) {
             if (Player.tileEquals(currentLocation, tileTap.getTile())) {
