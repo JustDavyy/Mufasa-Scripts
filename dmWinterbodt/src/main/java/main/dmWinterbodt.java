@@ -268,8 +268,8 @@ public class dmWinterbodt extends AbstractScript {
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
-        foodAmount = Integer.parseInt(configs.get("Food amount"));
-        foodAmountLeftToBank = Integer.parseInt(configs.get("Food amount left to bank at"));
+        foodAmount = Integer.parseInt(configs.get("Potion amount"));
+        foodAmountLeftToBank = Integer.parseInt(configs.get("Potions amount left to brew at"));
         pickedSide = configs.get("Side");
         bankTab = Integer.parseInt(configs.get("BankTab"));
         burnOnly = Boolean.parseBoolean(configs.get("Burn only?"));
