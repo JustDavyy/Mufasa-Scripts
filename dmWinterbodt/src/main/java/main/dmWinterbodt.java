@@ -38,14 +38,14 @@ import static utils.SideManager.pickRandomSide;
                 @ScriptConfiguration(
                         name = "Potion amount",
                         description = "Select the amount of potions you'd like to bring",
-                        defaultValue = "8",
+                        defaultValue = "6",
                         minMaxIntValues = {1, 28},
                         optionType = OptionType.INTEGER_SLIDER
                 ),
                 @ScriptConfiguration(
-                        name = "Potions amount left to brew at",
+                        name = "Potions amount left to create more",
                         description = "Select the amount of potion sips required to have for each game",
-                        defaultValue = "4",
+                        defaultValue = "8",
                         minMaxIntValues = {1, 28},
                         optionType = OptionType.INTEGER_SLIDER
                 ),
