@@ -137,7 +137,8 @@ public class dAgility extends AbstractScript {
             new Alkharid(),
             new Varrock(),
             new Canifis(),
-            new Falador()
+            new Falador(),
+            new Seers()
     );
 
     @Override
@@ -297,6 +298,8 @@ public class dAgility extends AbstractScript {
                 break;
             case "Seers":
             case "Seers - teleport":
+                MapChunk seersChunks = new MapChunk(new String[]{"42-54"}, "0", "2", "3");
+                Walker.setup(seersChunks);
                 break;
             default:
                 Logger.log("This is a unknown course, no chunks to set up.");
@@ -755,6 +758,87 @@ public class dAgility extends AbstractScript {
                 break;
             case "Seers":
             case "Seers - teleport":
+                // Mark of Grace ground color
+                Color seersMogColor = new Color(Integer.parseInt("ca8818", 16));
+                // Mark of Graces
+                List<MarkHandling> seersObstacle2Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(358, 190, 15, 13), seersMogColor, new Rectangle(112, 164, 35, 140), new Tile(10851, 13725, 2))
+                );
+                List<MarkHandling> seersObstacle3Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(253, 315, 18, 15), seersMogColor, new Rectangle(476, 453, 30, 32), new Tile(10839, 13669, 2)),
+                        new MarkHandling(new Rectangle(114, 318, 16, 11), seersMogColor, new Rectangle(624, 452, 30, 31), new Tile(10839, 13669, 2))
+                );
+                List<MarkHandling> seersObstacle4Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(522, 235, 16, 14), seersMogColor, new Rectangle(317, 475, 275, 59), new Tile(10839, 13637, 3))
+                );
+                List<MarkHandling> seersObstacle6Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(259, 273, 16, 14), seersMogColor, new Rectangle(670, 249, 27, 139), new Tile(10815, 13605, 0))
+                );
+                // Obstacles
+                obstacles.add(new Obstacle("Obstacle 1",
+                        new Area(new Tile(10888, 13663, 0), new Tile(10953, 13731, 0)),
+                        new Tile(10915, 13701, 0), new Tile(10915, 13713, 3),
+                        new Rectangle(433, 203, 35, 24), null, // No instantPressArea
+                        new Tile(10815, 13605, 0), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 2",
+                        new Area(new Tile(10867, 13691, 3), new Tile(10938, 13757, 3)),
+                        new Tile(10887, 13725, 3), new Tile(10851, 13725, 2),
+                        new Rectangle(328, 238, 37, 53), new Rectangle(46, 127, 37, 49),
+                        new Tile(10915, 13713, 3), seersObstacle2Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 3",
+                        new Area(new Tile(10806, 13682, 2), new Tile(10896, 13750, 2)),
+                        new Tile(10839, 13709, 2), new Tile(10839, 13669, 2),
+                        new Rectangle(432, 314, 24, 27), new Rectangle(286, 499, 25, 29),
+                        new Tile(10851, 13725, 2), seersObstacle3Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 4",
+                        new Area(new Tile(10826, 13641, 2), new Tile(10880, 13680, 2)),
+                        new Tile(10839, 13657, 2), new Tile(10839, 13637, 3),
+                        new Rectangle(425, 292, 33, 54), new Rectangle(429, 440, 38, 44),
+                        new Tile(10839, 13669, 2), seersObstacle4Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 5",
+                        new Area(new Tile(10784, 13607, 3), new Tile(10889, 13670, 3)),
+                        new Tile(10811, 13629, 3), new Tile(10807, 13609, 2),
+                        new Rectangle(432, 301, 32, 39), new Rectangle(73, 395, 46, 39),
+                        new Tile(10839, 13637, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 6",
+                        new Area(new Tile(10748, 13574, 2), new Tile(10829, 13627, 2)),
+                        new Tile(10807, 13605, 2), new Tile(10815, 13605, 0),
+                        new Rectangle(485, 268, 35, 36), new Rectangle(486, 301, 33, 38),
+                        new Tile(10807, 13609, 2), seersObstacle6Mark, true));
+
+                // Start tiles
+                startTiles = Arrays.asList(
+                        new startTileStorage(new Tile(10911, 13693, 0), new Rectangle(471, 129, 29, 24)),
+                        new startTileStorage(new Tile(10907, 13693, 0), new Rectangle(521, 130, 20, 24)),
+                        new startTileStorage(new Tile(10907, 13689, 0), new Rectangle(520, 95, 15, 23)),
+                        new startTileStorage(new Tile(10907, 13685, 0), new Rectangle(514, 67, 24, 20)),
+                        new startTileStorage(new Tile(10911, 13685, 0), new Rectangle(479, 69, 26, 18)),
+                        new startTileStorage(new Tile(10915, 13685, 0), new Rectangle(434, 68, 28, 21)),
+                        new startTileStorage(new Tile(10915, 13689, 0), new Rectangle(443, 97, 26, 12)),
+                        new startTileStorage(new Tile(10915, 13693, 0), new Rectangle(436, 125, 31, 24)),
+                        new startTileStorage(new Tile(10919, 13693, 0), new Rectangle(391, 135, 33, 24)),
+                        new startTileStorage(new Tile(10919, 13689, 0), new Rectangle(394, 106, 28, 24)),
+                        new startTileStorage(new Tile(10919, 13685, 0), new Rectangle(392, 72, 32, 27)),
+                        new startTileStorage(new Tile(10915, 13697, 0), new Rectangle(423, 164, 34, 24)),
+                        new startTileStorage(new Tile(10911, 13697, 0), new Rectangle(472, 160, 27, 26)),
+                        new startTileStorage(new Tile(10911, 13701, 0), new Rectangle(474, 200, 30, 24)),
+                        new startTileStorage(new Tile(10903, 13701, 0), new Rectangle(565, 201, 28, 22)),
+                        new startTileStorage(new Tile(10903, 13697, 0), new Rectangle(563, 170, 25, 24)),
+                        new startTileStorage(new Tile(10899, 13693, 0), new Rectangle(602, 125, 30, 23)),
+                        new startTileStorage(new Tile(10899, 13689, 0), new Rectangle(603, 93, 20, 23)),
+                        new startTileStorage(new Tile(10899, 13685, 0), new Rectangle(596, 64, 26, 20)),
+                        new startTileStorage(new Tile(10895, 13693, 0), new Rectangle(645, 124, 17, 25)),
+                        new startTileStorage(new Tile(10895, 13689, 0), new Rectangle(641, 94, 16, 24)),
+                        new startTileStorage(new Tile(10895, 13685, 0), new Rectangle(634, 65, 21, 19)),
+                        new startTileStorage(new Tile(10903, 13685, 0), new Rectangle(564, 65, 28, 20)),
+                        new startTileStorage(new Tile(10899, 13697, 0), new Rectangle(607, 158, 26, 29)),
+                        new startTileStorage(new Tile(10899, 13701, 0), new Rectangle(609, 200, 23, 20))
+                );
                 break;
             default:
                 Logger.log("This is a unknown course, no obstacles to set up.");
