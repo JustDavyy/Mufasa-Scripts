@@ -44,7 +44,7 @@ public class FletchBranches extends Task {
             SideManager.updateStates();
             XpBar.getXP();
 
-            return !inventoryHasLogs || startHP > currentHp || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
+            return !inventoryHasLogs || shouldEat || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
         }, 200, 150);
 
         return true;

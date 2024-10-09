@@ -23,31 +23,12 @@ import static utils.SideManager.pickRandomSide;
 @ScriptManifest(
         name = "dmWinterbodt",
         description = "Completes the Wintertodt minigame.",
-        version = "1.34",
+        version = "2.0",
         guideLink = "https://wiki.mufasaclient.com/docs/dmwinterbodt/",
         categories = {ScriptCategory.Firemaking, ScriptCategory.Minigames}
 )
 @ScriptConfiguration.List(
         {
-                @ScriptConfiguration(
-                        name = "Food",
-                        description = "Select which food to use",
-                        defaultValue = "Cakes",
-                        allowedValues = {
-                                @AllowedValue(optionIcon = "1891", optionName = "Cakes"),
-                                @AllowedValue(optionIcon = "379", optionName = "Lobster"),
-                                @AllowedValue(optionIcon = "373", optionName = "Swordfish"),
-                                @AllowedValue(optionIcon = "385", optionName = "Shark"),
-                                @AllowedValue(optionIcon = "359", optionName = "Tuna"),
-                                @AllowedValue(optionIcon = "333", optionName = "Trout"),
-                                @AllowedValue(optionIcon = "329", optionName = "Salmon"),
-                                @AllowedValue(optionIcon = "365", optionName = "Bass"),
-                                @AllowedValue(optionIcon = "3144", optionName = "Cooked karambwan"),
-                                @AllowedValue(optionIcon = "391", optionName = "Manta ray"),
-                                @AllowedValue(optionIcon = "13441", optionName = "Anglerfish")
-                        },
-                        optionType = OptionType.STRING
-                ),
                 @ScriptConfiguration(
                         name = "BankTab",
                         description = "What bank tab are your food located in?",
@@ -55,24 +36,17 @@ import static utils.SideManager.pickRandomSide;
                         optionType = OptionType.BANKTABS
                 ),
                 @ScriptConfiguration(
-                        name = "Food amount",
-                        description = "Select the amount of food you'd like to bring",
+                        name = "Potion amount",
+                        description = "Select the amount of potions you'd like to bring",
                         defaultValue = "8",
                         minMaxIntValues = {1, 28},
                         optionType = OptionType.INTEGER_SLIDER
                 ),
                 @ScriptConfiguration(
-                        name = "Food amount left to bank at",
-                        description = "Select the amount of food required to have for each game",
+                        name = "Potions amount left to brew at",
+                        description = "Select the amount of potion sips required to have for each game",
                         defaultValue = "4",
                         minMaxIntValues = {1, 28},
-                        optionType = OptionType.INTEGER_SLIDER
-                ),
-                @ScriptConfiguration(
-                        name = "HP to eat at",
-                        description = "Select the HP amount you'd like to eat at",
-                        defaultValue = "7",
-                        minMaxIntValues = {0, 100},
                         optionType = OptionType.INTEGER_SLIDER
                 ),
                 @ScriptConfiguration(
@@ -109,9 +83,6 @@ public class dmWinterbodt extends AbstractScript {
     public static String hopProfile;
     public static Boolean hopEnabled;
     public static Boolean useWDH;
-    public static int hpToEat;
-    public static String selectedFood;
-    public static int foodID;
     public static int foodAmount;
     public static int foodAmountLeftToBank;
     public static int bankTab;
@@ -121,8 +92,6 @@ public class dmWinterbodt extends AbstractScript {
             Color.decode("#2c3737"),
             Color.decode("#2a3535")
     );
-    public static int foodAmountInInventory;
-    public static int currentHp;
 
     public static boolean preGameFoodCheck = true;
     public static boolean gameAt13Percent;
@@ -136,6 +105,9 @@ public class dmWinterbodt extends AbstractScript {
     public static boolean isGameGoing;
     public static boolean isBurning = false;
     public static boolean shouldStartWithBurn;
+    public static int foodAmountInInventory;
+    public static boolean shouldEat;
+    public static boolean warmthCriticalLow;
     public static long lastWalkToSafety = System.currentTimeMillis();
     public static long lastActivity = System.currentTimeMillis();
     public static boolean isMoreThan40Seconds;
@@ -145,6 +117,10 @@ public class dmWinterbodt extends AbstractScript {
     public static int totalCrateCount = 0;
     public static int totalRepairCount = 0;
     public static int totalRelightCount = 0;
+    public static Area WTArea = new Area(
+            new Tile(6387, 15409, 0),
+            new Tile(6637, 15853, 0)
+    );
     public static Area lobby = new Area(
             new Tile(6501, 15655, 0),
             new Tile(6544, 15690, 0)
@@ -253,9 +229,9 @@ public class dmWinterbodt extends AbstractScript {
     // These tasks are executed in this order
     List<Task> WTTasks = Arrays.asList(
             new CheckGear(),
-            new BreakManager(), //I think it should be here?
+            new BreakManager(), // I think it should be here?
             new GoToSafety(),
-            new Bank(),
+            //new Bank(), // We dont need to bank anymore at all?
             new Eat(),
             new FailSafe(), // I think it should be here?
             new SwitchSide(),
@@ -292,8 +268,6 @@ public class dmWinterbodt extends AbstractScript {
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
-        hpToEat = Integer.parseInt(configs.get("HP to eat at"));
-        selectedFood = configs.get("Food");
         foodAmount = Integer.parseInt(configs.get("Food amount"));
         foodAmountLeftToBank = Integer.parseInt(configs.get("Food amount left to bank at"));
         pickedSide = configs.get("Side");
@@ -314,14 +288,9 @@ public class dmWinterbodt extends AbstractScript {
         Paint.setStatus("Initializing...");
         Paint.setStatistic("Brazier Repairs: " + totalRepairCount + " | Relights: " + totalRelightCount);
 
-        setupFoodIDs();
-
         // Make sure the inventory is open
         Paint.setStatus("Opening inventory");
         GameTabs.openInventoryTab();
-
-
-        initialFoodCount();
 
         if (pickedSide.equals("Random")) {
             Paint.setStatus("Picking random side");
@@ -355,80 +324,6 @@ public class dmWinterbodt extends AbstractScript {
                 task.execute();
                 return;
             }
-        }
-    }
-
-    private void setupFoodIDs() {
-        Paint.setStatus("Setting up food IDs");
-        Logger.debugLog("Setting up food IDs");
-        switch (selectedFood) {
-            case "Cakes":
-                foodID = 1891;
-                break;
-            case "Lobster":
-                foodID = 379;
-                break;
-            case "Swordfish":
-                foodID = 373;
-                break;
-            case "Shark":
-                foodID = 385;
-                break;
-            case "Tuna":
-                foodID = 359;
-                break;
-            case "Trout":
-                foodID = 333;
-                break;
-            case "Salmon":
-                foodID = 329;
-                break;
-            case "Bass":
-                foodID = 365;
-                break;
-            case "Cooked karambwan":
-                foodID = 3144;
-                break;
-            case "Manta ray":
-                foodID = 391;
-                break;
-            case "Anglerfish":
-                foodID = 13441;
-                break;
-            default:
-                Logger.log("Invalid food configuration, please restart script");
-                Script.stop();
-                break;
-        }
-    }
-
-    // Method to count total food items in the inventory
-    private void initialFoodCount() {
-        Paint.setStatus("Counting initial food");
-        foodAmountInInventory = 0; // Reset before counting
-
-        Logger.debugLog("Counting initial food in inventory");
-
-        if (selectedFood.equals("Cakes")) {
-            int[] foodIds = {1891, 1893, 1895};
-            for (int id : foodIds) {
-                int countMultiplier = 1; // Default count multiplier
-                if (id == 1891) {
-                    countMultiplier = 3; // A full cake counts as 3
-                } else if (id == 1893) {
-                    countMultiplier = 2; // half cake counts as 2
-                }
-
-                int count = Inventory.count(id, 0.85);
-                Logger.debugLog("Found " + count + " items with ID " + id + " and multiplier " + countMultiplier);
-                foodAmountInInventory += count * countMultiplier;
-                Logger.debugLog("Updated food amount in inventory: " + foodAmountInInventory);
-            }
-        } else {
-            int count = Inventory.count(foodID, 0.85);
-            Logger.debugLog("Found " + count + " items with ID " + foodID);
-            foodAmountInInventory = count;
-            Logger.debugLog("Total food in inventory: " + foodAmountInInventory);
         }
     }
 }

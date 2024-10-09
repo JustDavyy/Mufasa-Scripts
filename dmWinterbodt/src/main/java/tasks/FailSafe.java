@@ -13,12 +13,12 @@ public class FailSafe extends Task {
         if (foodAmountInInventory == 0) {
             currentLocation = Walker.getPlayerPosition();
 
-            if (currentHp < hpToEat) {
+            if (shouldEat) {
                 return true;
             }
 
             // Check if we died
-            weDied = !Player.isTileWithinRegionbox(currentLocation);
+            weDied = !Player.isTileWithinArea(currentLocation, WTArea);
         }
 
         return Player.isTileWithinArea(currentLocation, LeftTopWTArea) || Player.isTileWithinArea(currentLocation, RightTopWTArea) || weDied;

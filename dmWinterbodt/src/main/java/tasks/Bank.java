@@ -14,18 +14,16 @@ import static main.dmWinterbodt.*;
 
 public class Bank extends Task {
     Random random = new Random();
-    private boolean checkFood = true;
 
     @Override
     public boolean activate() {
         StateUpdater.updateIsGameGoing();
-        return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing && !Player.leveledUp() || !isGameGoing && (Inventory.count(ItemList.SUPPLY_CRATE_20703, 0.8) >= 8) || foodAmountInInventory < foodAmountLeftToBank && Player.isTileWithinArea(currentLocation, outsideArea) || foodAmountInInventory < foodAmountLeftToBank && Player.isTileWithinArea(currentLocation, lobby) && (!isGameGoing || totalGameCount == 0);
+        return !isGameGoing && !Player.leveledUp() || !isGameGoing && (Inventory.count(ItemList.SUPPLY_CRATE_20703, 0.8) >= 8) || Player.isTileWithinArea(currentLocation, outsideArea) || Player.isTileWithinArea(currentLocation, lobby) && (!isGameGoing || totalGameCount == 0);
     }
 
     @Override
     public boolean execute() {
         Logger.log("Banking!");
-        checkFood = true;
         currentLocation = Walker.getPlayerPosition();
 
         if (!GameTabs.isInventoryTabOpen()) {
@@ -74,11 +72,6 @@ public class Bank extends Task {
         if (ensureBankIsOpen()) {
             ensureCorrectBankTab();
 
-            depositExcessSupplyCrates();
-
-            int foodNeeded = CalculateAmountOfFoodNeeded();
-            withdrawFoodIfNeeded(foodNeeded);
-
             Bank.close();
             Condition.sleep(generateRandomDelay(400, 700));
             if (Bank.isOpen()) {
@@ -87,9 +80,7 @@ public class Bank extends Task {
 
             GameTabs.openInventoryTab();
 
-            checkFood = true;
             Condition.sleep(generateRandomDelay(1250, 2000));
-            countFoodInInventory();
 
             isBurning = false;
             FletchBranches.isFletching = false;
@@ -220,20 +211,6 @@ public class Bank extends Task {
         }
     }
 
-    private void withdrawFoodIfNeeded(int foodNeeded) {
-        if (foodNeeded > 0) {
-            Logger.log("Withdrawing " + foodNeeded + " " + selectedFood + " from the bank.");
-            if (!Bank.isSelectedQuantity1Button()) {
-                Bank.tapQuantity1Button();
-            }
-            for (int i = 0; i < foodNeeded; i++) {
-                Bank.withdrawItem(foodID, 0.7);
-                Condition.sleep(generateRandomDelay(75, 150));
-            }
-            Condition.sleep(generateRandomDelay(250, 500));
-        }
-    }
-
     private void ensureCorrectBankTab() {
         if (Bank.getCurrentTab(true) != bankTab) {
             Bank.openTab(bankTab);
@@ -253,48 +230,6 @@ public class Bank extends Task {
             }
             Inventory.tapItem(ItemList.SUPPLY_CRATE_20703, 0.80);
             Condition.wait(() -> !Inventory.contains(ItemList.SUPPLY_CRATE_20703, 0.80), 100, 20);
-        }
-    }
-
-    private int CalculateAmountOfFoodNeeded() {
-        Paint.setStatus("Calculating food needed");
-        // Calculate the amount of food needed to withdraw from the bank
-        int foodNeeded = foodAmount - foodAmountInInventory;
-
-        // If more food is needed, return that amount; otherwise, return 0
-        return Math.max(foodNeeded, 0);
-    }
-
-    // Method to count total food items in the inventory
-    private void countFoodInInventory() {
-        if (checkFood) {
-            Paint.setStatus("Running food count");
-            Logger.debugLog("Running food count.");
-            foodAmountInInventory = 0; // Reset before counting
-
-            if (selectedFood.equals("Cakes")) {
-                int[] foodIds = {1891, 1893, 1895};
-                for (int id : foodIds) {
-                    int countMultiplier = 1; // Default count multiplier
-                    if (id == 1891) {
-                        countMultiplier = 3; // A full cake counts as 3
-                    } else if (id == 1893) {
-                        countMultiplier = 2; // half cake counts as 2
-                    }
-
-                    int count = Inventory.count(id, 0.85);
-                    Logger.debugLog("Found " + count + " items with ID " + id + " and multiplier " + countMultiplier);
-                    foodAmountInInventory += count * countMultiplier;
-                    Logger.debugLog("Updated food amount in inventory: " + foodAmountInInventory);
-                }
-            } else {
-                int count = Inventory.count(foodID, 0.85);
-                Logger.debugLog("Found " + count + " items with ID " + foodID);
-                foodAmountInInventory = count;
-                Logger.debugLog("Total food in inventory: " + foodAmountInInventory);
-            }
-
-            checkFood = false;
         }
     }
 

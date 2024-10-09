@@ -1,6 +1,6 @@
 package tasks;
 
-import utils.StateUpdater;
+import helpers.utils.ItemList;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -10,8 +10,7 @@ public class Eat extends Task {
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside Eat activate()");
-        currentHp = Player.getHP();
-        return hpToEat > currentHp;
+        return shouldEat;
     }
 
     @Override
@@ -21,35 +20,27 @@ public class Eat extends Task {
 
         GameTabs.openInventoryTab();
 
-        if (java.util.Objects.equals(selectedFood, "Cakes")) {
-            // cake IDs; 1891, 1893, 1895
-            if (Inventory.contains(1895, 0.75)) { // slice of cake
-                Inventory.eat(1895, 0.75);
-                lastActivity = System.currentTimeMillis();
-                foodAmountInInventory--;
-                Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
-                return true;
-            } else if (Inventory.contains(1893, 0.75)) { // 2/3 cake
-                Inventory.eat(1893, 0.75);
-                lastActivity = System.currentTimeMillis();
-                foodAmountInInventory--;
-                Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
-                return true;
-            } else if (Inventory.contains(1891, 0.75)) { // full cake
-                Inventory.eat(1891, 0.75);
-                lastActivity = System.currentTimeMillis();
-                foodAmountInInventory--;
-                Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
-                return true;
-            }
-            return false;
-        } else {
-            Inventory.eat(foodID, 0.75);
+        if (Inventory.contains(ItemList.REJUVENATION_POTION__1__20702, 0.75)) {
+            Inventory.eat(ItemList.REJUVENATION_POTION__1__20702, 0.75);
             lastActivity = System.currentTimeMillis();
             foodAmountInInventory--;
-            Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
+            return true;
+        } else if (Inventory.contains(ItemList.REJUVENATION_POTION__2__20701, 0.75)) {
+            Inventory.eat(ItemList.REJUVENATION_POTION__2__20701, 0.75);
+            lastActivity = System.currentTimeMillis();
+            foodAmountInInventory--;
+            return true;
+        } else if (Inventory.contains(ItemList.REJUVENATION_POTION__3__20700, 0.75)) {
+            Inventory.eat(ItemList.REJUVENATION_POTION__3__20700, 0.75);
+            lastActivity = System.currentTimeMillis();
+            foodAmountInInventory--;
+            return true;
+        } else if (Inventory.contains(ItemList.REJUVENATION_POTION__4__20699, 0.75)) {
+            Inventory.eat(ItemList.REJUVENATION_POTION__4__20699, 0.75);
+            lastActivity = System.currentTimeMillis();
+            foodAmountInInventory--;
             return true;
         }
+    return false;
     }
-
 }

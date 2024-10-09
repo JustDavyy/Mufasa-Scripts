@@ -108,7 +108,7 @@ public class BurnBranches extends Task {
                     isBurning = false;
                 }
 
-                return !inventoryHasKindlings && !inventoryHasLogs || startHP > currentHp || Player.leveledUp() || !isGameGoing;
+                return !inventoryHasKindlings && !inventoryHasLogs || shouldEat || Player.leveledUp() || !isGameGoing;
             }, 100, 300);
 
             return true;
@@ -119,7 +119,7 @@ public class BurnBranches extends Task {
 
     private void tapAndSleep(int repeatCount, int startHP) {
         for (int i = 0; i < repeatCount; i++) {
-            if (startHP > currentHp) {
+            if (shouldEat) {
                 break; // Exit the loop if the player's health drops
             }
             Client.tap(SideManager.getBurnRect());

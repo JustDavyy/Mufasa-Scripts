@@ -19,6 +19,9 @@ public class StateUpdater {
     static Rectangle gameAt13CheckRect = new Rectangle(83, 38, 1, 1);
     static Rectangle gameAt20CheckRect = new Rectangle(93, 37, 1, 1);
     static Rectangle gameAt70CheckRect = new Rectangle(196, 39, 1, 1);
+    static Rectangle fullWarmtBar = new Rectangle(57, 35, 198, 9); //not really sure we need this, but I guess in case we do
+    static Rectangle warmthAt60 = new Rectangle(174, 35, 7, 8);
+    static Rectangle warmthCriticalLowRect = new Rectangle(58, 36, 16, 8);
     static Rectangle waitingForGameToStartRect = new Rectangle(253, 41, 1, 1);
     static Rectangle waitingForGameEndedRect = new Rectangle(56, 38, 1, 1);
     public static final HashMap<String, Long> mageDeadTimestamps = new HashMap<>();
@@ -57,6 +60,11 @@ public class StateUpdater {
         }
     }
 
+    private static void updateShouldEat() {
+        shouldEat = Client.isColorInRect(Color.decode("#007c69"), warmthAt60, 5); // Checks if the depleted color is in the 60% mark.
+        warmthCriticalLow = Client.isColorInRect(Color.decode("#007c69"), warmthCriticalLowRect, 5);
+    }
+
     private static boolean updateMageDeadState(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.MAGE_DEAD.getColor();
@@ -76,7 +84,7 @@ public class StateUpdater {
             state.setMageDead(updateMageDead(state));
         }
         updateIsGameGoing();
-        updateCurrentHP();
+        updateShouldEat();
         updateKindlingState();
 
     }
@@ -86,6 +94,8 @@ public class StateUpdater {
         currentLocation = Walker.getPlayerPosition();
 
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
+            updateShouldEat(); // Update our HP!
+
             for (WTStates state : states) {
                 // Update each boolean based on some conditions or actions
                 state.setFireAlive(updateFireAlive(state));
@@ -101,11 +111,9 @@ public class StateUpdater {
             updateIsGameGoing();
             updateWaitingForGameToStart();
             updateWaitingForGameEnded();
-            updateCurrentHP();
 
             updateKindlingState();
             updateShouldBurn();
-
         }
 
         // Update which side we are on
@@ -157,10 +165,6 @@ public class StateUpdater {
         }
 
         return isMageDead;
-    }
-
-    private static void updateCurrentHP() {
-        currentHp = Player.getHP();
     }
 
     public static void updateGameAt13() {

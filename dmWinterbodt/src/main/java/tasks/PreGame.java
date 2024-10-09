@@ -1,5 +1,6 @@
 package tasks;
 
+import helpers.utils.ItemList;
 import utils.SideManager;
 import utils.StateUpdater;
 import utils.Task;
@@ -132,26 +133,21 @@ public class PreGame extends Task {
         Logger.debugLog("Running food count.");
         foodAmountInInventory = 0; // Reset before counting
 
-        if (selectedFood.equals("Cakes")) {
-            int[] foodIds = {1891, 1893, 1895};
-            for (int id : foodIds) {
-                int countMultiplier = 1; // Default count multiplier
-                if (id == 1891) {
-                    countMultiplier = 3; // A full cake counts as 3
-                } else if (id == 1893) {
-                    countMultiplier = 2; // half cake counts as 2
-                }
-
-                int count = Inventory.count(id, 0.85);
-                Logger.debugLog("Found " + count + " items with ID " + id + " and multiplier " + countMultiplier);
-                foodAmountInInventory += count * countMultiplier;
-                Logger.debugLog("Updated food amount in inventory: " + foodAmountInInventory);
+        int[] foodIds = {ItemList.REJUVENATION_POTION__1__20702, ItemList.REJUVENATION_POTION__2__20701, ItemList.REJUVENATION_POTION__3__20700, ItemList.REJUVENATION_POTION__4__20699};
+        for (int id : foodIds) {
+            int countMultiplier = 1; // Default count multiplier
+            if (id == ItemList.REJUVENATION_POTION__2__20701) {
+                countMultiplier = 2;
+            } else if (id == ItemList.REJUVENATION_POTION__3__20700) {
+                countMultiplier = 3;
+            } else if (id == ItemList.REJUVENATION_POTION__4__20699) {
+                countMultiplier = 4;
             }
-        } else {
-            int count = Inventory.count(foodID, 0.85);
-            Logger.debugLog("Found " + count + " items with ID " + foodID);
-            foodAmountInInventory = count;
-            Logger.debugLog("Total food in inventory: " + foodAmountInInventory);
+
+            int count = Inventory.count(id, 0.85);
+            Logger.debugLog("Found " + count + " items with ID " + id + " and multiplier " + countMultiplier);
+            foodAmountInInventory += count * countMultiplier;
+            Logger.debugLog("Updated food amount in inventory: " + foodAmountInInventory);
         }
     }
 }

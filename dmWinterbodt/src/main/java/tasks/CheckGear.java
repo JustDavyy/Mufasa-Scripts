@@ -136,6 +136,9 @@ public class CheckGear extends Task {
                 if (Equipment.itemAt(EquipmentSlot.WEAPON, ItemList.BRUMA_TORCH_20720)) {
                     checkedForTinderboxOrBruma = true;
                     Logger.debugLog("Bruma Torch equipped, continuing");
+                } else if (Equipment.itemAt(EquipmentSlot.SHIELD, ItemList.BRUMA_TORCH_20720)) {
+                    checkedForTinderboxOrBruma = true;
+                    Logger.debugLog("Bruma Torch equipped in shield slot, continuing");
                 }
             }
         }

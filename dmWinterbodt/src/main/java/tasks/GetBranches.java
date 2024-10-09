@@ -58,7 +58,7 @@ public class GetBranches extends Task {
                     }
                 }
 
-                return Inventory.isFull() || hpToEat > currentHp || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
+                return Inventory.isFull() || shouldEat || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
             }, 200, 150);
             return true;
         }

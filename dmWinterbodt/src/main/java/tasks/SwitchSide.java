@@ -2,7 +2,6 @@ package tasks;
 
 import helpers.utils.Tile;
 import utils.SideManager;
-import utils.StateUpdater;
 import utils.Task;
 
 import java.awt.*;
