@@ -140,7 +140,8 @@ public class dAgility extends AbstractScript {
             new Falador(),
             new Seers(),
             new Pollnivneach(),
-            new Rellekka()
+            new Rellekka(),
+            new Ardougne()
     );
 
     @Override
@@ -293,6 +294,8 @@ public class dAgility extends AbstractScript {
                 Walker.setup(rellekkaChunks);
                 break;
             case "Ardougne":
+                MapChunk ardyChunks = new MapChunk(new String[]{"41-51"}, "0", "3");
+                Walker.setup(ardyChunks);
                 break;
             case "Draynor":
                 MapChunk draynorChunks = new MapChunk(new String[]{"48-51"}, "0", "3");
@@ -771,6 +774,62 @@ public class dAgility extends AbstractScript {
                 );
                 break;
             case "Ardougne":
+                // Mark of Grace ground color
+                Color ardyMogColor = new Color(Integer.parseInt("c98718", 16));
+                // Mark of Graces
+                List<MarkHandling> ardyObstacle4Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(456, 265, 10, 9), ardyMogColor, new Rectangle(384, 262, 14, 22), new Tile(10611, 13005, 3))
+                );
+
+                // Obstacles
+                obstacles.add(new Obstacle("Obstacle 1",
+                        new Area(new Tile(10664, 12900, 0), new Tile(10711, 12950, 0)),
+                        new Tile(10691, 12937, 0), new Tile(10683, 12945, 3),
+                        new Rectangle(443, 249, 11, 9), new Rectangle(527, 248, 14, 9),
+                        new Tile(10671, 12937, 0), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 2",
+                        new Area(new Tile(10676, 12937, 3), new Tile(10694, 12996, 3)),
+                        new Tile(10683, 12981, 3), new Tile(10659, 13021, 3),
+                        new Rectangle(430, 221, 12, 28), new Rectangle(433, 111, 10, 22),
+                        new Tile(10683, 12945, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 3",
+                        new Area(new Tile(10639, 13011, 3), new Tile(10670, 13027, 3)),
+                        new Tile(10647, 13021, 3), new Tile(10623, 13021, 3),
+                        new Rectangle(422, 268, 12, 5), new Rectangle(374, 267, 13, 6),
+                        new Tile(10659, 13021, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 4",
+                        new Area(new Tile(10609, 13011, 3), new Tile(10637, 13028, 3)),
+                        new Tile(10615, 13021, 3), new Tile(10611, 13005, 3),
+                        new Rectangle(419, 264, 14, 17), new Rectangle(383, 266, 14, 16),
+                        new Tile(10623, 13021, 3), ardyObstacle4Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 5",
+                        new Area(new Tile(10609, 12982, 3), new Tile(10621, 13007, 3)),
+                        new Tile(10611, 12989, 3), new Tile(10603, 12985, 3),
+                        new Rectangle(436, 279, 15, 31), new Rectangle(438, 356, 13, 31),
+                        new Tile(10611, 13005, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 6",
+                        new Area(new Tile(10600, 12957, 3), new Tile(10610, 12987, 3)),
+                        new Tile(10611, 12953, 3), new Tile(10623, 12937, 3),
+                        new Rectangle(462, 282, 8, 12), new Rectangle(502, 443, 12, 14),
+                        new Tile(10603, 12985, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 6-2",
+                        new Area(new Tile(10601, 12944, 3), new Tile(10622, 12967, 3)),
+                        new Tile(10611, 12953, 3), new Tile(10623, 12937, 3),
+                        new Rectangle(462, 282, 8, 12), new Rectangle(502, 443, 12, 14),
+                        new Tile(10603, 12985, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 7",
+                        new Area(new Tile(10623, 12904, 3), new Tile(10636, 12944, 3)),
+                        new Tile(10623, 12937, 3), new Tile(10671, 12937, 0),
+                        new Rectangle(450, 273, 13, 19), new Rectangle(450, 273, 13, 19),
+                        new Tile(10623, 12937, 3), noMarks, false));
+
                 break;
             case "Draynor":
                 // Mark of Grace ground color
