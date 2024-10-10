@@ -32,12 +32,16 @@ public class Ardougne extends Task {
             if (Player.isTileWithinArea(currentLocation, obstacle.area)) {
                 boolean markHandled = false;
 
+                // Ardy has a pre-defined mark handler as it only has 1 spot and we don't have to walk for it
                 if (obstacle.checkForMark && obstacle.markHandling != null) {
                     for (MarkHandling mark : obstacle.markHandling) {
                         if (mark.isMarkPresent(mark.checkArea, mark.targetColor)) {
                             Paint.setStatus("Pick up mark of grace");
                             Logger.log("Mark of grace detected, picking it up!");
-                            mark.pickUpMark(mark.checkArea, mark.tapArea, mark.endTile);
+                            Client.tap(mark.checkArea);
+                            Condition.sleep(generateRandomDelay(1750, 2300));
+                            Client.tap(mark.tapArea);
+                            Condition.wait(() -> Player.atTile(mark.endTile), 250, 110);
                             markHandled = true;
                             break;
                         }
