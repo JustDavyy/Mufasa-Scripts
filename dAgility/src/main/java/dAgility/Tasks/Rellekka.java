@@ -7,28 +7,28 @@ import helpers.utils.Tile;
 
 import static dAgility.dAgility.*;
 import static helpers.Interfaces.*;
-import static dAgility.dAgility.startTileStorage.*;
 
-public class Draynor extends Task {
+public class Rellekka extends Task {
 
-    Tile startTile = new Tile(12415, 12865, 0);
-    Tile obs1EndTile = new Tile(12407, 12865, 3);
-    Area draynorArea = new Area(new Tile(12275, 12663, 0), new Tile(12540, 12981, 0));
-    Area obstacle7EndArea = new Area(new Tile(12400, 12765, 0), new Tile(12432, 12846, 0));
+    Tile startTile = new Tile(10499, 14461, 0);
+    Tile obs1EndTile = new Tile(10499, 14453, 3);
+    Area rellekkaArea = new Area(new Tile(10421, 14322, 0), new Tile(10779, 14619, 0));
+    Area obstacle7EndArea = new Area(new Tile(10597, 14433, 0),new Tile(10630, 14467, 0));
     Tile[] pathToStart = new Tile[] {
-            new Tile(12417, 12802, 0),
-            new Tile(12419, 12822, 0),
-            new Tile(12419, 12838, 0),
-            new Tile(12422, 12858, 0)
+            new Tile(10592, 14453, 0),
+            new Tile(10570, 14453, 0),
+            new Tile(10545, 14457, 0),
+            new Tile(10529, 14460, 0),
+            new Tile(10511, 14459, 0)
     };
 
-    public Draynor(){
+    public Rellekka(){
         super();
-        super.name = "Draynor";
+        super.name = "Rellekka";
     }
     @Override
     public boolean activate() {
-        return (dAgility.courseChosen.equals("Draynor"));
+        return (dAgility.courseChosen.equals("Rellekka"));
     }
 
     @Override
@@ -42,7 +42,7 @@ public class Draynor extends Task {
             Logger.debugLog("Walking back to the start obstacle");
             Paint.setStatus("Walk to start obstacle");
             Walker.walkPath(pathToStart);
-            Player.waitTillNotMoving(20);
+            Player.waitTillNotMoving(18);
         }
 
         currentLocation = Walker.getPlayerPosition();
@@ -88,7 +88,7 @@ public class Draynor extends Task {
         }
 
         // Block that assumes we are not within any of those areas, which means we've fallen or wandered off somewhere?
-        if (Player.isTileWithinArea(currentLocation, draynorArea)) {
+        if (Player.isTileWithinArea(currentLocation, rellekkaArea)) {
             Logger.debugLog("Not within any obstacle area, webwalking back to start obstacle");
             Paint.setStatus("Recover after fall/failure");
             Walker.webWalk(startTile);

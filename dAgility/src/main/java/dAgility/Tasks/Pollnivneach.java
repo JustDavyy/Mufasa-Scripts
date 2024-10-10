@@ -51,7 +51,7 @@ public class Pollnivneach extends Task {
         // Handle most of the start tiles without using color finder for speed
         for (dAgility.startTileStorage tileTap : startTiles) {
             if (Player.tileEquals(currentLocation, tileTap.getTile())) {
-                Logger.debugLog("Player is on tile: " + tileTap.getTile());
+                Logger.debugLog("Player is on known start tile: " + tileTap.getTile());
                 Paint.setStatus("Tap start obstacle");
                 Client.tap(tileTap.getTapRectangle());
                 Condition.wait(() -> Player.atTile(obs1EndTile), 200, 40);

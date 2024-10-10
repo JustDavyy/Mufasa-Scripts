@@ -139,7 +139,8 @@ public class dAgility extends AbstractScript {
             new Canifis(),
             new Falador(),
             new Seers(),
-            new Pollnivneach()
+            new Pollnivneach(),
+            new Rellekka()
     );
 
     @Override
@@ -288,6 +289,8 @@ public class dAgility extends AbstractScript {
                 Walker.setup(faladorChunks);
                 break;
             case "Rellekka":
+                MapChunk rellekkaChunks = new MapChunk(new String[]{"41-57"}, "0", "3");
+                Walker.setup(rellekkaChunks);
                 break;
             case "Ardougne":
                 break;
@@ -674,6 +677,98 @@ public class dAgility extends AbstractScript {
                         new Tile(12075, 13081, 3), noMarks, false));
                 break;
             case "Rellekka":
+                // Mark of Grace ground color
+                Color rellekkaMogColor = new Color(Integer.parseInt("d38f1a", 16));
+                // Mark of Graces
+                List<MarkHandling> rellekkaObstacle2Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(404, 282, 9, 8), rellekkaMogColor, new Rectangle(400, 333, 52, 49), new Tile(10487, 14421, 3))
+                );
+                List<MarkHandling> rellekkaObstacle4Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(462, 301, 9, 9), rellekkaMogColor, new Rectangle(459, 198, 55, 28), new Tile(10555, 14361, 3)),
+                        new MarkHandling(new Rectangle(478, 286, 9, 7), rellekkaMogColor, new Rectangle(443, 209, 56, 29), new Tile(10555, 14361, 3))
+                );
+                List<MarkHandling> rellekkaObstacle5Mark = Arrays.asList(
+                        new MarkHandling(new Rectangle(500, 295, 10, 11), rellekkaMogColor, new Rectangle(458, 215, 27, 28), new Tile(10571, 14377, 3)),
+                        new MarkHandling(new Rectangle(482, 316, 8, 9), rellekkaMogColor, new Rectangle(472, 200, 30, 27), new Tile(10571, 14377, 3))
+                );
+                // Obstacles
+                obstacles.add(new Obstacle("Obstacle 1",
+                        new Area(new Tile(10477, 14438, 0), new Tile(10522, 14478, 0)),
+                        new Tile(10499, 14461, 0), new Tile(10499, 14453, 3),
+                        new Rectangle(448, 282, 8, 5), null,
+                        new Tile(10607, 14453, 0), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 2",
+                        new Area(new Tile(10480, 14428, 3), new Tile(10516, 14462, 3)),
+                        new Tile(10491, 14441, 3), new Tile(10487, 14421, 3),
+                        new Rectangle(404, 295, 48, 41), new Rectangle(361, 355, 43, 43),
+                        new Tile(10499, 14453, 3), rellekkaObstacle2Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 3",
+                        new Area(new Tile(10453, 14373, 3), new Tile(10500, 14426, 3)),
+                        new Tile(10487, 14385, 3), new Tile(10507, 14365, 3),
+                        new Rectangle(456, 281, 14, 13), new Rectangle(458, 466, 17, 25),
+                        new Tile(10487, 14421, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 4",
+                        new Area(new Tile(10500, 14338, 3), new Tile(10532, 14374, 3)),
+                        new Tile(10515, 14369, 3), new Tile(10555, 14361, 3),
+                        new Rectangle(445, 234, 55, 28), new Rectangle(477, 228, 56, 24),
+                        new Tile(10507, 14365, 3), rellekkaObstacle4Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 5",
+                        new Area(new Tile(10551, 14336, 3), new Tile(10586, 14367, 3)),
+                        new Tile(10571, 14361, 3), new Tile(10571, 14377, 3),
+                        new Rectangle(444, 234, 24, 29), new Rectangle(513, 237, 23, 25),
+                        new Tile(10555, 14361, 3), rellekkaObstacle5Mark, true));
+
+                obstacles.add(new Obstacle("Obstacle 6",
+                        new Area(new Tile(10563, 14365, 3), new Tile(10610, 14406, 3)),
+                        new Tile(10587, 14397, 3), new Tile(10619, 14429, 3),
+                        new Rectangle(442, 250, 13, 11), new Rectangle(504, 184, 10, 9),
+                        new Tile(10571, 14377, 3), noMarks, false));
+
+                obstacles.add(new Obstacle("Obstacle 7",
+                        new Area(new Tile(10603, 14401, 3), new Tile(10681, 14506, 3)),
+                        new Tile(10619, 14453, 3), new Tile(10607, 14453, 0),
+                        new Rectangle(404, 248, 22, 22), new Rectangle(413, 165, 21, 23),
+                        new Tile(10619, 14429, 3), noMarks, false));
+
+                // Start tiles
+                startTiles = Arrays.asList(
+                        new startTileStorage(new Tile(10503, 14461, 0), new Rectangle(428, 288, 10, 4)),
+                        new startTileStorage(new Tile(10495, 14465, 0), new Rectangle(461, 300, 8, 4)),
+                        new startTileStorage(new Tile(10495, 14461, 0), new Rectangle(461, 284, 8, 5)),
+                        new startTileStorage(new Tile(10495, 14457, 0), new Rectangle(460, 267, 9, 7)),
+                        new startTileStorage(new Tile(10499, 14457, 0), new Rectangle(447, 267, 10, 6)),
+                        new startTileStorage(new Tile(10499, 14461, 0), new Rectangle(448, 282, 8, 5)),
+                        new startTileStorage(new Tile(10499, 14465, 0), new Rectangle(448, 301, 9, 5)),
+                        new startTileStorage(new Tile(10503, 14469, 0), new Rectangle(431, 322, 6, 5)),
+                        new startTileStorage(new Tile(10503, 14465, 0), new Rectangle(433, 307, 7, 5)),
+                        new startTileStorage(new Tile(10503, 14461, 0), new Rectangle(428, 286, 10, 6)),
+                        new startTileStorage(new Tile(10503, 14457, 0), new Rectangle(428, 266, 11, 7)),
+                        new startTileStorage(new Tile(10507, 14457, 0), new Rectangle(410, 266, 10, 5)),
+                        new startTileStorage(new Tile(10507, 14461, 0), new Rectangle(411, 284, 9, 7)),
+                        new startTileStorage(new Tile(10507, 14465, 0), new Rectangle(410, 303, 10, 5)),
+                        new startTileStorage(new Tile(10507, 14469, 0), new Rectangle(410, 322, 9, 6)),
+                        new startTileStorage(new Tile(10479, 14465, 0), new Rectangle(543, 299, 6, 6)),
+                        new startTileStorage(new Tile(10479, 14461, 0), new Rectangle(537, 281, 5, 7)),
+                        new startTileStorage(new Tile(10483, 14465, 0), new Rectangle(526, 294, 6, 8)),
+                        new startTileStorage(new Tile(10483, 14461, 0), new Rectangle(523, 281, 7, 8)),
+                        new startTileStorage(new Tile(10487, 14465, 0), new Rectangle(506, 292, 7, 10)),
+                        new startTileStorage(new Tile(10491, 14465, 0), new Rectangle(487, 297, 8, 7)),
+                        new startTileStorage(new Tile(10491, 14461, 0), new Rectangle(485, 285, 8, 8)),
+                        new startTileStorage(new Tile(10491, 14457, 0), new Rectangle(484, 265, 7, 9)),
+                        new startTileStorage(new Tile(10519, 14457, 0), new Rectangle(355, 266, 9, 7)),
+                        new startTileStorage(new Tile(10519, 14461, 0), new Rectangle(354, 280, 10, 8)),
+                        new startTileStorage(new Tile(10519, 14465, 0), new Rectangle(353, 300, 9, 6)),
+                        new startTileStorage(new Tile(10515, 14465, 0), new Rectangle(369, 301, 9, 6)),
+                        new startTileStorage(new Tile(10515, 14461, 0), new Rectangle(370, 285, 8, 7)),
+                        new startTileStorage(new Tile(10515, 14457, 0), new Rectangle(368, 265, 9, 7)),
+                        new startTileStorage(new Tile(10511, 14457, 0), new Rectangle(389, 265, 7, 8)),
+                        new startTileStorage(new Tile(10511, 14461, 0), new Rectangle(387, 281, 7, 6)),
+                        new startTileStorage(new Tile(10511, 14465, 0), new Rectangle(388, 303, 8, 6))
+                );
                 break;
             case "Ardougne":
                 break;
