@@ -99,6 +99,7 @@ public class Pollnivneach extends Task {
             Logger.debugLog("Not within any obstacle area, webwalking back to start obstacle");
             Paint.setStatus("Recover after fall/failure");
             Walker.webWalk(startTile);
+            Player.waitTillNotMoving(17);
             return true;
         }
         return false;
