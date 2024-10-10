@@ -50,6 +50,12 @@ Rectangle channelButton = new Rectangle(282, 10, 44, 12);
 Rectangle clanButton = new Rectangle(346, 9, 43, 16);
 Random random = new Random();
 
+// Check rectangles if we have a spot against us
+Rectangle rightRect = new Rectangle(465, 267, 57, 22);
+Rectangle leftRect = new Rectangle(379, 273, 56, 21);
+Rectangle topRect = new Rectangle(443, 219, 23, 42);
+Rectangle bottomRect = new Rectangle(441, 303, 24, 43);
+
     // This is the onStart, and only gets ran once.
     @Override
     public void onStart(){
@@ -192,7 +198,8 @@ Random random = new Random();
         int randomOffset = random.nextInt(201); // Generates a random number between 0 and 200
         int lowerBound = 2400; // 2.4 seconds in milliseconds
 
-        return timeSinceLastXpGain >= (lowerBound + randomOffset);
+        // Check if we should fish based on time since last XP gain, or if the spot is no longer available
+        return timeSinceLastXpGain >= (lowerBound + randomOffset) || !isSpotAgainstUs(true);
     }
 
     private void readXP() {
@@ -224,6 +231,22 @@ Random random = new Random();
         } else {
             return false;
         }
+    }
+
+    private boolean isSpotAgainstUs(boolean log) {
+        // Check if the color is present in the right or bottom rectangles
+        if (Client.isColorInRect(OverlayColor.FISHING, rightRect, 5) ||
+            Client.isColorInRect(OverlayColor.FISHING, bottomRect, 5) ||
+            Client.isColorInRect(OverlayColor.FISHING, topRect, 5) ||
+            Client.isColorInRect(OverlayColor.FISHING, leftRect, 5)) {
+            return true;
+        }
+
+        // Log that the spot we're using moved, since we couldn't find a spot
+        if (log) {
+            Logger.debugLog("Moving to a new spot as the current spot has moved.");
+        }
+        return false;
     }
 
     private void hopActions() {
