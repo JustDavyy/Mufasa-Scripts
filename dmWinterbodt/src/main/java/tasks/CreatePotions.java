@@ -29,7 +29,7 @@ public class CreatePotions extends Task {
     
     @Override
     public boolean activate() {
-        return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing;
+        return foodAmountInInventory < foodAmountLeftToBank;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class CreatePotions extends Task {
 
         boolean hasBrumaHerb = Inventory.contains(brumaHerbItem, 0.75);
         boolean hasRejuvUnf = Inventory.contains(rejuvPotionUnf, 0.80);
-        boolean hasRejuv = Inventory.contains(rejuvPotion, 0.80);
+        //boolean hasRejuv = Inventory.contains(rejuvPotion, 0.80);
 
         if ((!hasBrumaHerb || !hasRejuvUnf)) {
             Logger.log("Getting herbs and unfinished potions");
