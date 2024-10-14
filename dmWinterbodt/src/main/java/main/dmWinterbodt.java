@@ -54,7 +54,7 @@ import static utils.SideManager.pickRandomSide;
                 @ScriptConfiguration(
                         name = "BankTab",
                         description = "What bank tab are your food located in?",
-                        defaultValue = "0",
+                        defaultValue = "1",
                         optionType = OptionType.BANKTABS
                 ),
                 @ScriptConfiguration(

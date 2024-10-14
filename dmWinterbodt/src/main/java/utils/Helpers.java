@@ -58,6 +58,7 @@ public class Helpers {
     private static long unchangedStartTime = 0;  // To track the start time when the count was unchanged
     private static final long CHECK_DURATION_MS = 3000;  // Total duration to check (3 seconds)
     private static final long THROTTLE_DURATION_MS = 400;  // Minimum time between checks (400 milliseconds)
+    private static final long RESET_THRESHOLD_MS = CHECK_DURATION_MS + 1000;  // Reset after 4 seconds
 
     /**
      * Checks if the count of an item has remained unchanged over a period of time.
@@ -72,6 +73,12 @@ public class Helpers {
         // This is done so we don't absolutely demolishingly spam the inventory count checks.
         if (currentTime - lastCheckTime < THROTTLE_DURATION_MS) {
             return false;
+        }
+
+        // Reset if it's been too long since the last check (to avoid using old data)
+        if (currentTime - lastCheckTime > RESET_THRESHOLD_MS) {
+            lastCount = 0;  // Reset count tracking
+            unchangedStartTime = currentTime;  // Reset the unchanged duration tracking
         }
 
         // Get the current item count
