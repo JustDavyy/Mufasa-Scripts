@@ -24,13 +24,11 @@ public class FletchBranches extends Task {
             isFletching = false;
         }
 
-        Logger.debugLog("Inside FletchBranches execute()");
         Logger.log("Initiating fletching action.");
         Paint.setStatus("Initiating fletching action");
 
         GameTabs.openInventoryTab();
 
-        Integer startHP = Player.getHP();
         Inventory.tapItem(knife, true, 0.60);
         Condition.sleep(generateRandomDelay(75, 150));
         Inventory.tapItem(brumaRoot, 0.60);
@@ -40,6 +38,7 @@ public class FletchBranches extends Task {
 
         Logger.debugLog("Heading to FletchBranches conditional wait.");
         Paint.setStatus("Waiting for fletching to end");
+
         Condition.wait(() -> {
             SideManager.updateStates();
             XpBar.getXP();

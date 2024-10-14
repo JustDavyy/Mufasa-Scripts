@@ -35,6 +35,7 @@ public class GetBranches extends Task {
             Paint.setStatus("Stepping to branch tile");
             Logger.log("Stepping to branch tile!");
             Walker.step(SideManager.getBranchTile());
+            Condition.wait(() -> Player.atTile(SideManager.getBranchTile()), 200, 20);
             lastActivity = System.currentTimeMillis();
             currentLocation = Walker.getPlayerPosition();
             return true;

@@ -44,7 +44,6 @@ public class BurnBranches extends Task {
         }
 
         Logger.debugLog("Inside BurnBranches execute()");
-        int startHP = Player.getHP();
 
         // This is the logic to walk to safety when the game is near end, and we're out of burns.
         if (!inventoryHasLogs & !inventoryHasKindlings && isGameGoing && Player.tileEquals(currentLocation, SideManager.getBurnTile()) && gameAt13Percent && !burnOnly) {
@@ -79,11 +78,11 @@ public class BurnBranches extends Task {
             Client.tap(SideManager.getBurnRect());
             lastActivity = System.currentTimeMillis();
             Paint.setStatus("Waiting for burning to end");
-            Condition.wait(() -> {
 
+            Condition.wait(() -> {
                 // Handle reburning/fixing
                 SideManager.updateBurnStates();
-                if (SideManager.getNeedsFixing() && isGameGoing && !SideManager.getMageDead() || SideManager.getNeedsReburning() && isGameGoing && !SideManager.getMageDead()) {
+                if (SideManager.getNeedsFixing() && isGameGoing && !SideManager.getMageDead() || SideManager.getNeedsReburning() && isGameGoing && !SideManager.getMageDead() || Player.isIdle()) {
                     Logger.log("Brazier needs fixing or re-lighting!");
                     if (SideManager.getNeedsFixing()) {
                         Paint.setStatus("Fixing & Relighting brazier");
@@ -91,13 +90,13 @@ public class BurnBranches extends Task {
                         totalRepairCount = totalRepairCount + 1;
                         Paint.setStatistic("Brazier Repairs: " + totalRepairCount + " | Relights: " + totalRelightCount);
                         Logger.log("Fixing & Relighting!");
-                        tapAndSleep(3, startHP); // Fixing and relighting requires three repetitions
+                        tapAndSleep(3); // Fixing and relighting requires three repetitions
                     } else {
                         Paint.setStatus("Relighting brazier");
                         totalRelightCount = totalRelightCount + 1;
                         Paint.setStatistic("Brazier Repairs: " + totalRepairCount + " | Relights: " + totalRelightCount);
                         Logger.log("Relighting!");
-                        tapAndSleep(2, startHP); // Relighting requires two repetitions
+                        tapAndSleep(2); // Relighting requires two repetitions
                     }
                 }
 
@@ -117,7 +116,7 @@ public class BurnBranches extends Task {
         return false;
     }
 
-    private void tapAndSleep(int repeatCount, int startHP) {
+    private void tapAndSleep(int repeatCount) {
         for (int i = 0; i < repeatCount; i++) {
             if (shouldEat) {
                 break; // Exit the loop if the player's health drops

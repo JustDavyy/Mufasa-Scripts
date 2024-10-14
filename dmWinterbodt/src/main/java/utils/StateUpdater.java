@@ -16,7 +16,7 @@ import static tasks.GetBranches.gettingBranches;
 
 public class StateUpdater {
     //    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
-    static Rectangle gameAt13CheckRect = new Rectangle(82, 51, 7, 7);
+    static Rectangle gameAt13CheckRect = new Rectangle(68, 50, 7, 10);
     static Rectangle gameAt20CheckRect = new Rectangle(100, 50, 9, 9);
     static Rectangle gameAt70CheckRect = new Rectangle(217, 50, 6, 9);
     static Rectangle fullWarmtBar = new Rectangle(57, 35, 198, 9);
