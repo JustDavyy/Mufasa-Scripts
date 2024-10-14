@@ -46,7 +46,7 @@ public class CreatePotions extends Task {
         boolean hasRejuvUnf = Inventory.contains(rejuvPotionUnf, 0.80);
         boolean hasRejuv = Inventory.contains(rejuvPotion, 0.80);
 
-        if ((!hasBrumaHerb || !hasRejuvUnf) && !hasRejuv) {
+        if ((!hasBrumaHerb || !hasRejuvUnf)) {
             Logger.log("Getting herbs and unfinished potions");
 
             if (hasBrumaHerb && hasRejuvUnf) {
