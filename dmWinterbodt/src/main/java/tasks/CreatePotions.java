@@ -32,7 +32,7 @@ public class CreatePotions extends Task {
             return false;
         }
 
-        return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing;
+        return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing || foodAmountInInventory < foodAmountLeftToBank & isGameGoing & Player.within(lobby);
     }
 
     @Override
