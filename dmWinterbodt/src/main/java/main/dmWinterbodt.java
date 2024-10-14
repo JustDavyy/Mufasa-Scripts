@@ -30,12 +30,6 @@ import static utils.SideManager.pickRandomSide;
 @ScriptConfiguration.List(
         {
                 @ScriptConfiguration(
-                        name = "BankTab",
-                        description = "What bank tab are your food located in?",
-                        defaultValue = "0",
-                        optionType = OptionType.BANKTABS
-                ),
-                @ScriptConfiguration(
                         name = "Potion amount",
                         description = "Select the amount of potions you'd like to bring",
                         defaultValue = "6",
@@ -228,18 +222,18 @@ public class dmWinterbodt extends AbstractScript {
     };
     // These tasks are executed in this order
     List<Task> WTTasks = Arrays.asList(
-            new CheckGear(),
-            new BreakManager(), // I think it should be here?
-            new GoToSafety(),
-            //new Bank(), // We dont need to bank anymore at all?
-            new Eat(),
-            new FailSafe(), // I think it should be here?
-            new SwitchSide(),
-            new BurnBranches(),
-            new FletchBranches(),
-            new PreGame(),
-            new GetBranches(),
-            new GoBackToGame()
+            //new CheckGear(),
+            new CreatePotions()
+            //new BreakManager(), // I think it should be here?
+            //new GoToSafety(),
+            //new Eat(),
+            //new FailSafe(), // I think it should be here?
+            //new SwitchSide(),
+            //new BurnBranches(),
+            //new FletchBranches(),
+            //new PreGame(),
+            //new GetBranches(),
+            //new GoBackToGame()
     );
 
     public static int generateRandomDelay(int lowerBound, int upperBound) {
@@ -269,9 +263,8 @@ public class dmWinterbodt extends AbstractScript {
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
         foodAmount = Integer.parseInt(configs.get("Potion amount"));
-        foodAmountLeftToBank = Integer.parseInt(configs.get("Potions amount left to brew at"));
+        foodAmountLeftToBank = Integer.parseInt(configs.get("Potions amount left to create more"));
         pickedSide = configs.get("Side");
-        bankTab = Integer.parseInt(configs.get("BankTab"));
         burnOnly = Boolean.parseBoolean(configs.get("Burn only?"));
 
         Walker.setup(new MapChunk(new String[]{"24-63", "26-61"}, "0"));
