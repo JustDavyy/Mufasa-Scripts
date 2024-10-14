@@ -37,7 +37,7 @@ public class Helpers {
             int count = Inventory.count(foodID, 0.85);
             Logger.debugLog("Found " + count + " items with ID " + foodID);
             foodAmountInInventory = count;
-            Logger.debugLog("Total food in inventory: " + foodAmountInInventory);
+            Logger.log("Total food in inventory: " + foodAmountInInventory);
         }
     }
 

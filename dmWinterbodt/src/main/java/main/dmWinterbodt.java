@@ -300,6 +300,10 @@ public class dmWinterbodt extends AbstractScript {
         selectedFood = configs.get("Food");
         bankTab = Integer.parseInt(configs.get("BankTab"));
 
+        if (!selectedFood.equals("Rejuv Potion")) {
+            setupFoodIDs();
+        }
+
         Walker.setup(new MapChunk(new String[]{"24-63", "26-61"}, "0"));
 
         // Creating the Paint object

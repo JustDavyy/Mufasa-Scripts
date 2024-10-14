@@ -114,10 +114,11 @@ public class CreatePotions extends Task {
      */
     private void collectRejuvPotions() {
         Logger.log("Collecting rejuvenation potions...");
-        while (Inventory.count(rejuvPotionUnf, 0.96) < foodAmount && !Script.isScriptStopping()) {
+        int herbCount = Inventory.count(brumaHerbItem, 0.75);
+        while (Inventory.count(rejuvPotionUnf, 0.96) < herbCount && !Script.isScriptStopping()) {
             Client.tap(potionRect);
             Condition.sleep(generateRandomDelay(600, 900));
-            if (Inventory.count(rejuvPotionUnf, 0.96) >= foodAmount) {
+            if (Inventory.count(rejuvPotionUnf, 0.96) >= herbCount) {
                 break;
             }
         }
@@ -131,8 +132,13 @@ public class CreatePotions extends Task {
         Inventory.tapItem(brumaHerbItem, 0.75);
         Condition.sleep(generateRandomDelay(200, 400));
         Inventory.tapItem(rejuvPotionUnf, 0.96);
-        Condition.wait(() -> !Inventory.contains(brumaHerbItem, 0.75), 300, 60);
+        Condition.wait(() -> !Inventory.contains(brumaHerbItem, 0.75) || Player.leveledUp(), 300, 60);
+
+        if (Player.leveledUp()) {
+            Logger.log("We leveled up, restarting!");
+            processInventory(); //Start the action again! recursive.. I know..
+        }
+
         countFoodInInventory();
-        Logger.log("Food amount in inventory: " + foodAmountInInventory);
     }
 }
