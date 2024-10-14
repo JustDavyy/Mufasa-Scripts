@@ -57,6 +57,7 @@ public class Helpers {
     private static long lastCheckTime = 0;  // To track the time of the last count check
     private static long unchangedStartTime = 0;  // To track the start time when the count was unchanged
     private static final long CHECK_DURATION_MS = 5000;  // Total duration to check (5 seconds)
+    private static final long THROTTLE_DURATION_MS = 400;  // Minimum time between checks (400 milliseconds)
 
     /**
      * Checks if the count of an item has remained unchanged over a period of time.
@@ -66,6 +67,12 @@ public class Helpers {
      */
     public static boolean countItemUnchanged(int itemID) {
         long currentTime = System.currentTimeMillis();
+
+        // Throttle: If less than THROTTLE_DURATION_MS has passed since the last check, skip the check
+        // This is done so we don't absolutely demolishingly spam the inventory count checks.
+        if (currentTime - lastCheckTime < THROTTLE_DURATION_MS) {
+            return false;
+        }
 
         // Get the current item count
         int currentCount = Inventory.count(itemID, 0.75);
