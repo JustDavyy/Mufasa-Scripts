@@ -29,12 +29,17 @@ public class CreatePotions extends Task {
     
     @Override
     public boolean activate() {
-        return foodAmountInInventory < foodAmountLeftToBank;
+        return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing;
     }
 
     @Override
     public boolean execute() {
         Logger.log("We should create potions");
+        countFoodInInventory(); //re-count since it CAN fail during a game.
+        if (foodAmountInInventory < foodAmountLeftToBank) {
+            return true;
+        }
+
         updateCurrentLocation();
 
         boolean hasBrumaHerb = Inventory.contains(brumaHerbItem, 0.75);
