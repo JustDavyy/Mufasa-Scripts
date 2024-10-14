@@ -28,7 +28,11 @@ public class CreatePotions extends Task {
 
     @Override
     public boolean activate() {
-        return foodAmountInInventory < foodAmountLeftToBank;
+        if (selectedFood != "Rejuv Potion") {
+            return false;
+        }
+
+        return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing;
     }
 
     @Override
@@ -38,10 +42,6 @@ public class CreatePotions extends Task {
 
         boolean hasBrumaHerb = Inventory.contains(brumaHerbItem, 0.75);
         boolean hasRejuvUnf = Inventory.contains(rejuvPotionUnf, 0.96);
-
-        if (hasBrumaHerb && hasRejuvUnf) {
-            processInventory();
-        }
 
         if ((!hasBrumaHerb || !hasRejuvUnf)) {
             Logger.log("Getting herbs and unfinished potions");
@@ -59,6 +59,10 @@ public class CreatePotions extends Task {
                     return true;
                 }
             }
+        }
+
+        if (hasBrumaHerb && hasRejuvUnf) {
+            processInventory();
         }
 
         return false;
@@ -110,10 +114,10 @@ public class CreatePotions extends Task {
      */
     private void collectRejuvPotions() {
         Logger.log("Collecting rejuvenation potions...");
-        while (Inventory.count(rejuvPotionUnf, 0.95) < foodAmount && !Script.isScriptStopping()) {
+        while (Inventory.count(rejuvPotionUnf, 0.96) < foodAmount && !Script.isScriptStopping()) {
             Client.tap(potionRect);
             Condition.sleep(generateRandomDelay(600, 900));
-            if (Inventory.count(rejuvPotionUnf, 0.95) >= foodAmount) {
+            if (Inventory.count(rejuvPotionUnf, 0.96) >= foodAmount) {
                 break;
             }
         }
@@ -126,8 +130,8 @@ public class CreatePotions extends Task {
         Logger.log("Combining herbs and unfinished potions in inventory.");
         Inventory.tapItem(brumaHerbItem, 0.75);
         Condition.sleep(generateRandomDelay(200, 400));
-        Inventory.tapItem(rejuvPotionUnf, 0.75);
-        Condition.wait(() -> !Inventory.contains(brumaHerbItem, 0.95), 300, 60);
+        Inventory.tapItem(rejuvPotionUnf, 0.96);
+        Condition.wait(() -> !Inventory.contains(brumaHerbItem, 0.75), 300, 60);
         countFoodInInventory();
         Logger.log("Food amount in inventory: " + foodAmountInInventory);
     }

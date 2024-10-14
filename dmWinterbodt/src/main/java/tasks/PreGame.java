@@ -60,7 +60,7 @@ public class PreGame extends Task {
         }
 
         // Read the timer on the WT bar
-        String results = Chatbox.readLastLine(new Rectangle(206, 45, 35, 16));
+        String results = Chatbox.readLastLine(new Rectangle(207, 46, 30, 14));
 
         // Check if results are not empty
         if (results != null && !results.trim().isEmpty()) {

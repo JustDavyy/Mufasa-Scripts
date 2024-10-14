@@ -18,7 +18,11 @@ public class Bank extends Task {
     @Override
     public boolean activate() {
         StateUpdater.updateIsGameGoing();
-        return !isGameGoing && !Player.leveledUp() || !isGameGoing && (Inventory.count(ItemList.SUPPLY_CRATE_20703, 0.8) >= 8) || Player.isTileWithinArea(currentLocation, outsideArea) || Player.isTileWithinArea(currentLocation, lobby) && (!isGameGoing || totalGameCount == 0);
+        if (selectedFood == "Rejuv Potion") {
+            return false;
+        }
+
+        return  !isGameGoing && !Player.leveledUp() || !isGameGoing && (Inventory.count(ItemList.SUPPLY_CRATE_20703, 0.8) >= 8) || Player.isTileWithinArea(currentLocation, outsideArea) || Player.isTileWithinArea(currentLocation, lobby) && (!isGameGoing || totalGameCount == 0);
     }
 
     @Override

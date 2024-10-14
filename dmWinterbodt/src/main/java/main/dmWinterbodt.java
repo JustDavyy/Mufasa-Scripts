@@ -24,13 +24,39 @@ import static utils.SideManager.pickRandomSide;
 
 @ScriptManifest(
         name = "dmWinterbodt",
-        description = "Completes the Wintertodt minigame.",
+        description = "Completes the Wintertodt minigame. Start inside the Wintertodt minigame area",
         version = "2.0",
         guideLink = "https://wiki.mufasaclient.com/docs/dmwinterbodt/",
         categories = {ScriptCategory.Firemaking, ScriptCategory.Minigames}
 )
 @ScriptConfiguration.List(
         {
+                @ScriptConfiguration(
+                        name = "Food",
+                        description = "Select which food to use",
+                        defaultValue = "Rejuv Potion",
+                        allowedValues = {
+                                @AllowedValue(optionIcon = "20699", optionName = "Rejuv Potion"),
+                                @AllowedValue(optionIcon = "1891", optionName = "Cakes"),
+                                @AllowedValue(optionIcon = "379", optionName = "Lobster"),
+                                @AllowedValue(optionIcon = "373", optionName = "Swordfish"),
+                                @AllowedValue(optionIcon = "385", optionName = "Shark"),
+                                @AllowedValue(optionIcon = "359", optionName = "Tuna"),
+                                @AllowedValue(optionIcon = "333", optionName = "Trout"),
+                                @AllowedValue(optionIcon = "329", optionName = "Salmon"),
+                                @AllowedValue(optionIcon = "365", optionName = "Bass"),
+                                @AllowedValue(optionIcon = "3144", optionName = "Cooked karambwan"),
+                                @AllowedValue(optionIcon = "391", optionName = "Manta ray"),
+                                @AllowedValue(optionIcon = "13441", optionName = "Anglerfish")
+                        },
+                        optionType = OptionType.STRING
+                ),
+                @ScriptConfiguration(
+                        name = "BankTab",
+                        description = "What bank tab are your food located in?",
+                        defaultValue = "0",
+                        optionType = OptionType.BANKTABS
+                ),
                 @ScriptConfiguration(
                         name = "Potion amount",
                         description = "Select the amount of potions you'd like to bring",
@@ -79,9 +105,11 @@ public class dmWinterbodt extends AbstractScript {
     public static String hopProfile;
     public static Boolean hopEnabled;
     public static Boolean useWDH;
+    public static String selectedFood;
     public static int foodAmount;
     public static int foodAmountLeftToBank;
     public static int bankTab;
+    public static int foodID;
     public static boolean burnOnly;
     public static Rectangle bankSearchArea = new Rectangle(410, 144, 429, 358);
     public static List<Color> bankChest = List.of(
@@ -227,6 +255,7 @@ public class dmWinterbodt extends AbstractScript {
             new CheckGear(),
             new BreakManager(), // I think it should be here?
             new GoToSafety(),
+            new Bank(),
             new Eat(),
             new FailSafe(), // I think it should be here?
             new CreatePotions(),
@@ -268,6 +297,8 @@ public class dmWinterbodt extends AbstractScript {
         foodAmountLeftToBank = Integer.parseInt(configs.get("Potions amount left to create more"));
         pickedSide = configs.get("Side");
         burnOnly = Boolean.parseBoolean(configs.get("Burn only?"));
+        selectedFood = configs.get("Food");
+        bankTab = Integer.parseInt(configs.get("BankTab"));
 
         Walker.setup(new MapChunk(new String[]{"24-63", "26-61"}, "0"));
 
@@ -308,6 +339,50 @@ public class dmWinterbodt extends AbstractScript {
         // Disable break and AFK handlers, as we use custom breaks
         Client.disableBreakHandler();
         Client.disableAFKHandler();
+    }
+
+    private void setupFoodIDs() {
+        Paint.setStatus("Setting up food IDs");
+        Logger.debugLog("Setting up food IDs");
+        switch (selectedFood) {
+            case "Cakes":
+                foodID = 1891;
+                break;
+            case "Lobster":
+                foodID = 379;
+                break;
+            case "Swordfish":
+                foodID = 373;
+                break;
+            case "Shark":
+                foodID = 385;
+                break;
+            case "Tuna":
+                foodID = 359;
+                break;
+            case "Trout":
+                foodID = 333;
+                break;
+            case "Salmon":
+                foodID = 329;
+                break;
+            case "Bass":
+                foodID = 365;
+                break;
+            case "Cooked karambwan":
+                foodID = 3144;
+                break;
+            case "Manta ray":
+                foodID = 391;
+                break;
+            case "Anglerfish":
+                foodID = 13441;
+                break;
+            default:
+                Logger.log("Invalid food configuration, please restart script");
+                Script.stop();
+                break;
+        }
     }
 
     @Override
