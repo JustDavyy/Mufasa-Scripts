@@ -6,8 +6,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
@@ -16,10 +18,14 @@ import static tasks.GetBranches.gettingBranches;
 
 public class StateUpdater {
     //    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
+    static Rectangle warmthPercentReadRect = new Rectangle(171, 28, 32, 17);
+    static List<Color> blackColor = Arrays.asList(
+            java.awt.Color.decode("#000001")
+    );
     static Rectangle gameAt13CheckRect = new Rectangle(68, 50, 7, 10);
     static Rectangle gameAt20CheckRect = new Rectangle(100, 50, 9, 9);
     static Rectangle gameAt70CheckRect = new Rectangle(217, 50, 6, 9);
-    static Rectangle fullWarmtBar = new Rectangle(57, 35, 198, 9);
+    static Rectangle fullWarmthBar = new Rectangle(57, 35, 198, 9);
     static Rectangle warmthAt60 = new Rectangle(174, 35, 7, 8);
     static int currentWarmth = 0;
     static Rectangle warmthCriticalLowRect = new Rectangle(58, 36, 16, 8);
@@ -62,7 +68,18 @@ public class StateUpdater {
     }
 
     private static void updateShouldEat() {
-        shouldEat = Client.isColorInRect(Color.decode("#007c69"), warmthAt60, 5); // Checks if the depleted color is in the 60% mark.
+        // Use readDigitsInArea to check the warmth percentage
+        int warmthPercentage = Chatbox.readDigitsInArea(warmthPercentReadRect, blackColor);
+
+        // Check if the warmth percentage is valid and above the critical threshold
+        if (warmthPercentage != -1 && warmthPercentage >= 30) {
+            shouldEat = warmthPercentage <= 60; // Set shouldEat to true if 60 or lower, otherwise false
+        } else {
+            // Fallback to color check if the OCR result is invalid or below 30
+            shouldEat = Client.isColorInRect(Color.decode("#007c69"), warmthAt60, 5);
+        }
+
+        // Update warmthCriticalLow based on the color check
         warmthCriticalLow = Client.isColorInRect(Color.decode("#007c69"), warmthCriticalLowRect, 5);
     }
 
