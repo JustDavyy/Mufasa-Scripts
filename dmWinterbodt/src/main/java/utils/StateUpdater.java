@@ -19,8 +19,9 @@ public class StateUpdater {
     static Rectangle gameAt13CheckRect = new Rectangle(82, 51, 7, 7);
     static Rectangle gameAt20CheckRect = new Rectangle(100, 50, 9, 9);
     static Rectangle gameAt70CheckRect = new Rectangle(217, 50, 6, 9);
-    static Rectangle fullWarmtBar = new Rectangle(57, 35, 198, 9); //not really sure we need this, but I guess in case we do
+    static Rectangle fullWarmtBar = new Rectangle(57, 35, 198, 9);
     static Rectangle warmthAt60 = new Rectangle(174, 35, 7, 8);
+    static int currentWarmth = 0;
     static Rectangle warmthCriticalLowRect = new Rectangle(58, 36, 16, 8);
     static Rectangle waitingForGameToStartRect = new Rectangle(245, 50, 9, 11);
     static Rectangle waitingForGameEndedRect = new Rectangle(56, 49, 5, 12);
