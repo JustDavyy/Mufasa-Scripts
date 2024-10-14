@@ -28,7 +28,7 @@ public class CreatePotions extends Task {
 
     @Override
     public boolean activate() {
-        if (selectedFood != "Rejuv Potion") {
+        if (!selectedFood.equals("Rejuv Potion")) {
             return false;
         }
 
