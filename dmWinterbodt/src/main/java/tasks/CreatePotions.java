@@ -44,6 +44,10 @@ public class CreatePotions extends Task {
         if ((!hasBrumaHerb || !hasRejuvUnf) && !hasRejuv) {
             Logger.log("Getting herbs and unfinished potions");
 
+            if (hasBrumaHerb && hasRejuvUnf) {
+                processInventory();
+            }
+
             if (!hasBrumaHerb) {
                 if (navigateToTile(herbTile, "herb")) {
                     collectHerbs();
@@ -57,10 +61,6 @@ public class CreatePotions extends Task {
                     return true;
                 }
             }
-        }
-
-        if (hasBrumaHerb && hasRejuvUnf) {
-            processInventory();
         }
 
         return false;
