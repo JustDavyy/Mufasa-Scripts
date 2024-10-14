@@ -19,7 +19,7 @@ public class Bank extends Task {
     @Override
     public boolean activate() {
         StateUpdater.updateIsGameGoing();
-        if (selectedFood == "Rejuv Potion") {
+        if (selectedFood.equals("Rejuv Potion")) {
             return false;
         }
 

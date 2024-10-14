@@ -92,7 +92,7 @@ public class CreatePotions extends Task {
             Walker.step(tile);
         } else {
             Logger.log("Webwalking to " + tileName + " spot!");
-            Walker.webWalk(tile);
+            Walker.webWalk(tile, true);
         }
 
         Condition.wait(() -> Player.atTile(tile), 200, 40);
