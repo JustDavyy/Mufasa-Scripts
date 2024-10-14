@@ -56,7 +56,7 @@ public class Helpers {
     private static int lastCount = 0;
     private static long lastCheckTime = 0;  // To track the time of the last count check
     private static long unchangedStartTime = 0;  // To track the start time when the count was unchanged
-    private static final long CHECK_DURATION_MS = 5000;  // Total duration to check (5 seconds)
+    private static final long CHECK_DURATION_MS = 3000;  // Total duration to check (3 seconds)
     private static final long THROTTLE_DURATION_MS = 400;  // Minimum time between checks (400 milliseconds)
 
     /**
