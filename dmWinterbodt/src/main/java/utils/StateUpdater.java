@@ -16,14 +16,14 @@ import static tasks.GetBranches.gettingBranches;
 
 public class StateUpdater {
     //    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
-    static Rectangle gameAt13CheckRect = new Rectangle(83, 38, 1, 1);
-    static Rectangle gameAt20CheckRect = new Rectangle(93, 37, 1, 1);
-    static Rectangle gameAt70CheckRect = new Rectangle(196, 39, 1, 1);
+    static Rectangle gameAt13CheckRect = new Rectangle(82, 51, 7, 7);
+    static Rectangle gameAt20CheckRect = new Rectangle(100, 50, 9, 9);
+    static Rectangle gameAt70CheckRect = new Rectangle(217, 50, 6, 9);
     static Rectangle fullWarmtBar = new Rectangle(57, 35, 198, 9); //not really sure we need this, but I guess in case we do
     static Rectangle warmthAt60 = new Rectangle(174, 35, 7, 8);
     static Rectangle warmthCriticalLowRect = new Rectangle(58, 36, 16, 8);
-    static Rectangle waitingForGameToStartRect = new Rectangle(253, 41, 1, 1);
-    static Rectangle waitingForGameEndedRect = new Rectangle(56, 38, 1, 1);
+    static Rectangle waitingForGameToStartRect = new Rectangle(245, 50, 9, 11);
+    static Rectangle waitingForGameEndedRect = new Rectangle(56, 49, 5, 12);
     public static final HashMap<String, Long> mageDeadTimestamps = new HashMap<>();
 
     static {

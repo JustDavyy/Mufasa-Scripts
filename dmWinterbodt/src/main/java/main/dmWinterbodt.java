@@ -7,6 +7,7 @@ import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.*;
 import tasks.*;
+import utils.Helpers;
 import utils.SideManager;
 import utils.Task;
 import utils.WTStates;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.Random;
 
 import static helpers.Interfaces.*;
+import static utils.Helpers.countFoodInInventory;
 import static utils.SideManager.pickRandomSide;
 
 @ScriptManifest(
@@ -217,23 +219,23 @@ public class dmWinterbodt extends AbstractScript {
     public static String pickedSide;
     // State creation (we might not need all 4, but just the bottom ones?)
     public static WTStates[] states = {
-            new WTStates("Left", new Rectangle(60, 112, 31, 31), false, false, false, false),
-            new WTStates("Right", new Rectangle(120, 113, 27, 31), false, false, false, false)
+            new WTStates("Left", new Rectangle(69, 133, 18, 20), false, false, false, false),
+            new WTStates("Right", new Rectangle(125, 137, 19, 16), false, false, false, false)
     };
     // These tasks are executed in this order
     List<Task> WTTasks = Arrays.asList(
-            //new CheckGear(),
-            new CreatePotions()
-            //new BreakManager(), // I think it should be here?
-            //new GoToSafety(),
-            //new Eat(),
-            //new FailSafe(), // I think it should be here?
-            //new SwitchSide(),
-            //new BurnBranches(),
-            //new FletchBranches(),
-            //new PreGame(),
-            //new GetBranches(),
-            //new GoBackToGame()
+            new CheckGear(),
+            new BreakManager(), // I think it should be here?
+            new GoToSafety(),
+            new Eat(),
+            new FailSafe(), // I think it should be here?
+            new CreatePotions(),
+            new SwitchSide(),
+            new BurnBranches(),
+            new FletchBranches(),
+            new PreGame(),
+            new GetBranches(),
+            new GoBackToGame()
     );
 
     public static int generateRandomDelay(int lowerBound, int upperBound) {
@@ -296,6 +298,12 @@ public class dmWinterbodt extends AbstractScript {
         // Make sure our Chatbox is closed
         Paint.setStatus("Closing chatbox");
         Chatbox.closeChatbox();
+
+        if (!GameTabs.isInventoryTabOpen()) {
+            GameTabs.openInventoryTab();
+            Condition.wait(() -> GameTabs.isInventoryTabOpen(), 100, 20);
+        }
+        countFoodInInventory(); // Initial food count!
 
         // Disable break and AFK handlers, as we use custom breaks
         Client.disableBreakHandler();

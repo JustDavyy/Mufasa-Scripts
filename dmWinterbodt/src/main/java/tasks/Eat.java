@@ -20,24 +20,28 @@ public class Eat extends Task {
 
         GameTabs.openInventoryTab();
 
-        if (Inventory.contains(ItemList.REJUVENATION_POTION__1__20702, 0.75)) {
-            Inventory.eat(ItemList.REJUVENATION_POTION__1__20702, 0.75);
+        if (Inventory.contains(ItemList.REJUVENATION_POTION__1__20702, 0.95)) {
+            Inventory.eat(ItemList.REJUVENATION_POTION__1__20702, 0.95);
             lastActivity = System.currentTimeMillis();
             foodAmountInInventory--;
+            Condition.sleep(500);
             return true;
-        } else if (Inventory.contains(ItemList.REJUVENATION_POTION__2__20701, 0.75)) {
-            Inventory.eat(ItemList.REJUVENATION_POTION__2__20701, 0.75);
+        } else if (Inventory.contains(ItemList.REJUVENATION_POTION__2__20701, 0.95)) {
+            Inventory.eat(ItemList.REJUVENATION_POTION__2__20701, 0.95);
             lastActivity = System.currentTimeMillis();
+            Condition.sleep(500);
             foodAmountInInventory--;
             return true;
-        } else if (Inventory.contains(ItemList.REJUVENATION_POTION__3__20700, 0.75)) {
-            Inventory.eat(ItemList.REJUVENATION_POTION__3__20700, 0.75);
+        } else if (Inventory.contains(ItemList.REJUVENATION_POTION__3__20700, 0.95)) {
+            Inventory.eat(ItemList.REJUVENATION_POTION__3__20700, 0.95);
             lastActivity = System.currentTimeMillis();
+            Condition.sleep(500);
             foodAmountInInventory--;
             return true;
-        } else if (Inventory.contains(ItemList.REJUVENATION_POTION__4__20699, 0.75)) {
-            Inventory.eat(ItemList.REJUVENATION_POTION__4__20699, 0.75);
+        } else if (Inventory.contains(ItemList.REJUVENATION_POTION__4__20699, 0.95)) {
+            Inventory.eat(ItemList.REJUVENATION_POTION__4__20699, 0.95);
             lastActivity = System.currentTimeMillis();
+            Condition.sleep(500);
             foodAmountInInventory--;
             return true;
         }

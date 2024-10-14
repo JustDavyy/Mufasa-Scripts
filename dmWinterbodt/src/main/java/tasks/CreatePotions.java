@@ -9,6 +9,7 @@ import java.awt.*;
 
 import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
+import static utils.Helpers.countFoodInInventory;
 
 public class CreatePotions extends Task {
     Tile herbTile = new Tile(6503, 15661, 0);
@@ -33,6 +34,7 @@ public class CreatePotions extends Task {
 
     @Override
     public boolean execute() {
+        Logger.log("We should create potions");
         updateCurrentLocation();
 
         boolean hasBrumaHerb = Inventory.contains(brumaHerbItem, 0.75);
@@ -112,7 +114,10 @@ public class CreatePotions extends Task {
         Logger.log("Collecting rejuvenation potions...");
         while (Inventory.count(rejuvPotionUnf, 0.85) < foodAmount && !Script.isScriptStopping()) {
             Client.tap(potionRect);
-            Condition.sleep(generateRandomDelay(400, 700));
+            Condition.sleep(generateRandomDelay(600, 900));
+            if (Inventory.count(rejuvPotionUnf, 0.95) >= foodAmount) {
+                break;
+            }
         }
     }
 
@@ -124,8 +129,8 @@ public class CreatePotions extends Task {
         Inventory.tapItem(brumaHerbItem, 0.75);
         Condition.sleep(generateRandomDelay(200, 400));
         Inventory.tapItem(rejuvPotionUnf, 0.75);
-        Condition.wait(() -> !Inventory.contains(brumaHerbItem, 0.75), 300, 60);
-        foodAmountInInventory = Inventory.count(rejuvPotion, 0.75) * 4;
+        Condition.wait(() -> !Inventory.contains(brumaHerbItem, 0.95), 300, 60);
+        countFoodInInventory();
         Logger.log("Food amount in inventory: " + foodAmountInInventory);
     }
 }

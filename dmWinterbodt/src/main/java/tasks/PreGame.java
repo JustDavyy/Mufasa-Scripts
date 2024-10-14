@@ -1,6 +1,5 @@
 package tasks;
 
-import helpers.utils.ItemList;
 import utils.SideManager;
 import utils.StateUpdater;
 import utils.Task;
@@ -11,6 +10,7 @@ import java.util.regex.Pattern;
 
 import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
+import static utils.Helpers.countFoodInInventory;
 
 public class PreGame extends Task {
     @Override
@@ -60,7 +60,7 @@ public class PreGame extends Task {
         }
 
         // Read the timer on the WT bar
-        String results = Chatbox.readLastLine(new Rectangle(209, 33, 25, 12));
+        String results = Chatbox.readLastLine(new Rectangle(206, 45, 35, 16));
 
         // Check if results are not empty
         if (results != null && !results.trim().isEmpty()) {
@@ -126,28 +126,5 @@ public class PreGame extends Task {
         }
 
         return false;
-    }
-
-    private void countFoodInInventory() {
-        Paint.setStatus("Running food count");
-        Logger.debugLog("Running food count.");
-        foodAmountInInventory = 0; // Reset before counting
-
-        int[] foodIds = {ItemList.REJUVENATION_POTION__1__20702, ItemList.REJUVENATION_POTION__2__20701, ItemList.REJUVENATION_POTION__3__20700, ItemList.REJUVENATION_POTION__4__20699};
-        for (int id : foodIds) {
-            int countMultiplier = 1; // Default count multiplier
-            if (id == ItemList.REJUVENATION_POTION__2__20701) {
-                countMultiplier = 2;
-            } else if (id == ItemList.REJUVENATION_POTION__3__20700) {
-                countMultiplier = 3;
-            } else if (id == ItemList.REJUVENATION_POTION__4__20699) {
-                countMultiplier = 4;
-            }
-
-            int count = Inventory.count(id, 0.85);
-            Logger.debugLog("Found " + count + " items with ID " + id + " and multiplier " + countMultiplier);
-            foodAmountInInventory += count * countMultiplier;
-            Logger.debugLog("Updated food amount in inventory: " + foodAmountInInventory);
-        }
     }
 }
