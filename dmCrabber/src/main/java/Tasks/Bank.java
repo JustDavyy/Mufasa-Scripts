@@ -8,13 +8,17 @@ import static helpers.Interfaces.*;
 import static main.dmCrabber.*;
 
 public class Bank extends Task {
-    private final Tile bankTile = new Tile(756,867);
+    private final Tile bankTile = new Tile(6875, 13609, 0);
 
     String dynamicBank = "Hosidius_crab_bank";
 
     // I'm guessing we should just withdraw full inv of food?
     @Override
     public boolean activate() {
+        if (!usingPots && selectedFood.equals("None")) {
+            return false;
+        }
+
         if (!GameTabs.isInventoryTabOpen()) {
             GameTabs.openInventoryTab();
             Condition.wait(() -> GameTabs.isInventoryTabOpen(), 100, 10);
@@ -40,14 +44,14 @@ public class Bank extends Task {
         Logger.debugLog("Navigating to the bank area");
         // Check if player needs to walk to the bank area
         if (!Player.isTileWithinArea(currentLocation, bankArea)) {
-            Walker.walkPath(crabRegion, spot.getPathToBank());
-            currentLocation = Walker.getPlayerPosition(crabRegion);
+            Walker.walkPath(spot.getPathToBank());
+            currentLocation = Walker.getPlayerPosition();
         }
 
         // Check if player needs to step to the bank tile
         if (!Player.tileEquals(currentLocation, bankTile)) {
-            Walker.step(bankTile, crabRegion);
-            currentLocation = Walker.getPlayerPosition(crabRegion);
+            Walker.step(bankTile);
+            currentLocation = Walker.getPlayerPosition();
         }
     }
 

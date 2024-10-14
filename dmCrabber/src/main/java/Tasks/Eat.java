@@ -39,7 +39,15 @@ public class Eat extends Task {
                 Walker.walkPath(spot.getPathToBank());
                 return true;
             }
-        } else {
+        }
+        else if (selectedFood.equals("None")) {
+            Logger.log("No food was selected and HP is low, walking to safety and stopping script!");
+            Walker.walkPath(spot.getResetPath());
+            Condition.sleep(generateRandomDelay(12000, 15000));
+            Logout.logout();
+            Script.stop();
+        }
+        else {
             if (Inventory.count(foodID, 0.8) > 0) {
                 eat(foodID);
             } else {

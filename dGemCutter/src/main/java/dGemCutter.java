@@ -15,7 +15,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dGem Cutter",
         description = "Cuts any uncut into their cut variants, supports dynamic banking and world hops.",
-        version = "1.024",
+        version = "1.04",
         guideLink = "https://wiki.mufasaclient.com/docs/dgem-cutter/",
         categories = {ScriptCategory.Crafting}
 )
@@ -250,7 +250,7 @@ public class dGemCutter extends AbstractScript {
         Logger.debugLog("Withdrew chisel from the bank.");
 
         Bank.tapSearchButton();
-        Condition.sleep(generateDelay(800, 1000));
+        Condition.sleep(generateDelay(500, 1000));
         Logger.debugLog("Closed search interface.");
 
         // Check if we have the chisel in the inventory, otherwise stop script.
@@ -265,7 +265,7 @@ public class dGemCutter extends AbstractScript {
             Script.stop();
         }
 
-        // Select the right bank tab if needed.
+        // Selecting the right bank tab again if needed
         if (!Bank.isSelectedBankTab(banktab)) {
             Paint.setStatus("Open tab " + banktab);
             Bank.openTab(banktab);
@@ -308,6 +308,7 @@ public class dGemCutter extends AbstractScript {
                 Paint.setStatus("Open tab " + banktab);
                 Bank.openTab(banktab);
                 Logger.debugLog("Opened bank tab " + banktab);
+                Condition.sleep(750);
             }
 
             // Withdraw first set of items
@@ -337,7 +338,6 @@ public class dGemCutter extends AbstractScript {
         Logger.debugLog("Closed bank interface.");
 
         Logger.debugLog("Ending the initialSetup() method.");
-
         Condition.sleep(generateDelay(1500,2250));
     }
 

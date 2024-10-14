@@ -31,16 +31,17 @@ public class GetBranches extends Task {
         }
 
         Logger.debugLog("Inside GetBranches execute()");
-        if (!Player.atTile(SideManager.getBranchTile(), WTRegion)) {
+        if (!Player.atTile(SideManager.getBranchTile())) {
             Paint.setStatus("Stepping to branch tile");
             Logger.log("Stepping to branch tile!");
-            Walker.step(SideManager.getBranchTile(), WTRegion);
+            Walker.step(SideManager.getBranchTile());
+            Condition.wait(() -> Player.atTile(SideManager.getBranchTile()), 200, 20);
             lastActivity = System.currentTimeMillis();
-            currentLocation = Walker.getPlayerPosition(WTRegion);
+            currentLocation = Walker.getPlayerPosition();
             return true;
         }
 
-        if (Player.atTile(SideManager.getBranchTile(), WTRegion)) {
+        if (Player.atTile(SideManager.getBranchTile())) {
             Paint.setStatus("Initiating chop action");
             Logger.log("Initiating chop action!");
             Client.tap(SideManager.getBranchRect());
@@ -58,7 +59,7 @@ public class GetBranches extends Task {
                     }
                 }
 
-                return Inventory.isFull() || hpToEat > currentHp || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
+                return Inventory.isFull() || shouldEat || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
             }, 200, 150);
             return true;
         }

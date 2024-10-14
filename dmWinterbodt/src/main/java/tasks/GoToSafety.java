@@ -21,10 +21,10 @@ public class GoToSafety extends Task {
         Paint.setStatus("Going to safety");
 
         // Walk towards the door
-        Walker.walkPath(WTRegion, gameToWTDoor);
+        Walker.walkPath(gameToWTDoor);
         lastActivity = System.currentTimeMillis();
-        Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
-        currentLocation = Walker.getPlayerPosition(WTRegion);
+        Condition.wait(() -> Player.within(atDoor), 100, 20);
+        currentLocation = Walker.getPlayerPosition();
         return false;
     }
 

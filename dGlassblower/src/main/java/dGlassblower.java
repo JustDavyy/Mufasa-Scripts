@@ -14,7 +14,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dGlass blower",
         description = "Blows molten glass into glass objects to train crafting. Supports all options and dynamic banking.",
-        version = "1.042",
+        version = "1.06",
         guideLink = "https://wiki.mufasaclient.com/docs/dglass-blower/",
         categories = {ScriptCategory.Crafting}
 )

@@ -8,12 +8,12 @@ import static main.dCakeThiever.*;
 public class PerformThieving extends Task {
     @Override
     public boolean activate() {
-        return Player.atTile(stallTile, ardyRegion) && !Inventory.isFull();
+        return Player.atTile(stallTile) && !Inventory.isFull();
     }
 
     @Override
     public boolean execute() {
-        if (!Player.atTile(stallTile, ardyRegion)) {
+        if (!Player.atTile(stallTile)) {
             moveToStall();
         } else {
             Logger.log("Stealing.");
@@ -25,7 +25,7 @@ public class PerformThieving extends Task {
 
     private void moveToStall() {
         Walker.step(stallTile);
-        Condition.wait(() -> Player.atTile(stallTile, ardyRegion), 250, 20);
+        Condition.wait(() -> Player.atTile(stallTile), 250, 20);
     }
 
     private void performThieving() {
@@ -71,7 +71,7 @@ public class PerformThieving extends Task {
 
     private void runBack() {
         Walker.walkPath(runBackPath);
-        Player.waitTillNotMoving(13, ardyRegion);
+        Player.waitTillNotMoving(13);
         moveToStall();
     }
 

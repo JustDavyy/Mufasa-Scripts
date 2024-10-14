@@ -1,10 +1,8 @@
 import helpers.*;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
-import helpers.utils.OptionType;
-import helpers.utils.OverlayColor;
-import helpers.utils.Tile;
-import helpers.utils.Area;
+import helpers.utils.*;
+
 import java.awt.*;
 import java.time.Duration;
 import java.util.Map;
@@ -16,7 +14,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dKarambwanji Fisher",
         description = "Fishes Karambwanji at Karamja to use as bait for Karambwans. Has a safe option for low HP accounts (keep in mind, this slows down the catch rate).",
-        version = "1.052",
+        version = "1.07",
         guideLink = "https://wiki.mufasaclient.com/docs/dkarambwanji-fisher/",
         categories = {ScriptCategory.Fishing}
 )
@@ -42,25 +40,32 @@ String hopProfile;
 Boolean hopEnabled;
 Boolean useWDH;
 Area FishingArea = new Area(
-        new Tile(1, 0),
-        new Tile(97, 77)
+        new Tile(11109, 11740, 0),
+        new Tile(11279, 11875, 0)
 );
 String FishingSpot;
 Boolean SafeModeOn;
 private Instant lastXpGainTime = Instant.now().minusSeconds(15);
 int previousXP;
 int newXP;
-Tile SouthSpot = new Tile(55, 49);
-Tile NorthEastSpot = new Tile(63, 32);
-Tile NorthWestSpot = new Tile(42, 34);
-Tile EastSpot = new Tile(69, 38);
+int karambwanjiStartCount = 0;
+int karambwanjiGainedCount = 0;
+Tile SouthSpot = new Tile(11203, 11785, 0);
+Tile NorthEastSpot = new Tile(11231, 11833, 0);
+Tile NorthWestSpot = new Tile(11163, 11829, 0);
+Tile EastSpot = new Tile(11243, 11817, 0);
+
 Tile[] fishingSpots = new Tile[] {NorthEastSpot, EastSpot, NorthWestSpot, SouthSpot};
 private Instant lastActionTime = Instant.now();
 
     // This is the onStart, and only gets ran once.
     @Override
     public void onStart(){
-        Walker.setup("/maps/KarambwanjiArea.png"); //Set up the walker!
+        // Create the MapChunk with chunks of our location
+        MapChunk chunks = new MapChunk(new String[]{"43-47"}, "0");
+
+        // Set up the walker with the created MapChunk
+        Walker.setup(chunks);
 
         Map<String, String> configs = getConfigurations();
         SafeModeOn = Boolean.valueOf((configs.get("Use safe mode?")));
@@ -72,11 +77,11 @@ private Instant lastActionTime = Instant.now();
         Logger.log("Setting up everything for your gains now...");
 
         // Checking if we are at the right location
-        Tile playerPos = Walker.getPlayerPosition();
-        if (Player.isTileWithinArea(playerPos, FishingArea)) {
+        if (Player.within(FishingArea)) {
             Logger.debugLog("We are located at the Karambwanji fishing area, checking if we have a small fishing net...");
         } else {
             Logger.log("Could not locate us in the Karambwanji fishing area. Please move there and start the script again.");
+            Logger.log("Location: " + Walker.getPlayerPosition().toString());
             Logout.logout();
             Script.stop();
         }
@@ -94,6 +99,11 @@ private Instant lastActionTime = Instant.now();
             Logger.debugLog("Fishing net is present in the inventory, we're good to go!");
             GameTabs.closeInventoryTab();
             hopActions();
+        }
+
+        // Gather start amount of karambwanji
+        if (Inventory.contains(ItemList.RAW_KARAMBWANJI_3150, 0.7)) {
+            karambwanjiStartCount = Inventory.stackSize(ItemList.RAW_KARAMBWANJI_3150);
         }
 
     }
@@ -114,6 +124,9 @@ private Instant lastActionTime = Instant.now();
             performAntiAFKAction();
             hopActions();
         }
+
+        // Read the gained karambwanji count
+        Logger.log("Karambwanji's gained: " + (Inventory.stackSize(ItemList.RAW_KARAMBWANJI_3150) - karambwanjiStartCount));
     }
 
     private void FishKarambwanjis() {
@@ -177,36 +190,9 @@ private Instant lastActionTime = Instant.now();
     }
 
     private void performAntiAFKAction() {
-        Random random = new Random();
-        int actionNumber = random.nextInt(5);
 
-        switch (actionNumber) {
-            case 0:
-                Logger.debugLog("Performing Anti-AFK action 1");
-                GameTabs.openStatsTab();
-                GameTabs.closeStatsTab();
-                break;
-            case 1:
-                Logger.debugLog("Performing Anti-AFK action 2");
-                GameTabs.openSettingsTab();
-                GameTabs.closeSettingsTab();
-                break;
-            case 2:
-                Logger.debugLog("Performing Anti-AFK action 3");
-                GameTabs.openEquipTab();
-                GameTabs.closeEquipTab();
-                break;
-            case 3:
-                Logger.debugLog("Performing Anti-AFK action 4");
-                GameTabs.openFriendsTab();
-                GameTabs.closeFriendsTab();
-                break;
-            case 4:
-                Logger.debugLog("Performing Anti-AFK action 5");
-                GameTabs.openInventoryTab();
-                GameTabs.closeInventoryTab();
-                break;
-        }
+        Game.antiAFK();
+        GameTabs.openInventoryTab();
 
         // Reset the last action time
         lastActionTime = Instant.now();
@@ -215,6 +201,7 @@ private Instant lastActionTime = Instant.now();
     private void hopActions() {
         if(hopEnabled) {
             Game.hop(hopProfile, useWDH, false);
+            GameTabs.openInventoryTab();
         } else {
             // We do nothing here, as hop is disabled.
         }

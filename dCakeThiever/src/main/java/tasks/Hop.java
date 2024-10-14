@@ -8,7 +8,7 @@ import static main.dCakeThiever.*;
 public class Hop extends Task {
     @Override
     public boolean activate() {
-        return Player.atTile(stallTile, ardyRegion) && Game.isPlayersUnderUs();
+        return Player.atTile(stallTile) && Game.isPlayersUnderUs();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class Hop extends Task {
             Game.switchWorld(hopProfile);
         } else {
             // Hops are disabled, so we'll use the default profile to hop away from our crasher
-            Game.switchWorldNoProfile();
+            Game.switchWorld();
         }
 
         Condition.sleep(generateRandomDelay(1000, 2000));

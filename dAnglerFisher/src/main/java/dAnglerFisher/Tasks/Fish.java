@@ -17,8 +17,8 @@ public class Fish extends Task {
     Rectangle rightRect = new Rectangle(451, 263, 30, 13);
     Rectangle bottomRect = new Rectangle(439, 275, 10, 25);
     boolean inventoryFull = false;
-    Tile stepTile = new Tile(904, 457);
-    Tile walkToTile = new Tile(905, 461);
+    Tile stepTile = new Tile(7319, 14829, 0);
+    Tile walkToTile = new Tile(7319, 14837, 0);
     public Fish(dAnglerFisher main){
         super();
         super.name = "Fish";

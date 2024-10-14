@@ -12,11 +12,12 @@ import static helpers.Interfaces.*;
 public class Bank extends Task {
     dAnglerFisher main;
     Tile[] pathToBank = new Tile[]{
-            new Tile(902, 453),
-            new Tile(893, 451),
-            new Tile(885, 451),
-            new Tile(874, 447),
-            new Tile(871, 438)
+            new Tile(7322, 14845, 0),
+            new Tile(7298, 14848, 0),
+            new Tile(7266, 14850, 0),
+            new Tile(7244, 14859, 0),
+            new Tile(7223, 14875, 0),
+            new Tile(7217, 14895, 0)
     };
 
     public Bank(dAnglerFisher main) {
@@ -62,11 +63,11 @@ public class Bank extends Task {
             }
             Inventory.tapItem(ItemList.RAW_ANGLERFISH_13439, 0.8);
 
-            if (Inventory.contains(ItemList.CLUE_BOTTLE_EASY_13648, 0.8) || Inventory.contains(ItemList.CLUE_BOTTLE_MEDIUM_13649, 0.8) || Inventory.contains(ItemList.CLUE_BOTTLE_HARD_13650, 0.8) || Inventory.contains(ItemList.CLUE_BOTTLE_ELITE_13651, 0.8)) {
-                Inventory.tapItem(ItemList.CLUE_BOTTLE_EASY_13648, 0.8);
-                Inventory.tapItem(ItemList.CLUE_BOTTLE_MEDIUM_13649, 0.8);
-                Inventory.tapItem(ItemList.CLUE_BOTTLE_HARD_13650, 0.8);
-                Inventory.tapItem(ItemList.CLUE_BOTTLE_ELITE_13651, 0.8);
+            if (Inventory.contains(ItemList.CLUE_BOTTLE__EASY__13648, 0.8) || Inventory.contains(ItemList.CLUE_BOTTLE__MEDIUM__13649, 0.8) || Inventory.contains(ItemList.CLUE_BOTTLE__HARD__13650, 0.8) || Inventory.contains(ItemList.CLUE_BOTTLE__ELITE__13651, 0.8)) {
+                Inventory.tapItem(ItemList.CLUE_BOTTLE__EASY__13648, 0.8);
+                Inventory.tapItem(ItemList.CLUE_BOTTLE__MEDIUM__13649, 0.8);
+                Inventory.tapItem(ItemList.CLUE_BOTTLE__HARD__13650, 0.8);
+                Inventory.tapItem(ItemList.CLUE_BOTTLE__ELITE__13651, 0.8);
             }
 
             Condition.sleep(dAnglerFisher.generateRandomDelay(750, 1000));

@@ -52,7 +52,7 @@ public class BreakManager extends Task {
         int breakMillis = breakMinutes * 60000 + breakSeconds * 1000;  // Convert minutes and seconds to milliseconds
 
         if (moveBeforeBreak) {
-            Walker.walkTo(new Tile(638, 175), WTRegion);
+            Walker.walkTo(new Tile(6519, 15685, 0));
             moveBeforeBreak = false;
         }
 

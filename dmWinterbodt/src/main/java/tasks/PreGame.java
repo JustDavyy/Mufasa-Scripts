@@ -5,13 +5,24 @@ import utils.StateUpdater;
 import utils.Task;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
+import static utils.Helpers.countFoodInInventory;
 
 public class PreGame extends Task {
+
+
+    private final Rectangle startTimerRect = new Rectangle(204, 45, 31, 15);
+    private final Rectangle warmthPercentRect = new Rectangle(171, 28, 32, 17);
+    private final List<java.awt.Color> blackColor = Arrays.asList(
+            java.awt.Color.decode("#000001")
+    );
+
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside PreGame activate()");
@@ -40,12 +51,12 @@ public class PreGame extends Task {
         // Check if we are at the burn tile, otherwise move there
         if (BreakManager.shouldBreakNow && !Player.isTileWithinArea(currentLocation, lobby)) {
             Paint.setStatus("Moving to burn tile");
-            Walker.walkPath(WTRegion, fromEitherSideToGameLobby);
-            currentLocation = Walker.getPlayerPosition(WTRegion);
+            Walker.walkPath(fromEitherSideToGameLobby);
+            currentLocation = Walker.getPlayerPosition();
             return true;
         } else if (!Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
             Paint.setStatus("Stepping to burn tile");
-            Walker.step(SideManager.getBurnTile(), WTRegion);
+            Walker.step(SideManager.getBurnTile());
         }
 
         // If at burn tile, update current location and lock ourselves to this task
@@ -59,34 +70,43 @@ public class PreGame extends Task {
         }
 
         // Read the timer on the WT bar
-        String results = Chatbox.readLastLine(new Rectangle(209, 33, 25, 12));
+        int results = Chatbox.readDigitsInArea(startTimerRect, blackColor);
 
-        // Check if results are not empty
-        if (results != null && !results.trim().isEmpty()) {
+        // Check if results are valid
+        if (results != -1) {
             try {
-                // Extract the seconds from the results using a regular expression
-                Pattern pattern = Pattern.compile("\\d+:\\d+");
-                Matcher matcher = pattern.matcher(results);
-                if (matcher.find()) {
-                    String time = matcher.group();
-                    int seconds = Integer.parseInt(time.split(":")[1].trim());
-                    if (seconds >= 5) {
-                        Paint.setStatus("Wintertodt starting in " + seconds + "s");
-                        Logger.log("Wintertodt starting in " + seconds + " seconds.");
-                    }
+                // Calculate minutes and seconds from the results
+                int minutes;
+                int seconds;
 
+                if (results >= 100) {
+                    // If the result is 100 or more, treat it as MMSS format
+                    minutes = results / 100;
+                    seconds = results % 100;
+                } else {
+                    // Otherwise, treat it as total seconds
+                    minutes = results / 60;
+                    seconds = results % 60;
+                }
+
+                // Format the time as "minutes:seconds"
+                String timeFormatted = String.format("%d:%02d", minutes, seconds);
+
+                if (seconds >= 5) {
+                    Paint.setStatus("Wintertodt starting in " + timeFormatted);
+                    Logger.log("Wintertodt starting in " + timeFormatted);
 
                     // Check if the time is between 5 and 10 seconds (inclusive)
                     if (seconds >= 5 && seconds <= 10) {
-                        // Wait for 1 seconds less than the number of seconds read
+                        // Wait for 1 second less than the number of seconds read
                         int waitTime = Math.max(0, seconds - 1) * 1000; // Convert to milliseconds
                         Condition.sleep(waitTime);
 
-                        // Start a 1,5-second while loop with an action every 200-300ms
+                        // Start a 1.5-second while loop with an action every 200-300 ms
                         long startTime = System.currentTimeMillis();
                         while (System.currentTimeMillis() - startTime < 1500) {
                             Paint.setStatus("Perform initial burn");
-                            totalRelightCount = totalRelightCount + 1;
+                            totalRelightCount++;
                             Paint.setStatistic("Brazier repairs: " + totalRepairCount + " | Brazier relights: " + totalRelightCount);
                             Client.tap(SideManager.getBurnRect());
 
@@ -97,7 +117,7 @@ public class PreGame extends Task {
 
                         // Move to the branch tile
                         Paint.setStatus("Stepping to branch tile");
-                        Walker.step(SideManager.getBranchTile(), WTRegion);
+                        Walker.step(SideManager.getBranchTile());
                         lastActivity = System.currentTimeMillis();
                         currentLocation = SideManager.getBranchTile();
 
@@ -106,7 +126,7 @@ public class PreGame extends Task {
                         Logger.log("Total Game Count: " + totalGameCount);
                         Paint.updateBox(brazierIndex, totalGameCount - 1);
                         Paint.updateBox(crateIndex, totalGameCount - 1);
-                        Logger.debugLog("Current game count since break:" + BreakManager.currentGameCount);
+                        Logger.debugLog("Current game count since break: " + BreakManager.currentGameCount);
                         Logger.log("Games till next break: " + (BreakManager.shouldBreakAt - BreakManager.currentGameCount));
 
                         Paint.setStatus("Resetting states");
@@ -116,42 +136,14 @@ public class PreGame extends Task {
                         // Reset our booleans before exiting the task
                         shouldStartWithBurn = false;
                     }
-                } else {
-                    Logger.debugLog("No valid time format found in OCR result: " + results);
                 }
-            } catch (NumberFormatException e) {
-                Logger.debugLog("Failed to parse seconds from OCR result: " + results);
+            } catch (Exception e) {
+                Logger.debugLog("Error processing OCR result: " + e.getMessage());
             }
+        } else {
+            Logger.debugLog("No valid digits found in the specified area.");
         }
 
         return false;
-    }
-
-    private void countFoodInInventory() {
-        Paint.setStatus("Running food count");
-        Logger.debugLog("Running food count.");
-        foodAmountInInventory = 0; // Reset before counting
-
-        if (selectedFood.equals("Cakes")) {
-            int[] foodIds = {1891, 1893, 1895};
-            for (int id : foodIds) {
-                int countMultiplier = 1; // Default count multiplier
-                if (id == 1891) {
-                    countMultiplier = 3; // A full cake counts as 3
-                } else if (id == 1893) {
-                    countMultiplier = 2; // half cake counts as 2
-                }
-
-                int count = Inventory.count(id, 0.85);
-                Logger.debugLog("Found " + count + " items with ID " + id + " and multiplier " + countMultiplier);
-                foodAmountInInventory += count * countMultiplier;
-                Logger.debugLog("Updated food amount in inventory: " + foodAmountInInventory);
-            }
-        } else {
-            int count = Inventory.count(foodID, 0.85);
-            Logger.debugLog("Found " + count + " items with ID " + foodID);
-            foodAmountInInventory = count;
-            Logger.debugLog("Total food in inventory: " + foodAmountInInventory);
-        }
     }
 }

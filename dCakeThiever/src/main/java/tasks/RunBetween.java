@@ -13,7 +13,7 @@ public class RunBetween extends Task {
 
     @Override
     public boolean execute() {
-        if (!Player.within(bankArea, ardyRegion) && Inventory.isFull()) {
+        if (!Player.within(bankArea) && Inventory.isFull()) {
             movetoBank();
         } else {
             movetoStall();
@@ -42,10 +42,10 @@ public class RunBetween extends Task {
 
         Walker.walkPath(pathToStall);
         Condition.wait(() -> Player.within(scriptArea), 1000, 15);
-        Player.waitTillNotMoving(13, ardyRegion);
+        Player.waitTillNotMoving(13);
         Walker.step(stallTile);
 
-        if (!Player.atTile(stallTile, ardyRegion)) {
+        if (!Player.atTile(stallTile)) {
             Walker.step(stallTile);
         }
 

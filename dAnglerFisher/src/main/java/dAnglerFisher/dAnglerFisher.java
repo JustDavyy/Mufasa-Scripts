@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAnglerFisher",
         description = "Fishes Anglerfish at Port Piscarilius",
-        version = "1.4",
+        version = "1.41",
         categories = {ScriptCategory.Fishing},
         guideLink = "https://wiki.mufasaclient.com/docs/danglerfisher/"
 )
@@ -46,30 +46,29 @@ public class dAnglerFisher extends AbstractScript {
     public static long startTime;
     public static Instant lastXpGainTime = Instant.now().minusSeconds(90);
     public static Instant lastActionTime = Instant.now();
-    public static RegionBox portPiscRegion = new RegionBox(
-            "PortPiscarilius",
-            2469, 1188,
-            2841, 1473
-    );
     public static Random random = new Random();
-    public static Tile bankTile = new Tile(870, 434);
+    public static Tile bankTile = new Tile(7215, 14909, 0);
     public static Rectangle bankClickRect = new Rectangle(437, 249, 13, 10);
     public static Area fishingArea = new Area(
-            new Tile(886, 447),
-            new Tile(920, 464)
+            new Tile(7264, 14807, 0),
+            new Tile(7363, 14868, 0)
     );
     public static Area upperFishSpotArea = new Area(
-            new Tile(908, 447),
-            new Tile(918, 455)
+            new Tile(7337, 14830, 0),
+            new Tile(7366, 14880, 0)
+    );
+    public static Area portPiscArea = new Area(
+            new Tile(7149, 14809, 0),
+            new Tile(7419, 14967, 0)
     );
 
     // Walker stuff
     public static Tile[] pathToSpots = new Tile[]{
-            new Tile(871, 438),
-            new Tile(874, 447),
-            new Tile(885, 451),
-            new Tile(893, 451),
-            new Tile(900, 459),
+            new Tile(7223, 14874, 0),
+            new Tile(7242, 14857, 0),
+            new Tile(7272, 14852, 0),
+            new Tile(7298, 14849, 0),
+            new Tile(7320, 14835, 0)
     };
 
     // Paint stuff
@@ -89,13 +88,17 @@ public class dAnglerFisher extends AbstractScript {
         taskList.add(new Bank(this));
         taskList.add(new AntiAFK(this));
 
-        Walker.setup(portPiscRegion);
+        // Create the MapChunk with chunks of our location
+        MapChunk chunks = new MapChunk(new String[]{"28-59"}, "0");
+
+        // Set up the walker with the created MapChunk
+        Walker.setup(chunks);
 
         // Grab script config stuff
         Map<String, String> configs = getConfigurations();
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
-        if (!Player.within(portPiscRegion)){
+        if (!Player.within(portPiscArea)){
             Logger.log("Not at fishing area, stopping script.");
             Logout.logout();
             Script.stop();
@@ -118,7 +121,7 @@ public class dAnglerFisher extends AbstractScript {
         // Create all image boxes with a 500ms delay between each one
         anglerIndex = Paint.createBox("Raw Anglerfish", ItemList.RAW_ANGLERFISH_13439, anglerAmount);
         Condition.sleep(500);
-        profitIndex = Paint.createBox("Profit", ItemList.COINS_9_1004, profitAmount);
+        profitIndex = Paint.createBox("Profit", ItemList.MOUNTED_COINS_20631, profitAmount);
         Condition.sleep(500);
 
         Paint.setStatus("Initializing...");
@@ -126,7 +129,7 @@ public class dAnglerFisher extends AbstractScript {
         anglerInventCount = Inventory.count(ItemList.RAW_ANGLERFISH_13439, 0.8);
         anglerPrice = GrandExchange.getItemPrice(ItemList.RAW_ANGLERFISH_13439);
 
-        if (!Player.within(fishingArea, portPiscRegion) && !Inventory.isFull()) {
+        if (!Player.within(fishingArea) && !Inventory.isFull()) {
             Paint.setStatus("Move to the fishing spots");
             moveToSpots();
         }

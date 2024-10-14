@@ -2,11 +2,11 @@ import helpers.*;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.Area;
+import helpers.utils.MapChunk;
 import helpers.utils.OptionType;
 import helpers.utils.Tile;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Map;
 
 import static helpers.Interfaces.*;
@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @ScriptManifest(
         name = "dTeaYoinker",
         description = "Steals from the tea stall in east Varrock. Supports world hopping and banking the tea.",
-        version = "1.042",
+        version = "1.06",
         guideLink = "https://wiki.mufasaclient.com/docs/dtea-yoinker/",
         categories = {ScriptCategory.Thieving}
 )
@@ -47,34 +47,15 @@ public class dTeaYoinker extends AbstractScript {
     Tile playerPos;
     int tea = 712;
 
-    Tile stallTile = new Tile(189, 161);
-    Tile bankTile1 = new Tile(168, 148);
-    Tile bankTile2 = new Tile(169, 148);
-    Tile bankTile3 = new Tile(170, 148);
+    Tile stallTile = new Tile(13071, 13389, 0);
+    Tile bankTile1 = new Tile(13007, 13429, 0);
+    Tile bankTile2 = new Tile(13011, 13429, 0);
+    Tile bankTile3 = new Tile(13015, 13429, 0);
+    Tile middleTile = new Tile(13051, 13425, 0);
     Rectangle boothArea = new Rectangle(432, 307, 19, 24);
-    Rectangle stallArea = new Rectangle(469, 178, 102, 140);
     Rectangle stallTapWindow = new Rectangle(493, 212, 56, 75);
     int pollsSinceLastDrop = 0;
 
-    Tile[] pathtoBank1 = new Tile[] {
-            new Tile(181, 152),
-            bankTile1
-    };
-
-    Tile[] pathtoBank2 = new Tile[] {
-            new Tile(183, 151),
-            bankTile2
-    };
-
-    Tile[] pathtoBank3 = new Tile[] {
-            new Tile(182, 153),
-            bankTile3
-    };
-
-    Tile[] pathtoStall = new Tile[] {
-            new Tile(181, 154),
-            stallTile
-    };
     boolean stolen = false;
     int inventSpotsFree;
 
@@ -89,8 +70,11 @@ public class dTeaYoinker extends AbstractScript {
 
         Logger.log("Thank you for using the dTeaYoinker script!\nSetting up everything for your gains now...");
 
-        // Set the map we'll be using (varrock)
-        Walker.setup("/maps/Varrock.png");
+        // Create the MapChunk with chunks of our location
+        MapChunk chunks = new MapChunk(new String[]{"51-53"}, "0");
+
+        // Set up the walker with the created MapChunk
+        Walker.setup(chunks);
 
         hopActions();
         initialSetup();
@@ -134,16 +118,15 @@ public class dTeaYoinker extends AbstractScript {
     private void initialSetup() {
         Logger.debugLog("Starting initialSetup() method.");
 
-        // Get the script area and current player position
-        playerPos = Walker.getPlayerPosition();
         Area scriptArea = new Area(
-                new Tile(143, 125),
-                new Tile(204, 170)
+                new Tile(12955, 13374, 0),
+                new Tile(13098, 13490, 0)
         );
 
         // Check if we are within the script area, otherwise stop the script.
-
-        if (Player.isTileWithinArea(playerPos, scriptArea)) {
+        playerPos = Walker.getPlayerPosition();
+        Logger.log("Location: " + playerPos.toString());
+        if (Player.within(scriptArea)) {
             Logger.debugLog("We are located in the Varrock area needed for the script to run. Continuing... ");
 
             // Check if inventory is full
@@ -172,6 +155,12 @@ public class dTeaYoinker extends AbstractScript {
                 if (!Game.isTapToDropEnabled()) {
                     Game.enableTapToDrop();
                 }
+            }
+
+            // Check if we're at stall, if not move there.
+            if (!Player.atTile(stallTile)) {
+                Logger.debugLog("Not at stall, moving there!");
+                movetoStall();
             }
 
         } else {
@@ -209,51 +198,65 @@ public class dTeaYoinker extends AbstractScript {
     private void movetoBank() {
         Logger.debugLog("Starting movetoBank() method.");
 
-        Tile[][] pathsToBank = new Tile[][]{pathtoBank1, pathtoBank2, pathtoBank3};
-        Tile[] bankTiles = new Tile[]{bankTile1, bankTile2, bankTile3};
-        int randomIndex = ThreadLocalRandom.current().nextInt(pathsToBank.length); // Generates 0, 1, or 2
+        int randomIndex = ThreadLocalRandom.current().nextInt(1, 4); // Generates 1, 2, or 3
 
-        Logger.debugLog("Walking to a randomly chosen bank path.");
-        Walker.walkPath(pathsToBank[randomIndex]);
+        Logger.debugLog("Walking to a randomly chosen bank booth.");
+
+        Walker.walkTo(middleTile);
+        Player.waitTillNotMoving(7);
+
+        switch (randomIndex) {
+            case 1:
+                Walker.step(bankTile1);
+                break;
+            case 2:
+                Walker.step(bankTile2);
+                break;
+            case 3:
+                Walker.step(bankTile3);
+                break;
+        }
 
         // Adding a delay to allow the player to finish walking
-        Condition.sleep(4000);
-        Tile targetBankTile = bankTiles[ThreadLocalRandom.current().nextInt(bankTiles.length)];
-        Random random = new Random();
-        int delay = 2000 + random.nextInt(400); // 2000 to 2400 milliseconds
-
-        Walker.step(targetBankTile);
-        Condition.sleep(delay);
+        Condition.sleep(750);
 
         Logger.debugLog("Checking if the player has reached the bank.");
         boolean atBank = false;
         playerPos = Walker.getPlayerPosition();
 
-        // Loop through bankTiles to check if player is at one of the bank tiles
-        for (Tile bankTile : bankTiles) {
-            if (Player.atTile(bankTile)) {
-                atBank = true;
-                Logger.debugLog("Player has reached the bank.");
-                break; // Exit the loop as we found the player is at the bank
-            }
+        // Check if we are at one of the bank tiles
+        if (Player.tileEquals(playerPos, bankTile1) || Player.tileEquals(playerPos, bankTile2) || Player.tileEquals(playerPos, bankTile3)) {
+            atBank = true;
+            Logger.debugLog("Player has reached the bank.");
         }
 
         if (!atBank) {
             Logger.debugLog("Player did not reach the bank.");
-            // Pick one of the three bank tiles at random
-            Walker.step(targetBankTile); // Attempt to walk to the randomly chosen bank tile
-            Condition.sleep(delay);
             Logger.debugLog("Attempting to walk to a new randomly chosen bank tile.");
+            switch (randomIndex) {
+                case 1:
+                    Walker.step(bankTile1);
+                    break;
+                case 2:
+                    Walker.step(bankTile2);
+                    break;
+                case 3:
+                    Walker.step(bankTile3);
+                    break;
+            }
+            Condition.sleep(750);
         }
-
         Logger.debugLog("Ending the movetoBank() method.");
     }
 
     private void movetoStall() {
         Logger.debugLog("Starting movetoStall() method.");
 
+        Walker.walkTo(middleTile);
+        Player.waitTillNotMoving(7);
+
         // Initial attempt to walk to the stall
-        Walker.walkPath(pathtoStall);
+        Walker.step(stallTile);
 
         // Adding a delay to allow the player to finish walking
         Random random = new Random();

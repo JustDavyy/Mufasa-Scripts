@@ -1,15 +1,10 @@
 import helpers.*;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
-import helpers.utils.OptionType;
-import helpers.utils.OverlayColor;
-import helpers.utils.RegionBox;
-import helpers.utils.Tile;
-import helpers.utils.Area;
+import helpers.utils.*;
 
 import java.awt.*;
 import java.time.Duration;
-import java.util.List;
 import java.util.Map;
 import java.time.Instant;
 import java.util.Random;
@@ -19,7 +14,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dMinnows Fisher",
         description = "Fishes Minnows at Kylie Minnow's fishing platform at the Fishing Guild. The angler's outfit is needed to unlock the platform.",
-        version = "1.04",
+        version = "1.05",
         guideLink = "https://wiki.mufasaclient.com/docs/dminnows-fisher/",
         categories = {ScriptCategory.Fishing}
 )
@@ -36,15 +31,9 @@ import static helpers.Interfaces.*;
 
 public class dMinnowsFisher extends AbstractScript {
 Area minnowPlatform = new Area(
-        new Tile(1935, 883),
-        new Tile(1965, 903)
+        new Tile(10421, 13497, 0),
+        new Tile(10504, 13544, 0)
 );
-RegionBox minnowRegion = new RegionBox(
-        "minnows",
-        5616, 2490,
-        6090, 2928
-);
-Tile playerPos;
 private Instant lastXpGainTime = Instant.now().minusSeconds(5);
 private Instant lastSharkAction = Instant.now();
 int previousXP;
@@ -52,9 +41,6 @@ int newXP;
 String hopProfile;
 Color FishSpotColor = Color.decode("#27ffff");
 Rectangle lastLine = new Rectangle(35, 104, 361, 14);
-Rectangle eastArea = new Rectangle(5816, 2658, 33, 32);
-Rectangle westArea = new Rectangle(5816, 2658, 33, 32);
-RegionBox fishingRegion = new RegionBox("FishingRegion", 5573, 2440, 6110, 2952);
 Boolean hopEnabled;
 Rectangle allButton = new Rectangle(23, 10, 47, 15);
 Rectangle gameButton = new Rectangle(89, 9, 44, 13);
@@ -86,9 +72,14 @@ Rectangle bottomRect = new Rectangle(441, 303, 24, 43);
             Logger.debugLog("Hopping is disabled for this run!");
         }
 
+        // Create the MapChunk with chunks of our location
+        MapChunk chunks = new MapChunk(new String[]{"40-53"}, "0");
+
+        // Set up the walker with the created MapChunk
+        Walker.setup(chunks);
+
         // Checking if we are at the right location
-        playerPos = Walker.getPlayerPosition();
-        if (Player.isTileWithinArea(playerPos, minnowPlatform)) {
+        if (Player.within(minnowPlatform)) {
             Logger.debugLog("We are located at the Minnow platform, checking if we have a small fishing net...");
         } else {
             Logger.log("Could not locate us at the Minnow platform. Please move there and start the script again.");
@@ -102,10 +93,9 @@ Rectangle bottomRect = new Rectangle(441, 303, 24, 43);
         }
 
         if(!Inventory.contains("303", 0.90)) {
-            //Logger.log("No small fishing net was found in the inventory, please grab it and restart the script.");
-            //Logout.logout();
-            //Script.stop();
-            Logger.log("No net was found, check is disabled by Davyy for now.");
+            Logger.log("No small fishing net was found in the inventory, please grab it and restart the script.");
+            Logout.logout();
+            Script.stop();
         } else {
             Logger.debugLog("Fishing net is present in the inventory, we're good to go!");
             GameTabs.closeInventoryTab();
@@ -243,21 +233,12 @@ Rectangle bottomRect = new Rectangle(441, 303, 24, 43);
         }
     }
 
-    private static Point calculateCentroid(List<Point> points) {
-        int sumX = 0, sumY = 0;
-        for (Point p : points) {
-            sumX += p.x;
-            sumY += p.y;
-        }
-        return new Point(sumX / points.size(), sumY / points.size());
-    }
-
     private boolean isSpotAgainstUs(boolean log) {
         // Check if the color is present in the right or bottom rectangles
         if (Client.isColorInRect(OverlayColor.FISHING, rightRect, 5) ||
-                Client.isColorInRect(OverlayColor.FISHING, bottomRect, 5) ||
-                Client.isColorInRect(OverlayColor.FISHING, topRect, 5) ||
-                Client.isColorInRect(OverlayColor.FISHING, leftRect, 5)) {
+            Client.isColorInRect(OverlayColor.FISHING, bottomRect, 5) ||
+            Client.isColorInRect(OverlayColor.FISHING, topRect, 5) ||
+            Client.isColorInRect(OverlayColor.FISHING, leftRect, 5)) {
             return true;
         }
 

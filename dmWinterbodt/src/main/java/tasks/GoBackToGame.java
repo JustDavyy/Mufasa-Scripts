@@ -31,13 +31,13 @@ public class GoBackToGame extends Task {
 
         isMoreThan40Seconds = (System.currentTimeMillis() - lastWalkToSafety) > 40000;
 
-        return Player.within(outsideArea, WTRegion) || Player.within(insideArea, WTRegion) && !SideManager.isWithinGameArea() && !waitingForGameEnded && !isGameGoing && isMoreThan40Seconds || Player.within(insideArea, WTRegion) && !SideManager.isWithinGameArea() && Player.isTileWithinArea(currentLocation, lobby) && isMoreThan40Seconds && !gameAt70Percent;
+        return Player.within(outsideArea) || Player.within(insideArea) && !SideManager.isWithinGameArea() && !waitingForGameEnded && !isGameGoing && isMoreThan40Seconds || Player.within(insideArea) && !SideManager.isWithinGameArea() && Player.isTileWithinArea(currentLocation, lobby) && isMoreThan40Seconds && !gameAt70Percent;
     }
 
     @Override
     public boolean execute() {
         Logger.debugLog("Inside GoBackToGame execute()");
-        if (BreakManager.shouldBreakNow && (Player.within(lobby, WTRegion) || Player.within(outsideArea, WTRegion)) ) {
+        if (BreakManager.shouldBreakNow && (Player.within(lobby) || Player.within(outsideArea)) ) {
             return true;
         }
 
@@ -56,8 +56,8 @@ public class GoBackToGame extends Task {
     private boolean walkToBranchTileFromLobby() {
         if (Player.isTileWithinArea(currentLocation, lobby)) {
             Paint.setStatus("Walking to branch tile from lobby");
-            Walker.step(SideManager.getBranchTile(), WTRegion);
-            currentLocation = Walker.getPlayerPosition(WTRegion);
+            Walker.step(SideManager.getBranchTile());
+            currentLocation = Walker.getPlayerPosition();
             return true;
         }
         return false;
@@ -66,12 +66,12 @@ public class GoBackToGame extends Task {
     private boolean walkToDoorFromOutside() {
         if (Player.isTileWithinArea(currentLocation, outsideArea)) {
             Paint.setStatus("Walking to the door from outside");
-            Walker.walkPath(WTRegion, getReversedTiles(wtDoorToBank));
-            Condition.wait(() -> Player.within(atDoor, WTRegion), 100, 20);
+            Walker.walkPath(getReversedTiles(wtDoorToBank));
+            Condition.wait(() -> Player.within(atDoor), 100, 20);
             Condition.sleep(generateRandomDelay(700, 1300));
             Client.tap(enterDoorRect);
             Condition.sleep(generateRandomDelay(4250, 5300));
-            currentLocation = Walker.getPlayerPosition(WTRegion);
+            currentLocation = Walker.getPlayerPosition();
             return true;
         }
         return false;
@@ -80,9 +80,9 @@ public class GoBackToGame extends Task {
     private boolean walkToGameFromDoor() {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
             Paint.setStatus("Walking to game from the door");
-            Walker.walkPath(WTRegion, SideManager.getDoorToGamePath());
+            Walker.walkPath(SideManager.getDoorToGamePath());
             Condition.wait(SideManager::isWithinGameArea, 100, 20);
-            currentLocation = Walker.getPlayerPosition(WTRegion);
+            currentLocation = Walker.getPlayerPosition();
             return true;
         }
         return false;
@@ -94,7 +94,7 @@ public class GoBackToGame extends Task {
             Client.tap(new java.awt.Rectangle(800, 63, 16, 19));
             lastActivity = System.currentTimeMillis();
             Condition.sleep(generateRandomDelay(2000, 4000));
-            currentLocation = Walker.getPlayerPosition(WTRegion);
+            currentLocation = Walker.getPlayerPosition();
 
             // Check if we can start a game or not
             StateUpdater.updateGameAt70();
@@ -109,7 +109,7 @@ public class GoBackToGame extends Task {
     private void walkToBranchesTile() {
         if (Player.isTileWithinArea(currentLocation, lobby)) {
             Paint.setStatus("Walking to branch tile");
-            Walker.step(SideManager.getBranchTile(), WTRegion);
+            Walker.step(SideManager.getBranchTile());
         }
     }
 }

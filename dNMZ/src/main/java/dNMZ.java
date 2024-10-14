@@ -2,10 +2,7 @@ import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
-import helpers.utils.Area;
-import helpers.utils.EquipmentSlot;
-import helpers.utils.OptionType;
-import helpers.utils.Tile;
+import helpers.utils.*;
 
 import java.awt.*;
 import java.util.*;
@@ -16,7 +13,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
-        version = "1.078",
+        version = "1.08",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -134,42 +131,46 @@ public class dNMZ extends AbstractScript {
     private long lastTimeHPWasTwo = 0;
 
     // Tiles
-    Tile bankTile = new Tile(85, 95);
-    Tile rewardChestTile = new Tile(80, 64);
-    Tile rewardChestTile2 = new Tile(80, 63);
-    Tile vialOutsideTile = new Tile(74, 66);
-    Tile absorptionBarrelTile = new Tile(69, 64);
-    Tile absorptionBarrelTileWALKCALL = new Tile(69, 65);
-    Tile overloadBarrelTile = new Tile(69, 66);
-    Tile vialInsideTile = new Tile(195, 93);
-    Tile dominicOnionTile = new Tile(78, 67);
-    Tile respawnTile = new Tile(78, 67);
+    Tile bankTile = new Tile(10451, 12125, 0);
+    Tile rewardChestTile = new Tile(10435, 12221, 0);
+    Tile vialOutsideTile = new Tile(10419, 12213, 0);
+    Tile absorptionBarrelTile = new Tile(10403, 12217, 0);
+    Tile overloadBarrelTile = new Tile(10403, 12213, 0);
+    Tile vialInsideTile = new Tile(9103, 18469, 0);
+    Tile dominicOnionTile = new Tile(10431, 12209, 0);
+    Tile respawnTile = new Tile(10431, 12209, 0);
 
     // Areas
-    Area NMZArea = new Area(
-            new Tile(63, 58),
-            new Tile(85, 78)
+    Area NMZAreaOutside = new Area(
+            new Tile(10394, 12183, 0),
+            new Tile(10468, 12231, 0)
+    );
+    Area NMZAreaInside = new Area(
+            new Tile(8993, 18438, 0),
+            new Tile(9183, 18636, 0)
     );
 
     // Paths
     Tile[] pathToBank = new Tile[] {
-            new Tile(81, 70),
-            new Tile(85, 76),
-            new Tile(80, 83),
-            new Tile(77, 90),
-            new Tile(82, 95)
+            new Tile(10443, 12198, 0),
+            new Tile(10456, 12182, 0),
+            new Tile(10461, 12159, 0),
+            new Tile(10442, 12147, 0),
+            new Tile(10428, 12135, 0),
+            new Tile(10435, 12119, 0),
+            new Tile(10451, 12120, 0)
     };
     Tile[] pathToNMZ = new Tile[] {
-            new Tile(77, 89),
-            new Tile(82, 84),
-            new Tile(86, 76),
-            new Tile(81, 70)
+            new Tile(10441, 12124, 0),
+            new Tile(10441, 12148, 0),
+            new Tile(10461, 12163, 0),
+            new Tile(10457, 12185, 0),
+            new Tile(10444, 12198, 0)
     };
     
     // Rectangles
     Rectangle bankBooth = new Rectangle(479, 250, 29, 31);
     Rectangle vialInside = new Rectangle(438, 307, 19, 20);
-    Rectangle rewardChest = new Rectangle(430, 210, 29, 36);
     Rectangle quickPrayers = new Rectangle(699, 87, 20, 17);
 
     // Points
@@ -203,8 +204,11 @@ public class dNMZ extends AbstractScript {
 
         Logger.log("Thank you for using the dNMZ script!\nSetting up everything for your gains now...");
 
-        // Set the map we'll be using (Custom NMZ)
-        Walker.setup("/maps/NMZ.png");
+        // Set up the map chunks we need
+        MapChunk mapChunk = new MapChunk(new String[]{"40-49", "40-48", "41-49", "41-48", "40-47", "41-47", "35-72", "35-73"}, "0");
+
+        // Set up the walker with our chunks
+        Walker.setup(mapChunk);
 
         // Check if auto retaliate is on.
         Player.enableAutoRetaliate();
@@ -242,7 +246,7 @@ public class dNMZ extends AbstractScript {
         Client.disableBreakHandler();
         Client.disableAFKHandler();
 
-        if (!Player.within(NMZArea)) {
+        if (!Player.within(NMZAreaOutside)) {
             Logger.debugLog("We are not within the NMZ area, trying to move there.");
             moveToNMZ();
         }
@@ -252,9 +256,7 @@ public class dNMZ extends AbstractScript {
     @Override
     public void poll() {
 
-        if (Player.within(NMZArea)) {
-            insideNMZ = false;
-        }
+        insideNMZ = checkInsideNMZ();
 
         // Check for break time
         if (insideNMZ) {
@@ -475,7 +477,7 @@ public class dNMZ extends AbstractScript {
             moveToDominic();
             // Move towards the chest, and wait for us to arrive
             Client.tap(new Rectangle(482, 136, 22, 18));
-            Condition.wait(() -> check2Tiles(rewardChestTile, rewardChestTile2), 250, 20);
+            Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
             // Restock (buy) the pots we need
             restockNMZPotionsCHEST();
             // Proceed to restock them in the inventory
@@ -504,7 +506,7 @@ public class dNMZ extends AbstractScript {
             moveToDominic();
             // Move towards the chest, and wait for us to arrive
             Client.tap(new Rectangle(482, 136, 22, 18));
-            Condition.wait(() -> check2Tiles(rewardChestTile, rewardChestTile2), 250, 20);
+            Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
             // Restock (buy) the pots we need
             restockNMZPotionsCHEST();
             // Proceed to restock them in the inventory
@@ -533,7 +535,7 @@ public class dNMZ extends AbstractScript {
             moveToDominic();
             // Move towards the chest, and wait for us to arrive
             Client.tap(new Rectangle(482, 136, 22, 18));
-            Condition.wait(() -> check2Tiles(rewardChestTile, rewardChestTile2), 250, 20);
+            Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
             // Restock (buy) the pots we need
             restockNMZPotionsCHEST();
             // Proceed to restock them in the inventory
@@ -557,7 +559,7 @@ public class dNMZ extends AbstractScript {
             moveToDominic();
             // Move towards the chest, and wait for us to arrive
             Client.tap(new Rectangle(482, 136, 22, 18));
-            Condition.wait(() -> check2Tiles(rewardChestTile, rewardChestTile2), 250, 20);
+            Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
             // Move back to Dominic
             moveToDominic();
             // Start a dream
@@ -781,21 +783,21 @@ public class dNMZ extends AbstractScript {
     private void restockNMZPotionsCHEST() {
         Logger.log("Restocking NMZ potions.");
         // Check if we are at the reward chest, if not move there.
-        if (!check2Tiles(rewardChestTile, rewardChestTile2)) {
+        if (!Player.atTile(rewardChestTile)) {
             Logger.debugLog("We are not yet at the NMZ Reward chest, moving there!");
             Walker.step(dominicOnionTile);
             Condition.wait(() -> Player.atTile(dominicOnionTile), 250, 20);
             Client.tap(new Rectangle(482, 136, 22, 18));
-            Condition.wait(() -> check2Tiles(rewardChestTile, rewardChestTile2), 250, 20);
+            Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
 
-            if (!check2Tiles(rewardChestTile, rewardChestTile2)) {
+            if (!Player.atTile(rewardChestTile)) {
                 Logger.debugLog("We are still not at the NMZ reward chest, retrying...");
                 Walker.step(dominicOnionTile);
                 Condition.wait(() -> Player.atTile(dominicOnionTile), 250, 20);
                 Client.tap(new Rectangle(482, 136, 22, 18));
-                Condition.wait(() -> check2Tiles(rewardChestTile, rewardChestTile2), 250, 20);
+                Condition.wait(() -> Player.atTile(rewardChestTile), 250, 20);
 
-                if (!check2Tiles(rewardChestTile, rewardChestTile2)) {
+                if (!Player.atTile(rewardChestTile)) {
                     Logger.log("Failed to restock, stopping script!");
                     Logout.logout();
                     Script.stop();
@@ -878,13 +880,13 @@ public class dNMZ extends AbstractScript {
 
             if (!Player.atTile(absorptionBarrelTile)) {
                 Logger.debugLog("Player not at absorption barrel, moving there!");
-                Walker.step(absorptionBarrelTileWALKCALL);
+                Walker.step(absorptionBarrelTile);
                 Condition.wait(() -> Player.atTile(absorptionBarrelTile), 250, 20);
 
                 // failsafe
                 if (!Player.atTile(absorptionBarrelTile)) {
                     Logger.debugLog("Player is still not at the absorption barrel, retrying...");
-                    Walker.step(absorptionBarrelTileWALKCALL);
+                    Walker.step(absorptionBarrelTile);
                     Condition.wait(() -> Player.atTile(absorptionBarrelTile), 250, 20);
 
                     if (!Player.atTile(absorptionBarrelTile)) {
@@ -1005,17 +1007,17 @@ public class dNMZ extends AbstractScript {
         if (java.util.Objects.equals(barrel, "Absorption")) {
             if (!Player.atTile(absorptionBarrelTile)) {
                 Logger.debugLog("Moving towards the absorption barrel.");
-                Walker.step(absorptionBarrelTileWALKCALL);
+                Walker.step(absorptionBarrelTile);
                 Condition.wait(() -> Player.atTile(absorptionBarrelTile), 250,20);
 
                 if (!Player.atTile(absorptionBarrelTile)) {
                     Logger.debugLog("Failed to move towards the absorption barrel, retrying...");
-                    Walker.step(absorptionBarrelTileWALKCALL);
+                    Walker.step(absorptionBarrelTile);
                     Condition.wait(() -> Player.atTile(absorptionBarrelTile), 250,20);
 
                     if (!Player.atTile(absorptionBarrelTile)) {
                         Logger.debugLog("Failed to move towards the absorption barrel for the third time, retrying...");
-                        Walker.step(absorptionBarrelTileWALKCALL);
+                        Walker.step(absorptionBarrelTile);
                         Condition.wait(() -> Player.atTile(absorptionBarrelTile), 250,20);
 
                         if (!Player.atTile(absorptionBarrelTile)) {
@@ -2100,6 +2102,10 @@ public class dNMZ extends AbstractScript {
         return guzzles;
     }
 
+    private boolean checkInsideNMZ() {
+        return Player.within(NMZAreaInside);
+    }
+
     public static Point getRandomTapPoint(Point center, int range) {
         Random random = new Random();
 
@@ -2109,21 +2115,6 @@ public class dNMZ extends AbstractScript {
 
         // Create a new point with the random offsets applied
         return new Point(center.x + dx, center.y + dy);
-    }
-
-    public boolean check2Tiles(Tile tile1, Tile tile2) {
-        Tile playerPos = Walker.getPlayerPosition();
-
-        if (java.util.Objects.equals(playerPos.x(), tile1.x()) && java.util.Objects.equals(playerPos.y(), tile1.y())) {
-            Logger.debugLog("playerpos equals tile1 (x:" + tile1.x() + "|y:" + tile1.y() + ")");
-            return true;
-        } else if (java.util.Objects.equals(playerPos.x(), tile2.x()) && java.util.Objects.equals(playerPos.y(), tile2.y())) {
-            Logger.debugLog("playerpos equals tile2 (x:" + tile2.x() + "|y:" + tile2.y() + ")");
-            return true;
-        } else {
-            return false;
-        }
-
     }
 
     private void hopActions() {

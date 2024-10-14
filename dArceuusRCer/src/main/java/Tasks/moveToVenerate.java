@@ -13,6 +13,8 @@ import java.util.List;
 
 public class moveToVenerate extends Task {
 
+    Tile obstacleOutSuccess = new Tile(7043, 15245, 0);
+
     @Override
     public boolean activate() {
         return (Player.within(dArceuusRCer.miningArea) || Player.within(dArceuusRCer.beforeObstacleOutArea) || Player.within(dArceuusRCer.veneratePathArea)) && Inventory.isFull() && !doneVenerating();
@@ -52,7 +54,7 @@ public class moveToVenerate extends Task {
             if (!foundPoints.isEmpty()) {
                 Logger.debugLog("Located the obstacle using the color finder, tapping.");
                 Client.tap(mostCentralPoints, false);
-                Condition.wait(() -> Player.within(dArceuusRCer.successObstacleOUTArea), 250, 25);
+                Condition.wait(() -> Player.atTile(obstacleOutSuccess), 250, 25);
                 waitTillStopped(7);
             } else {
                 Logger.debugLog("Couldn't locate the obstacle with the color finder, using fallback method.");
@@ -84,11 +86,11 @@ public class moveToVenerate extends Task {
                     // Select the top 4-5 most central points
                     List<Point> mostCentralPoints2 = foundPoints2.subList(0, Math.min(5, foundPoints2.size()));
 
-                    Condition.wait(() -> Player.within(dArceuusRCer.successObstacleOUTArea), 250, 25);
+                    Condition.wait(() -> Player.atTile(obstacleOutSuccess), 250, 25);
                     waitTillStopped(4);
                     if (!mostCentralPoints2.isEmpty()) {
                         Client.tap(mostCentralPoints2, false);
-                        Condition.wait(() -> Player.within(dArceuusRCer.successObstacleOUTArea), 250, 25);
+                        Condition.wait(() -> Player.atTile(obstacleOutSuccess), 250, 25);
                         waitTillStopped(7);
                     }
                 }

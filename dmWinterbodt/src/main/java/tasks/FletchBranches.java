@@ -1,5 +1,6 @@
 package tasks;
 
+import utils.Helpers;
 import utils.SideManager;
 import utils.Task;
 
@@ -24,13 +25,11 @@ public class FletchBranches extends Task {
             isFletching = false;
         }
 
-        Logger.debugLog("Inside FletchBranches execute()");
         Logger.log("Initiating fletching action.");
         Paint.setStatus("Initiating fletching action");
 
         GameTabs.openInventoryTab();
 
-        Integer startHP = Player.getHP();
         Inventory.tapItem(knife, true, 0.60);
         Condition.sleep(generateRandomDelay(75, 150));
         Inventory.tapItem(brumaRoot, 0.60);
@@ -40,11 +39,12 @@ public class FletchBranches extends Task {
 
         Logger.debugLog("Heading to FletchBranches conditional wait.");
         Paint.setStatus("Waiting for fletching to end");
+
         Condition.wait(() -> {
             SideManager.updateStates();
             XpBar.getXP();
 
-            return !inventoryHasLogs || startHP > currentHp || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
+            return !inventoryHasLogs || Helpers.countItemUnchanged(brumaRoot) || shouldEat || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
         }, 200, 150);
 
         return true;

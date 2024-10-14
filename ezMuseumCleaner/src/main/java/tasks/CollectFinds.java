@@ -25,8 +25,6 @@ public class CollectFinds extends Task {
 
         if (Player.tileEquals(currentLocation, depositTile)) {
             instantTapFromDeposit(instantTapFromDeposit1);
-        } else if (Player.tileEquals(currentLocation, depositTile2)) {
-            instantTapFromDeposit(instantTapFromDeposit2);
         } else if (!Player.tileEquals(currentLocation, collectTile)) {
             stepToCollectPile();
         }
@@ -49,7 +47,7 @@ public class CollectFinds extends Task {
 
     private void stepToCollectPile() {
         Logger.debugLog("Stepping to collect pile");
-        Walker.step(collectTile, museumRegion);
+        Walker.step(collectTile);
         currentLocation = collectTile;
     }
 

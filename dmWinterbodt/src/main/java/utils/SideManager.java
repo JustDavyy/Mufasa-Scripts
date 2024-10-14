@@ -48,9 +48,9 @@ public class SideManager {
 
     public static boolean isWithinGameArea() {
         if (currentSide.equals("Right")) {
-            return Player.within(rightWTArea, WTRegion);
+            return Player.within(rightWTArea);
         } else {
-            return Player.within(leftWTArea, WTRegion);
+            return Player.within(leftWTArea);
         }
     }
 

@@ -2,7 +2,6 @@ package tasks;
 
 import helpers.utils.Tile;
 import utils.SideManager;
-import utils.StateUpdater;
 import utils.Task;
 
 import java.awt.*;
@@ -64,7 +63,7 @@ public class SwitchSide extends Task {
         }
         Client.tap(switchRect);
         Condition.sleep(generateRandomDelay(4250, 5250));
-        Walker.step(targetTile, WTRegion);
+        Walker.step(targetTile);
         lastActivity = System.currentTimeMillis();
         currentLocation = targetTile;
         isMageDead = false;
@@ -75,10 +74,10 @@ public class SwitchSide extends Task {
     private void walkToMiddle() {
         Paint.setStatus("Walking to the middle");
         Logger.debugLog("Walking to middle tile.");
-        Tile middleTile = new Tile(638, 167);
-        Walker.walkTo(middleTile, WTRegion);
+        Tile middleTile = new Tile(6519, 15685, 0);
+        Walker.walkTo(middleTile);
         lastActivity = System.currentTimeMillis();
-        currentLocation = Walker.getPlayerPosition(WTRegion);
+        currentLocation = Walker.getPlayerPosition();
         isMageDead = false;
         Logger.debugLog("Reached middle tile. New location: " + currentLocation);
     }

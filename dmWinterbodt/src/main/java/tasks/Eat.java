@@ -1,7 +1,9 @@
 package tasks;
 
-import utils.StateUpdater;
+import helpers.utils.ItemList;
 import utils.Task;
+
+import java.util.Map;
 
 import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
@@ -10,9 +12,25 @@ public class Eat extends Task {
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside Eat activate()");
-        currentHp = Player.getHP();
-        return hpToEat > currentHp;
+        return shouldEat;
     }
+
+    // Map food types to their IDs and tolerance levels
+    Map<String, int[]> foodMap = Map.of(
+            "Rejuv Potion", new int[] {
+                    ItemList.REJUVENATION_POTION__1__20702,
+                    ItemList.REJUVENATION_POTION__2__20701,
+                    ItemList.REJUVENATION_POTION__3__20700,
+                    ItemList.REJUVENATION_POTION__4__20699
+            },
+            "Cakes", new int[] { 1895, 1893, 1891 } // Slice, half, full cake
+    );
+
+    // Map for tolerance values
+    Map<String, Double> toleranceMap = Map.of(
+            "Rejuv Potion", 0.95,
+            "Cakes", 0.75
+    );
 
     @Override
     public boolean execute() {
@@ -21,35 +39,30 @@ public class Eat extends Task {
 
         GameTabs.openInventoryTab();
 
-        if (java.util.Objects.equals(selectedFood, "Cakes")) {
-            // cake IDs; 1891, 1893, 1895
-            if (Inventory.contains(1895, 0.75)) { // slice of cake
-                Inventory.eat(1895, 0.75);
-                lastActivity = System.currentTimeMillis();
-                foodAmountInInventory--;
-                Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
-                return true;
-            } else if (Inventory.contains(1893, 0.75)) { // 2/3 cake
-                Inventory.eat(1893, 0.75);
-                lastActivity = System.currentTimeMillis();
-                foodAmountInInventory--;
-                Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
-                return true;
-            } else if (Inventory.contains(1891, 0.75)) { // full cake
-                Inventory.eat(1891, 0.75);
-                lastActivity = System.currentTimeMillis();
-                foodAmountInInventory--;
-                Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
-                return true;
-            }
-            return false;
+        // Check if selected food is in the map
+        if (foodMap.containsKey(selectedFood)) {
+            int[] foodIds = foodMap.get(selectedFood);
+            double tolerance = toleranceMap.get(selectedFood);
+
+            // Try to consume one of the food items
+            return consumeFood(foodIds, tolerance);
         } else {
-            Inventory.eat(foodID, 0.75);
-            lastActivity = System.currentTimeMillis();
-            foodAmountInInventory--;
-            Condition.wait(() -> Player.getHP() > hpToEat, 200, 20);
-            return true;
+            // Handle generic food (with a fixed tolerance of 0.75)
+            return consumeFood(new int[] { foodID }, 0.75);
         }
     }
 
+    // Helper method to check and eat food from the inventory
+    private boolean consumeFood(int[] foodIds, double tolerance) {
+        for (int foodId : foodIds) {
+            if (Inventory.contains(foodId, tolerance)) {
+                Inventory.eat(foodId, tolerance);
+                lastActivity = System.currentTimeMillis();
+                foodAmountInInventory--;
+                Condition.sleep(generateRandomDelay(800, 1100));
+                return true;
+            }
+        }
+        return false;
+    }
 }

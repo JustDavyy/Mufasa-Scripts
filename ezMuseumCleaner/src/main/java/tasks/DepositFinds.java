@@ -11,11 +11,7 @@ import static main.ezMuseumCleaner.*;
 
 public class DepositFinds extends Task {
     private final Rectangle depositRect = new Rectangle(443, 311, 17, 13);
-    private final Rectangle depositRect2 = new Rectangle(474, 266, 8, 11);
     private final Rectangle instantTap = new Rectangle(554, 321, 14, 6);
-
-    private final Color checkColor = Color.decode("#9c1f1b"); // the color for the red "Finds"
-    private final Rectangle checkRect = new Rectangle(106, 16, 49, 26); // a rectangle for the red "Finds"
     private final Rectangle chatboxRectangle = new Rectangle(146, 52, 255, 20); // Chatbox click rectangle
 
     @Override
@@ -44,8 +40,9 @@ public class DepositFinds extends Task {
     private void instantTapForDeposit() {
         Logger.debugLog("Instant tapping for deposit");
         Client.tap(instantTap);
-        Condition.wait(() -> Player.atTile(depositTile2), 100, 50);
-        currentLocation = depositTile2;
+        Condition.wait(() -> Player.atTile(depositTile), 100, 50);
+        currentLocation = depositTile;
+        Condition.sleep(800);
     }
 
     private void stepToDepositBox() {
@@ -56,7 +53,7 @@ public class DepositFinds extends Task {
     }
 
     private boolean isAtDepositTile() {
-        return Player.tileEquals(currentLocation, depositTile) || Player.tileEquals(currentLocation, depositTile2);
+        return Player.tileEquals(currentLocation, depositTile);
     }
 
     private void depositItems() {

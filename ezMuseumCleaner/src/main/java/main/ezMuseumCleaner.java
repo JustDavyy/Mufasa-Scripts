@@ -4,10 +4,7 @@ import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
-import helpers.utils.ItemList;
-import helpers.utils.OptionType;
-import helpers.utils.RegionBox;
-import helpers.utils.Tile;
+import helpers.utils.*;
 import tasks.*;
 import utils.Task;
 
@@ -20,7 +17,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "ezMuseumCleaner",
         description = "Does Museum Cleaning for all your off-skill needs",
-        version = "1.5",
+        version = "1.51",
         guideLink = "https://wiki.mufasaclient.com/docs/ezmuseumcleaner/",
         categories = {ScriptCategory.Minigames}
 )
@@ -86,14 +83,12 @@ public class ezMuseumCleaner extends AbstractScript {
     public static Rectangle selectedLampSkillRectangle;
     public static boolean dropAll;
 
-    public static Tile depositTile = new Tile(186, 117);
-    public static Tile depositTile2 = new Tile(185, 118);
-    public static Tile cleanTile = new Tile(181,116);
-    public static Tile collectTile = new Tile(182, 114);
-    public static RegionBox museumRegion = new RegionBox(
-	"museumRegion",
-            414, 237,
-            636, 438
+    public static Tile depositTile = new Tile(13059, 13517, 0);
+    public static Tile cleanTile = new Tile(13047, 13525, 0);
+    public static Tile collectTile = new Tile(13051, 13529, 0);
+    public static Area museumArea = new Area(
+            new Tile(12995, 13507, 0),
+            new Tile(13077, 13573, 0)
     );
 
     public static int[] depositItemsList = {
@@ -121,7 +116,11 @@ public class ezMuseumCleaner extends AbstractScript {
         selectedLampSkill = configs.get("Lamp skill");
         dropAll = Boolean.parseBoolean(configs.get("Drop All"));
 
-        Walker.setup("maps/Varrock.png", museumRegion);
+        // Create the MapChunk with chunk 50-53 and plane "0"
+        MapChunk chunks = new MapChunk(new String[]{"50-53"}, "0");
+
+        // Set up the walker with the created MapChunk
+        Walker.setup(chunks);
 
         Chatbox.closeChatbox();
         Game.setZoom("2");
@@ -199,7 +198,7 @@ public class ezMuseumCleaner extends AbstractScript {
                 ItemList.IRON_ORE_440,
                 ItemList.MITHRIL_ORE_447,
                 ItemList.UNCUT_OPAL_1625,
-                ItemList.BROKEN_GLASS_1469
+                ItemList.BROKEN_GLASS_NOTED_1469
         ));
 
         // Items exclusive to dropAll condition

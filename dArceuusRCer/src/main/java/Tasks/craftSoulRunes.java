@@ -6,6 +6,7 @@ import utils.Task;
 
 import static helpers.Interfaces.*;
 import static main.dArceuusRCer.random;
+import static main.dArceuusRCer.soulAltarArea;
 
 import main.dArceuusRCer;
 
@@ -16,7 +17,7 @@ public class craftSoulRunes extends Task {
 
     @Override
     public boolean activate() {
-        return (Player.within(dArceuusRCer.SoulArea1) || Player.within(dArceuusRCer.SoulArea2) || Player.tileEquals(dArceuusRCer.playerPos, dArceuusRCer.soulAltarTile)) && Inventory.containsAny(new int[]{ItemList.DARK_ESSENCE_BLOCK_13446, ItemList.DARK_ESSENCE_FRAGMENTS_7938}, 0.8) && dArceuusRCer.runeType.equals("Soul rune");
+        return (Player.within(dArceuusRCer.SoulArea1) || Player.within(dArceuusRCer.SoulArea2) || Player.atTile(dArceuusRCer.soulAltarTile) || Player.within(soulAltarArea)) && Inventory.containsAny(new int[]{ItemList.DARK_ESSENCE_BLOCK_13446, ItemList.DARK_ESSENCE_FRAGMENTS_7938}, 0.8) && dArceuusRCer.runeType.equals("Soul rune");
     }
 
     @Override

@@ -5,10 +5,7 @@ import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
-import helpers.utils.Area;
-import helpers.utils.OptionType;
-import helpers.utils.RegionBox;
-import helpers.utils.Tile;
+import helpers.utils.*;
 import utils.Spots;
 import utils.Task;
 
@@ -19,7 +16,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dmCrabber",
         description = "Does crab people",
-        version = "1.01",
+        version = "1.02",
         guideLink = "",
         categories = {ScriptCategory.Combat}
 )
@@ -33,7 +30,7 @@ import static helpers.Interfaces.*;
                         allowedValues = {
                                 @AllowedValue(optionName = "East 1 (2 crabs)"),
                                 @AllowedValue(optionName = "East 2 (3 crabs)"),
-                                @AllowedValue(optionName = "East 3 (3 crabs)"),
+                                @AllowedValue(optionName = "East 3 (4 crabs)"),
                                 @AllowedValue(optionName = "East 4 (3 crabs)"),
                                 @AllowedValue(optionName = "West 1 (2 crabs)"),
                                 @AllowedValue(optionName = "West 2 (3 crabs)"),
@@ -65,6 +62,7 @@ import static helpers.Interfaces.*;
                         description = "Select which food to use",
                         defaultValue = "Shark",
                         allowedValues = {
+                                @AllowedValue(optionName = "None"),
                                 @AllowedValue(optionIcon = "1891", optionName = "Cakes"),
                                 @AllowedValue(optionIcon = "379", optionName = "Lobster"),
                                 @AllowedValue(optionIcon = "373", optionName = "Swordfish"),
@@ -121,13 +119,11 @@ public class dmCrabber extends AbstractScript {
     public static int higherBreak;
 
     public static Area bankArea = new Area(
-            new Tile(748, 864),
-            new Tile(761, 874)
+            new Tile(6841, 13577, 0),
+            new Tile(6904, 13624, 0)
     );
 
     private static final Random random = new Random();
-
-    public static RegionBox crabRegion = new RegionBox("crabRegion", 2016, 2373, 2748, 2826);
 
     @Override
     public void onStart(){
@@ -147,6 +143,12 @@ public class dmCrabber extends AbstractScript {
         setupFoodIDs();
         setupPotIDs();
 
+        // Create the MapChunk with chunks of our location
+        MapChunk chunks = new MapChunk(new String[]{"27-54"}, "0");
+
+        // Set up the walker with the created MapChunk
+        Walker.setup(chunks);
+
         Client.disableBreakHandler();
         Client.disableAFKHandler();
 
@@ -154,7 +156,7 @@ public class dmCrabber extends AbstractScript {
 
         Logger.log("Done with startup, script starting");
 
-        currentLocation = Walker.getPlayerPosition(crabRegion);
+        currentLocation = Walker.getPlayerPosition();
     }
 
     // Task list!
@@ -247,6 +249,9 @@ public class dmCrabber extends AbstractScript {
     private void setupFoodIDs() {
         Logger.debugLog("Setting up food IDs");
         switch (selectedFood) {
+            case "None":
+                foodID = 0;
+                break;
             case "Cakes":
                 foodID = 1891;
                 break;

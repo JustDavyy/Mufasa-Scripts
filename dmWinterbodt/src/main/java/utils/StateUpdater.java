@@ -6,8 +6,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
@@ -16,11 +18,19 @@ import static tasks.GetBranches.gettingBranches;
 
 public class StateUpdater {
     //    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
-    static Rectangle gameAt13CheckRect = new Rectangle(83, 38, 1, 1);
-    static Rectangle gameAt20CheckRect = new Rectangle(93, 37, 1, 1);
-    static Rectangle gameAt70CheckRect = new Rectangle(196, 39, 1, 1);
-    static Rectangle waitingForGameToStartRect = new Rectangle(253, 41, 1, 1);
-    static Rectangle waitingForGameEndedRect = new Rectangle(56, 38, 1, 1);
+    static Rectangle warmthPercentReadRect = new Rectangle(171, 28, 32, 17);
+    static List<Color> blackColor = Arrays.asList(
+            java.awt.Color.decode("#000001")
+    );
+    static Rectangle gameAt13CheckRect = new Rectangle(68, 50, 7, 10);
+    static Rectangle gameAt20CheckRect = new Rectangle(100, 50, 9, 9);
+    static Rectangle gameAt70CheckRect = new Rectangle(217, 50, 6, 9);
+    static Rectangle fullWarmthBar = new Rectangle(57, 35, 198, 9);
+    static Rectangle warmthAt60 = new Rectangle(174, 35, 7, 8);
+    static int currentWarmth = 0;
+    static Rectangle warmthCriticalLowRect = new Rectangle(58, 36, 16, 8);
+    static Rectangle waitingForGameToStartRect = new Rectangle(245, 50, 9, 11);
+    static Rectangle waitingForGameEndedRect = new Rectangle(56, 49, 5, 12);
     public static final HashMap<String, Long> mageDeadTimestamps = new HashMap<>();
 
     static {
@@ -57,6 +67,22 @@ public class StateUpdater {
         }
     }
 
+    private static void updateShouldEat() {
+        // Use readDigitsInArea to check the warmth percentage
+        int warmthPercentage = Chatbox.readDigitsInArea(warmthPercentReadRect, blackColor);
+
+        // Check if the warmth percentage is valid and above the critical threshold
+        if (warmthPercentage != -1 && warmthPercentage >= 30) {
+            shouldEat = warmthPercentage <= 60; // Set shouldEat to true if 60 or lower, otherwise false
+        } else {
+            // Fallback to color check if the OCR result is invalid or below 30
+            shouldEat = Client.isColorInRect(Color.decode("#007c69"), warmthAt60, 5);
+        }
+
+        // Update warmthCriticalLow based on the color check
+        warmthCriticalLow = Client.isColorInRect(Color.decode("#007c69"), warmthCriticalLowRect, 5);
+    }
+
     private static boolean updateMageDeadState(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.MAGE_DEAD.getColor();
@@ -76,16 +102,18 @@ public class StateUpdater {
             state.setMageDead(updateMageDead(state));
         }
         updateIsGameGoing();
-        updateCurrentHP();
+        updateShouldEat();
         updateKindlingState();
 
     }
 
     public static void updateStates(WTStates[] states) {
         //Update our position
-        currentLocation = Walker.getPlayerPosition(WTRegion);
+        currentLocation = Walker.getPlayerPosition();
 
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
+            updateShouldEat(); // Update our HP!
+
             for (WTStates state : states) {
                 // Update each boolean based on some conditions or actions
                 state.setFireAlive(updateFireAlive(state));
@@ -101,11 +129,9 @@ public class StateUpdater {
             updateIsGameGoing();
             updateWaitingForGameToStart();
             updateWaitingForGameEnded();
-            updateCurrentHP();
 
             updateKindlingState();
             updateShouldBurn();
-
         }
 
         // Update which side we are on
@@ -157,10 +183,6 @@ public class StateUpdater {
         }
 
         return isMageDead;
-    }
-
-    private static void updateCurrentHP() {
-        currentHp = Player.getHP();
     }
 
     public static void updateGameAt13() {

@@ -20,7 +20,7 @@ public class PerformTeleAlching extends Task {
 
     @Override
     public boolean execute() {
-        if (!Inventory.contains(itemID, 0.69) && Inventory.contains(ItemList.LAW_RUNE_563, 0.8) && GameTabs.isInventoryTabOpen()) {
+        if (!Inventory.contains(itemID, 0.69) && Inventory.contains(ItemList.LAW_RUNE_563, 0.69) && GameTabs.isInventoryTabOpen()) {
             Logger.log("Ran out of items to alch or law runes, stopping script");
             Logout.logout();
             Script.stop();
@@ -31,7 +31,7 @@ public class PerformTeleAlching extends Task {
         if (!GameTabs.isMagicTabOpen()) {
             Logger.log("Opening Magic tab");
             GameTabs.openMagicTab();
-            Condition.wait(GameTabs::isMagicTabOpen, 100, 10);
+            Condition.wait(GameTabs::isMagicTabOpen, 100, 25);
         }
 
         // Tap alchemy spell based on the chosen teleport spell
