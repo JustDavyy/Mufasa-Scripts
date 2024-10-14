@@ -16,7 +16,7 @@ public class CreatePotions extends Task {
     Rectangle herbRect = new Rectangle(388, 260, 18, 26);
 
     Tile potionTile = new Tile(6507, 15677, 0);
-    Rectangle potionRect = new Rectangle(388, 260, 18, 26);
+    Rectangle potionRect = new Rectangle(399, 260, 15, 19);
 
     Area safeAreaToStep = new Area(
             new Tile(6477, 15640, 0),
@@ -25,8 +25,7 @@ public class CreatePotions extends Task {
 
     int brumaHerbItem = ItemList.BRUMA_HERB_20698;
     int rejuvPotionUnf = ItemList.REJUVENATION_POTION__UNF__20697;
-    int rejuvPotion = ItemList.REJUVENATION_POTION__4__20699;
-    
+
     @Override
     public boolean activate() {
         return foodAmountInInventory < foodAmountLeftToBank;
@@ -35,23 +34,17 @@ public class CreatePotions extends Task {
     @Override
     public boolean execute() {
         Logger.log("We should create potions");
-        countFoodInInventory(); //re-count since it CAN fail during a game.
-        if (foodAmountInInventory < foodAmountLeftToBank) {
-            return true;
-        }
-
         updateCurrentLocation();
 
         boolean hasBrumaHerb = Inventory.contains(brumaHerbItem, 0.75);
-        boolean hasRejuvUnf = Inventory.contains(rejuvPotionUnf, 0.80);
-        //boolean hasRejuv = Inventory.contains(rejuvPotion, 0.80);
+        boolean hasRejuvUnf = Inventory.contains(rejuvPotionUnf, 0.96);
+
+        if (hasBrumaHerb && hasRejuvUnf) {
+            processInventory();
+        }
 
         if ((!hasBrumaHerb || !hasRejuvUnf)) {
             Logger.log("Getting herbs and unfinished potions");
-
-            if (hasBrumaHerb && hasRejuvUnf) {
-                processInventory();
-            }
 
             if (!hasBrumaHerb) {
                 if (navigateToTile(herbTile, "herb")) {
@@ -117,7 +110,7 @@ public class CreatePotions extends Task {
      */
     private void collectRejuvPotions() {
         Logger.log("Collecting rejuvenation potions...");
-        while (Inventory.count(rejuvPotionUnf, 0.85) < foodAmount && !Script.isScriptStopping()) {
+        while (Inventory.count(rejuvPotionUnf, 0.95) < foodAmount && !Script.isScriptStopping()) {
             Client.tap(potionRect);
             Condition.sleep(generateRandomDelay(600, 900));
             if (Inventory.count(rejuvPotionUnf, 0.95) >= foodAmount) {

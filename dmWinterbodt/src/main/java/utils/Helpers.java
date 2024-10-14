@@ -29,4 +29,40 @@ public class Helpers {
             Logger.log("Updated food amount in inventory: " + foodAmountInInventory);
         }
     }
+
+    private static int lastCount = 0;
+    private static long lastCheckTime = 0;  // To track the time of the last count check
+    private static long unchangedStartTime = 0;  // To track the start time when the count was unchanged
+    private static final long CHECK_DURATION_MS = 5000;  // Total duration to check (5 seconds)
+
+    /**
+     * Checks if the count of an item has remained unchanged over a period of time.
+     *
+     * @param itemID the ID of the item to count
+     * @return true if the count hasn't changed for the duration, false otherwise
+     */
+    public static boolean countItemUnchanged(int itemID) {
+        long currentTime = System.currentTimeMillis();
+
+        // Get the current item count
+        int currentCount = Inventory.count(itemID, 0.75);
+
+        // First call or reset: initialize lastCount and start tracking the unchanged duration
+        if (lastCheckTime == 0 || lastCount != currentCount) {
+            lastCount = currentCount;
+            unchangedStartTime = currentTime;  // Reset the unchanged start time
+        }
+
+        // Update the last check time to the current time
+        lastCheckTime = currentTime;
+
+        // Check if the count has remained unchanged for the required duration
+        if (currentTime - unchangedStartTime >= CHECK_DURATION_MS) {
+            // If count has not changed for the duration, return true
+            return true;
+        }
+
+        // Otherwise, return false as the count is still being monitored for changes
+        return false;
+    }
 }

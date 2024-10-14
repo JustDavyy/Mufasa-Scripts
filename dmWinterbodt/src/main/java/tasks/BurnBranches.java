@@ -1,6 +1,8 @@
 package tasks;
 
+import helpers.utils.ItemList;
 import helpers.utils.Tile;
+import utils.Helpers;
 import utils.SideManager;
 import utils.StateUpdater;
 import utils.Task;
@@ -82,7 +84,7 @@ public class BurnBranches extends Task {
             Condition.wait(() -> {
                 // Handle reburning/fixing
                 SideManager.updateBurnStates();
-                if (SideManager.getNeedsFixing() && isGameGoing && !SideManager.getMageDead() || SideManager.getNeedsReburning() && isGameGoing && !SideManager.getMageDead() || Player.isIdle()) {
+                if (SideManager.getNeedsFixing() && isGameGoing && !SideManager.getMageDead() || SideManager.getNeedsReburning() && isGameGoing && !SideManager.getMageDead() || ( (inventoryHasKindlings && Helpers.countItemUnchanged(ItemList.BRUMA_KINDLING_20696)) || (inventoryHasLogs && Helpers.countItemUnchanged(ItemList.BRUMA_ROOT_20695)) ) ) {
                     Logger.log("Brazier needs fixing or re-lighting!");
                     if (SideManager.getNeedsFixing()) {
                         Paint.setStatus("Fixing & Relighting brazier");
