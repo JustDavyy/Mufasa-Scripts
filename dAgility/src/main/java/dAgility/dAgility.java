@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAgility",
         description = "Trains agility at various courses. World hopping and eating food is supported, as well as picking up Marks of Grace when running a rooftop course.",
-        version = "1.01",
+        version = "1.02",
         categories = {ScriptCategory.Agility},
         guideLink = "https://wiki.mufasaclient.com/docs/dagility/"
 )
@@ -1034,7 +1034,7 @@ public class dAgility extends AbstractScript {
                         new MarkHandling(new Rectangle(114, 318, 16, 11), seersMogColor, new Rectangle(624, 452, 30, 31), new Tile(10839, 13669, 2), null, false)
                 );
                 List<MarkHandling> seersObstacle4Mark = Arrays.asList(
-                        new MarkHandling(new Rectangle(522, 235, 16, 14), seersMogColor, new Rectangle(317, 475, 275, 59), new Tile(10839, 13637, 3), null, false)
+                        new MarkHandling(new Rectangle(522, 235, 16, 14), seersMogColor, new Rectangle(317, 475, 275, 59), new Tile(10847, 13637, 3), null, false)
                 );
                 List<MarkHandling> seersObstacle6Mark = Arrays.asList(
                         new MarkHandling(new Rectangle(259, 273, 16, 14), seersMogColor, new Rectangle(670, 249, 27, 139), new Tile(10815, 13605, 0), null, false)
