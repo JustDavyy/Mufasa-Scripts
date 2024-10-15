@@ -23,7 +23,7 @@ public class Bank extends Task {
             return false;
         }
 
-        return  !isGameGoing && !Player.leveledUp() || !isGameGoing && (Inventory.count(ItemList.SUPPLY_CRATE_20703, 0.8) >= 8) || Player.isTileWithinArea(currentLocation, outsideArea) || Player.isTileWithinArea(currentLocation, lobby) && (!isGameGoing || totalGameCount == 0);
+        return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing && !Player.leveledUp() || foodAmountInInventory < foodAmountLeftToBank && Player.isTileWithinArea(currentLocation, outsideArea) || foodAmountInInventory < foodAmountLeftToBank && Player.isTileWithinArea(currentLocation, lobby) && (!isGameGoing || totalGameCount == 0);
     }
 
     @Override
@@ -326,6 +326,11 @@ public class Bank extends Task {
             Paint.setStatus("Walking to the bank from inside");
             Client.tap(exitDoorRect);
             Condition.sleep(generateRandomDelay(4250, 5300));
+            if (!Player.within(outsideArea)) {
+                // Most likely a chatbox dialogue is open
+                Client.sendKeystroke("1");
+                Condition.sleep(generateRandomDelay(4250, 5300));
+            }
             Walker.walkTo(new Tile(6527, 15549, 0));
             Condition.sleep(generateRandomDelay(300, 450));
             Walker.step(bankTile);

@@ -1,5 +1,6 @@
 package tasks;
 
+import helpers.utils.Tile;
 import utils.SideManager;
 import utils.StateUpdater;
 import utils.Task;
@@ -68,6 +69,7 @@ public class GoBackToGame extends Task {
             Paint.setStatus("Walking to the door from outside");
             Walker.walkPath(getReversedTiles(wtDoorToBank));
             Condition.wait(() -> Player.within(atDoor), 100, 20);
+            Walker.step(new Tile(6519, 15601, 0));
             Condition.sleep(generateRandomDelay(700, 1300));
             Client.tap(enterDoorRect);
             Condition.sleep(generateRandomDelay(4250, 5300));
@@ -91,7 +93,7 @@ public class GoBackToGame extends Task {
     private boolean walkToLobbyFromDoor() {
         if (Player.isTileWithinArea(currentLocation, insideArea)) {
             Paint.setStatus("Walking to lobby from the door");
-            Client.tap(new java.awt.Rectangle(800, 63, 16, 19));
+            Walker.walkTo(new Tile(6519, 15681, 0));
             lastActivity = System.currentTimeMillis();
             Condition.sleep(generateRandomDelay(2000, 4000));
             currentLocation = Walker.getPlayerPosition();

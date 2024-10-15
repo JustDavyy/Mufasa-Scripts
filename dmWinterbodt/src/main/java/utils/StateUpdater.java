@@ -19,6 +19,7 @@ import static tasks.GetBranches.gettingBranches;
 public class StateUpdater {
     //    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
     static Rectangle warmthPercentReadRect = new Rectangle(171, 28, 32, 17);
+    static Rectangle energyPercentReadRect = new Rectangle(188, 43, 35, 17);
     static List<Color> blackColor = Arrays.asList(
             java.awt.Color.decode("#000001")
     );
@@ -186,15 +187,57 @@ public class StateUpdater {
     }
 
     public static void updateGameAt13() {
-        gameAt13Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt13CheckRect, 10);
+        // Use readDigitsInArea to check the energy percentage
+        int energyPercentage = Chatbox.readDigitsInArea(energyPercentReadRect, blackColor);
+
+        // Check if the energy percentage is exactly 15 or lower (and valid)
+        if (energyPercentage != -1 && energyPercentage <= 15) {
+            if (!gameAt13Percent) {
+                Logger.debugLog("Game at 15% true with CF OCR");
+            }
+            gameAt13Percent = true;
+        } else if (energyPercentage > 15) {
+            gameAt13Percent = false;
+        } else {
+            // Fallback to color check if the OCR result is invalid
+            gameAt13Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt13CheckRect, 10);
+        }
     }
 
     public static void updateGameAt20() {
-        gameAt20Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt20CheckRect, 10);
+        // Use readDigitsInArea to check the energy percentage
+        int energyPercentage = Chatbox.readDigitsInArea(energyPercentReadRect, blackColor);
+
+        // Check if the energy percentage is exactly 20 or lower (and valid)
+        if (energyPercentage != -1 && energyPercentage <= 20) {
+            if (!gameAt20Percent) {
+                Logger.debugLog("Game at 20% true with CF OCR");
+            }
+            gameAt20Percent = true;
+        } else if (energyPercentage > 20) {
+            gameAt20Percent = false;
+        } else {
+            // Fallback to color check if the OCR result is invalid
+            gameAt20Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt20CheckRect, 10);
+        }
     }
 
     public static void updateGameAt70() {
-        gameAt70Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt70CheckRect, 10);
+        // Use readDigitsInArea to check the energy percentage
+        int energyPercentage = Chatbox.readDigitsInArea(energyPercentReadRect, blackColor);
+
+        // Check if the energy percentage is exactly 70 or lower (and valid)
+        if (energyPercentage != -1 && energyPercentage <= 70) {
+            if (!gameAt70Percent) {
+                Logger.debugLog("Game at 70% true with CF OCR");
+            }
+            gameAt70Percent = true;
+        } else if (energyPercentage > 70) {
+            gameAt70Percent = false;
+        } else {
+            // Fallback to color check if the OCR result is invalid
+            gameAt70Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt70CheckRect, 10);
+        }
     }
 
     private static void updateShouldBurn() {

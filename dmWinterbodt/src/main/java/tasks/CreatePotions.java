@@ -68,20 +68,10 @@ public class CreatePotions extends Task {
         return false;
     }
 
-    /**
-     * Updates the current location of the player.
-     */
     private void updateCurrentLocation() {
         currentLocation = Walker.getPlayerPosition();
     }
 
-    /**
-     * Navigates to a specified tile either by stepping or webwalking.
-     *
-     * @param tile The destination tile.
-     * @param tileName A descriptive name for logging purposes.
-     * @return true if navigation was initiated, false if already at the tile.
-     */
     private boolean navigateToTile(Tile tile, String tileName) {
         if (Player.atTile(tile)) {
             return false;

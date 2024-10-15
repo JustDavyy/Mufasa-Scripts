@@ -25,7 +25,7 @@ import static utils.SideManager.pickRandomSide;
 @ScriptManifest(
         name = "dmWinterbodt",
         description = "Completes the Wintertodt minigame. Start inside the Wintertodt minigame area",
-        version = "2.14",
+        version = "2.15",
         guideLink = "https://wiki.mufasaclient.com/docs/dmwinterbodt/",
         categories = {ScriptCategory.Firemaking, ScriptCategory.Minigames}
 )
@@ -146,8 +146,8 @@ public class dmWinterbodt extends AbstractScript {
             new Tile(6637, 15853, 0)
     );
     public static Area lobby = new Area(
-            new Tile(6501, 15655, 0),
-            new Tile(6544, 15690, 0)
+            new Tile(6492, 15609, 0),
+            new Tile(6551, 15695, 0)
     );
     public static Area LeftTopWTArea = new Area(
             new Tile(6440, 15753, 0),
@@ -179,8 +179,8 @@ public class dmWinterbodt extends AbstractScript {
     };
     public static Tile bankTile = new Tile(6559, 15521, 0);
     public static Area bankTentArea = new Area(
-            new Tile(6550, 15508, 0),
-            new Tile(6570, 15531, 0)
+            new Tile(6550, 15511, 0),
+            new Tile(6568, 15535, 0)
     );
     public static Tile[] outsideToBankPath =  new Tile[] {
             new Tile(6527, 15549, 0),
@@ -197,8 +197,8 @@ public class dmWinterbodt extends AbstractScript {
             new Tile(6557, 15631, 0)
     );
     public static Area outsideArea = new Area(
-            new Tile(6468, 15473, 0),
-            new Tile(6609, 15598, 0)
+            new Tile(6457, 15436, 0),
+            new Tile(6617, 15608, 0)
     );
     public static Area atDoor = new Area(
             new Tile(6484, 15572, 0),

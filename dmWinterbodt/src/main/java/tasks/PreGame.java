@@ -96,8 +96,10 @@ public class PreGame extends Task {
                     Paint.setStatus("Wintertodt starting in " + timeFormatted);
                     Logger.log("Wintertodt starting in " + timeFormatted);
 
-                    if (seconds >= 16) {
-                        Condition.sleep(5000); // Sleep for 5 seconds to avoid too much spamming
+                    if (seconds >= 15) {
+                        Logger.log("Sleeping for: " + (seconds - 11) + " seconds.");
+                        Paint.setStatus("Sleep for " + (seconds - 11));
+                        Condition.sleep((seconds - 11) * 1000);
                     }
 
                     // Check if the time is between 5 and 10 seconds (inclusive)
@@ -106,9 +108,9 @@ public class PreGame extends Task {
                         int waitTime = Math.max(0, seconds - 1) * 1000; // Convert to milliseconds
                         Condition.sleep(waitTime);
 
-                        // Start a 1.5-second while loop with an action every 200-300 ms
+                        // Start a 1.2-second while loop with an action every 200-300 ms
                         long startTime = System.currentTimeMillis();
-                        while (System.currentTimeMillis() - startTime < 1500) {
+                        while (System.currentTimeMillis() - startTime < 1200) {
                             Paint.setStatus("Perform initial burn");
                             totalRelightCount++;
                             Paint.setStatistic("Brazier repairs: " + totalRepairCount + " | Relights: " + totalRelightCount);
@@ -117,7 +119,7 @@ public class PreGame extends Task {
                             Condition.sleep(generateRandomDelay(200, 300));
                         }
 
-                        Condition.sleep(generateRandomDelay(750, 1000));
+                        Condition.sleep(generateRandomDelay(1250, 1750));
 
                         // Move to the branch tile
                         Paint.setStatus("Stepping to branch tile");
