@@ -111,7 +111,7 @@ public class PreGame extends Task {
                         while (System.currentTimeMillis() - startTime < 1500) {
                             Paint.setStatus("Perform initial burn");
                             totalRelightCount++;
-                            Paint.setStatistic("Brazier repairs: " + totalRepairCount + " | Brazier relights: " + totalRelightCount);
+                            Paint.setStatistic("Brazier repairs: " + totalRepairCount + " | Relights: " + totalRelightCount);
                             Client.tap(SideManager.getBurnRect());
 
                             Condition.sleep(generateRandomDelay(200, 300));
