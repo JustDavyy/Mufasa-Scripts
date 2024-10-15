@@ -117,8 +117,16 @@ public class CreatePotions extends Task {
         int herbCount = Inventory.count(brumaHerbItem, 0.75);
         while (Inventory.count(rejuvPotionUnf, 0.96) < herbCount && !Script.isScriptStopping()) {
             Client.tap(potionRect);
-            Condition.sleep(generateRandomDelay(800, 1100));
-            if (Inventory.count(rejuvPotionUnf, 0.96) >= herbCount) {
+
+            // Check how close we are to the target count and adjust sleep delay accordingly
+            int currentCount = Inventory.count(rejuvPotionUnf, 0.96);
+            if (herbCount - currentCount <= 1) {
+                Condition.sleep(generateRandomDelay(1900, 2700)); // Slower as it approaches target
+            } else {
+                Condition.sleep(generateRandomDelay(800, 1100)); // Regular speed
+            }
+
+            if (currentCount >= herbCount) {
                 break;
             }
         }
