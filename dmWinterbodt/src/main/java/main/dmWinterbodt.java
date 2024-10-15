@@ -25,7 +25,7 @@ import static utils.SideManager.pickRandomSide;
 @ScriptManifest(
         name = "dmWinterbodt",
         description = "Completes the Wintertodt minigame. Start inside the Wintertodt minigame area",
-        version = "2.0",
+        version = "2.1",
         guideLink = "https://wiki.mufasaclient.com/docs/dmwinterbodt/",
         categories = {ScriptCategory.Firemaking, ScriptCategory.Minigames}
 )
@@ -304,7 +304,7 @@ public class dmWinterbodt extends AbstractScript {
             setupFoodIDs();
         }
 
-        Walker.setup(new MapChunk(new String[]{"24-63", "26-61"}, "0"));
+        Walker.setup(new MapChunk(new String[]{"24-63", "24-62", "24-61", "25-63", "25-62", "25-61", "26-63", "26-62", "26-61", "24-60", "25-60", "26-60", "50-50"}, "0"));
 
         // Creating the Paint object
         Logger.debugLog("Creating paint object.");
