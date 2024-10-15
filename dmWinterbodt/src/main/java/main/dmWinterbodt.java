@@ -25,7 +25,7 @@ import static utils.SideManager.pickRandomSide;
 @ScriptManifest(
         name = "dmWinterbodt",
         description = "Completes the Wintertodt minigame. Start inside the Wintertodt minigame area",
-        version = "2.12",
+        version = "2.13",
         guideLink = "https://wiki.mufasaclient.com/docs/dmwinterbodt/",
         categories = {ScriptCategory.Firemaking, ScriptCategory.Minigames}
 )
@@ -60,15 +60,15 @@ import static utils.SideManager.pickRandomSide;
                 @ScriptConfiguration(
                         name = "Potion amount",
                         description = "Select the amount of potions you'd like to bring",
-                        defaultValue = "6",
-                        minMaxIntValues = {1, 28},
+                        defaultValue = "5",
+                        minMaxIntValues = {1, 15},
                         optionType = OptionType.INTEGER_SLIDER
                 ),
                 @ScriptConfiguration(
-                        name = "Potions amount left to create more",
-                        description = "Select the amount of potion sips required to have for each game",
+                        name = "Potion sips/food amount left to obtain more",
+                        description = "Select the amount of potion sips or food bites required to have for each game",
                         defaultValue = "8",
-                        minMaxIntValues = {1, 28},
+                        minMaxIntValues = {6, 28},
                         optionType = OptionType.INTEGER_SLIDER
                 ),
                 @ScriptConfiguration(
