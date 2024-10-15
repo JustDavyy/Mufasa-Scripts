@@ -18,7 +18,7 @@ public class FailSafe extends Task {
             new Tile(12858, 12580, 0),
             new Tile(12918, 12656, 0)
     );
-    
+
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside FailSafe activate()");
@@ -30,10 +30,10 @@ public class FailSafe extends Task {
             }
 
             // Check if we died
-            weDied = !Player.isTileWithinArea(currentLocation, WTArea);
+            weDied = !Player.isTileWithinArea(currentLocation, deadArea);
         }
 
-        return Player.isTileWithinArea(currentLocation, LeftTopWTArea) || Player.isTileWithinArea(currentLocation, RightTopWTArea) || weDied;
+        return !Player.isTileWithinArea(currentLocation, goodArea) || weDied;
     }
 
     @Override
@@ -43,20 +43,9 @@ public class FailSafe extends Task {
         Logger.log("FailSafe triggered!");
 
         // FailSafe for if we are at the top left of the WT area
-        if (Player.isTileWithinArea(currentLocation, LeftTopWTArea)) {
-            Paint.setStatus("FailSafe top left activated");
-            Walker.walkPath(LeftTopToStart);
-            Player.waitTillNotMoving(4);
-            Walker.step(SideManager.getBranchTile());
-            lastActivity = System.currentTimeMillis();
-            currentLocation = Walker.getPlayerPosition();
-            return false;
-        }
-
-        //FailSafe for if we are at the top right of the WT area
-        if (Player.isTileWithinArea(currentLocation, RightTopWTArea)) {
-            Paint.setStatus("FailSafe top right activated");
-            Walker.walkPath(RightTopToStart);
+        if (!Player.isTileWithinArea(currentLocation, goodArea)) {
+            Paint.setStatus("FailSafe top of minigame activated");
+            Walker.webWalk(lobby.getRandomTile());
             Player.waitTillNotMoving(4);
             Walker.step(SideManager.getBranchTile());
             lastActivity = System.currentTimeMillis();
@@ -86,5 +75,4 @@ public class FailSafe extends Task {
         GameTabs.openInventoryTab();
         return false;
     }
-
 }
