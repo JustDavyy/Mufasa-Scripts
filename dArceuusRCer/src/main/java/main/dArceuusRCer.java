@@ -226,7 +226,7 @@ public class dArceuusRCer extends AbstractScript {
             new Tile(6884, 15283, 0),
             new Tile(6879, 15265, 0)
     };
-    public static Tile southDenseRunestone = new Tile(7047, 15149, 0);
+    public static Tile southDenseRunestone = new Tile(7047, 15145, 0);
     public static Tile northDenseRunestone = new Tile(7047, 15169, 0);
     public static Rectangle tapNorthRuneStoneSOUTH = new Rectangle(462, 157, 28, 16);
     public static Rectangle tapSouthRuneStoneSOUTH = new Rectangle(466, 290, 51, 52);

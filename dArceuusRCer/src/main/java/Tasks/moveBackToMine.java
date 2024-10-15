@@ -15,7 +15,7 @@ import java.util.List;
 
 public class moveBackToMine extends Task {
 
-    Tile bloodRockObstacleSuccess = new Tile(7007, 15161, 0);
+    Tile bloodRockObstacleSuccess = new Tile(7007, 15165, 0);
     Tile soulRockObstacleSuccess = new Tile(7103, 15265, 0);
 
 
