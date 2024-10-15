@@ -26,6 +26,40 @@ public class CreatePotions extends Task {
     int brumaHerbItem = ItemList.BRUMA_HERB_20698;
     int rejuvPotionUnf = ItemList.REJUVENATION_POTION__UNF__20697;
 
+    Area topLeftArea = new Area(
+            new Tile(6413, 15738, 0),
+            new Tile(6520, 15880, 0)
+    );
+
+    Area topRightArea = new Area(
+            new Tile(6527, 15739, 0),
+            new Tile(6609, 15877, 0)
+    );
+
+    Tile[] topLeftRecoveryPath = new Tile[] {
+            new Tile(6499, 15838, 0),
+            new Tile(6479, 15825, 0),
+            new Tile(6461, 15812, 0),
+            new Tile(6454, 15785, 0),
+            new Tile(6457, 15751, 0),
+            new Tile(6469, 15724, 0),
+            new Tile(6488, 15716, 0),
+            new Tile(6510, 15704, 0),
+            new Tile(6523, 15685, 0)
+    };
+
+    Tile[] topRightRecoveryPath = new Tile[] {
+            new Tile(6546, 15837, 0),
+            new Tile(6565, 15825, 0),
+            new Tile(6584, 15807, 0),
+            new Tile(6586, 15777, 0),
+            new Tile(6586, 15750, 0),
+            new Tile(6574, 15733, 0),
+            new Tile(6553, 15716, 0),
+            new Tile(6528, 15707, 0),
+            new Tile(6521, 15685, 0)
+    };
+
     @Override
     public boolean activate() {
         if (!selectedFood.equals("Rejuv Potion")) {
@@ -77,8 +111,16 @@ public class CreatePotions extends Task {
             return false;
         }
 
-        if (Player.isTileWithinArea(currentLocation, safeAreaToStep)) {
-            Logger.log("Within stepping distance, stepping to " + tileName + " spot!");
+        if (Walker.isReachable(tile)) {
+            Walker.step(tile);
+        } else if (Walker.isReachable(new Tile(6519, 15681, 0))) {
+            Walker.walkTo(new Tile(6519, 15681, 0));
+            Walker.step(tile);
+        } else if (Player.within(topLeftArea)) {
+            Walker.walkPath(topLeftRecoveryPath);
+            Walker.step(tile);
+        } else if (Player.within(topRightArea)) {
+            Walker.walkPath(topRightRecoveryPath);
             Walker.step(tile);
         } else {
             Logger.log("Webwalking to " + tileName + " spot!");
