@@ -422,7 +422,7 @@ public class dArceuusRCer extends AbstractScript {
 
         if (!anyTaskActivated) {
             Logger.debugLog("Not a single task was activated for some reason... Failsafe kicking in and webwalking to the mine!");
-            Walker.webWalk(southDenseRunestone, true);
+            Walker.webWalk(southDenseRunestone);
         }
     }
 
