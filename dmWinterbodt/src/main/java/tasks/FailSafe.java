@@ -21,7 +21,6 @@ public class FailSafe extends Task {
 
     @Override
     public boolean activate() {
-        //Logger.debugLog("Inside FailSafe activate()");
         if (foodAmountInInventory == 0) {
             currentLocation = Walker.getPlayerPosition();
 
@@ -30,15 +29,14 @@ public class FailSafe extends Task {
             }
 
             // Check if we died
-            weDied = !Player.isTileWithinArea(currentLocation, deadArea);
+            weDied = Player.isTileWithinArea(currentLocation, deadArea);
         }
-
+        Logger.log("Current loc: " + currentLocation);
         return !Player.isTileWithinArea(currentLocation, goodArea) || weDied;
     }
 
     @Override
     public boolean execute() {
-        Logger.debugLog("Inside FailSafe execute()");
         Paint.setStatus("FailSafe triggered");
         Logger.log("FailSafe triggered!");
 
