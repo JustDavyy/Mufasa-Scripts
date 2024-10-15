@@ -40,7 +40,7 @@ public class moveToVenerate extends Task {
 
             Logger.debugLog("Crossing the rocks obstacle.");
 
-            java.util.List<Point> foundPoints = Client.getPointsFromColorsInRect(dArceuusRCer.obstacleColors, new Rectangle(369, 140, 261, 218), 5);
+            java.util.List<Point> foundPoints = Client.getPointsFromColorsInRect(dArceuusRCer.obstacleColors, new Rectangle(382, 179, 139, 116), 5);
 
             // Calculate the centroid of the points
             Point centroid = calculateCentroid(foundPoints);
@@ -75,7 +75,7 @@ public class moveToVenerate extends Task {
                 }
 
                 if (Player.atTile(dArceuusRCer.obstacleInsideTile)) {
-                    List<Point> foundPoints2 = Client.getPointsFromColorsInRect(dArceuusRCer.obstacleColors, new Rectangle(337, 122, 275, 241), 5);
+                    List<Point> foundPoints2 = Client.getPointsFromColorsInRect(dArceuusRCer.obstacleColors, new Rectangle(382, 179, 139, 116), 5);
 
                     // Calculate the centroid of the points
                     Point centroid2 = calculateCentroid(foundPoints2);

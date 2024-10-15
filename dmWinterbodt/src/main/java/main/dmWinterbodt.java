@@ -25,7 +25,7 @@ import static utils.SideManager.pickRandomSide;
 @ScriptManifest(
         name = "dmWinterbodt",
         description = "Completes the Wintertodt minigame. Start inside the Wintertodt minigame area",
-        version = "2.13",
+        version = "2.14",
         guideLink = "https://wiki.mufasaclient.com/docs/dmwinterbodt/",
         categories = {ScriptCategory.Firemaking, ScriptCategory.Minigames}
 )
@@ -58,8 +58,8 @@ import static utils.SideManager.pickRandomSide;
                         optionType = OptionType.BANKTABS
                 ),
                 @ScriptConfiguration(
-                        name = "Potion amount",
-                        description = "Select the amount of potions you'd like to bring",
+                        name = "Potion/food amount",
+                        description = "Select the amount of potions or food you'd like to bring",
                         defaultValue = "5",
                         minMaxIntValues = {1, 15},
                         optionType = OptionType.INTEGER_SLIDER
@@ -293,8 +293,8 @@ public class dmWinterbodt extends AbstractScript {
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
-        foodAmount = Integer.parseInt(configs.get("Potion amount"));
-        foodAmountLeftToBank = Integer.parseInt(configs.get("Potions amount left to create more"));
+        foodAmount = Integer.parseInt(configs.get("Potion/food amount"));
+        foodAmountLeftToBank = Integer.parseInt(configs.get("Potion sips/food amount left to obtain more"));
         pickedSide = configs.get("Side");
         burnOnly = Boolean.parseBoolean(configs.get("Burn only?"));
         selectedFood = configs.get("Food");
