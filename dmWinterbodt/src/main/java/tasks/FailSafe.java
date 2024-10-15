@@ -1,5 +1,7 @@
 package tasks;
 
+import helpers.utils.Area;
+import helpers.utils.Tile;
 import utils.SideManager;
 import utils.Task;
 
@@ -7,6 +9,16 @@ import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
 
 public class FailSafe extends Task {
+    Area goodArea = new Area(
+            new Tile(6467, 15487, 0),
+            new Tile(6585, 15736, 0)
+    ); //This is just the area including the two sides, lobby and bank area.
+
+    Area deadArea = new Area(
+            new Tile(12858, 12580, 0),
+            new Tile(12918, 12656, 0)
+    );
+    
     @Override
     public boolean activate() {
         //Logger.debugLog("Inside FailSafe activate()");
