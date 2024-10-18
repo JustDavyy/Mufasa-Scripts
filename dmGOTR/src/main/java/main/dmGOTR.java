@@ -60,25 +60,64 @@ public class dmGOTR extends AbstractScript {
     StateUpdater stateUpdater = new StateUpdater();
 
     // REGIONS
-    public static RegionBox gameRegion = new RegionBox("mainGameArea", 54, 12, 504, 393);
-    public static RegionBox airAltar = new RegionBox("airAltar", 1308, 537, 1512, 774);
-    public static RegionBox waterAltar = new RegionBox("waterAltar", 780, 537, 1029, 783);
-    public static RegionBox earthAltar = new RegionBox("earthAltar", 531, 540, 774, 747);
-    public static RegionBox fireAltar = new RegionBox("fireAltar", 240, 534, 519, 762);
-    public static RegionBox mindAltar = new RegionBox("mindAltar", 1035, 540, 1269, 741);
-    public static RegionBox bodyAltar = new RegionBox("bodyAltar", 18, 537, 207, 714);
-    public static RegionBox cosmicAltar = new RegionBox("cosmicAltar", 549, 15, 801, 258);
-    public static RegionBox chaosAltar = new RegionBox("chaosAltar", 1053, 9, 1302, 198);
-    public static RegionBox natureAltar = new RegionBox("natureAltar", 792, 270, 1041, 510);
-    public static RegionBox lawAltar = new RegionBox("lawAltar", 1074, 276, 1293, 507);
-    public static RegionBox deathAltar = new RegionBox("deathAltar", 804, 9, 1047, 237);
-    public static RegionBox bloodAltar = new RegionBox("bloodAltar", 1308, 93, 1560, 345);
+    public static Area gameArea = new Area(
+            new Tile(14281, 37673, 0),
+            new Tile(14639, 37836, 0)
+    );
+    public static Area gameLobby = new Area(
+            new Tile(14398, 37593, 0),
+            new Tile(14517, 37672, 0)
+    );
+    public static Area airAltar = new Area(
+            new Tile(11322, 19012, 0),
+            new Tile(11443, 19133, 0)
+    );
+    public static Area waterAltar = new Area(
+            new Tile(10767, 18958, 0),
+            new Tile(10995, 19184, 0)
+    );
+    public static Area earthAltar = new Area(
+            new Tile(10519, 18989, 0),
+            new Tile(10730, 19190, 0)
+    );
+    public static Area fireAltar = new Area(
+            new Tile(10230, 18970, 0),
+            new Tile(10475, 19192, 0)
+    );
+    public static Area mindAltar = new Area(
+            new Tile(11022, 18991, 0),
+            new Tile(11228, 19192, 0)
+    );
+    public static Area bodyAltar = new Area(
+            new Tile(10009, 19014, 0),
+            new Tile(10164, 19182, 0)
+    );
+    public static Area cosmicAltar = new Area(
+            new Tile(8471, 18963, 0),
+            new Tile(8682, 19179, 0)
+    );
+    public static Area chaosAltar = new Area(
+            new Tile(8984, 19001, 0),
+            new Tile(9198, 19192, 0)
+    );
+    public static Area natureAltar = new Area(
+            new Tile(9490, 18976, 0),
+            new Tile(9701, 19195, 0)
+    );
+    public static Area lawAltar = new Area(
+            new Tile(9772, 18973, 0),
+            new Tile(9944, 19166, 0)
+    );
+    public static Area deathAltar = new Area(
+            new Tile(8729, 18997, 0),
+            new Tile(8937, 19187, 0)
+    );
+    public static Area bloodAltar = new Area(
+            new Tile(12811, 18960, 0),
+            new Tile(13040, 19189, 0)
+    );
 
-    // AREAS
-    Area preGameMine = new Area(new Tile(118, 32), new Tile(134, 60));
-    Area regularMine = new Area(new Tile(70, 59), new Tile(87, 71));
-    Area specialMine = new Area(new Tile(53, 33), new Tile(63, 59));
-    Area middleOfGameArea = new Area(new Tile(79, 33), new Tile(106, 66));
+    public static Tile currentLocation;
 
     // SETTINGS
     public static boolean doCosmics;
@@ -100,8 +139,8 @@ public class dmGOTR extends AbstractScript {
         doBloods = Boolean.parseBoolean(configs.get("Do Blood runes?"));
         usePouches = Boolean.parseBoolean(configs.get("Use pouches?"));
 
-        // 55-148, 55-147, 56-147, 56-148, 56-149, 57-149, 57-148, 57-147, 44-75, 42-75, 41-75, 40-75, 39-75, 38-75, 37-75, 36-75, 35-75, 34-75, 33-75, 32-75
-        Walker.setup(new MapChunk(new String[]{"55-148", "55-147", "56-147", "56-148", "56-149", "57-149", "57-148", "57-147", "44-75", "42-75", "41-75", "41-75", "40-75", "39-75", "38-75", "37-75", "36-75", "35-75", "34-75", "33-75", "32-75"}, "0"));
+        // 55-148, 55-147, 56-147, 56-148, 56-149, 57-149, 57-148, 57-147, 44-75, 42-75, 41-75, 40-75, 39-75, 38-75, 37-75, 36-75, 35-75, 34-75, 33-75, 32-75, 43-75, 50-75
+        Walker.setup(new MapChunk(new String[]{"55-148", "55-147", "56-147", "56-148", "56-149", "57-149", "57-148", "57-147", "44-75", "42-75", "41-75", "41-75", "40-75", "39-75", "38-75", "37-75", "36-75", "35-75", "34-75", "33-75", "32-75", "43-75", "50-75"}, "0"));
 
         if (!GameTabs.isStatsTabOpen()) {
             GameTabs.openStatsTab();

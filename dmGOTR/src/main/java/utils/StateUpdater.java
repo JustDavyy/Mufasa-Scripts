@@ -1,5 +1,7 @@
 package utils;
 
+import static helpers.Interfaces.Walker;
+import static main.dmGOTR.currentLocation;
 import static main.dmGOTR.usePouches;
 
 public class StateUpdater {
@@ -8,6 +10,7 @@ public class StateUpdater {
     boolean shouldRepairPouches;
 
     public void updateAllStates() {
+        currentLocation = Walker.getPlayerPosition();
         // Update all states
     }
 
