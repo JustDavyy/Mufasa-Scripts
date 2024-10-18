@@ -4,7 +4,6 @@ import utils.StateUpdater;
 import utils.Task;
 
 import static helpers.Interfaces.Player;
-import static helpers.Interfaces.Walker;
 import static main.dmGOTR.currentLocation;
 import static main.dmGOTR.gameLobby;
 
