@@ -67,7 +67,7 @@ public class Pollnivneach extends Task {
                 if (obstacle.checkForMark && obstacle.markHandling != null) {
                     for (MarkHandling mark : obstacle.markHandling) {
                         if (mark.isMarkPresent(mark.checkArea, mark.targetColor)) {
-                            if (obstacle.name.equals("Obstacle 8")) {
+                            if (obstacle.name.equals("Obstacle 8") || obstacle.name.equals("Obstacle 9")) {
                                 Condition.sleep(generateRandomDelay(850, 1100));
                             }
                             Paint.setStatus("Pick up mark of grace");
@@ -80,7 +80,7 @@ public class Pollnivneach extends Task {
                 }
 
                 if (!markHandled) {
-                    if (obstacle.name.equals("Obstacle 8")) {
+                    if (obstacle.name.equals("Obstacle 8") || obstacle.name.equals("Obstacle 9")) {
                         Condition.sleep(generateRandomDelay(850, 1100));
                     }
                     Paint.setStatus("Traverse obstacle " + obstacle.name);
