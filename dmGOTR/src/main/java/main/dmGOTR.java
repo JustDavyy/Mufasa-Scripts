@@ -100,6 +100,9 @@ public class dmGOTR extends AbstractScript {
         doBloods = Boolean.parseBoolean(configs.get("Do Blood runes?"));
         usePouches = Boolean.parseBoolean(configs.get("Use pouches?"));
 
+        // 55-148, 55-147, 56-147, 56-148, 56-149, 57-149, 57-148, 57-147, 44-75, 42-75, 41-75, 40-75, 39-75, 38-75, 37-75, 36-75, 35-75, 34-75, 33-75, 32-75
+        Walker.setup(new MapChunk(new String[]{"55-148", "55-147", "56-147", "56-148", "56-149", "57-149", "57-148", "57-147", "44-75", "42-75", "41-75", "41-75", "40-75", "39-75", "38-75", "37-75", "36-75", "35-75", "34-75", "33-75", "32-75"}, "0"));
+
         if (!GameTabs.isStatsTabOpen()) {
             GameTabs.openStatsTab();
             Condition.wait(() -> GameTabs.isStatsTabOpen(), 100, 20);
