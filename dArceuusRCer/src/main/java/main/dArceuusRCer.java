@@ -23,7 +23,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dArceuus RCer",
         description = "Crafts blood or soul runes at Arceuus, supports using blood essence and hopping worlds. DISCLAIMER: This script is NOT fully safe for 10HP accounts, use at own risk!",
-        version = "2.08",
+        version = "2.09",
         guideLink = "https://wiki.mufasaclient.com/docs/darceuus-rcer/",
         categories = {ScriptCategory.Runecrafting, ScriptCategory.Moneymaking}
 )
@@ -410,6 +410,14 @@ public class dArceuusRCer extends AbstractScript {
     @Override
     public void poll() {
         boolean anyTaskActivated = false; // Track if any task was activated
+
+        // Check invent open
+        GameTabs.openInventoryTab();
+
+        // Check if dialogue is open
+        if (Chatbox.findChatboxMenu() != null) {
+            Client.sendKeystroke("space");
+        }
 
         // Run tasks
         for (Task task : RCTasks) {
