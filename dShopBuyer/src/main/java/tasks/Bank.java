@@ -50,6 +50,9 @@ public class Bank extends Task {
         Paint.setStatus("Get player position");
         currentLoc = Walker.getPlayerPosition();
 
+        // Open inventory
+        GameTabs.openInventoryTab();
+
         // Logic till we open the bank
         if (Player.tileEquals(currentLoc, shopBuyer.BFBankTile)) {
             // We are already at the bank

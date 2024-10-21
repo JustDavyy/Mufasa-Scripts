@@ -90,6 +90,9 @@ public class Buy extends Task {
     @Override
     public boolean execute() {
 
+        // Open inventory
+        GameTabs.openInventoryTab();
+
         switch (shopBuyer.shopToUse) {
             case "Blast Furnace":
                 blastFurnaceHandleBuy();
