@@ -80,6 +80,10 @@ public class Bank extends Task {
 
         // Logic to actually bank and deposit items
         if (Bank.isOpen()) {
+            Paint.setStatus("Check Qty setting");
+            if (!Bank.isSelectedQuantityAllButton()) {
+                Bank.tapQuantityAllButton();
+            }
             Paint.setStatus("Deposit bought items");
             switch (shopBuyer.itemToBuy) {
                 case "Copper + Tin":
@@ -126,6 +130,10 @@ public class Bank extends Task {
 
         // Logic to actually bank and deposit items
         if (Bank.isOpen()) {
+            Paint.setStatus("Check Qty setting");
+            if (!Bank.isSelectedQuantityAllButton()) {
+                Bank.tapQuantityAllButton();
+            }
             Paint.setStatus("Deposit bought items");
             Inventory.tapItem(shopBuyer.bankItemID, 0.7);
         }
@@ -169,6 +177,10 @@ public class Bank extends Task {
 
         // Logic to actually bank and deposit items
         if (Bank.isOpen()) {
+            Paint.setStatus("Check Qty setting");
+            if (!Bank.isSelectedQuantityAllButton()) {
+                Bank.tapQuantityAllButton();
+            }
             Paint.setStatus("Deposit bought items");
 
             switch (shopBuyer.itemToBuy) {
