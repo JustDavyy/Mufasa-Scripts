@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAgility",
         description = "Trains agility at various courses. World hopping and eating food is supported, as well as picking up Marks of Grace when running a rooftop course.",
-        version = "1.03",
+        version = "1.04",
         categories = {ScriptCategory.Agility},
         guideLink = "https://wiki.mufasaclient.com/docs/dagility/"
 )
@@ -107,7 +107,7 @@ public class dAgility extends AbstractScript {
     );
     public static List<startTileStorage> startTiles = Arrays.asList();
     public static final List<Obstacle> obstacles = new ArrayList<dAgility.Obstacle>();
-    private static final Random random = new Random();
+    public static final Random random = new Random();
     private final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
     private final DecimalFormat MoGsFormat = new DecimalFormat("#,##0.0", symbols);
     private final DecimalFormat LapsFormat = new DecimalFormat("#,##0.0", symbols);
