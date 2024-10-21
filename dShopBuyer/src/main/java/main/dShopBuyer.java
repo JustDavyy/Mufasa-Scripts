@@ -16,7 +16,7 @@ import static helpers.Interfaces.*;
 
 @ScriptManifest(
         name = "dShopBuyer",
-        description = "Buys stuff from stores all around Gielinor",
+        description = "Buys stuff from stores all around Gielinor, aimed to aid ironman accounts.",
         version = "1.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dshopbuyer/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Crafting, ScriptCategory.Moneymaking}
