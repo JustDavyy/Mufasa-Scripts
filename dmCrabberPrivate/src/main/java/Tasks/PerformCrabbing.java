@@ -95,12 +95,12 @@ public class PerformCrabbing extends Task {
     }
 
     private void performHopAction() {
-        Walker.walkPath(spot.getResetPath());
+        Walker.webWalk(spot.getResetSpot());
         Condition.sleep(generateRandomDelay(4000, 7000));
         Logout.logout();
         Game.switchWorld();
         Login.login();
-        Walker.walkPath(getReversedTiles(spot.getResetPath()));
+        Walker.webWalk(spot.getSpotTile(), true);
         Condition.sleep(generateRandomDelay(1500, 2250));
         Walker.step(spot.getSpotTile());
         Condition.sleep(generateRandomDelay(1500, 2250));
@@ -110,9 +110,8 @@ public class PerformCrabbing extends Task {
     private void performReset() {
         Logger.debugLog("Resetting.");
 
-        Walker.walkPath(spot.getResetPath());
-
-        Walker.walkPath(getReversedTiles(spot.getResetPath()));
+        Walker.webWalk(spot.getResetSpot());
+        Walker.webWalk(spot.getSpotTile(), true);
         Condition.sleep(generateRandomDelay(1500, 2250));
         Walker.step(spot.getSpotTile());
         Condition.sleep(generateRandomDelay(1500, 2250));

@@ -42,7 +42,7 @@ public class Eat extends Task {
         }
         else if (selectedFood.equals("None")) {
             Logger.log("No food was selected and HP is low, walking to safety and stopping script!");
-            Walker.walkPath(spot.getResetPath());
+            Walker.walkPath(spot.getResetSpot());
             Condition.sleep(generateRandomDelay(12000, 15000));
             Logout.logout();
             Script.stop();

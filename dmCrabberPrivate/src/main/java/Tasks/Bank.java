@@ -44,7 +44,7 @@ public class Bank extends Task {
         Logger.debugLog("Navigating to the bank area");
         // Check if player needs to walk to the bank area
         if (!Player.isTileWithinArea(currentLocation, bankArea)) {
-            Walker.walkPath(spot.getPathToBank());
+            Walker.webWalk(bankTile, true);
             currentLocation = Walker.getPlayerPosition();
         }
 
