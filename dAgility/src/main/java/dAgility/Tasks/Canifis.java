@@ -12,6 +12,14 @@ public class Canifis extends Task {
 
     Tile startTile = new Tile(12887, 13405, 0);
     Area canifisArea = new Area(new Tile(13835, 13588, 0), new Tile(14096, 13822, 0));
+    Area obs4FailArea = new Area(new Tile(13906, 13714, 0), new Tile(13960, 13766, 0));
+    Tile[] obs4FailPath = new Tile[] {
+            new Tile(13937, 13726, 0),
+            new Tile(13958, 13710, 0),
+            new Tile(13987, 13699, 0),
+            new Tile(14008, 13696, 0),
+            new Tile(14027, 13700, 0)
+    };
 
     public Canifis(){
         super();
@@ -58,6 +66,15 @@ public class Canifis extends Task {
 
                 return true;
             }
+        }
+
+        if (Player.within(obs4FailArea)) {
+            Logger.debugLog("Failed obstacle 4, walking back to start.");
+            Paint.setStatus("Recover after fall/failure");
+            Walker.walkPath(obs4FailPath);
+            Player.waitTillNotMoving(10);
+            Walker.step(startTile);
+            return true;
         }
 
         // Block that assumes we are not within any of those areas, which means we've fallen or wandered off somewhere?
