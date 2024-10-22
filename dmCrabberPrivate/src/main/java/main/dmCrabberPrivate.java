@@ -118,6 +118,11 @@ public class dmCrabberPrivate extends AbstractScript {
     public static int lowerBreak;
     public static int higherBreak;
 
+    public static int attackLevel;
+    public static int strenghtLevel;
+    public static int defenceLevel;
+    public static int rangeLevel;
+
     public static Area bankArea = new Area(
             new Tile(6841, 13577, 0),
             new Tile(6904, 13624, 0)
@@ -162,6 +167,7 @@ public class dmCrabberPrivate extends AbstractScript {
     // Task list!
     List<Task> crabTasks = Arrays.asList(
             new CheckAutoRetaliate(),
+            new SkillTracker(),
             new Bank(),
             new BreakManager(),
             new Eat(),

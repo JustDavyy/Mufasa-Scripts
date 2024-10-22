@@ -71,6 +71,7 @@ public class Bank extends Task {
         if (Bank.isOpen()) {
             depositItems();
             selectBankTab();
+            withdrawGear();
             withdrawPotions();
             withdrawFood();
             closeBank();
@@ -87,6 +88,10 @@ public class Bank extends Task {
             Condition.wait(() -> Bank.isSelectedBankTab(selectedBankTab), 250, 12);
             Logger.debugLog("Opened bank tab " + selectedBankTab);
         }
+    }
+
+    private void withdrawGear() {
+        //nothing atm
     }
 
     private void withdrawPotions() {
