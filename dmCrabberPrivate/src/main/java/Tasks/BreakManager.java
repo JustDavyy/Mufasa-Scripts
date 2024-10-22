@@ -60,14 +60,14 @@ public class BreakManager extends Task {
     }
 
     private void moveToSafeLocation() {
-        Walker.walkPath(spot.getResetSpot());
+        Walker.webWalk(spot.getResetSpot());
         Condition.sleep(generateRandomDelay(1500, 2250));
         currentLocation = Walker.getPlayerPosition();
     }
 
     private void moveBackToSpot() {
         Condition.sleep(generateRandomDelay(1500, 2250));
-        Walker.walkPath(getReversedTiles(spot.getResetSpot()));
+        Walker.webWalk(spot.getSpotTile(), true);
         Condition.sleep(generateRandomDelay(1500, 2250));
         Walker.step(spot.getSpotTile());
         Condition.sleep(generateRandomDelay(1500, 2250));

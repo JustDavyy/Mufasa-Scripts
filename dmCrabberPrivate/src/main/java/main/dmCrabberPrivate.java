@@ -102,7 +102,7 @@ import static helpers.Interfaces.*;
         }
 )
 
-public class dmCrabber extends AbstractScript {
+public class dmCrabberPrivate extends AbstractScript {
     String selectedSpot;
     public static int selectedBankTab;
     public static String potions;
