@@ -6,6 +6,7 @@ import utils.Task;
 import java.util.Random;
 
 import static helpers.Interfaces.*;
+import static main.dmCrabberPrivate.*;
 
 public class SkillTracker extends Task {
     public boolean timeToCheckStats = true;
@@ -22,7 +23,7 @@ public class SkillTracker extends Task {
         if ((currentTime - lastCheckTime) >= randomDelay) {
             timeToCheckStats = true;
         }
-        
+
         return timeToCheckStats;
     }
 
@@ -35,14 +36,14 @@ public class SkillTracker extends Task {
 
         if (GameTabs.isStatsTabOpen()) {
             // Once the stats tab is open, retrieve the skill levels
-            int attackLevel = Stats.getRealLevel(Skills.ATTACK);
-            int strengthLevel = Stats.getRealLevel(Skills.STRENGTH);
-            int defenceLevel = Stats.getRealLevel(Skills.DEFENCE);
-            int rangeLevel = Stats.getRealLevel(Skills.RANGED);
+            attackLevel = Stats.getRealLevel(Skills.ATTACK);
+            strenghtLevel = Stats.getRealLevel(Skills.STRENGTH);
+            defenceLevel = Stats.getRealLevel(Skills.DEFENCE);
+            rangeLevel = Stats.getRealLevel(Skills.RANGED);
 
             // Log or use the skill levels as needed
             Logger.log("Attack Level: " + attackLevel);
-            Logger.log("Strength Level: " + strengthLevel);
+            Logger.log("Strength Level: " + strenghtLevel);
             Logger.log("Defence Level: " + defenceLevel);
             Logger.log("Range Level: " + rangeLevel);
 
@@ -51,6 +52,8 @@ public class SkillTracker extends Task {
             randomDelay = MIN_DELAY + (random.nextInt(120) - 60) * 1000; // +/- 1 minute
             timeToCheckStats = false;
 
+            // re-open inv
+            GameTabs.openInventoryTab();
             return true;
         }
 
