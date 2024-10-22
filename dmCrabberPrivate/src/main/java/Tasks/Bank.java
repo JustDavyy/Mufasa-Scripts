@@ -5,7 +5,7 @@ import utils.Task;
 
 import static Tasks.PerformCrabbing.startTime;
 import static helpers.Interfaces.*;
-import static main.dmCrabber.*;
+import static main.dmCrabberPrivate.*;
 
 public class Bank extends Task {
     private final Tile bankTile = new Tile(6875, 13609, 0);

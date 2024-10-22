@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static helpers.Interfaces.*;
-import static main.dmCrabber.*;
+import static main.dmCrabberPrivate.*;
 
 public class Eat extends Task {
     private final List<Integer> cakeIds = Arrays.asList(1895, 1893, 1891);

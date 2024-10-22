@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Random;
 
 import static helpers.Interfaces.*;
-import static main.dmCrabber.*;
+import static main.dmCrabberPrivate.*;
 
 public class BreakManager extends Task {
     private final Random random = new Random();

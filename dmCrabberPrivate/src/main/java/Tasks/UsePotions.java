@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import static helpers.Interfaces.*;
-import static main.dmCrabber.*;
+import static main.dmCrabberPrivate.*;
 
 public class UsePotions extends Task {
     private long lastOffensivePotionTime = 0;

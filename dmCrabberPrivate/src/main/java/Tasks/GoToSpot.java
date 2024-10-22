@@ -3,7 +3,7 @@ package Tasks;
 import utils.Task;
 
 import static helpers.Interfaces.*;
-import static main.dmCrabber.*;
+import static main.dmCrabberPrivate.*;
 
 public class GoToSpot extends Task {
     @Override

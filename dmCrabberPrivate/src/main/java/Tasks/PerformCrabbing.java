@@ -5,7 +5,7 @@ import utils.Task;
 import java.awt.*;
 
 import static helpers.Interfaces.*;
-import static main.dmCrabber.*;
+import static main.dmCrabberPrivate.*;
 
 public class PerformCrabbing extends Task {
     public static boolean shouldReset = false;
