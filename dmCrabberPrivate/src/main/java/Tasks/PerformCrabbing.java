@@ -111,6 +111,7 @@ public class PerformCrabbing extends Task {
         Logger.debugLog("Resetting.");
 
         Walker.webWalk(spot.getResetSpot());
+        Condition.sleep(generateRandomDelay(1500, 2250));
         Walker.webWalk(spot.getSpotTile(), true);
         Condition.sleep(generateRandomDelay(1500, 2250));
         Walker.step(spot.getSpotTile());
