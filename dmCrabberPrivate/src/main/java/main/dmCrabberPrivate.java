@@ -80,7 +80,7 @@ import static helpers.Interfaces.*;
                 @ScriptConfiguration(
                         name = "HP to eat at",
                         description = "Select the HP amount you'd like to eat at",
-                        defaultValue = "15",
+                        defaultValue = "6",
                         minMaxIntValues = {0, 100},
                         optionType = OptionType.INTEGER_SLIDER
                 ),
