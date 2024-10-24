@@ -24,6 +24,8 @@ public class TrainDefence extends Task {
     @Override
     public boolean execute() {
         Logger.log("Swapping to Defence");
+
+        // Also needs to check here if we should swap any equipment I guess?
         return false;
     }
 }

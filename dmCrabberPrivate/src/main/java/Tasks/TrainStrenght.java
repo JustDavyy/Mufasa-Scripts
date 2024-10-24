@@ -26,6 +26,7 @@ public class TrainStrenght extends Task {
     public boolean execute() {
         Logger.log("Swapping to Strenght");
 
+        // Also needs to check here if we should swap any equipment I guess?
         return false;
     }
 }

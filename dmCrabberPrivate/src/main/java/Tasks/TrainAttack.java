@@ -18,13 +18,15 @@ public class TrainAttack extends Task {
         if (attackLevel == 5 && strenghtLevel == 5 && defenceLevel == 5) {
             return true;
         }
-        
+
         return false;
     }
 
     @Override
     public boolean execute() {
         Logger.log("Swapping to attack");
+
+        // Also needs to check here if we should swap any equipment I guess?
         return false;
     }
 }
