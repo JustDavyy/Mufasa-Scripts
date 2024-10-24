@@ -14,7 +14,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dMinnows Fisher",
         description = "Fishes Minnows at Kylie Minnow's fishing platform at the Fishing Guild. The angler's outfit is needed to unlock the platform.",
-        version = "1.05",
+        version = "1.06",
         guideLink = "https://wiki.mufasaclient.com/docs/dminnows-fisher/",
         categories = {ScriptCategory.Fishing}
 )
@@ -42,12 +42,7 @@ String hopProfile;
 Color FishSpotColor = Color.decode("#27ffff");
 Rectangle lastLine = new Rectangle(35, 104, 361, 14);
 Boolean hopEnabled;
-Rectangle allButton = new Rectangle(23, 10, 47, 15);
-Rectangle gameButton = new Rectangle(89, 9, 44, 13);
-Rectangle privateButton = new Rectangle(153, 9, 45, 16);
-Rectangle friendsButton = new Rectangle(218, 10, 42, 15);
-Rectangle channelButton = new Rectangle(282, 10, 44, 12);
-Rectangle clanButton = new Rectangle(346, 9, 43, 16);
+private long lastRunTime = System.currentTimeMillis();
 Random random = new Random();
 
 // Check rectangles if we have a spot against us
@@ -103,31 +98,7 @@ Rectangle bottomRect = new Rectangle(441, 303, 24, 43);
 
         // Make sure the chatbox is opened
         Logger.debugLog("Making sure the chatbox is open.");
-        Random random = new Random();
-        int actionNumber = random.nextInt(5);
-        switch (actionNumber) {
-            case 0:
-                Client.tap(gameButton);
-                Client.tap(allButton);
-                break;
-            case 1:
-                Client.tap(privateButton);
-                Client.tap(allButton);
-                break;
-            case 2:
-                Client.tap(friendsButton);
-                Client.tap(allButton);
-                break;
-            case 3:
-                Client.tap(channelButton);
-                Client.tap(allButton);
-                break;
-            case 4:
-                Client.tap(clanButton);
-                Client.tap(allButton);
-                break;
-        }
-
+        Chatbox.openAllChat();
     }
 
     // This is the main part of the script, poll gets looped constantly
@@ -234,11 +205,23 @@ Rectangle bottomRect = new Rectangle(441, 303, 24, 43);
     }
 
     private boolean isSpotAgainstUs(boolean log) {
+        // Get the current time
+        long currentTime = System.currentTimeMillis();
+
+        // Check if 5 seconds have passed since the last run
+        if (currentTime - lastRunTime < 5000) {
+            // If less than 5 seconds, return true by default
+            return true;
+        }
+
+        // Update the last run time to the current time
+        lastRunTime = currentTime;
+
         // Check if the color is present in the right or bottom rectangles
         if (Client.isColorInRect(OverlayColor.FISHING, rightRect, 5) ||
-            Client.isColorInRect(OverlayColor.FISHING, bottomRect, 5) ||
-            Client.isColorInRect(OverlayColor.FISHING, topRect, 5) ||
-            Client.isColorInRect(OverlayColor.FISHING, leftRect, 5)) {
+                Client.isColorInRect(OverlayColor.FISHING, bottomRect, 5) ||
+                Client.isColorInRect(OverlayColor.FISHING, topRect, 5) ||
+                Client.isColorInRect(OverlayColor.FISHING, leftRect, 5)) {
             return true;
         }
 
