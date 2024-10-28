@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAgility",
         description = "Trains agility at various courses. World hopping and eating food is supported, as well as picking up Marks of Grace when running a rooftop course.",
-        version = "1.05",
+        version = "1.06",
         categories = {ScriptCategory.Agility},
         guideLink = "https://wiki.mufasaclient.com/docs/dagility/"
 )
@@ -834,7 +834,7 @@ public class dAgility extends AbstractScript {
                         new Tile(10603, 12985, 3), noMarks, false, null, false));
 
                 obstacles.add(new Obstacle("Obstacle 7",
-                        new Area(new Tile(10623, 12904, 3), new Tile(10636, 12944, 3)),
+                        new Area(new Tile(10620, 12904, 3), new Tile(10636, 12944, 3)),
                         new Tile(10623, 12937, 3), new Tile(10671, 12937, 0),
                         new Rectangle(450, 273, 13, 19), new Rectangle(450, 273, 13, 19),
                         new Tile(10623, 12937, 3), noMarks, false, null, false));
