@@ -143,6 +143,38 @@ public class StateUpdater {
         }
     }
 
+    public static void updateStatesNoLoc(WTStates[] states) {
+        if (Player.isTileWithinArea(currentLocation, insideArea)) {
+            updateShouldEat(); // Update our HP!
+
+            for (WTStates state : states) {
+                // Update each boolean based on some conditions or actions
+                state.setFireAlive(updateFireAlive(state));
+                state.setNeedsReburning(updateNeedsReburning(state));
+                state.setNeedsFixing(updateNeedsFixing(state));
+                state.setMageDead(updateMageDead(state));
+            }
+
+            // Update the game state boolean (true if wt game is 15% or less left.
+            updateGameAt13();
+            updateGameAt20();
+            updateGameAt70();
+            updateIsGameGoing();
+            updateWaitingForGameToStart();
+            updateWaitingForGameEnded();
+
+            updateKindlingState();
+            updateShouldBurn();
+        }
+
+        // Update which side we are on
+        if (Player.isTileWithinArea(currentLocation, leftWTArea)) {
+            currentSide = "Left";
+        } else if (Player.isTileWithinArea(currentLocation, rightWTArea)) {
+            currentSide = "Right";
+        }
+    }
+
     private static boolean updateFireAlive(WTStates state) {
         Rectangle checkRect = state.getRectangle();
         Color checkColor = StateColor.FIRE_ALIVE.getColor();

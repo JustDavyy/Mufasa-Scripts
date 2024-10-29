@@ -15,13 +15,15 @@ public class GoBackToGame extends Task {
     public boolean activate() {
         //Logger.debugLog("Inside GoBackToGame activate()");
 
-        StateUpdater.updateStates(states);
+        StateUpdater.updateStatesNoLoc(states);
 
-        // Use logging here for user visibility as this is the last task in our task list
-        if (Player.isTileWithinArea(currentLocation, lobby) && isGameGoing) {
+        // Check if 5 seconds have passed since the last run to prevent position find spam
+        if (System.currentTimeMillis() - lastRun >= 5000) {
+            // Update location
+            currentLocation = Walker.getPlayerPosition();
 
-            // Check if 5 seconds have passed since the last run to prevent position find spam
-            if (System.currentTimeMillis() - lastRun >= 5000) {
+            if (Player.isTileWithinArea(currentLocation, lobby) && isGameGoing) {
+                // Use logging here for user visibility as this is the last task in our task list
                 Paint.setStatus("Waiting for game to end");
                 Logger.log("Waiting for game to end.");
 
@@ -32,9 +34,10 @@ public class GoBackToGame extends Task {
                     lastActivity = System.currentTimeMillis();
                 }
 
-                // Update the last run time
-                lastRun = System.currentTimeMillis();
             }
+
+            // Update the last run time
+            lastRun = System.currentTimeMillis();
         }
 
         isMoreThan40Seconds = (System.currentTimeMillis() - lastWalkToSafety) > 40000;
