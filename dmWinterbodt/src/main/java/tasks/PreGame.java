@@ -119,7 +119,7 @@ public class PreGame extends Task {
                             Condition.sleep(generateRandomDelay(200, 300));
                         }
 
-                        Condition.sleep(generateRandomDelay(1250, 1750));
+                        Condition.sleep(generateRandomDelay(1800, 2400));
 
                         // Move to the branch tile
                         Paint.setStatus("Stepping to branch tile");
