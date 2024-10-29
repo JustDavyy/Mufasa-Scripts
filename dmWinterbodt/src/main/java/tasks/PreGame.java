@@ -97,9 +97,9 @@ public class PreGame extends Task {
                     Logger.log("Wintertodt starting in " + timeFormatted);
 
                     if (seconds >= 15) {
-                        Logger.log("Sleeping for: " + (seconds - 11) + " seconds.");
-                        Paint.setStatus("Sleep for " + (seconds - 11));
-                        Condition.sleep((seconds - 11) * 1000);
+                        Logger.log("Sleeping for: " + (seconds - 10) + " seconds.");
+                        Paint.setStatus("Sleep for " + (seconds - 10) + " seconds");
+                        Condition.sleep((seconds - 10) * 1000);
                     }
 
                     // Check if the time is between 5 and 10 seconds (inclusive)
