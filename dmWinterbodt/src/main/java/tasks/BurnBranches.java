@@ -1,5 +1,6 @@
 package tasks;
 
+import helpers.utils.Area;
 import helpers.utils.ItemList;
 import helpers.utils.Tile;
 import utils.Helpers;
@@ -11,6 +12,16 @@ import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
 
 public class BurnBranches extends Task {
+    private long lastRun = 0;
+    Area topLeftArea = new Area(
+            new Tile(6413, 15738, 0),
+            new Tile(6520, 15880, 0)
+    );
+
+    Area topRightArea = new Area(
+            new Tile(6527, 15739, 0),
+            new Tile(6609, 15877, 0)
+    );
 
     @Override
     public boolean activate() {
@@ -26,6 +37,14 @@ public class BurnBranches extends Task {
             isBurning = true;
         }
 
+        // Check if 5 seconds have passed since the last run to prevent position find spam
+        if (System.currentTimeMillis() - lastRun >= 5000) {
+            // Update location
+            currentLocation = Walker.getPlayerPosition();
+            // Update the last run time
+            lastRun = System.currentTimeMillis();
+        }
+
         // check if we have brumakindlings & we are at the burn tile
         return (inventoryHasKindlings
                 && Player.tileEquals(currentLocation, SideManager.getBurnTile()))
@@ -33,7 +52,9 @@ public class BurnBranches extends Task {
                 && !SideManager.getMageDead()
                 || isBurning
                 && Player.isTileWithinArea(currentLocation, insideArea)
-                && !SideManager.getMageDead();
+                && !SideManager.getMageDead()
+                || Player.isTileWithinArea(currentLocation, topRightArea) // early exit failsafe when we wander off to top right
+                || Player.isTileWithinArea(currentLocation, topLeftArea); // early exit failsafe when we wander off to top left
     }
 
     @Override
