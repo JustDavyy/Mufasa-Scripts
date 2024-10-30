@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAgility",
         description = "Trains agility at various courses. World hopping and eating food is supported, as well as picking up Marks of Grace when running a rooftop course.",
-        version = "1.06",
+        version = "1.07",
         categories = {ScriptCategory.Agility},
         guideLink = "https://wiki.mufasaclient.com/docs/dagility/"
 )
@@ -31,16 +31,18 @@ import static helpers.Interfaces.*;
                 @ScriptConfiguration(
                         name =  "Course",
                         description = "What agility course do you want to train at?",
-                        defaultValue = "Seers",
+                        defaultValue = "Advanced Colossal Wyrm",
                         allowedValues = {
                                 @AllowedValue(optionName = "Gnome"),
                                 @AllowedValue(optionName = "Al Kharid"),
                                 @AllowedValue(optionName = "Draynor"),
                                 @AllowedValue(optionName = "Varrock"),
                                 @AllowedValue(optionName = "Canifis"),
+                                @AllowedValue(optionName = "Basic Colossal Wyrm"),
                                 @AllowedValue(optionName = "Falador"),
                                 @AllowedValue(optionName = "Seers"),
                                 @AllowedValue(optionName = "Seers - teleport"),
+                                @AllowedValue(optionName = "Advanced Colossal Wyrm"),
                                 @AllowedValue(optionName = "Pollnivneach"),
                                 @AllowedValue(optionName = "Rellekka"),
                                 @AllowedValue(optionName = "Ardougne")
@@ -111,6 +113,8 @@ public class dAgility extends AbstractScript {
     private final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
     private final DecimalFormat MoGsFormat = new DecimalFormat("#,##0.0", symbols);
     private final DecimalFormat LapsFormat = new DecimalFormat("#,##0.0", symbols);
+    private final DecimalFormat ShardsFormat = new DecimalFormat("#,##0", symbols);
+    private final DecimalFormat TermitesFormat = new DecimalFormat("#,##0", symbols);
 
     public static Tile currentLocation;
 
@@ -123,7 +127,13 @@ public class dAgility extends AbstractScript {
     private Boolean useWDH;
     public static int lapCount = 0;
     private static int mogCount = 0;
+    public static int initialTermiteCount = 0;
+    public static int initialBoneShardCount = 0;
+    public static int termiteCount = 0;
+    public static int boneShardCount = 0;
     private static int MoGIndex;
+    public static int termiteIndex;
+    public static int shardIndex;
     public static int mogTotal;
     public static long startTime = System.currentTimeMillis();
     public static Boolean useSeersTeleport = false;
@@ -141,7 +151,9 @@ public class dAgility extends AbstractScript {
             new Seers(),
             new Pollnivneach(),
             new Rellekka(),
-            new Ardougne()
+            new Ardougne(),
+            new BasicWyrm(),
+            new AdvancedWyrm()
     );
 
     @Override
@@ -168,8 +180,14 @@ public class dAgility extends AbstractScript {
         Logger.debugLog("Creating paint object.");
         Paint.Create("/logo/davyy.png");
 
-        // Create a single image box, to show the amount of processed bows
-        MoGIndex = Paint.createBox("Marks of Grace", ItemList.MARK_OF_GRACE_11849, 0);
+        // Create image box(es), to show the amount of obtained marks
+        if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm")) {
+            termiteIndex = Paint.createBox("Termites", 30038, 0);
+            Condition.sleep(500);
+            shardIndex = Paint.createBox("Bl. Bone Shards", ItemList.BLESSED_BONE_SHARDS_29381, 0);
+        } else {
+            MoGIndex = Paint.createBox("Marks of Grace", ItemList.MARK_OF_GRACE_11849, 0);
+        }
 
         // Set the two top headers of paintUI.
         Paint.setStatus("Initializing...");
@@ -199,6 +217,21 @@ public class dAgility extends AbstractScript {
 
         // Logs for debugging purposes
         Logger.log("Chosen agility course: " + courseChosen);
+
+        // Open inventory again if doing the wyrm course
+        if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm")) {
+            GameTabs.openInventoryTab();
+            Condition.sleep(1500);
+
+            // Read initial stack values
+            initialTermiteCount = Inventory.stackSize(30038);
+            initialBoneShardCount = Inventory.stackSize(ItemList.BLESSED_BONE_SHARDS_29381);
+
+            Logger.debugLog("Initial Termites count: " + initialTermiteCount);
+            Logger.debugLog("Initial Blessed Bone shard count: " + initialBoneShardCount);
+        }
+
+        // Logs for debugging purposes
         Logger.log("Starting dAgility!");
         Paint.setStatus("End of onStart");
     }
@@ -309,6 +342,11 @@ public class dAgility extends AbstractScript {
             case "Seers - teleport":
                 MapChunk seersChunks = new MapChunk(new String[]{"42-54"}, "0", "2", "3");
                 Walker.setup(seersChunks);
+                break;
+            case "Advanced Colossal Wyrm":
+            case "Basic Colossal Wyrm":
+                MapChunk colossalWyrmChunks = new MapChunk(new String[]{"25-45"}, "0", "1", "2");
+                Walker.setup(colossalWyrmChunks);
                 break;
             default:
                 Logger.log("This is a unknown course, no chunks to set up.");
@@ -1107,6 +1145,72 @@ public class dAgility extends AbstractScript {
                         new startTileStorage(new Tile(10899, 13701, 0), new Rectangle(609, 200, 23, 20))
                 );
                 break;
+            case "Basic Colossal Wyrm":
+                // Obstacles
+                obstacles.add(new Obstacle("Obstacle 1",
+                        new Area(new Tile(6554, 11453, 0), new Tile(6618, 11502, 0)),
+                        new Tile(6603, 11473, 0), new Tile(6611, 11473, 1),
+                        new Rectangle(467, 252, 6, 10), new Rectangle(609, 275, 12, 6),
+                        new Tile(6579, 11481, 0), noMarks, false, null, false));
+                obstacles.add(new Obstacle("Obstacle 2",
+                        new Area(new Tile(6601, 11441, 1), new Tile(6643, 11493, 1)),
+                        new Tile(6619, 11453, 1), new Tile(6595, 11389, 1),
+                        new Rectangle(442, 284, 13, 12), new Rectangle(485, 366, 15, 19),
+                        new Tile(6611, 11473, 1), noMarks, false, null, false));
+                obstacles.add(new Obstacle("Obstacle 3",
+                        new Area(new Tile(6581, 11361, 1), new Tile(6613, 11401, 1)),
+                        new Tile(6587, 11389, 1), new Tile(6539, 11389, 1),
+                        new Rectangle(421, 269, 14, 10), new Rectangle(388, 268, 14, 12),
+                        new Tile(6595, 11389, 1), noMarks, false, null, false));
+                obstacles.add(new Obstacle("Obstacle 4",
+                        new Area(new Tile(6524, 11358, 1), new Tile(6555, 11402, 1)),
+                        new Tile(6527, 11389, 1), new Tile(6507, 11473, 1),
+                        new Rectangle(420, 253, 12, 21), new Rectangle(364, 255, 13, 18),
+                        new Tile(6539, 11389, 1), noMarks, false, null, false));
+                obstacles.add(new Obstacle("Obstacle 5",
+                        new Area(new Tile(6483, 11459, 1), new Tile(6525, 11492, 1)),
+                        new Tile(6503, 11477, 1), new Tile(6499, 11477, 2),
+                        new Rectangle(435, 254, 5, 8), new Rectangle(417, 245, 5, 9),
+                        new Tile(6507, 11473, 1), noMarks, false, null, false));
+                obstacles.add(new Obstacle("Obstacle 6",
+                        new Area(new Tile(6482, 11456, 2), new Tile(6515, 11492, 2)),
+                        new Tile(6499, 11481, 2), new Tile(6579, 11481, 0),
+                        new Rectangle(459, 251, 9, 21), new Rectangle(459, 236, 9, 22),
+                        new Tile(6499, 11477, 2), noMarks, false, null, false));
+                break;
+            case "Advanced Colossal Wyrm":
+                // Obstacles
+                obstacles.add(new Obstacle("Obstacle 1",
+                        new Area(new Tile(6554, 11453, 0), new Tile(6618, 11502, 0)),
+                        new Tile(6603, 11473, 0), new Tile(6611, 11473, 1),
+                        new Rectangle(467, 252, 6, 10), new Rectangle(609, 275, 12, 6),
+                        new Tile(6579, 11481, 0), noMarks, false, null, false));
+                obstacles.add(new Obstacle("Obstacle 2",
+                        new Area(new Tile(6601, 11441, 1), new Tile(6643, 11493, 1)),
+                        new Tile(6619, 11453, 1), new Tile(6595, 11389, 1),
+                        new Rectangle(442, 284, 13, 12), new Rectangle(485, 366, 15, 19),
+                        new Tile(6611, 11473, 1), noMarks, false, null, false));
+                obstacles.add(new Obstacle("Obstacle 3",
+                        new Area(new Tile(6581, 11361, 1), new Tile(6613, 11401, 1)),
+                        new Tile(6591, 11385, 1), new Tile(6591, 11381, 2),
+                        new Rectangle(442, 267, 6, 9), new Rectangle(423, 284, 8, 10),
+                        new Tile(6595, 11389, 1), noMarks, false, null, false));
+                obstacles.add(new Obstacle("Obstacle 4",
+                        new Area(new Tile(6573, 11355, 2), new Tile(6620, 11395, 2)),
+                        new Tile(6587, 11377, 2), new Tile(6539, 11377, 2),
+                        new Rectangle(419, 253, 15, 25), new Rectangle(400, 274, 16, 18),
+                        new Tile(6591, 11381, 2), noMarks, false, null, false));
+                obstacles.add(new Obstacle("Obstacle 5",
+                        new Area(new Tile(6523, 11357, 2), new Tile(6564, 11395, 2)),
+                        new Tile(6531, 11377, 2), new Tile(6495, 11473, 2),
+                        new Rectangle(440, 253, 10, 12), new Rectangle(408, 253, 10, 11),
+                        new Tile(6539, 11377, 2), noMarks, false, null, false));
+                obstacles.add(new Obstacle("Obstacle 6",
+                        new Area(new Tile(6482, 11456, 2), new Tile(6515, 11492, 2)),
+                        new Tile(6499, 11481, 2), new Tile(6579, 11481, 0),
+                        new Rectangle(459, 251, 9, 21), new Rectangle(474, 218, 11, 19),
+                        new Tile(6495, 11473, 2), noMarks, false, null, false));
+                break;
             default:
                 Logger.log("This is a unknown course, no obstacles to set up.");
                 Script.stop();
@@ -1123,7 +1227,9 @@ public class dAgility extends AbstractScript {
                 new AbstractMap.SimpleEntry<>("Canifis", "1"),
                 new AbstractMap.SimpleEntry<>("Falador", "1"),
                 new AbstractMap.SimpleEntry<>("Rellekka", "1"),
-                new AbstractMap.SimpleEntry<>("Ardougne", "1")
+                new AbstractMap.SimpleEntry<>("Ardougne", "1"),
+                new AbstractMap.SimpleEntry<>("Basic Colossal Wyrm", "1"),
+                new AbstractMap.SimpleEntry<>("Advanced Colossal Wyrm", "1")
         );
 
         String zoomLevel = courseZoomLevels.get(courseChosen);
@@ -1164,8 +1270,10 @@ public class dAgility extends AbstractScript {
                 new AbstractMap.SimpleEntry<>("Varrock", 30),
                 new AbstractMap.SimpleEntry<>("Canifis", 40),
                 new AbstractMap.SimpleEntry<>("Falador", 50),
+                new AbstractMap.SimpleEntry<>("Basic Colossal Wyrm", 50),
                 new AbstractMap.SimpleEntry<>("Seers", 60),
                 new AbstractMap.SimpleEntry<>("Seers - Teleport", 60),
+                new AbstractMap.SimpleEntry<>("Advanced Colossal Wyrm", 62),
                 new AbstractMap.SimpleEntry<>("Pollnivneach", 70),
                 new AbstractMap.SimpleEntry<>("Rellekka", 80),
                 new AbstractMap.SimpleEntry<>("Ardougne", 90)
@@ -1194,25 +1302,49 @@ public class dAgility extends AbstractScript {
     }
 
     private void updateStatLabel() {
-        // Set separators
-        symbols.setGroupingSeparator('.');
-        symbols.setDecimalSeparator(',');
+        if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm")) {
+            // Set separators
+            symbols.setGroupingSeparator('.');
+            symbols.setDecimalSeparator(',');
 
-        // Calculations for MoGs and laps per hour
-        long currentTime = System.currentTimeMillis();
-        double elapsedTimeInHours = (currentTime - startTime) / (1000.0 * 60 * 60);
+            // Calculations for MoGs and laps per hour
+            long currentTime = System.currentTimeMillis();
+            double elapsedTimeInHours = (currentTime - startTime) / (1000.0 * 60 * 60);
 
-        // Calculate MoGs per hour and laps per hour
-        double MoGsPerHour = mogCount / elapsedTimeInHours;
-        double LapsPerHour = lapCount / elapsedTimeInHours;
+            // Calculate MoGs per hour and laps per hour
+            double TermitesPerHour = termiteCount/ elapsedTimeInHours;
+            double ShardsPerHour = boneShardCount / elapsedTimeInHours;
+            double LapsPerHour = lapCount / elapsedTimeInHours;
 
-        // Format MoGs per hour and laps per hour with one decimal place
-        String MoGsPerHourFormatted = MoGsFormat.format(MoGsPerHour);
-        String LapsPerHourFormatted = LapsFormat.format(LapsPerHour);
+            // Format Termites per hour, shards per hour, and laps per hour with one decimal place
+            String TermitesPerHourFormatted = TermitesFormat.format(TermitesPerHour);
+            String ShardsPerHourFormatted = ShardsFormat.format(ShardsPerHour);
+            String LapsPerHourFormatted = LapsFormat.format(LapsPerHour);
 
-        // Update the statistics label
-        String statistics = String.format("MoGs/hr: %s | Laps/hr: %s", MoGsPerHourFormatted, LapsPerHourFormatted);
-        Paint.setStatistic(statistics);
+            // Update the statistics label with all three stats
+            String statistics = String.format("Term %s | Shard %s | Lap %s /hr", TermitesPerHourFormatted, ShardsPerHourFormatted, LapsPerHourFormatted);
+            Paint.setStatistic(statistics);
+        } else {
+            // Set separators
+            symbols.setGroupingSeparator('.');
+            symbols.setDecimalSeparator(',');
+
+            // Calculations for MoGs and laps per hour
+            long currentTime = System.currentTimeMillis();
+            double elapsedTimeInHours = (currentTime - startTime) / (1000.0 * 60 * 60);
+
+            // Calculate MoGs per hour and laps per hour
+            double MoGsPerHour = mogCount / elapsedTimeInHours;
+            double LapsPerHour = lapCount / elapsedTimeInHours;
+
+            // Format MoGs per hour and laps per hour with one decimal place
+            String MoGsPerHourFormatted = MoGsFormat.format(MoGsPerHour);
+            String LapsPerHourFormatted = LapsFormat.format(LapsPerHour);
+
+            // Update the statistics label
+            String statistics = String.format("MoGs/hr: %s | Laps/hr: %s", MoGsPerHourFormatted, LapsPerHourFormatted);
+            Paint.setStatistic(statistics);
+        }
     }
 
     public static int generateRandomDelay(int lowerBound, int upperBound) {
