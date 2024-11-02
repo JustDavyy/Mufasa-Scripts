@@ -23,7 +23,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dArceuus RCer",
         description = "Crafts blood or soul runes at Arceuus, supports using blood essence and hopping worlds. DISCLAIMER: This script is NOT fully safe for 10HP accounts, use at own risk!",
-        version = "2.09",
+        version = "2.10",
         guideLink = "https://wiki.mufasaclient.com/docs/darceuus-rcer/",
         categories = {ScriptCategory.Runecrafting, ScriptCategory.Moneymaking}
 )
@@ -131,33 +131,41 @@ public class dArceuusRCer extends AbstractScript {
     public static Tile soulAltarTile = new Tile(7267, 15165, 0);
     public static Rectangle venerateAltar = new Rectangle(401, 238, 16, 17);
     public static Tile[] venerateToBloodAltarPath = new Tile[] {
-            new Tile(6844, 15275, 0),
-            new Tile(6801, 15267, 0),
-            new Tile(6762, 15259, 0),
-            new Tile(6728, 15258, 0),
-            new Tile(6702, 15259, 0),
-            new Tile(6670, 15257, 0),
-            new Tile(6636, 15260, 0),
-            new Tile(6639, 15226, 0),
-            new Tile(6644, 15200, 0),
-            new Tile(6666, 15192, 0),
-            new Tile(6695, 15183, 0),
-            new Tile(6726, 15178, 0),
-            new Tile(6769, 15175, 0),
-            new Tile(6800, 15177, 0),
-            new Tile(6837, 15177, 0),
-            new Tile(6869, 15174, 0),
-            new Tile(6908, 15167, 0),
-            new Tile(6932, 15145, 0),
-            new Tile(6937, 15121, 0),
-            new Tile(6939, 15088, 0),
-            new Tile(6945, 15058, 0),
-            new Tile(6921, 15051, 0),
-            new Tile(6900, 15046, 0),
-            new Tile(6882, 15052, 0),
-            new Tile(6873, 15056, 0)
+            new Tile(6847, 15273, 0),
+            new Tile(6822, 15269, 0),
+            new Tile(6806, 15268, 0),
+            new Tile(6785, 15268, 0),
+            new Tile(6765, 15267, 0),
+            new Tile(6743, 15268, 0),
+            new Tile(6718, 15268, 0),
+            new Tile(6701, 15266, 0),
+            new Tile(6681, 15263, 0),
+            new Tile(6664, 15253, 0),
+            new Tile(6650, 15235, 0),
+            new Tile(6649, 15217, 0),
+            new Tile(6655, 15202, 0),
+            new Tile(6670, 15194, 0),
+            new Tile(6688, 15189, 0),
+            new Tile(6707, 15189, 0),
+            new Tile(6725, 15186, 0),
+            new Tile(6747, 15181, 0),
+            new Tile(6771, 15179, 0),
+            new Tile(6787, 15180, 0),
+            new Tile(6817, 15182, 0),
+            new Tile(6832, 15179, 0),
+            new Tile(6852, 15178, 0),
+            new Tile(6872, 15175, 0),
+            new Tile(6887, 15167, 0),
+            new Tile(6900, 15155, 0),
+            new Tile(6914, 15142, 0),
+            new Tile(6926, 15132, 0),
+            new Tile(6932, 15109, 0),
+            new Tile(6934, 15086, 0),
+            new Tile(6931, 15063, 0),
+            new Tile(6913, 15056, 0),
+            new Tile(6891, 15055, 0),
+            new Tile(6874, 15061, 0)
     };
-
     public static Tile[] venerateToSoulAltarPath = new Tile[] {
             new Tile(6886, 15295, 0),
             new Tile(6919, 15304, 0),
@@ -176,21 +184,25 @@ public class dArceuusRCer extends AbstractScript {
             new Tile(7271, 15175, 0)
     };
     public static Tile[] venerateBackToObstaclePath = new Tile[] {
-            new Tile(6882, 15264, 0),
-            new Tile(6917, 15260, 0),
-            new Tile(6951, 15244, 0),
-            new Tile(6977, 15234, 0),
-            new Tile(7001, 15238, 0),
-            new Tile(7045, 15247, 0)
+            new Tile(6885, 15262, 0),
+            new Tile(6915, 15261, 0),
+            new Tile(6937, 15250, 0),
+            new Tile(6957, 15237, 0),
+            new Tile(6986, 15231, 0),
+            new Tile(7006, 15236, 0),
+            new Tile(7022, 15247, 0),
+            new Tile(7036, 15244, 0)
     };
     public static Tile[] bloodBackToObstaclePath = new Tile[] {
-            new Tile(6897, 15046, 0),
-            new Tile(6925, 15052, 0),
-            new Tile(6943, 15067, 0),
-            new Tile(6941, 15095, 0),
-            new Tile(6949, 15121, 0),
-            new Tile(6956, 15142, 0),
-            new Tile(6967, 15152, 0)
+            new Tile(6879, 15059, 0),
+            new Tile(6901, 15050, 0),
+            new Tile(6915, 15057, 0),
+            new Tile(6933, 15061, 0),
+            new Tile(6935, 15082, 0),
+            new Tile(6944, 15099, 0),
+            new Tile(6952, 15116, 0),
+            new Tile(6956, 15136, 0),
+            new Tile(6965, 15147, 0)
     };
     public static Tile[] soulBackToObstaclePath = new Tile[] {
             new Tile(7272, 15181, 0),

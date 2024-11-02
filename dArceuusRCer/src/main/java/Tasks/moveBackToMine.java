@@ -227,17 +227,18 @@ public class moveBackToMine extends Task {
         // Calculate the centroid of the points
         Point centroid = calculateCentroid(foundPoints);
 
-        // Sort points by distance to the centroid
-        foundPoints.sort(Comparator.comparingDouble(p -> distance(p, centroid)));
+        if (centroid.x != -1 && centroid.y != -1) {
+            // Sort points by distance to the centroid
+            foundPoints.sort(Comparator.comparingDouble(p -> distance(p, centroid)));
 
-        // Select the top 4-5 most central points
-        List<Point> mostCentralPoints = foundPoints.subList(0, Math.min(5, foundPoints.size()));
+            // Select the top 4-5 most central points
+            List<Point> mostCentralPoints = foundPoints.subList(0, Math.min(5, foundPoints.size()));
 
-        if (!foundPoints.isEmpty()) {
-            Logger.debugLog("Located the obstacle using the color finder, tapping.");
-            Client.tap(mostCentralPoints, false);
-            waitTillStopped(8);
-
+            if (!foundPoints.isEmpty()) {
+                Logger.debugLog("Located the obstacle using the color finder, tapping.");
+                Client.tap(mostCentralPoints, false);
+                waitTillStopped(8);
+            }
         } else {
             Logger.debugLog("Couldn't locate the obstacle with the color finder, using fallback method.");
 
@@ -403,17 +404,19 @@ public class moveBackToMine extends Task {
         // Calculate the centroid of the points
         Point centroid = calculateCentroid(foundPoints);
 
-        // Sort points by distance to the centroid
-        foundPoints.sort(Comparator.comparingDouble(p -> distance(p, centroid)));
+        if (centroid.x != -1 && centroid.y != -1) {
+            // Sort points by distance to the centroid
+            foundPoints.sort(Comparator.comparingDouble(p -> distance(p, centroid)));
 
-        // Select the top 4-5 most central points
-        List<Point> mostCentralPoints = foundPoints.subList(0, Math.min(5, foundPoints.size()));
+            // Select the top 4-5 most central points
+            List<Point> mostCentralPoints = foundPoints.subList(0, Math.min(5, foundPoints.size()));
 
-        if (!foundPoints.isEmpty()) {
-            Logger.debugLog("Located the obstacle using the color finder, tapping.");
-            Client.tap(mostCentralPoints, false);
-            waitTillStopped(8);
-            Condition.sleep(dArceuusRCer.generateRandomDelay(1750, 2250));
+            if (!foundPoints.isEmpty()) {
+                Logger.debugLog("Located the obstacle using the color finder, tapping.");
+                Client.tap(mostCentralPoints, false);
+                waitTillStopped(8);
+                Condition.sleep(dArceuusRCer.generateRandomDelay(1750, 2250));
+            }
         } else {
             Logger.debugLog("Couldn't locate the obstacle with the color finder, using fallback method.");
 
@@ -518,11 +521,17 @@ public class moveBackToMine extends Task {
     }
 
     private static Point calculateCentroid(List<Point> points) {
+        if (points == null || points.isEmpty()) {
+            Logger.debugLog("No points found to calculate the centroid.");
+            return new Point(-1, -1);
+        }
+
         int sumX = 0, sumY = 0;
         for (Point p : points) {
             sumX += p.x;
             sumY += p.y;
         }
+
         return new Point(sumX / points.size(), sumY / points.size());
     }
 

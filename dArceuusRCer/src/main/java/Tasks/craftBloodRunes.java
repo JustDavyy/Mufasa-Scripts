@@ -37,10 +37,13 @@ public class craftBloodRunes extends Task {
         if (!Inventory.contains(ItemList.DARK_ESSENCE_FRAGMENTS_7938, 0.8) && Inventory.contains(ItemList.DARK_ESSENCE_BLOCK_13446, 0.8)) {
             Paint.setStatus("Process dark essence");
             int count = Inventory.count(13446, 0.95);
-            for (int i = 0; i < count + 2; i++) {
-                Inventory.tapItem(1755, true, 0.80);
-                Client.tap(dArceuusRCer.essenceCachedLoc);
-                dArceuusRCer.generateRandomDelay(100, 150);
+            Logger.debugLog("Essences left: " + count);
+            if (count > 0) {
+                for (int i = 0; i < count + 2; i++) {
+                    Inventory.tapItem(1755, true, 0.80);
+                    Client.tap(dArceuusRCer.essenceCachedLoc);
+                    dArceuusRCer.generateRandomDelay(100, 150);
+                }
             }
         }
 
@@ -51,6 +54,17 @@ public class craftBloodRunes extends Task {
             Logger.debugLog("Located the blood altar using the color finder, tapping.");
             Client.tap(foundPoints, true);
             Condition.wait(() -> !Inventory.contains(7938, 0.85), 250, 20);
+            if (Inventory.contains(ItemList.DARK_ESSENCE_FRAGMENTS_7938, 0.85)) {
+                // Tap again as we might have used the chisel on the altar.
+                List<Point> foundPoints2 = Client.getPointsFromColorsInRect(dArceuusRCer.bloodAltar, new Rectangle(329, 163, 277, 201), 5);
+
+                if (!foundPoints2.isEmpty()) {
+                    Paint.setStatus("Tap blood altar");
+                    Logger.debugLog("Located the blood altar using the color finder, tapping.");
+                    Client.tap(foundPoints2, true);
+                    Condition.wait(() -> !Inventory.contains(7938, 0.85), 250, 20);
+                }
+            }
         } else {
             Logger.debugLog("Couldn't locate the blood altar using the color finder, moving to altar tile and proceeding...");
             Paint.setStatus("Step to blood altar");

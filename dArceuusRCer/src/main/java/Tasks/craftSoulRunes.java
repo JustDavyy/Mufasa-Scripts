@@ -40,10 +40,12 @@ public class craftSoulRunes extends Task {
         if (!Inventory.contains(ItemList.DARK_ESSENCE_FRAGMENTS_7938, 0.8) && Inventory.contains(ItemList.DARK_ESSENCE_BLOCK_13446, 0.8)) {
             Paint.setStatus("Process dark essence");
             int count = Inventory.count(13446, 0.95);
-            for (int i = 0; i < count + 2; i++) {
-                Inventory.tapItem(1755, true, 0.80);
-                Client.tap(dArceuusRCer.essenceCachedLoc);
-                dArceuusRCer.generateRandomDelay(100, 150);
+            if (count > 0) {
+                for (int i = 0; i < count + 2; i++) {
+                    Inventory.tapItem(1755, true, 0.80);
+                    Client.tap(dArceuusRCer.essenceCachedLoc);
+                    dArceuusRCer.generateRandomDelay(100, 150);
+                }
             }
         }
 
