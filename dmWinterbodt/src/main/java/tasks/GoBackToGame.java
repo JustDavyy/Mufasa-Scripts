@@ -21,12 +21,12 @@ public class GoBackToGame extends Task {
         if (System.currentTimeMillis() - lastRun >= 5000) {
             // Update location
             currentLocation = Walker.getPlayerPosition();
-            Condition.sleep(5000);
 
             if (Player.isTileWithinArea(currentLocation, lobby) && isGameGoing) {
                 // Use logging here for user visibility as this is the last task in our task list
                 Paint.setStatus("Waiting for game to end");
-                Logger.log("Waiting for game to end.");
+                Logger.log("Waiting for game to end, sleeping 5 seconds.");
+                Condition.sleep(5000);
 
                 // Prevent DCing because of idling
                 if (System.currentTimeMillis() - lastActivity > 240000) {
