@@ -297,9 +297,17 @@ public class StateUpdater {
     }
 
     public static void updateIsGameGoing() {
-        isGameGoing = Client.isColorInRect(StateColor.GAME_GREEN_COLOR.getColor(), waitingForGameEndedRect, 10);
+        // Use readDigitsInArea to check the energy percentage
+        int energyPercentage = Chatbox.readDigitsInArea(energyPercentReadRect, blackColor);
+
+        // Set isGameGoing to true if the energy percentage is valid and 1% or higher
+        if (energyPercentage != -1 && energyPercentage >= 1) {
+            isGameGoing = true;
+        } else {
+            isGameGoing = Client.isColorInRect(StateColor.GAME_GREEN_COLOR.getColor(), waitingForGameEndedRect, 10);
+        }
     }
-    
+
     public static void resetAllStates() {
         isGameGoing = false;
         waitingForGameEnded = false;
