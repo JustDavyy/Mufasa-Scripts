@@ -21,6 +21,7 @@ public class GoBackToGame extends Task {
         if (System.currentTimeMillis() - lastRun >= 5000) {
             // Update location
             currentLocation = Walker.getPlayerPosition();
+            Condition.sleep(5000);
 
             if (Player.isTileWithinArea(currentLocation, lobby) && isGameGoing) {
                 // Use logging here for user visibility as this is the last task in our task list
