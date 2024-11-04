@@ -26,6 +26,8 @@ public class GoBackToGame extends Task {
                 // Use logging here for user visibility as this is the last task in our task list
                 Paint.setStatus("Waiting for game to end");
                 Logger.log("Waiting for game to end, sleeping 5 seconds.");
+                // Update the last run time
+                lastRun = System.currentTimeMillis();
                 Condition.sleep(5000);
 
                 // Prevent DCing because of idling
@@ -35,10 +37,10 @@ public class GoBackToGame extends Task {
                     lastActivity = System.currentTimeMillis();
                 }
 
+            } else {
+                // Update the last run time
+                lastRun = System.currentTimeMillis();
             }
-
-            // Update the last run time
-            lastRun = System.currentTimeMillis();
         }
 
         isMoreThan40Seconds = (System.currentTimeMillis() - lastWalkToSafety) > 40000;
