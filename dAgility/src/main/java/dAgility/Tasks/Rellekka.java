@@ -84,6 +84,17 @@ public class Rellekka extends Task {
                 Paint.setStatus("Fetch player position");
                 currentLocation = Walker.getPlayerPosition();
                 Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
+            } else {
+                for (Obstacle obstacle : obstacles) {
+                    if (obstacle.name.equals("Obstacle 1")) {
+                        Walker.step(obstacle.startTile);
+
+                        if (Player.atTile(obstacle.startTile)) {
+                            Client.tap(obstacle.pressArea);
+                            Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 80);
+                        }
+                    }
+                }
             }
         }
 
