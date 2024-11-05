@@ -93,6 +93,8 @@ public class Rellekka extends Task {
                             Client.tap(obstacle.pressArea);
                             Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 80);
                         }
+
+                        return true;
                     }
                 }
             }
