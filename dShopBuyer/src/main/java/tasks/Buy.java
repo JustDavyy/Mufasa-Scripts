@@ -27,56 +27,56 @@ public class Buy extends Task {
 
     // Blast Furnace
     List<Color> OrdanLetterColors = Arrays.asList(java.awt.Color.decode("#ffffff"), java.awt.Color.decode("#ffff00"));
-    Rectangle copperOreCheckRect = new Rectangle(178, 247, 4, 5);
-    Rectangle goldOreCheckRect = new Rectangle(413, 247, 5, 6);
+    Rectangle copperOreCheckRect = new Rectangle(160, 223, 22, 25);
+    Rectangle goldOreCheckRect = new Rectangle(399, 218, 15, 26);
     Rectangle shopFromShopTileRect = new Rectangle(442, 248, 4, 6);
-    Rectangle copperOreStackRect = new Rectangle(156, 227, 29, 21);
-    Rectangle tinOreStackRect = new Rectangle(204, 225, 29, 22);
-    Rectangle ironOreStackRect = new Rectangle(251, 226, 33, 23);
-    Rectangle mithrilOreStackRect = new Rectangle(301, 227, 27, 18);
-    Rectangle silverOreStackRect = new Rectangle(345, 227, 29, 19);
-    Rectangle goldOreStackRect = new Rectangle(395, 228, 26, 20);
-    Rectangle coalOreStackRect = new Rectangle(439, 226, 31, 23);
-    Rectangle copperOreClickRect = new Rectangle(169, 238, 17, 20);
-    Rectangle tinOreClickRect = new Rectangle(218, 240, 15, 17);
-    Rectangle ironOreClickRect = new Rectangle(263, 239, 16, 16);
-    Rectangle mithrilOreClickRect = new Rectangle(313, 241, 15, 15);
-    Rectangle silverOreClickRect = new Rectangle(361, 242, 14, 12);
-    Rectangle goldOreClickRect = new Rectangle(406, 241, 15, 14);
-    Rectangle coalOreClickRect = new Rectangle(452, 241, 16, 18);
-    Rectangle quantity50Rect = new Rectangle(518, 461, 20, 18);
+    Rectangle copperOreStackRect = new Rectangle(144, 214, 37, 19);
+    Rectangle tinOreStackRect = new Rectangle(194, 213, 36, 22);
+    Rectangle ironOreStackRect = new Rectangle(242, 213, 32, 21);
+    Rectangle mithrilOreStackRect = new Rectangle(287, 213, 32, 18);
+    Rectangle silverOreStackRect = new Rectangle(335, 213, 30, 18);
+    Rectangle goldOreStackRect = new Rectangle(383, 214, 31, 17);
+    Rectangle coalOreStackRect = new Rectangle(428, 212, 34, 21);
+    Rectangle copperOreClickRect = new Rectangle(160, 227, 16, 15);
+    Rectangle tinOreClickRect = new Rectangle(209, 227, 14, 15);
+    Rectangle ironOreClickRect = new Rectangle(256, 227, 15, 14);
+    Rectangle mithrilOreClickRect = new Rectangle(303, 225, 16, 16);
+    Rectangle silverOreClickRect = new Rectangle(349, 227, 18, 13);
+    Rectangle goldOreClickRect = new Rectangle(395, 225, 17, 17);
+    Rectangle coalOreClickRect = new Rectangle(443, 226, 15, 18);
+    Rectangle quantity50Rect = new Rectangle(508, 447, 21, 19);
 
     // Fortunato
     Area fortunatoArea = new Area(new Tile(12325, 12739, 0), new Tile(12352, 12769, 0));
     Rectangle fortunatoScanArea = new Rectangle(283, 156, 191, 279);
     public static List<Color> fortunatoColors = Arrays.asList(Color.decode("#390e09"), Color.decode("#330e09"), Color.decode("#260909"));
     List<Color> FortunatoLetterColors = Arrays.asList(java.awt.Color.decode("#ffffff"), java.awt.Color.decode("#ffff00"));
-    Rectangle FWSOpenCheckRect1 = new Rectangle(302, 228, 29, 41);
-    Rectangle FWSOpenCheckRect2 = new Rectangle(253, 229, 38, 38);
-    Rectangle JugOfWineStackRect = new Rectangle(155, 229, 23, 19);
-    Rectangle EmptyJugPackStackRect = new Rectangle(249, 225, 25, 22);
-    Rectangle JugOfWineClickRect = new Rectangle(171, 239, 14, 18);
-    Rectangle EmptyJugPackClickRect = new Rectangle(265, 241, 15, 16);
+    Rectangle FWSOpenCheckRect1 = new Rectangle(298, 217, 22, 34);
+    Rectangle FWSOpenCheckRect2 = new Rectangle(254, 223, 17, 22);
+    Rectangle JugOfWineStackRect = new Rectangle(147, 214, 21, 21);
+    Rectangle EmptyJugPackStackRect = new Rectangle(240, 214, 29, 19);
+    Rectangle JugOfWineClickRect = new Rectangle(164, 230, 9, 13);
+    Rectangle EmptyJugPackClickRect = new Rectangle(254, 225, 18, 19);
 
     // Khazard Charter
     public static List<Color> khazardCrewColors = Arrays.asList(Color.decode("#7a1152"), Color.decode("#6e1149"), Color.decode("#610e40"), Color.decode("#dbce49"));
     List<Color> khazardCrewLetterColors = Arrays.asList(java.awt.Color.decode("#ffffff"), java.awt.Color.decode("#ffff00"));
-    Rectangle khazardOpenCheckRect1 = new Rectangle(409, 336, 12, 11);
-    Rectangle khazardOpenCheckRect2 = new Rectangle(266, 333, 10, 11);
+    Rectangle khazardOpenCheckRect1 = new Rectangle(248, 310, 28, 25);
+    Rectangle khazardOpenCheckRect2 = new Rectangle(485, 267, 24, 28);
     Area khazardShopArea = new Area(new Tile(10687, 12308, 0), new Tile(10713, 12339, 0));
     Rectangle khazardCrewScanArea = new Rectangle(251, 60, 358, 447);
-    Rectangle khazardEmptyBucketStackRect = new Rectangle(392, 228, 24, 21);
-    Rectangle khazardPineappleStackRect = new Rectangle(483, 274, 27, 24);
-    Rectangle khazardBucketofSlimeStackRect = new Rectangle(250, 322, 25, 19);
-    Rectangle khazardBucketofSandStackRect = new Rectangle(345, 319, 24, 23);
-    Rectangle khazardSeaweedStackRect = new Rectangle(392, 321, 27, 21);
-    Rectangle khazardSodaAshStackRect = new Rectangle(440, 321, 24, 20);
-    Rectangle khazardEmptyBucketClickRect = new Rectangle(406, 240, 15, 19);
-    Rectangle khazardPineappleClickRect = new Rectangle(500, 287, 14, 17);
-    Rectangle khazardBucketofSlimeClickRect = new Rectangle(266, 336, 13, 16);
-    Rectangle khazardBucketofSandClickRect = new Rectangle(361, 337, 12, 17);
-    Rectangle khazardSeaweedClickRect = new Rectangle(405, 335, 19, 17);
-    Rectangle khazardSodaAshClickRect = new Rectangle(454, 336, 13, 14);
+    Rectangle khazardEmptyBucketStackRect = new Rectangle(382, 214, 33, 19);
+    Rectangle khazardPineappleStackRect = new Rectangle(476, 261, 23, 18);
+    Rectangle khazardBucketofSlimeStackRect = new Rectangle(241, 307, 26, 18);
+    Rectangle khazardBucketofSandStackRect = new Rectangle(336, 307, 26, 20);
+    Rectangle khazardSeaweedStackRect = new Rectangle(381, 305, 31, 24);
+    Rectangle khazardSodaAshStackRect = new Rectangle(429, 304, 24, 23);
+    Rectangle khazardEmptyBucketClickRect = new Rectangle(396, 226, 15, 17);
+    Rectangle khazardPineappleClickRect = new Rectangle(491, 277, 10, 12);
+    Rectangle khazardBucketofSlimeClickRect = new Rectangle(257, 323, 11, 13);
+    Rectangle khazardBucketofSandClickRect = new Rectangle(351, 323, 11, 14);
+    Rectangle khazardSeaweedClickRect = new Rectangle(400, 323, 6, 11);
+    Rectangle khazardSodaAshClickRect = new Rectangle(444, 324, 11, 10);
 
 
     public Buy(dShopBuyer shopBuyer) {
@@ -116,22 +116,22 @@ public class Buy extends Task {
 
     // Blast Furnace
     private boolean isBFShopOpen() {
-        boolean check1 = Client.isColorInRect(Color.decode("#d56f29"), copperOreCheckRect, 10);
-        boolean check2 = Client.isColorInRect(Color.decode("#cea211"), goldOreCheckRect, 10);
+        boolean check1 = Client.isColorInRect(Color.decode("#d76e29"), copperOreCheckRect, 10);
+        boolean check2 = Client.isColorInRect(Color.decode("#cda110"), goldOreCheckRect, 10);
 
         return check1 && check2;
     }
 
     private boolean isFortunatoShopOpen() {
-        boolean check1 = Client.isColorInRect(Color.decode("#b9470f"), FWSOpenCheckRect1, 10);
-        boolean check2 = Client.isColorInRect(Color.decode("#be9562"), FWSOpenCheckRect2, 10);
+        boolean check1 = Client.isColorInRect(Color.decode("#b7450e"), FWSOpenCheckRect1, 10);
+        boolean check2 = Client.isColorInRect(Color.decode("#c69a64"), FWSOpenCheckRect2, 10);
 
         return check1 && check2;
     }
 
     private boolean isKhazardShopOpen() {
-        boolean check1 = Client.isColorInRect(Color.decode("#045534"), khazardOpenCheckRect1, 10);
-        boolean check2 = Client.isColorInRect(Color.decode("#0fb313"), khazardOpenCheckRect2, 10);
+        boolean check1 = Client.isColorInRect(Color.decode("#0eb112"), khazardOpenCheckRect1, 10);
+        boolean check2 = Client.isColorInRect(Color.decode("#be780e"), khazardOpenCheckRect2, 10);
 
         return check1 && check2;
     }
