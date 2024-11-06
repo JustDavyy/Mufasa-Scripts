@@ -17,7 +17,7 @@ import static utils.Helpers.countFoodInInventory;
 public class PreGame extends Task {
 
 
-    private final Rectangle startTimerRect = new Rectangle(204, 45, 31, 15);
+    private final Rectangle startTimerRect = new Rectangle(198, 23, 70, 13);
     private final Rectangle warmthPercentRect = new Rectangle(171, 28, 32, 17);
     private final List<java.awt.Color> blackColor = Arrays.asList(
             java.awt.Color.decode("#000001")

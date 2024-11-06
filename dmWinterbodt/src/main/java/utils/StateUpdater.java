@@ -18,20 +18,20 @@ import static tasks.GetBranches.gettingBranches;
 
 public class StateUpdater {
     //    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
-    static Rectangle warmthPercentReadRect = new Rectangle(171, 28, 32, 17);
-    static Rectangle energyPercentReadRect = new Rectangle(188, 43, 35, 17);
+    static Rectangle warmthPercentReadRect = new Rectangle(189, 7, 33, 12);
+    static Rectangle energyPercentReadRect = new Rectangle(198, 23, 70, 13);
     static List<Color> blackColor = Arrays.asList(
             java.awt.Color.decode("#000001")
     );
-    static Rectangle gameAt13CheckRect = new Rectangle(68, 50, 7, 10);
-    static Rectangle gameAt20CheckRect = new Rectangle(100, 50, 9, 9);
-    static Rectangle gameAt70CheckRect = new Rectangle(217, 50, 6, 9);
+    static Rectangle gameAt13CheckRect = new Rectangle(84, 26, 5, 7);
+    static Rectangle gameAt20CheckRect = new Rectangle(98, 26, 8, 6);
+    static Rectangle gameAt70CheckRect = new Rectangle(239, 25, 4, 8);
     static Rectangle fullWarmthBar = new Rectangle(57, 35, 198, 9);
-    static Rectangle warmthAt60 = new Rectangle(174, 35, 7, 8);
+    static Rectangle warmthAt60 = new Rectangle(202, 40, 12, 9);
     static int currentWarmth = 0;
-    static Rectangle warmthCriticalLowRect = new Rectangle(58, 36, 16, 8);
-    static Rectangle waitingForGameToStartRect = new Rectangle(245, 50, 9, 11);
-    static Rectangle waitingForGameEndedRect = new Rectangle(56, 49, 5, 12);
+    static Rectangle warmthCriticalLowRect = new Rectangle(98, 11, 8, 6);
+    static Rectangle waitingForGameToStartRect = new Rectangle(261, 25, 9, 10);
+    static Rectangle waitingForGameEndedRect = new Rectangle(75, 25, 4, 9);
     public static final HashMap<String, Long> mageDeadTimestamps = new HashMap<>();
 
     static {

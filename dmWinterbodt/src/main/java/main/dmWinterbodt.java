@@ -25,7 +25,7 @@ import static utils.SideManager.pickRandomSide;
 @ScriptManifest(
         name = "dmWinterbodt",
         description = "Completes the Wintertodt minigame. Start inside the Wintertodt minigame area",
-        version = "2.23",
+        version = "2.24",
         guideLink = "https://wiki.mufasaclient.com/docs/dmwinterbodt/",
         categories = {ScriptCategory.Firemaking, ScriptCategory.Minigames}
 )
@@ -141,42 +141,10 @@ public class dmWinterbodt extends AbstractScript {
     public static int totalCrateCount = 0;
     public static int totalRepairCount = 0;
     public static int totalRelightCount = 0;
-    public static Area WTArea = new Area(
-            new Tile(6387, 15409, 0),
-            new Tile(6637, 15853, 0)
-    );
     public static Area lobby = new Area(
             new Tile(6492, 15609, 0),
             new Tile(6551, 15695, 0)
     );
-    public static Area LeftTopWTArea = new Area(
-            new Tile(6440, 15753, 0),
-            new Tile(6473, 15816, 0)
-    );
-    public static Area RightTopWTArea = new Area(
-            new Tile(6570, 15746, 0),
-            new Tile(6605, 15808, 0)
-    );
-    public static Tile[] LeftTopToStart = new Tile[] {
-            new Tile(6469, 15813, 0),
-            new Tile(6463, 15789, 0),
-            new Tile(6462, 15764, 0),
-            new Tile(6464, 15741, 0),
-            new Tile(6471, 15728, 0),
-            new Tile(6484, 15719, 0),
-            new Tile(6501, 15706, 0),
-            new Tile(6520, 15694, 0)
-    };
-    public static Tile[] RightTopToStart =  new Tile[] {
-            new Tile(6564, 15827, 0),
-            new Tile(6578, 15806, 0),
-            new Tile(6588, 15789, 0),
-            new Tile(6585, 15756, 0),
-            new Tile(6581, 15739, 0),
-            new Tile(6567, 15723, 0),
-            new Tile(6549, 15707, 0),
-            new Tile(6533, 15691, 0)
-    };
     public static Tile bankTile = new Tile(6559, 15521, 0);
     public static Area bankTentArea = new Area(
             new Tile(6550, 15511, 0),
@@ -247,8 +215,8 @@ public class dmWinterbodt extends AbstractScript {
     public static String pickedSide;
     // State creation (we might not need all 4, but just the bottom ones?)
     public static WTStates[] states = {
-            new WTStates("Left", new Rectangle(69, 133, 18, 20), false, false, false, false),
-            new WTStates("Right", new Rectangle(125, 137, 19, 16), false, false, false, false)
+            new WTStates("Left", new Rectangle(88, 112, 16, 13), false, false, false, false),
+            new WTStates("Right", new Rectangle(143, 107, 17, 14), false, false, false, false)
     };
     // These tasks are executed in this order
     List<Task> WTTasks = Arrays.asList(
@@ -304,6 +272,7 @@ public class dmWinterbodt extends AbstractScript {
             setupFoodIDs();
         }
 
+        // 24-63, 24-62, 24-61, 25-63, 25-62, 25-61, 26-63, 26-62, 26-61, 24-60, 25-60, 26-60, 50-50
         Walker.setup(new MapChunk(new String[]{"24-63", "24-62", "24-61", "25-63", "25-62", "25-61", "26-63", "26-62", "26-61", "24-60", "25-60", "26-60", "50-50"}, "0"));
 
         // Creating the Paint object
