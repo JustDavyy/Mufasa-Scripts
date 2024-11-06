@@ -19,7 +19,7 @@ import static tasks.GetBranches.gettingBranches;
 public class StateUpdater {
     //    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
     static Rectangle warmthPercentReadRect = new Rectangle(189, 7, 33, 12);
-    static Rectangle energyPercentReadRect = new Rectangle(198, 23, 70, 13);
+    static Rectangle energyPercentReadRect = new Rectangle(198, 23, 29, 13);
     static List<Color> blackColor = Arrays.asList(
             java.awt.Color.decode("#000001")
     );
