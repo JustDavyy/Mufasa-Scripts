@@ -1254,14 +1254,14 @@ public class dAgility extends AbstractScript {
             Condition.sleep(1500);
         }
 
-        int calc = Stats.getRealLevel("Hitpoints");
+        int calc = Stats.getRealLevel(Skills.HITPOINTS);
         eatHP = (int) (calc * (eatPercent / 100.0));
         Logger.debugLog("HP to eat at: " + eatHP);
 
         Logger.debugLog("Checking level requirements.");
 
         // Save agility level
-        int agilityLevel = Stats.getRealLevel("Agility");
+        int agilityLevel = Stats.getRealLevel(Skills.AGILITY);
         Logger.debugLog("Agility level " + agilityLevel);
 
         // Map of course names to their required agility levels using Map.ofEntries
