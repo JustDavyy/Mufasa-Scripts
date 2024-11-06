@@ -61,8 +61,8 @@ public class Buy extends Task {
     // Khazard Charter
     public static List<Color> khazardCrewColors = Arrays.asList(Color.decode("#7a1152"), Color.decode("#6e1149"), Color.decode("#610e40"), Color.decode("#dbce49"));
     List<Color> khazardCrewLetterColors = Arrays.asList(java.awt.Color.decode("#ffffff"), java.awt.Color.decode("#ffff00"));
-    Rectangle khazardOpenCheckRect1 = new Rectangle(248, 310, 28, 25);
-    Rectangle khazardOpenCheckRect2 = new Rectangle(485, 267, 24, 28);
+    Rectangle khazardOpenCheckRect1 = new Rectangle(251, 312, 19, 19);
+    Rectangle khazardOpenCheckRect2 = new Rectangle(487, 269, 22, 25);
     Area khazardShopArea = new Area(new Tile(10687, 12308, 0), new Tile(10713, 12339, 0));
     Rectangle khazardCrewScanArea = new Rectangle(251, 60, 358, 447);
     Rectangle khazardEmptyBucketStackRect = new Rectangle(382, 214, 33, 19);
@@ -131,7 +131,7 @@ public class Buy extends Task {
 
     private boolean isKhazardShopOpen() {
         boolean check1 = Client.isColorInRect(Color.decode("#0eb112"), khazardOpenCheckRect1, 10);
-        boolean check2 = Client.isColorInRect(Color.decode("#be780e"), khazardOpenCheckRect2, 10);
+        boolean check2 = Client.isColorInRect(Color.decode("#c48b0e"), khazardOpenCheckRect2, 10);
 
         return check1 && check2;
     }
