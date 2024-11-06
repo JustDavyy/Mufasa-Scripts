@@ -31,7 +31,7 @@ public class StateUpdater {
     static int currentWarmth = 0;
     static Rectangle warmthCriticalLowRect = new Rectangle(98, 11, 8, 6);
     static Rectangle waitingForGameToStartRect = new Rectangle(261, 25, 9, 10);
-    static Rectangle waitingForGameEndedRect = new Rectangle(75, 25, 4, 9);
+    static Rectangle waitingForGameEndedRect = new Rectangle(75, 25, 5, 9);
     public static final HashMap<String, Long> mageDeadTimestamps = new HashMap<>();
 
     static {
