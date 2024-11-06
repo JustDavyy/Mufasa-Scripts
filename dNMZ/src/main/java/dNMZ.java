@@ -12,7 +12,7 @@ import static helpers.Interfaces.*;
 
 @ScriptManifest(
         name = "dNMZ",
-        description = "Slays all the nightmare monsters in Gielinor on automatic pilot. Automatically restocks on potions, supports all styles.",
+        description = "Slays all the nightmare monsters in Gielinor on auto pilot. Automatically restocks on potions, supports all styles.",
         version = "1.08",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
