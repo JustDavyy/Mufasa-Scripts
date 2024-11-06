@@ -1254,40 +1254,41 @@ public class dAgility extends AbstractScript {
             Condition.sleep(1500);
         }
 
-        int calc = Stats.getRealLevel(Skills.HITPOINTS);
-        eatHP = (int) (calc * (eatPercent / 100.0));
+//        int calc = Stats.getRealLevel(Skills.HITPOINTS);
+//        eatHP = (int) (calc * (eatPercent / 100.0));
+        eatHP = 7;
         Logger.debugLog("HP to eat at: " + eatHP);
 
-        Logger.debugLog("Checking level requirements.");
+//        Logger.debugLog("Checking level requirements.");
+//
+//        // Save agility level
+//        int agilityLevel = Stats.getRealLevel(Skills.AGILITY);
+//        Logger.debugLog("Agility level " + agilityLevel);
+//
+//        // Map of course names to their required agility levels using Map.ofEntries
+//        Map<String, Integer> courseRequirements = Map.ofEntries(
+//                new AbstractMap.SimpleEntry<>("Al Kharid", 20),
+//                new AbstractMap.SimpleEntry<>("Varrock", 30),
+//                new AbstractMap.SimpleEntry<>("Canifis", 40),
+//                new AbstractMap.SimpleEntry<>("Falador", 50),
+//                new AbstractMap.SimpleEntry<>("Basic Colossal Wyrm", 50),
+//                new AbstractMap.SimpleEntry<>("Seers", 60),
+//                new AbstractMap.SimpleEntry<>("Seers - Teleport", 60),
+//                new AbstractMap.SimpleEntry<>("Advanced Colossal Wyrm", 62),
+//                new AbstractMap.SimpleEntry<>("Pollnivneach", 70),
+//                new AbstractMap.SimpleEntry<>("Rellekka", 80),
+//                new AbstractMap.SimpleEntry<>("Ardougne", 90)
+//        );
+//
+//        Integer requiredLevel = courseRequirements.get(courseChosen);
+//
+//        if (requiredLevel != null && agilityLevel < requiredLevel) {
+//            Logger.log("Agility level not high enough for chosen course (" + courseChosen + "), stopping script.");
+//            Logout.logout();
+//            Script.stop();
+//        }
 
-        // Save agility level
-        int agilityLevel = Stats.getRealLevel(Skills.AGILITY);
-        Logger.debugLog("Agility level " + agilityLevel);
-
-        // Map of course names to their required agility levels using Map.ofEntries
-        Map<String, Integer> courseRequirements = Map.ofEntries(
-                new AbstractMap.SimpleEntry<>("Al Kharid", 20),
-                new AbstractMap.SimpleEntry<>("Varrock", 30),
-                new AbstractMap.SimpleEntry<>("Canifis", 40),
-                new AbstractMap.SimpleEntry<>("Falador", 50),
-                new AbstractMap.SimpleEntry<>("Basic Colossal Wyrm", 50),
-                new AbstractMap.SimpleEntry<>("Seers", 60),
-                new AbstractMap.SimpleEntry<>("Seers - Teleport", 60),
-                new AbstractMap.SimpleEntry<>("Advanced Colossal Wyrm", 62),
-                new AbstractMap.SimpleEntry<>("Pollnivneach", 70),
-                new AbstractMap.SimpleEntry<>("Rellekka", 80),
-                new AbstractMap.SimpleEntry<>("Ardougne", 90)
-        );
-
-        Integer requiredLevel = courseRequirements.get(courseChosen);
-
-        if (requiredLevel != null && agilityLevel < requiredLevel) {
-            Logger.log("Agility level not high enough for chosen course (" + courseChosen + "), stopping script.");
-            Logout.logout();
-            Script.stop();
-        }
-
-        GameTabs.closeStatsTab();
+//        GameTabs.closeStatsTab();
         Logger.debugLog("Ending level requirements.");
     }
 
