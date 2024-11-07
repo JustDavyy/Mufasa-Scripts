@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAgility",
         description = "Trains agility at various courses. World hopping and eating food is supported, as well as picking up Marks of Grace when running a rooftop course.",
-        version = "1.10",
+        version = "1.11",
         categories = {ScriptCategory.Agility},
         guideLink = "https://wiki.mufasaclient.com/docs/dagility/"
 )
@@ -781,42 +781,6 @@ public class dAgility extends AbstractScript {
                         new Tile(10619, 14453, 3), new Tile(10607, 14453, 0),
                         new Rectangle(404, 248, 22, 22), new Rectangle(413, 165, 21, 23),
                         new Tile(10619, 14429, 3), noMarks, false, null, false));
-
-                // Start tiles
-                startTiles = Arrays.asList(
-                        new startTileStorage(new Tile(10503, 14461, 0), new Rectangle(428, 288, 10, 4)),
-                        new startTileStorage(new Tile(10495, 14465, 0), new Rectangle(461, 300, 8, 4)),
-                        new startTileStorage(new Tile(10495, 14461, 0), new Rectangle(461, 284, 8, 5)),
-                        new startTileStorage(new Tile(10495, 14457, 0), new Rectangle(460, 267, 9, 7)),
-                        new startTileStorage(new Tile(10499, 14457, 0), new Rectangle(447, 267, 10, 6)),
-                        new startTileStorage(new Tile(10499, 14461, 0), new Rectangle(448, 282, 8, 5)),
-                        new startTileStorage(new Tile(10499, 14465, 0), new Rectangle(448, 301, 9, 5)),
-                        new startTileStorage(new Tile(10503, 14469, 0), new Rectangle(431, 322, 6, 5)),
-                        new startTileStorage(new Tile(10503, 14465, 0), new Rectangle(433, 307, 7, 5)),
-                        new startTileStorage(new Tile(10503, 14461, 0), new Rectangle(428, 286, 10, 6)),
-                        new startTileStorage(new Tile(10503, 14457, 0), new Rectangle(428, 266, 11, 7)),
-                        new startTileStorage(new Tile(10507, 14457, 0), new Rectangle(410, 266, 10, 5)),
-                        new startTileStorage(new Tile(10507, 14461, 0), new Rectangle(411, 284, 9, 7)),
-                        new startTileStorage(new Tile(10507, 14465, 0), new Rectangle(410, 303, 10, 5)),
-                        new startTileStorage(new Tile(10507, 14469, 0), new Rectangle(410, 322, 9, 6)),
-                        new startTileStorage(new Tile(10479, 14465, 0), new Rectangle(543, 299, 6, 6)),
-                        new startTileStorage(new Tile(10479, 14461, 0), new Rectangle(537, 281, 5, 7)),
-                        new startTileStorage(new Tile(10483, 14465, 0), new Rectangle(526, 294, 6, 8)),
-                        new startTileStorage(new Tile(10483, 14461, 0), new Rectangle(523, 281, 7, 8)),
-                        new startTileStorage(new Tile(10487, 14465, 0), new Rectangle(506, 292, 7, 10)),
-                        new startTileStorage(new Tile(10491, 14465, 0), new Rectangle(487, 297, 8, 7)),
-                        new startTileStorage(new Tile(10491, 14461, 0), new Rectangle(485, 285, 8, 8)),
-                        new startTileStorage(new Tile(10491, 14457, 0), new Rectangle(484, 265, 7, 9)),
-                        new startTileStorage(new Tile(10519, 14457, 0), new Rectangle(355, 266, 9, 7)),
-                        new startTileStorage(new Tile(10519, 14461, 0), new Rectangle(354, 280, 10, 8)),
-                        new startTileStorage(new Tile(10519, 14465, 0), new Rectangle(353, 300, 9, 6)),
-                        new startTileStorage(new Tile(10515, 14465, 0), new Rectangle(369, 301, 9, 6)),
-                        new startTileStorage(new Tile(10515, 14461, 0), new Rectangle(370, 285, 8, 7)),
-                        new startTileStorage(new Tile(10515, 14457, 0), new Rectangle(368, 265, 9, 7)),
-                        new startTileStorage(new Tile(10511, 14457, 0), new Rectangle(389, 265, 7, 8)),
-                        new startTileStorage(new Tile(10511, 14461, 0), new Rectangle(387, 281, 7, 6)),
-                        new startTileStorage(new Tile(10511, 14465, 0), new Rectangle(388, 303, 8, 6))
-                );
                 break;
             case "Ardougne":
                 // Mark of Grace ground color
@@ -938,25 +902,6 @@ public class dAgility extends AbstractScript {
                         new Rectangle(485, 193, 71, 74), new Rectangle(664, 35, 21, 9),
                         new Tile(12383, 12773, 3), draynorObstacle7Marks, true, null, false));
 
-                // Start tiles
-                startTiles = Arrays.asList(
-                        new startTileStorage(new Tile(12415, 12873, 0), new Rectangle(371, 332, 2, 20)),
-                        new startTileStorage(new Tile(12419, 12873, 0), new Rectangle(331, 338, 3, 18)),
-                        new startTileStorage(new Tile(12423, 12873, 0), new Rectangle(280, 336, 7, 23)),
-                        new startTileStorage(new Tile(12427, 12873, 0), new Rectangle(233, 340, 8, 26)),
-                        new startTileStorage(new Tile(12427, 12869, 0), new Rectangle(239, 311, 7, 16)),
-                        new startTileStorage(new Tile(12423, 12869, 0), new Rectangle(274, 303, 6, 21)),
-                        new startTileStorage(new Tile(12419, 12869, 0), new Rectangle(321, 299, 6, 23)),
-                        new startTileStorage(new Tile(12415, 12869, 0), new Rectangle(373, 302, 4, 19)),
-                        new startTileStorage(new Tile(12415, 12865, 0), new Rectangle(374, 253, 5, 20)),
-                        new startTileStorage(new Tile(12419, 12865, 0), new Rectangle(338, 257, 5, 17)),
-                        new startTileStorage(new Tile(12423, 12865, 0), new Rectangle(290, 262, 8, 19)),
-                        new startTileStorage(new Tile(12427, 12865, 0), new Rectangle(244, 265, 8, 18)),
-                        new startTileStorage(new Tile(12427, 12861, 0), new Rectangle(249, 225, 9, 20)),
-                        new startTileStorage(new Tile(12423, 12861, 0), new Rectangle(295, 221, 7, 17)),
-                        new startTileStorage(new Tile(12419, 12861, 0), new Rectangle(329, 216, 6, 20)),
-                        new startTileStorage(new Tile(12415, 12861, 0), new Rectangle(376, 213, 3, 20))
-                );
                 break;
             case "Pollnivneach":
                 // Mark of Grace ground color
@@ -1116,34 +1061,6 @@ public class dAgility extends AbstractScript {
                         new Rectangle(485, 268, 35, 36), new Rectangle(486, 301, 33, 38),
                         new Tile(10807, 13609, 2), seersObstacle6Mark, true, null, false));
 
-                // Start tiles
-                startTiles = Arrays.asList(
-                        new startTileStorage(new Tile(10911, 13693, 0), new Rectangle(471, 129, 29, 24)),
-                        new startTileStorage(new Tile(10907, 13693, 0), new Rectangle(521, 130, 20, 24)),
-                        new startTileStorage(new Tile(10907, 13689, 0), new Rectangle(520, 95, 15, 23)),
-                        new startTileStorage(new Tile(10907, 13685, 0), new Rectangle(514, 67, 24, 20)),
-                        new startTileStorage(new Tile(10911, 13685, 0), new Rectangle(479, 69, 26, 18)),
-                        new startTileStorage(new Tile(10915, 13685, 0), new Rectangle(434, 68, 28, 21)),
-                        new startTileStorage(new Tile(10915, 13689, 0), new Rectangle(443, 97, 26, 12)),
-                        new startTileStorage(new Tile(10915, 13693, 0), new Rectangle(436, 125, 31, 24)),
-                        new startTileStorage(new Tile(10919, 13693, 0), new Rectangle(391, 135, 33, 24)),
-                        new startTileStorage(new Tile(10919, 13689, 0), new Rectangle(394, 106, 28, 24)),
-                        new startTileStorage(new Tile(10919, 13685, 0), new Rectangle(392, 72, 32, 27)),
-                        new startTileStorage(new Tile(10915, 13697, 0), new Rectangle(423, 164, 34, 24)),
-                        new startTileStorage(new Tile(10911, 13697, 0), new Rectangle(472, 160, 27, 26)),
-                        new startTileStorage(new Tile(10911, 13701, 0), new Rectangle(474, 200, 30, 24)),
-                        new startTileStorage(new Tile(10903, 13701, 0), new Rectangle(565, 201, 28, 22)),
-                        new startTileStorage(new Tile(10903, 13697, 0), new Rectangle(563, 170, 25, 24)),
-                        new startTileStorage(new Tile(10899, 13693, 0), new Rectangle(602, 125, 30, 23)),
-                        new startTileStorage(new Tile(10899, 13689, 0), new Rectangle(603, 93, 20, 23)),
-                        new startTileStorage(new Tile(10899, 13685, 0), new Rectangle(596, 64, 26, 20)),
-                        new startTileStorage(new Tile(10895, 13693, 0), new Rectangle(645, 124, 17, 25)),
-                        new startTileStorage(new Tile(10895, 13689, 0), new Rectangle(641, 94, 16, 24)),
-                        new startTileStorage(new Tile(10895, 13685, 0), new Rectangle(634, 65, 21, 19)),
-                        new startTileStorage(new Tile(10903, 13685, 0), new Rectangle(564, 65, 28, 20)),
-                        new startTileStorage(new Tile(10899, 13697, 0), new Rectangle(607, 158, 26, 29)),
-                        new startTileStorage(new Tile(10899, 13701, 0), new Rectangle(609, 200, 23, 20))
-                );
                 break;
             case "Basic Colossal Wyrm":
                 // Obstacles

@@ -5,6 +5,9 @@ import dAgility.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Tile;
 
+import java.awt.*;
+import java.util.Arrays;
+
 import static dAgility.dAgility.*;
 import static helpers.Interfaces.*;
 
@@ -15,14 +18,33 @@ public class Seers extends Task {
     Area seersArea = new Area(new Tile(10692, 13450, 0), new Tile(11020, 13808, 0));
     Area obstacle6EndArea = new Area(new Tile(10791, 13557, 0), new Tile(10854, 13636, 0));
     Area teleportArea = new Area(new Tile(10892, 13669, 0), new Tile(10924, 13700, 0));
+    Area failArea = new Area(new Tile(10818, 13668, 0), new Tile(10878, 13744, 0));
     Tile[] pathToStart = new Tile[] {
-            new Tile(10838, 13593, 0),
-            new Tile(10860, 13599, 0),
-            new Tile(10875, 13616, 0),
-            new Tile(10886, 13634, 0),
-            new Tile(10897, 13655, 0),
-            new Tile(10903, 13672, 0),
-            new Tile(10911, 13687, 0)
+            new Tile(10831, 13597, 0),
+            new Tile(10850, 13596, 0),
+            new Tile(10864, 13596, 0),
+            new Tile(10876, 13609, 0),
+            new Tile(10881, 13621, 0),
+            new Tile(10891, 13637, 0),
+            new Tile(10899, 13649, 0),
+            new Tile(10904, 13662, 0),
+            new Tile(10909, 13674, 0),
+            new Tile(10913, 13687, 0)
+    };
+
+    Rectangle screenROI = new Rectangle(316, 4, 316, 330);
+    Area obs1Area = new Area(new Tile(10894, 13668, 0), new Tile(10939, 13715, 0));
+    java.util.List<Color> startObstacleColors = Arrays.asList(
+            Color.decode("#20ff25"),
+            Color.decode("#20ff26"),
+            Color.decode("#21ff27")
+    );
+    Tile[] fallPathToStart = new Tile[] {
+            new Tile(10866, 13693, 0),
+            new Tile(10880, 13684, 0),
+            new Tile(10893, 13684, 0),
+            new Tile(10907, 13682, 0),
+            new Tile(10916, 13687, 0)
     };
 
     public Seers(){
@@ -53,19 +75,48 @@ public class Seers extends Task {
                 Walker.walkPath(pathToStart);
                 Player.waitTillNotMoving(17);
             }
+            currentLocation = Walker.getPlayerPosition();
+            Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
         }
 
-        currentLocation = Walker.getPlayerPosition();
-        Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
-        // Handle most of the start tiles without using color finder for speed
-        for (dAgility.startTileStorage tileTap : startTiles) {
-            if (Player.tileEquals(currentLocation, tileTap.getTile())) {
-                Logger.debugLog("Player is on known start tile: " + tileTap.getTile());
-                Paint.setStatus("Tap start obstacle");
-                Client.tap(tileTap.getTapRectangle());
-                Condition.wait(() -> Player.atTile(obs1EndTile), 200, 40);
+        if (Player.isTileWithinArea(currentLocation, obs1Area)) {
+            Logger.debugLog("Colorfinding start obstacle");
+            Paint.setStatus("Colorfind obstacle 1");
+
+            java.util.List<Point> foundPoints = Client.getPointsFromColorsInRect(startObstacleColors, screenROI, 10);
+
+            if (!foundPoints.isEmpty()) {
+                // Calculate the center point of all found points
+                int totalX = 0;
+                int totalY = 0;
+
+                for (Point p : foundPoints) {
+                    totalX += p.x;
+                    totalY += p.y;
+                }
+
+                // Compute the average (center) point
+                Point centerPoint = new Point(totalX / foundPoints.size(), totalY / foundPoints.size());
+
+                Logger.debugLog("Located the first obstacle using the color finder, tapping around the center point.");
+                Client.tap(centerPoint);
+                Condition.wait(() -> Player.atTile(obs1EndTile), 200, 45);
+                Paint.setStatus("Fetch player position");
                 currentLocation = Walker.getPlayerPosition();
-                break;
+                Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
+            } else {
+                for (Obstacle obstacle : obstacles) {
+                    if (obstacle.name.equals("Obstacle 1")) {
+                        Walker.step(obstacle.startTile);
+
+                        if (Player.atTile(obstacle.startTile)) {
+                            Client.tap(obstacle.pressArea);
+                            Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 80);
+                        }
+
+                        return true;
+                    }
+                }
             }
         }
 
@@ -99,6 +150,15 @@ public class Seers extends Task {
 
                 return true;
             }
+        }
+
+        // Block that assumes we are within the fail area of seers
+        if (Player.isTileWithinArea(currentLocation, failArea)) {
+            Logger.debugLog("Within fail area, walking back to start obstacle");
+            Paint.setStatus("Recover after fall/failure");
+            Walker.walkPath(fallPathToStart);
+            Player.waitTillNotMoving(15);
+            return true;
         }
 
         // Block that assumes we are not within any of those areas, which means we've fallen or wandered off somewhere?
