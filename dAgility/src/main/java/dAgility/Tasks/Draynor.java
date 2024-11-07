@@ -5,6 +5,9 @@ import dAgility.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Tile;
 
+import java.awt.*;
+import java.util.Arrays;
+
 import static dAgility.dAgility.*;
 import static helpers.Interfaces.*;
 import static dAgility.dAgility.startTileStorage.*;
@@ -15,6 +18,12 @@ public class Draynor extends Task {
     Tile obs1EndTile = new Tile(12407, 12865, 3);
     Area draynorArea = new Area(new Tile(12275, 12663, 0), new Tile(12540, 12981, 0));
     Area obstacle7EndArea = new Area(new Tile(12400, 12765, 0), new Tile(12432, 12846, 0));
+    Area obs1Area = new Area(new Tile(12405, 12848, 0), new Tile(12443, 12879, 0));
+    java.util.List<Color> startObstacleColors = Arrays.asList(
+            Color.decode("#20ff25"),
+            Color.decode("#20ff26")
+    );
+    Rectangle screenROI = new Rectangle(102, 85, 408, 372);
     Tile[] pathToStart = new Tile[] {
             new Tile(12417, 12802, 0),
             new Tile(12419, 12822, 0),
@@ -42,20 +51,49 @@ public class Draynor extends Task {
             Logger.debugLog("Walking back to the start obstacle");
             Paint.setStatus("Walk to start obstacle");
             Walker.walkPath(pathToStart);
-            Player.waitTillNotMoving(20);
+            Player.waitTillNotMoving(17);
         }
 
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
-        // Handle most of the start tiles without using color finder for speed
-        for (dAgility.startTileStorage tileTap : startTiles) {
-            if (Player.tileEquals(currentLocation, tileTap.getTile())) {
-                Logger.debugLog("Player is on known start tile: " + tileTap.getTile());
-                Paint.setStatus("Tap start obstacle");
-                Client.tap(tileTap.getTapRectangle());
-                Condition.wait(() -> Player.atTile(obs1EndTile), 200, 40);
+        if (Player.isTileWithinArea(currentLocation, obs1Area)) {
+            Logger.debugLog("Colorfinding start obstacle");
+            Paint.setStatus("Colorfind obstacle 1");
+
+            java.util.List<Point> foundPoints = Client.getPointsFromColorsInRect(startObstacleColors, screenROI, 10);
+
+            if (!foundPoints.isEmpty()) {
+                // Calculate the center point of all found points
+                int totalX = 0;
+                int totalY = 0;
+
+                for (Point p : foundPoints) {
+                    totalX += p.x;
+                    totalY += p.y;
+                }
+
+                // Compute the average (center) point
+                Point centerPoint = new Point(totalX / foundPoints.size(), totalY / foundPoints.size());
+
+                Logger.debugLog("Located the first obstacle using the color finder, tapping around the center point.");
+                Client.tap(centerPoint);
+                Condition.wait(() -> Player.atTile(obs1EndTile), 200, 35);
+                Paint.setStatus("Fetch player position");
                 currentLocation = Walker.getPlayerPosition();
-                break;
+                Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
+            } else {
+                for (Obstacle obstacle : obstacles) {
+                    if (obstacle.name.equals("Obstacle 1")) {
+                        Walker.step(obstacle.startTile);
+
+                        if (Player.atTile(obstacle.startTile)) {
+                            Client.tap(obstacle.pressArea);
+                            Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 80);
+                        }
+
+                        return true;
+                    }
+                }
             }
         }
 
@@ -65,6 +103,7 @@ public class Draynor extends Task {
 
                 if (obstacle.checkForMark && obstacle.markHandling != null) {
                     for (MarkHandling mark : obstacle.markHandling) {
+                        Condition.sleep(generateRandomDelay(200, 400));
                         if (mark.isMarkPresent(mark.checkArea, mark.targetColor)) {
                             Paint.setStatus("Pick up mark of grace");
                             Logger.log("Mark of grace detected, picking it up!");
@@ -77,6 +116,9 @@ public class Draynor extends Task {
 
                 if (!markHandled) {
                     Paint.setStatus("Traverse obstacle " + obstacle.name);
+                    if (obstacle.name.equals("Obstacle 5")) {
+                        Condition.sleep(generateRandomDelay(500, 700));
+                    }
                     proceedWithTraversal(obstacle, currentLocation);
                     if (obstacle.name.equals("Obstacle 7")) {
                         lapCount++;

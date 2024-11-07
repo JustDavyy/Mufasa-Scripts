@@ -66,6 +66,7 @@ public class Pollnivneach extends Task {
 
                 if (obstacle.checkForMark && obstacle.markHandling != null) {
                     for (MarkHandling mark : obstacle.markHandling) {
+                        Condition.sleep(generateRandomDelay(200, 400));
                         if (mark.isMarkPresent(mark.checkArea, mark.targetColor)) {
                             if (obstacle.name.equals("Obstacle 8") || obstacle.name.equals("Obstacle 9")) {
                                 Condition.sleep(generateRandomDelay(850, 1100));

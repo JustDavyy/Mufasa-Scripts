@@ -5,13 +5,23 @@ import dAgility.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Tile;
 
+import java.awt.*;
+import java.util.Arrays;
+
 import static dAgility.dAgility.*;
 import static helpers.Interfaces.*;
 
 public class Varrock extends Task {
 
-    Tile startTile = new Tile(12887, 13405, 0);
+    Tile startTile = new Tile(12895, 13405, 0);
     Area varrockArea = new Area(new Tile(12731, 13275, 0), new Tile(13101, 13571, 0));
+    Area obs1Area = new Area(new Tile(12842, 13383, 0), new Tile(12975, 13453, 0));
+    Tile obs1EndTile = new Tile(12875, 13405, 3);
+    java.util.List<Color> startObstacleColors = Arrays.asList(
+            Color.decode("#20ff25"),
+            Color.decode("#20ff26")
+    );
+    Rectangle screenROI = new Rectangle(239, 160, 360, 235);
 
     public Varrock(){
         super();
@@ -28,12 +38,54 @@ public class Varrock extends Task {
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
 
+        if (Player.isTileWithinArea(currentLocation, obs1Area)) {
+            Logger.debugLog("Colorfinding start obstacle");
+            Paint.setStatus("Colorfind obstacle 1");
+
+            java.util.List<Point> foundPoints = Client.getPointsFromColorsInRect(startObstacleColors, screenROI, 10);
+
+            if (!foundPoints.isEmpty()) {
+                // Calculate the center point of all found points
+                int totalX = 0;
+                int totalY = 0;
+
+                for (Point p : foundPoints) {
+                    totalX += p.x;
+                    totalY += p.y;
+                }
+
+                // Compute the average (center) point
+                Point centerPoint = new Point(totalX / foundPoints.size(), totalY / foundPoints.size());
+
+                Logger.debugLog("Located the first obstacle using the color finder, tapping around the center point.");
+                Client.tap(centerPoint);
+                Condition.wait(() -> Player.atTile(obs1EndTile), 200, 35);
+                Paint.setStatus("Fetch player position");
+                currentLocation = Walker.getPlayerPosition();
+                Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
+            } else {
+                for (Obstacle obstacle : obstacles) {
+                    if (obstacle.name.equals("Obstacle 1")) {
+                        Walker.step(obstacle.startTile);
+
+                        if (Player.atTile(obstacle.startTile)) {
+                            Client.tap(obstacle.pressArea);
+                            Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 80);
+                        }
+
+                        return true;
+                    }
+                }
+            }
+        }
+
         for (Obstacle obstacle : obstacles) {
             if (Player.isTileWithinArea(currentLocation, obstacle.area)) {
                 boolean markHandled = false;
 
                 if (obstacle.checkForMark && obstacle.markHandling != null) {
                     for (MarkHandling mark : obstacle.markHandling) {
+                        Condition.sleep(generateRandomDelay(200, 400));
                         if (mark.isMarkPresent(mark.checkArea, mark.targetColor)) {
                             Paint.setStatus("Pick up mark of grace");
                             Logger.log("Mark of grace detected, picking it up!");

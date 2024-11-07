@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAgility",
         description = "Trains agility at various courses. World hopping and eating food is supported, as well as picking up Marks of Grace when running a rooftop course.",
-        version = "1.09",
+        version = "1.10",
         categories = {ScriptCategory.Agility},
         guideLink = "https://wiki.mufasaclient.com/docs/dagility/"
 )
@@ -498,8 +498,8 @@ public class dAgility extends AbstractScript {
                 // Obstacles
                 obstacles.add(new Obstacle("Obstacle 1",
                         new Area(new Tile(12842, 13383, 0), new Tile(12975, 13453, 0)),
-                        new Tile(12887, 13405, 0), new Tile(12875, 13405, 3),
-                        new Rectangle(419, 262, 3, 10), new Rectangle(149, 312, 11, 9),
+                        new Tile(12895, 13405, 0), new Tile(12875, 13405, 3),
+                        new Rectangle(386, 262, 4, 7), new Rectangle(149, 312, 11, 9),
                         new Tile(12943, 13417, 0), noMarks, false, null, false));
 
                 obstacles.add(new Obstacle("Obstacle 2",
@@ -935,7 +935,7 @@ public class dAgility extends AbstractScript {
                 obstacles.add(new Obstacle("Obstacle 7",
                         new Area(new Tile(12382, 12767, 3), new Tile(12412, 12796, 3)),
                         new Tile(12403, 12793, 3), new Tile(12411, 12793, 0),
-                        new Rectangle(485, 193, 71, 74), new Rectangle(668, 3, 24, 20),
+                        new Rectangle(485, 193, 71, 74), new Rectangle(664, 35, 21, 9),
                         new Tile(12383, 12773, 3), draynorObstacle7Marks, true, null, false));
 
                 // Start tiles
@@ -1254,41 +1254,40 @@ public class dAgility extends AbstractScript {
             Condition.sleep(1500);
         }
 
-//        int calc = Stats.getRealLevel(Skills.HITPOINTS);
-//        eatHP = (int) (calc * (eatPercent / 100.0));
-        eatHP = 7;
+        int calc = Stats.getRealLevel(Skills.HITPOINTS);
+        eatHP = (int) (calc * (eatPercent / 100.0));
         Logger.debugLog("HP to eat at: " + eatHP);
 
-//        Logger.debugLog("Checking level requirements.");
-//
-//        // Save agility level
-//        int agilityLevel = Stats.getRealLevel(Skills.AGILITY);
-//        Logger.debugLog("Agility level " + agilityLevel);
-//
-//        // Map of course names to their required agility levels using Map.ofEntries
-//        Map<String, Integer> courseRequirements = Map.ofEntries(
-//                new AbstractMap.SimpleEntry<>("Al Kharid", 20),
-//                new AbstractMap.SimpleEntry<>("Varrock", 30),
-//                new AbstractMap.SimpleEntry<>("Canifis", 40),
-//                new AbstractMap.SimpleEntry<>("Falador", 50),
-//                new AbstractMap.SimpleEntry<>("Basic Colossal Wyrm", 50),
-//                new AbstractMap.SimpleEntry<>("Seers", 60),
-//                new AbstractMap.SimpleEntry<>("Seers - Teleport", 60),
-//                new AbstractMap.SimpleEntry<>("Advanced Colossal Wyrm", 62),
-//                new AbstractMap.SimpleEntry<>("Pollnivneach", 70),
-//                new AbstractMap.SimpleEntry<>("Rellekka", 80),
-//                new AbstractMap.SimpleEntry<>("Ardougne", 90)
-//        );
-//
-//        Integer requiredLevel = courseRequirements.get(courseChosen);
-//
-//        if (requiredLevel != null && agilityLevel < requiredLevel) {
-//            Logger.log("Agility level not high enough for chosen course (" + courseChosen + "), stopping script.");
-//            Logout.logout();
-//            Script.stop();
-//        }
+        Logger.debugLog("Checking level requirements.");
 
-//        GameTabs.closeStatsTab();
+        // Save agility level
+        int agilityLevel = Stats.getRealLevel(Skills.AGILITY);
+        Logger.debugLog("Agility level " + agilityLevel);
+
+        // Map of course names to their required agility levels using Map.ofEntries
+        Map<String, Integer> courseRequirements = Map.ofEntries(
+                new AbstractMap.SimpleEntry<>("Al Kharid", 20),
+                new AbstractMap.SimpleEntry<>("Varrock", 30),
+                new AbstractMap.SimpleEntry<>("Canifis", 40),
+                new AbstractMap.SimpleEntry<>("Falador", 50),
+                new AbstractMap.SimpleEntry<>("Basic Colossal Wyrm", 50),
+                new AbstractMap.SimpleEntry<>("Seers", 60),
+                new AbstractMap.SimpleEntry<>("Seers - Teleport", 60),
+                new AbstractMap.SimpleEntry<>("Advanced Colossal Wyrm", 62),
+                new AbstractMap.SimpleEntry<>("Pollnivneach", 70),
+                new AbstractMap.SimpleEntry<>("Rellekka", 80),
+                new AbstractMap.SimpleEntry<>("Ardougne", 90)
+        );
+
+        Integer requiredLevel = courseRequirements.get(courseChosen);
+
+        if (requiredLevel != null && agilityLevel < requiredLevel) {
+            Logger.log("Agility level not high enough for chosen course (" + courseChosen + "), stopping script.");
+            Logout.logout();
+            Script.stop();
+        }
+
+        GameTabs.closeStatsTab();
         Logger.debugLog("Ending level requirements.");
     }
 
