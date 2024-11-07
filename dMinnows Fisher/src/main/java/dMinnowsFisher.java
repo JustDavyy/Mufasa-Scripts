@@ -14,7 +14,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dMinnows Fisher",
         description = "Fishes Minnows at Kylie Minnow's fishing platform at the Fishing Guild. The angler's outfit is needed to unlock the platform.",
-        version = "1.06",
+        version = "1.07",
         guideLink = "https://wiki.mufasaclient.com/docs/dminnows-fisher/",
         categories = {ScriptCategory.Fishing}
 )
@@ -147,6 +147,7 @@ Rectangle bottomRect = new Rectangle(441, 303, 24, 43);
             Logger.debugLog("Switching to a new Minnow spot.");
             Client.tap(new Point(centerX, centerY)); // Tap around the randomized center
             lastXpGainTime = Instant.now().plusSeconds(5);
+            Condition.sleep(4000);
         } else {
             Logger.debugLog("Could not locate the nearest fishing spot...");
         }
