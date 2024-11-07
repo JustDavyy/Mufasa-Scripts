@@ -14,7 +14,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dMinnows Fisher",
         description = "Fishes Minnows at Kylie Minnow's fishing platform at the Fishing Guild. The angler's outfit is needed to unlock the platform.",
-        version = "1.07",
+        version = "1.08",
         guideLink = "https://wiki.mufasaclient.com/docs/dminnows-fisher/",
         categories = {ScriptCategory.Fishing}
 )
@@ -40,7 +40,7 @@ int previousXP;
 int newXP;
 String hopProfile;
 Color FishSpotColor = Color.decode("#27ffff");
-Rectangle lastLine = new Rectangle(35, 104, 361, 14);
+Rectangle lastLine = new Rectangle(87, 109, 443, 22);
 Boolean hopEnabled;
 private long lastRunTime = System.currentTimeMillis();
 Random random = new Random();
@@ -105,6 +105,7 @@ Rectangle bottomRect = new Rectangle(441, 303, 24, 43);
     @Override
     public void poll() {
 
+        readXP();
         if (isSharkPresent()) {
             Instant currentTime = Instant.now();
             long timeSinceLastSharkAction = Duration.between(lastSharkAction, currentTime).getSeconds();
