@@ -22,6 +22,8 @@ public class Varrock extends Task {
             Color.decode("#20ff26")
     );
     Rectangle screenROI = new Rectangle(239, 160, 360, 235);
+    Area obs6MoGArea = new Area(new Tile(12724, 13309, 3), new Tile(12761, 13345, 3));
+    Tile obs6AfterMoGTile = new Tile(12794, 13331, 3);
 
     public Varrock(){
         super();
@@ -77,6 +79,12 @@ public class Varrock extends Task {
                     }
                 }
             }
+        }
+
+        if(Player.isTileWithinArea(currentLocation, obs6MoGArea)) {
+            Walker.walkTo(obs6AfterMoGTile);
+            Condition.sleep(generateRandomDelay(1250, 2000));
+            return true;
         }
 
         for (Obstacle obstacle : obstacles) {
