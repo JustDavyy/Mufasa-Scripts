@@ -42,16 +42,16 @@ public class moveToVenerate extends Task {
 
             java.util.List<Point> foundPoints = Client.getPointsFromColorsInRect(dArceuusRCer.obstacleColors, new Rectangle(382, 179, 139, 116), 5);
 
-            // Calculate the centroid of the points
-            Point centroid = calculateCentroid(foundPoints);
-
-            // Sort points by distance to the centroid
-            foundPoints.sort(Comparator.comparingDouble(p -> distance(p, centroid)));
-
-            // Select the top 4-5 most central points
-            List<Point> mostCentralPoints = foundPoints.subList(0, Math.min(5, foundPoints.size()));
-
             if (!foundPoints.isEmpty()) {
+                // Calculate the centroid only if there are points
+                Point centroid = calculateCentroid(foundPoints);
+
+                // Sort points by distance to the centroid
+                foundPoints.sort(Comparator.comparingDouble(p -> distance(p, centroid)));
+
+                // Select the top 4-5 most central points
+                List<Point> mostCentralPoints = foundPoints.subList(0, Math.min(5, foundPoints.size()));
+
                 Logger.debugLog("Located the obstacle using the color finder, tapping.");
                 Client.tap(mostCentralPoints, false);
                 Condition.wait(() -> Player.atTile(obstacleOutSuccess), 250, 25);
@@ -77,21 +77,21 @@ public class moveToVenerate extends Task {
                 if (Player.atTile(dArceuusRCer.obstacleInsideTile)) {
                     List<Point> foundPoints2 = Client.getPointsFromColorsInRect(dArceuusRCer.obstacleColors, new Rectangle(382, 179, 139, 116), 5);
 
-                    // Calculate the centroid of the points
-                    Point centroid2 = calculateCentroid(foundPoints2);
+                    if (!foundPoints2.isEmpty()) {
+                        // Calculate the centroid only if there are points
+                        Point centroid2 = calculateCentroid(foundPoints2);
 
-                    // Sort points by distance to the centroid
-                    foundPoints2.sort(Comparator.comparingDouble(p -> distance(p, centroid2)));
+                        // Sort points by distance to the centroid
+                        foundPoints2.sort(Comparator.comparingDouble(p -> distance(p, centroid2)));
 
-                    // Select the top 4-5 most central points
-                    List<Point> mostCentralPoints2 = foundPoints2.subList(0, Math.min(5, foundPoints2.size()));
+                        // Select the top 4-5 most central points
+                        List<Point> mostCentralPoints2 = foundPoints2.subList(0, Math.min(5, foundPoints2.size()));
 
-                    Condition.wait(() -> Player.atTile(obstacleOutSuccess), 250, 25);
-                    waitTillStopped(4);
-                    if (!mostCentralPoints2.isEmpty()) {
                         Client.tap(mostCentralPoints2, false);
                         Condition.wait(() -> Player.atTile(obstacleOutSuccess), 250, 25);
                         waitTillStopped(7);
+                    } else {
+                        Logger.debugLog("Couldn't locate the obstacle with the color finder, fallback also failed.");
                     }
                 }
             }
