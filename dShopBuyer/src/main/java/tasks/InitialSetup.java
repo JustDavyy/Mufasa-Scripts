@@ -60,8 +60,18 @@ public class InitialSetup extends Task {
         // Some interface actions
         Chatbox.closeChatbox();
         GameTabs.openSettingsTab();
+        Condition.sleep(500);
+        if (!GameTabs.isSettingsTabOpen()) {
+            GameTabs.openSettingsTab();
+            Condition.sleep(500);
+            Game.setZoom("1");
+        } else {
+            Game.setZoom("1");
+        }
+
+        // Double zoom iteration to be sure
         Game.setZoom("1");
-        GameTabs.closeSettingsTab();
+        Condition.sleep(500);
         GameTabs.openInventoryTab();
 
         // Check prerequisites
