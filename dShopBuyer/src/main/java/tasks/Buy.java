@@ -64,6 +64,8 @@ public class Buy extends Task {
     Rectangle khazardOpenCheckRect1 = new Rectangle(251, 312, 19, 19);
     Rectangle khazardOpenCheckRect2 = new Rectangle(487, 269, 22, 25);
     Area khazardShopArea = new Area(new Tile(10687, 12308, 0), new Tile(10713, 12339, 0));
+    Area khazardScriptArea = new Area(new Tile(10633, 12307, 0), new Tile(10715, 12401, 0));
+    Tile khazardRecoverTile = new Tile(10648, 12370, 0);
     Rectangle khazardCrewScanArea = new Rectangle(251, 60, 358, 447);
     Rectangle khazardEmptyBucketStackRect = new Rectangle(382, 214, 33, 19);
     Rectangle khazardPineappleStackRect = new Rectangle(476, 261, 23, 18);
@@ -101,6 +103,9 @@ public class Buy extends Task {
                 fortunatoHandleBuy();
                 break;
             case "Khazard Charter":
+                // Check if we haven't wandered off for some reason
+                khazardCheckWanderedOff();
+                // Proceed to buy
                 khazardHandleBuy();
                 break;
             default:
@@ -375,13 +380,13 @@ public class Buy extends Task {
         int targetAmount = shopBuyer.amountToBuy * 2; // Total target for both items combined
 
         // Always attempt to buy item 1 if the target for item 1 hasn't been reached
-        if (shopBuyer.boughtAmount1 < shopBuyer.amountToBuy) {
+        if (stackSize1 > 0 && shopBuyer.boughtAmount1 < shopBuyer.amountToBuy) {
             Paint.setStatus("Buy item 1");
             Client.tap(rect1);  // Buy from rect1 regardless of the stack size as long as we're under the target
         }
 
         // Check if it's safe to buy item 2 without filling the inventory due to item 1
-        if (shopBuyer.boughtAmount2 < shopBuyer.amountToBuy && totalBought < targetAmount) {
+        if (stackSize2 > 0 && shopBuyer.boughtAmount2 < shopBuyer.amountToBuy && totalBought < targetAmount) {
             if (shopBuyer.boughtAmount1 >= shopBuyer.amountToBuy || stackSize1 < 27) {
                 // If item 1 is already bought to its target, or stackSize1 hasn't filled the inventory
                 Paint.setStatus("Buy item 2");
@@ -539,7 +544,9 @@ public class Buy extends Task {
             readShopStack();
 
             // Check if buy 50 is selected, select if not
-            if (!qty50Selected() && stackSize1 != 0 && stackSize2 != 0) {Client.tap(quantity50Rect);}
+            if (!qty50Selected() && (stackSize1 > 0 || stackSize2 > 0)) {
+                Client.tap(quantity50Rect);
+            }
 
             // Buy ores
             Paint.setStatus("Buy ores");
@@ -713,6 +720,22 @@ public class Buy extends Task {
             Logger.log("Shop not open yet... Retrying");
             Client.tap(new Rectangle(642, 221, 198, 4));
             notFoundCounter++;
+        }
+    }
+
+    private void khazardCheckWanderedOff() {
+        if (!Player.within(khazardScriptArea)) {
+            Paint.setStatus("Recover from wander off");
+            Logger.debugLog("Seems like we have wandered off, recovering!");
+            if (Walker.isReachable(khazardRecoverTile)) {
+                Paint.setStatus("Step back to script area");
+                Logger.debugLog("Stepping back to script area!");
+                Walker.step(khazardRecoverTile);
+            } else {
+                Logger.debugLog("Webwalking back to script area!");
+                Paint.setStatus("Webwalk back to script area");
+                Walker.webWalk(khazardRecoverTile);
+            }
         }
     }
 

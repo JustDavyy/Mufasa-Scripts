@@ -17,7 +17,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dShopBuyer",
         description = "Buys stuff from different stores all around Gielinor, aimed to aid ironman accounts",
-        version = "1.04",
+        version = "1.05",
         guideLink = "https://wiki.mufasaclient.com/docs/dshopbuyer/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Crafting, ScriptCategory.Moneymaking, ScriptCategory.Ironman}
 )
@@ -119,7 +119,7 @@ public class dShopBuyer extends AbstractScript {
     public Tile khazardCharterCrewStepTile = new Tile(10695, 12329, 0);
     public Tile khazardCharterWalkToTile = new Tile(10655, 12353, 0);
     public Tile khazardCharterBankTile = new Tile(10643, 12397, 0);
-    public Rectangle khazardCharterBankRect = new Rectangle(426, 207, 32, 41);
+    public Rectangle khazardCharterBankRect = new Rectangle(433, 215, 17, 25);
 
     @Override
     public void onStart(){

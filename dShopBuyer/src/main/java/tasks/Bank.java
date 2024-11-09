@@ -207,7 +207,10 @@ public class Bank extends Task {
         }
 
         shopBuyer.updatePaintBar();
-        Bank.isOpen();
+
+        if (Bank.isOpen()) {
+            Bank.close();
+        }
     }
 
     private Runnable updateBuyCounts() {
