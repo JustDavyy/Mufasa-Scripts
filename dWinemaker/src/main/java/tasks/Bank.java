@@ -13,7 +13,7 @@ public class Bank extends Task {
 
     @Override
     public boolean activate() {
-        return !Inventory.contains(JUG_OF_WATER, 0.75, JUG_OF_WINE_COLOR) && !Inventory.contains(GRAPES, 0.75);
+        return !Inventory.contains(GRAPES, 0.75);
     }
 
     @Override

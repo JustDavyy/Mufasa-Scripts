@@ -9,7 +9,7 @@ public class DoWines extends Task {
 
     @Override
     public boolean activate() {
-        return Inventory.contains(JUG_OF_WATER, 0.75) && Inventory.contains(GRAPES, 0.75);
+        return Inventory.contains(GRAPES, 0.75);
     }
 
     @Override
