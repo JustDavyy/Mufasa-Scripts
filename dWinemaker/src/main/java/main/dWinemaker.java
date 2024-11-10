@@ -52,8 +52,6 @@ public class dWinemaker extends AbstractScript {
     public static int PROCESS_COUNT = 0;
     public static int INVENT_COUNT = 0;
 
-    public static Color JUG_OF_WINE_COLOR = Color.decode("#bc4139");
-
     // This is the onStart, and only gets ran once.
     @Override
     public void onStart(){

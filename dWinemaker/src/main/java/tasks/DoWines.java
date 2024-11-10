@@ -25,7 +25,7 @@ public class DoWines extends Task {
         long timeout = 25 * 1000;
 
         Paint.setStatus("Waiting for inventory to finish");
-        while (Inventory.contains(GRAPES, 0.75) && !Script.isScriptStopping() && !Script.isTimeForBreak()) {
+        while (Inventory.contains(GRAPES, 0.75) && !Script.isScriptStopping()) {
             Condition.sleep(generateRandomDelay(1000, 1500)); // Sleep between actions
             hopActions();
 
@@ -55,7 +55,6 @@ public class DoWines extends Task {
 
     private void makeWine() {
         int initialDelay = generateRandomDelay(100, 250);
-
         Inventory.tapItem(JUG_OF_WATER, 0.75);
         Condition.sleep(initialDelay);
         Inventory.tapItem(GRAPES, 0.75);
