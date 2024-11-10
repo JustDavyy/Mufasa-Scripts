@@ -69,7 +69,7 @@ public class Bank extends Task {
         withdrawItem(GRAPES);
 
         Bank.close();
-        Condition.wait(() -> !Bank.isOpen(), 200, 20);
+        Condition.sleep(generateRandomDelay(1000, 1500));
     }
 
     private void setQuantity(int quantity) {

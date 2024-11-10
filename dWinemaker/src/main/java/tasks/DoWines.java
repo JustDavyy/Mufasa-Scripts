@@ -26,7 +26,7 @@ public class DoWines extends Task {
 
         Paint.setStatus("Waiting for inventory to finish");
         while (Inventory.contains(GRAPES, 0.75) && !Script.isScriptStopping() && !Script.isTimeForBreak()) {
-            Condition.sleep(generateRandomDelay(1500, 2000)); // Sleep between actions
+            Condition.sleep(generateRandomDelay(1000, 1500)); // Sleep between actions
             hopActions();
 
             // Restart wine-making if player leveled up
