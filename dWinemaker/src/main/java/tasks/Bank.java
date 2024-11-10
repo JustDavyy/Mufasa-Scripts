@@ -62,7 +62,6 @@ public class Bank extends Task {
             selectBankTab();
         }
 
-        Bank.tapDepositInventoryButton();
         Condition.sleep(generateRandomDelay(100, 250));
 
         withdrawItem(JUG_OF_WATER);
