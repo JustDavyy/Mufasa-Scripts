@@ -16,7 +16,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAIOCooker",
         description = "The cooker script to cook all your raw fish (or seaweed) at various different places.",
-        version = "1.04",
+        version = "1.05",
         guideLink = "https://wiki.mufasaclient.com/docs/dcooker/",
         categories = {ScriptCategory.Cooking}
 )
@@ -58,6 +58,7 @@ import static helpers.Interfaces.*;
                         allowedValues = {
                                 @AllowedValue(optionName = "Catherby range"),
                                 @AllowedValue(optionName = "Hosidius kitchen"),
+                                @AllowedValue(optionName = "Myths guild"),
                                 @AllowedValue(optionName = "Nardah oven"),
                         },
                         optionType = OptionType.STRING
@@ -98,20 +99,28 @@ Area hosidiusKitchenArea = new Area(
         new Tile(6767, 14262, 0)
 );
 Tile hosidiusStartTile = new Tile(6699, 14213, 0);
-Rectangle hosidiusStartRangeRect = new Rectangle(462, 102, 13, 19);
+Rectangle hosidiusStartRangeRect = new Rectangle(490, 122, 10, 14);
+Rectangle hosidiusStartBankRect = new Rectangle(437, 294, 15, 12);
+Rectangle hosidiusRecookRect = new Rectangle(444, 229, 13, 15);
 Area nardahArea = new Area(
         new Tile(13676, 11259, 0),
         new Tile(13803, 11367, 0)
 );
 Tile nardahStartTile = new Tile(13707, 11313, 0);
-Rectangle nardahStartOvenRect = new Rectangle(559, 362, 19, 22);
+Rectangle nardahStartOvenRect = new Rectangle(561, 363, 18, 19);
 
 Area catherbyArea = new Area(
         new Tile(11199, 13474, 0),
         new Tile(11294, 13552, 0)
 );
 Tile catherbyStartTile = new Tile(11235, 13513, 0);
-Rectangle catherbyStartRangeRect = new Rectangle(658, 184, 33, 22);
+Rectangle catherbyStartRangeRect = new Rectangle(657, 185, 20, 16);
+
+// Myths guild stuff
+Rectangle mythsBankRect = new Rectangle(433, 215, 29, 32);
+Rectangle mythsRangeRect = new Rectangle(484, 250, 25, 34);
+Tile mythsTile = new Tile(9859, 11141, 1);
+Area mythsArea = new Area(new Tile(9768, 11071, 1), new Tile(9902, 11199, 1));
 
 // Banks and range rectangles
 private Map<String, List<RectanglePair>> bankRectangles = new HashMap<>();
@@ -119,7 +128,6 @@ private Random random = new Random();
 
 
 // Script logic variables
-Tile playerPos;
 
     // This is the onStart, and only gets ran once.
     @Override
@@ -145,11 +153,13 @@ Tile playerPos;
             Logger.debugLog("Hopping is disabled for this run!");
         }
 
-        // Create the MapChunk with chunks of our location
-        MapChunk chunks = new MapChunk(new String[]{"43-53", "43-54", "44-54", "44-53", "26-56", "25-56", "53-45", "53-44"}, "0");
-
-        // Set up the walker with the created MapChunk
-        Walker.setup(chunks);
+        if (location.equals("Myths guild")) {
+            MapChunk chunks = new MapChunk(new String[]{"38-44"}, "1");
+            Walker.setup(chunks);
+        } else {
+            MapChunk chunks = new MapChunk(new String[]{"43-53", "43-54", "44-54", "44-53", "26-56", "25-56", "53-45", "53-44"}, "0");
+            Walker.setup(chunks);
+        }
 
         // Debug prints for chosen settings (in case we ever need this)
         Logger.debugLog("We're using bank tab: " + banktab);
@@ -198,6 +208,8 @@ Tile playerPos;
             case "Nardah oven":
                 Client.tap(nardahStartOvenRect);
                 break;
+            case "Myths guild":
+                Client.tap(mythsRangeRect);
         }
 
         // Process first inventory
@@ -249,6 +261,9 @@ Tile playerPos;
             case "Nardah oven":
                 checkLocation(nardahArea, nardahStartTile);
                 break;
+            case "Myths guild":
+                checkLocation(mythsArea, mythsTile);
+                break;
         }
     }
 
@@ -263,6 +278,9 @@ Tile playerPos;
             case "Nardah oven":
                 Game.setZoom("1");
                 break;
+            case "Myths guild":
+                Game.setZoom("3");
+                break;
         }
     }
 
@@ -273,46 +291,54 @@ Tile playerPos;
         // Nardah
         List<RectanglePair> nardahRects = new ArrayList<>();
         nardahRects.add(new RectanglePair(
-                new Rectangle(325, 230, 14, 11),    // Bank Rectangle
-                new Rectangle(550, 323, 24, 20)     // Range Rectangle
+                new Rectangle(329, 233, 7, 11),    // Bank Rectangle
+                new Rectangle(555, 324, 15, 19)    // Range Rectangle
         ));
         nardahRects.add(new RectanglePair(
-                new Rectangle(329, 202, 15, 13),    // Bank Rectangle
-                new Rectangle(557, 357, 23, 21)     // Range Rectangle
+                new Rectangle(333, 205, 10, 11),    // Bank Rectangle
+                new Rectangle(558, 359, 17, 19)    // Range Rectangle
         ));
         nardahRects.add(new RectanglePair(
-                new Rectangle(332, 173, 7, 8),      // Bank Rectangle
-                new Rectangle(563, 398, 26, 22)     // Range Rectangle
+                new Rectangle(337, 179, 9, 7),      // Bank Rectangle
+                new Rectangle(565, 401, 17, 22)     // Range Rectangle
         ));
         nardahRects.add(new RectanglePair(
-                new Rectangle(335, 158, 7, 6),      // Bank Rectangle
-                new Rectangle(567, 420, 24, 26)     // Range Rectangle
+                new Rectangle(344, 168, 6, 6),      // Bank Rectangle
+                new Rectangle(567, 426, 17, 20)     // Range Rectangle
         ));
         bankRectangles.put("Nardah oven", nardahRects);
 
         // Hosidius Kitchen
         List<RectanglePair> hosidiusRects = new ArrayList<>();
         hosidiusRects.add(new RectanglePair(
-                new Rectangle(378, 434, 16, 20),   // Bank Rectangle
-                new Rectangle(486, 118, 15, 21)    // Range Rectangle
+                new Rectangle(373, 440, 20, 18),   // Bank Rectangle
+                new Rectangle(490, 122, 10, 16)    // Range Rectangle
         ));
         bankRectangles.put("Hosidius kitchen", hosidiusRects);
 
         // Catherby range
         List<RectanglePair> catherbyRects = new ArrayList<>();
         catherbyRects.add(new RectanglePair(
-                new Rectangle(232, 287, 15, 20),   // Bank Rectangle
-                new Rectangle(635, 184, 32, 21)    // Range Rectangle
+                new Rectangle(141, 287, 18, 15),   // Bank Rectangle
+                new Rectangle(706, 188, 19, 16)    // Range Rectangle
         ));
         catherbyRects.add(new RectanglePair(
-                new Rectangle(200, 290, 16, 14),   // Bank Rectangle
-                new Rectangle(656, 181, 29, 23)    // Range Rectangle
+                new Rectangle(201, 289, 12, 17),   // Bank Rectangle
+                new Rectangle(655, 182, 19, 20)    // Range Rectangle
         ));
         catherbyRects.add(new RectanglePair(
-                new Rectangle(141, 290, 21, 17),   // Bank Rectangle
-                new Rectangle(704, 188, 16, 14)    // Range Rectangle
+                new Rectangle(232, 287, 14, 18),   // Bank Rectangle
+                new Rectangle(637, 184, 17, 19)    // Range Rectangle
         ));
         bankRectangles.put("Catherby range", catherbyRects);
+
+        // Myths guild
+        List<RectanglePair> mythsRects = new ArrayList<>();
+        mythsRects.add(new RectanglePair(
+                new Rectangle(433, 215, 29, 32),   // Bank Rectangle
+                new Rectangle(484, 250, 25, 34)    // Range Rectangle
+        ));
+        bankRectangles.put("Myths guild", mythsRects);
 
     }
 
@@ -493,7 +519,7 @@ Tile playerPos;
                 }
                 break;
             case "Hosidius kitchen":
-                Client.tap(new Rectangle(412, 267, 13, 17));
+                Client.tap(hosidiusStartBankRect);
                 Condition.wait(() -> Bank.isOpen(), 200, 20);
 
                 // Check for pin, as we don't use Bank.open here (which already processes the pin)
@@ -510,6 +536,15 @@ Tile playerPos;
                     Bank.enterBankPin();
                 }
                 break;
+            case "Myths guild":
+                Client.tap(mythsBankRect);
+                Condition.wait(() -> Bank.isOpen(), 200, 20);
+
+                // Check for pin, as we don't use Bank.open here (which already processes the pin)
+                if (Bank.isBankPinNeeded()) {
+                    Bank.enterBankPin();
+                }
+                break;
         }
 
         // Wait till bank is open to be double sure
@@ -518,6 +553,7 @@ Tile playerPos;
         // Deposit the entire inventory
         Paint.setStatus("Deposit inventory");
         Bank.tapDepositInventoryButton();
+        Condition.sleep(generateRandomDelay(500, 700));
 
         // Set the correct quantities based on config choices
 
@@ -554,6 +590,7 @@ Tile playerPos;
         // Withdraw the first set of items
         Paint.setStatus("Withdrawing " + product);
         Bank.withdrawItem(productID, 0.88);
+        Condition.sleep(generateRandomDelay(150, 250));
 
         // Close the bank after, twice just in case.
         Paint.setStatus("Close bank");
@@ -630,13 +667,16 @@ Tile playerPos;
             Paint.setStatus("Re-cook after level up");
             switch (location) {
                 case "Catherby range":
-                    Client.tap(new Rectangle(448, 231, 35, 23));
+                    //Client.tap(catherbyRecookRect);
                     break;
                 case "Hosidius kitchen":
-                    Client.tap(new Rectangle(441, 229, 17, 19));
+                    Client.tap(hosidiusRecookRect);
                     break;
                 case "Nardah oven":
-                    Client.tap(new Rectangle(449, 292, 19, 18));
+                    //Client.tap(nardahRecookRect);
+                    break;
+                case "Myths guild":
+                    Client.tap(mythsRangeRect);
                     break;
             }
 
@@ -695,6 +735,15 @@ Tile playerPos;
                         Bank.enterBankPin();
                     }
                     break;
+                case "Myths guild":
+                    Client.tap(mythsBankRect);
+                    Condition.wait(() -> Bank.isOpen(), 200, 20);
+
+                    // Check for pin, as we don't use Bank.open here (which already processes the pin)
+                    if (Bank.isBankPinNeeded()) {
+                        Bank.enterBankPin();
+                    }
+                    break;
             }
 
             bank();
@@ -709,6 +758,16 @@ Tile playerPos;
                         break;
                     case "Nardah oven":
                         Client.tap(new Rectangle(422, 261, 12, 14));
+                        Condition.wait(() -> Bank.isOpen(), 200, 20);
+
+                        // Check for pin, as we don't use Bank.open here (which already processes the pin)
+                        if (Bank.isBankPinNeeded()) {
+                            Bank.enterBankPin();
+                        }
+                        break;
+                    case "Myths guild":
+                        Walker.step(mythsTile);
+                        Client.tap(mythsBankRect);
                         Condition.wait(() -> Bank.isOpen(), 200, 20);
 
                         // Check for pin, as we don't use Bank.open here (which already processes the pin)
