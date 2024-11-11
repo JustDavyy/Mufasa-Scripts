@@ -15,7 +15,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dCannonball Smelter",
         description = "Smelts steel bars into cannonballs at various locations. Supports hopping worlds.",
-        version = "1.81",
+        version = "1.82",
         guideLink = "https://wiki.mufasaclient.com/docs/dcannonball-smelter/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Moneymaking}
 )
@@ -233,11 +233,13 @@ public class dCannonballSmelter extends AbstractScript {
         }
 
         // Do the rest of the bank setup
-        Condition.wait(() -> Bank.isOpen(), 250, 20);
+        Condition.wait(() -> Bank.isOpen(), 250, 35);
         if (!Bank.isOpen()) {
             Logger.debugLog("Failed to open bank, stopping script.");
             Logout.logout();
             Script.stop();
+        } else {
+            Condition.sleep(generateDelay(400, 600));
         }
         if (Bank.isBankPinNeeded()) {
             Paint.setStatus("Enter pin");
@@ -247,16 +249,18 @@ public class dCannonballSmelter extends AbstractScript {
         if (!Bank.isSelectedQuantityAllButton()) {
             Paint.setStatus("Set quantity all");
             Bank.tapQuantityAllButton();
+            Condition.sleep(generateDelay(200, 350));
         }
         if (!Bank.isSelectedBankTab(banktab)) {
             Paint.setStatus("Open tab " + banktab);
             Bank.openTab(banktab);
-            Condition.sleep(750);
+            Condition.sleep(generateDelay(500, 750));
         }
 
         // Withdraw the steel bars
         Paint.setStatus("Withdraw steel bars");
         Bank.withdrawItem(steelbar, 0.9);
+        Condition.sleep(generateDelay(200, 350));
 
         // Close the bank interface
         Paint.setStatus("Close bank");
@@ -282,14 +286,17 @@ public class dCannonballSmelter extends AbstractScript {
                 Logger.debugLog("Tapping the " + location + " bank.");
                 Client.tap(edgeBankRect);
                 Condition.wait(() -> Bank.isOpen(), 250, 45);
+                Condition.sleep(generateDelay(200, 350));
             } else if (java.util.Objects.equals(location, "Mount Karuulm")) {
                 Logger.debugLog("Tapping the " + location + " bank.");
                 Client.tap(karuulmBankRect);
                 Condition.wait(() -> Bank.isOpen(), 250, 55);
+                Condition.sleep(generateDelay(200, 350));
             } else if (java.util.Objects.equals(location, "Neitiznot")) {
                 Logger.debugLog("Tapping the " + location + " bank.");
                 Client.tap(neitBankRect);
                 Condition.wait(() -> Bank.isOpen(), 250, 55);
+                Condition.sleep(generateDelay(200, 350));
             }
         } else {
             if (java.util.Objects.equals(location, "Edgeville")) {
@@ -299,6 +306,7 @@ public class dCannonballSmelter extends AbstractScript {
                 Logger.debugLog("Tapping the " + location + " bank.");
                 Client.tap(openEdgeBankONCE);
                 Condition.wait(() -> Bank.isOpen(), 250, 45);
+                Condition.sleep(generateDelay(200, 350));
             } else if (java.util.Objects.equals(location, "Mount Karuulm")) {
                 if (!Player.atTile(karuulmBankTile)) {
                     Walker.step(karuulmBankTile);
@@ -306,6 +314,7 @@ public class dCannonballSmelter extends AbstractScript {
                 Logger.debugLog("Tapping the " + location + " bank.");
                 Client.tap(openKaruulmBankONCE);
                 Condition.wait(() -> Bank.isOpen(), 250, 55);
+                Condition.sleep(generateDelay(200, 350));
             } else if (java.util.Objects.equals(location, "Neitiznot")) {
                 if (!Player.atTile(neitBankTile)) {
                     Walker.step(neitBankTile);
@@ -313,6 +322,7 @@ public class dCannonballSmelter extends AbstractScript {
                 Logger.debugLog("Tapping the " + location + " bank.");
                 Client.tap(openNeitBankONCE);
                 Condition.wait(() -> Bank.isOpen(), 250, 55);
+                Condition.sleep(generateDelay(200, 350));
             }
         }
 
@@ -332,14 +342,18 @@ public class dCannonballSmelter extends AbstractScript {
 
         Paint.setStatus("Withdraw steel bar");
         Bank.withdrawItem(steelbar, 0.9);
+        Condition.sleep(generateDelay(200, 350));
 
         Paint.setStatus("Close bank");
         Bank.close();
         Condition.wait(() -> !Bank.isOpen(),250,20);
+        Condition.sleep(generateDelay(400, 700));
         if (Bank.isOpen()) {
             Bank.close();
             Condition.sleep(500);
         }
+
+        GameTabs.openInventoryTab();
 
         Condition.wait(() -> Inventory.contains(ItemList.STEEL_BAR_2353, 0.8), 250, 20);
 
@@ -442,7 +456,11 @@ public class dCannonballSmelter extends AbstractScript {
         int processedBalls = Inventory.stackSize(ItemList.CANNONBALL_2);
         Paint.updateBox(productIndex, processedBalls - startCount);
 
-        return !Inventory.contains(ItemList.STEEL_BAR_2353, 0.8);
+        if (Player.leveledUp()) {
+            return true;
+        } else {
+            return !Inventory.contains(ItemList.STEEL_BAR_2353, 0.8);
+        }
     }
 
     private int generateDelay(int lowerEnd, int higherEnd) {
