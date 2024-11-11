@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAnglerFisher",
         description = "Fishes Anglerfish at Port Piscarilius",
-        version = "1.41",
+        version = "1.42",
         categories = {ScriptCategory.Fishing},
         guideLink = "https://wiki.mufasaclient.com/docs/danglerfisher/"
 )
