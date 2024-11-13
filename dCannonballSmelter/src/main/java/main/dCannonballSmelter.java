@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
         description = "Smelts steel bars into cannonballs at various locations. Supports hopping worlds.",
         version = "2.00",
         guideLink = "https://wiki.mufasaclient.com/docs/dcannonball-smelter/",
-        categories = {ScriptCategory.Smithing, ScriptCategory.Moneymaking},
+        categories = {ScriptCategory.Smithing, ScriptCategory.Moneymaking, ScriptCategory.Ironman},
         skipZoomSetup = true
 )
 @ScriptConfiguration.List(
