@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAgility",
         description = "Trains agility at various courses. World hopping and eating food is supported, as well as picking up Marks of Grace when running a rooftop course.",
-        version = "1.14",
+        version = "1.15",
         categories = {ScriptCategory.Agility},
         guideLink = "https://wiki.mufasaclient.com/docs/dagility/"
 )
@@ -213,8 +213,6 @@ public class dAgility extends AbstractScript {
             useSeersTeleport = true;
         }
 
-        GameTabs.closeInventoryTab();
-
         // Logs for debugging purposes
         Logger.log("Chosen agility course: " + courseChosen);
 
@@ -241,6 +239,7 @@ public class dAgility extends AbstractScript {
         // Looped tasks go here.
         hopActions();
         updateStatLabel();
+        GameTabs.closeTab(UITabs.INVENTORY);
 
         for (Task task : agilityTasks) {
             if (task.activate()) {
@@ -1353,6 +1352,30 @@ public class dAgility extends AbstractScript {
         Logger.debugLog("Traversing " + obstacle.name + " with instant tap.");
         Paint.setStatus("Traverse " + obstacle.name);
         Client.tap(obstacle.instantPressArea);
+
+        // Update our counters here before we wait for the end tile
+        if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm")) {
+            // Generate a random number between 0 and 100 to check for 15% activation chance
+            int randomChance = random.nextInt(100);
+
+            if (randomChance < 15 && (obstacle.name.equals("Obstacle 2") ||
+                    obstacle.name.equals("Obstacle 4") ||
+                    obstacle.name.equals("Obstacle 5") ||
+                    obstacle.name.equals("Obstacle 6"))) {
+
+                Logger.debugLog("Randomized activation: Open inventory to read new stack counts");
+                GameTabs.openTab(UITabs.INVENTORY);
+
+                termiteCount = Inventory.stackSize(30038) - initialTermiteCount;
+                Paint.updateBox(termiteIndex, termiteCount);
+
+                boneShardCount = Inventory.stackSize(ItemList.BLESSED_BONE_SHARDS_29381) - initialBoneShardCount;
+                Paint.updateBox(shardIndex, boneShardCount);
+
+                Logger.debugLog("Close inventory for instant obstacle tap");
+                GameTabs.closeTab(UITabs.INVENTORY);
+            }
+        }
 
         if (obstacle.failArea != null && obstacle.checkForFail) {
             Condition.wait(() -> Player.atTile(obstacle.endTile) || Player.within(obstacle.failArea), 100, 250);

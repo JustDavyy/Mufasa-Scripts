@@ -1,6 +1,7 @@
 package dAgility.Tasks;
 
 import dAgility.utils.Task;
+import helpers.utils.UITabs;
 
 import static helpers.Interfaces.*;
 import static dAgility.dAgility.*;
@@ -61,6 +62,7 @@ public class Eat extends Task {
                 }
             }
 
+        GameTabs.closeTab(UITabs.INVENTORY);
         Logger.log("Done eating food.");
         return true;
         }
@@ -71,10 +73,10 @@ public class Eat extends Task {
         Inventory.eat(food, 0.8);
         Condition.sleep(3000);
         currentHP = Player.getHP();
-        GameTabs.closeInventoryTab();
-        Condition.wait(() -> !GameTabs.isInventoryTabOpen(), 250, 20);
-        if (GameTabs.isInventoryTabOpen()) {
-            GameTabs.closeInventoryTab();
+        GameTabs.closeTab(UITabs.INVENTORY);
+        Condition.wait(() -> !GameTabs.isTabOpen(UITabs.INVENTORY), 250, 20);
+        if (GameTabs.isTabOpen(UITabs.INVENTORY)) {
+            GameTabs.closeTab(UITabs.INVENTORY);
         }
     }
 }

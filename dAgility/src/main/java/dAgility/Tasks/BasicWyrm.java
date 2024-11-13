@@ -5,6 +5,7 @@ import dAgility.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.ItemList;
 import helpers.utils.Tile;
+import helpers.utils.UITabs;
 
 import static dAgility.dAgility.*;
 import static helpers.Interfaces.*;
@@ -44,13 +45,12 @@ public class BasicWyrm extends Task {
 
                 if (!markHandled) {
                     Paint.setStatus("Traverse obstacle " + obstacle.name);
+                    if (obstacle.name.equals("Obstacle 6")) {
+                        Condition.sleep(generateRandomDelay(100, 200));
+                    }
                     proceedWithTraversal(obstacle, currentLocation);
                     if (obstacle.name.equals("Obstacle 6")) {
                         lapCount++;
-                        termiteCount = Inventory.stackSize(30038) - initialTermiteCount;
-                        Paint.updateBox(termiteIndex, termiteCount);
-                        boneShardCount = Inventory.stackSize(ItemList.BLESSED_BONE_SHARDS_29381) - initialBoneShardCount;
-                        Paint.updateBox(shardIndex, boneShardCount);
                     }
                 }
 
