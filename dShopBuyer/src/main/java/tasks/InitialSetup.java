@@ -160,6 +160,19 @@ public class InitialSetup extends Task {
 
         // Some interface actions
         Chatbox.closeChatbox();
+        GameTabs.openSettingsTab();
+        Condition.sleep(500);
+        if (!GameTabs.isSettingsTabOpen()) {
+            GameTabs.openSettingsTab();
+            Condition.sleep(500);
+            Game.setZoom("3");
+        } else {
+            Game.setZoom("3");
+        }
+
+        // Double zoom iteration to be sure
+        Game.setZoom("3");
+        Condition.sleep(500);
         GameTabs.openInventoryTab();
 
         // Check prerequisites
@@ -230,6 +243,19 @@ public class InitialSetup extends Task {
 
         // Some interface actions
         Chatbox.closeChatbox();
+        GameTabs.openSettingsTab();
+        Condition.sleep(500);
+        if (!GameTabs.isSettingsTabOpen()) {
+            GameTabs.openSettingsTab();
+            Condition.sleep(500);
+            Game.setZoom("3");
+        } else {
+            Game.setZoom("3");
+        }
+
+        // Double zoom iteration to be sure
+        Game.setZoom("3");
+        Condition.sleep(500);
         GameTabs.openInventoryTab();
 
         // Check prerequisites

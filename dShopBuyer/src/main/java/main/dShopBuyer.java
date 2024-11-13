@@ -17,9 +17,10 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dShopBuyer",
         description = "Buys stuff from different stores all around Gielinor, aimed to aid ironman accounts",
-        version = "1.06",
+        version = "1.07",
         guideLink = "https://wiki.mufasaclient.com/docs/dshopbuyer/",
-        categories = {ScriptCategory.Smithing, ScriptCategory.Crafting, ScriptCategory.Moneymaking, ScriptCategory.Ironman}
+        categories = {ScriptCategory.Smithing, ScriptCategory.Crafting, ScriptCategory.Moneymaking, ScriptCategory.Ironman},
+        skipZoomSetup = true
 )
 @ScriptConfiguration.List(
         {
@@ -81,6 +82,7 @@ import static helpers.Interfaces.*;
 
 public class dShopBuyer extends AbstractScript {
     public Boolean hasCoins;
+    public boolean doneMESSetup = false;
     public String hopProfile;
     public String itemToBuy;
     public String shopToUse;

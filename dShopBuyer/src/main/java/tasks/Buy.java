@@ -3,7 +3,6 @@ package tasks;
 import static helpers.Interfaces.*;
 
 import helpers.utils.Area;
-import helpers.utils.ItemList;
 import helpers.utils.Tile;
 
 import main.dShopBuyer;
@@ -24,6 +23,9 @@ public class Buy extends Task {
     int stackSize3 = -1;
     int notFoundCounter = 0;
 
+    // General
+    Rectangle chatWindowCheck1Rect = new Rectangle(7, 126, 24, 27);
+    Rectangle chatWindowCheck2Rect = new Rectangle(518, 130, 26, 26);
 
     // Blast Furnace
     List<Color> OrdanLetterColors = Arrays.asList(java.awt.Color.decode("#ffffff"), java.awt.Color.decode("#ffff00"));
@@ -50,7 +52,6 @@ public class Buy extends Task {
     Area fortunatoArea = new Area(new Tile(12325, 12739, 0), new Tile(12352, 12769, 0));
     Rectangle fortunatoScanArea = new Rectangle(283, 156, 191, 279);
     public static List<Color> fortunatoColors = Arrays.asList(Color.decode("#390e09"), Color.decode("#330e09"), Color.decode("#260909"));
-    List<Color> FortunatoLetterColors = Arrays.asList(java.awt.Color.decode("#ffffff"), java.awt.Color.decode("#ffff00"));
     Rectangle FWSOpenCheckRect1 = new Rectangle(298, 217, 22, 34);
     Rectangle FWSOpenCheckRect2 = new Rectangle(254, 223, 17, 22);
     Rectangle JugOfWineStackRect = new Rectangle(147, 214, 21, 21);
@@ -59,9 +60,7 @@ public class Buy extends Task {
     Rectangle EmptyJugPackClickRect = new Rectangle(254, 225, 18, 19);
 
     // Khazard Charter
-    public static List<Color> khazardCrewColors = Arrays.asList(Color.decode("#7a1152"), Color.decode("#6e1149"), Color.decode("#610e40"), Color.decode("#dbce49"));
-    List<Color> khazardCrewLetterColors = Arrays.asList(java.awt.Color.decode("#ffffff"), java.awt.Color.decode("#ffff00"));
-    Rectangle khazardOpenCheckRect1 = new Rectangle(251, 312, 19, 19);
+    public static List<Color> khazardCrewColors = Arrays.asList(Color.decode("#7a1152"), Color.decode("#6e1149"), Color.decode("#610e40"), Color.decode("#dbce49"));Rectangle khazardOpenCheckRect1 = new Rectangle(251, 312, 19, 19);
     Rectangle khazardOpenCheckRect2 = new Rectangle(487, 269, 22, 25);
     Area khazardShopArea = new Area(new Tile(10687, 12308, 0), new Tile(10713, 12339, 0));
     Area khazardScriptArea = new Area(new Tile(10633, 12307, 0), new Tile(10715, 12401, 0));
@@ -137,6 +136,13 @@ public class Buy extends Task {
     private boolean isKhazardShopOpen() {
         boolean check1 = Client.isColorInRect(Color.decode("#0eb112"), khazardOpenCheckRect1, 10);
         boolean check2 = Client.isColorInRect(Color.decode("#c48b0e"), khazardOpenCheckRect2, 10);
+
+        return check1 && check2;
+    }
+
+    private boolean isChatWindowOpen() {
+        boolean check1 = Client.isColorInRect(Color.decode("#5b5345"), chatWindowCheck1Rect, 10);
+        boolean check2 = Client.isColorInRect(Color.decode("#5b5345"), chatWindowCheck2Rect, 10);
 
         return check1 && check2;
     }
@@ -523,17 +529,17 @@ public class Buy extends Task {
         Paint.setStatus("Trade Ordan");
         if (Player.tileEquals(currentLoc, shopBuyer.BFBankTile)) {
             // Open the shop from the bank tile
-            Client.longPressWithMenuAction(shopBuyer.BFShopRect, 235, 235, OrdanLetterColors, "Trade Ordan");
+            Client.tap(shopBuyer.BFShopRect);
             Condition.wait(this::isBFShopOpen, 250, 50);
         } else if (Player.tileEquals(currentLoc, shopBuyer.BFShopTile)) {
             // We are at the shop tile
-            Client.longPressWithMenuAction(shopFromShopTileRect, 235, 235, OrdanLetterColors, "Trade Ordan");
+            Client.tap(shopFromShopTileRect);
             Condition.wait(this::isBFShopOpen, 150, 20);
         } else {
             // We are not at the bank OR shop
             Walker.step(shopBuyer.BFShopTile);
             Condition.wait(() -> Player.atTile(shopBuyer.BFShopTile), 250, 50);
-            Client.longPressWithMenuAction(shopFromShopTileRect, 235, 235, OrdanLetterColors, "Trade Ordan");
+            Client.tap(shopFromShopTileRect);
             Condition.wait(this::isBFShopOpen, 150, 20);
         }
 
@@ -567,6 +573,28 @@ public class Buy extends Task {
                 Logger.debugLog("No stock left, hopping to a new world.");
                 Game.instantHop(shopBuyer.hopProfile);
             }
+        } else {
+            if (!shopBuyer.doneMESSetup) {
+                Logger.log("MES Setup is not done yet, verifying if it's set up correctly!");
+
+                if (isChatWindowOpen()) {
+                    Logger.log("Chat window is open, confirmed talk-to option is the first option.");
+
+                    Paint.setStatus("Longpress Ordan");
+
+                    Client.longPress(shopFromShopTileRect);
+                    Condition.sleep(750);
+
+                    // Perform by setting up the MES stuff here
+                    if (enableMES()) {
+                        swapMESOptions("/imgs/blast-talk-to.png", "/imgs/blast-trade.png");
+                    }
+                }
+            } else {
+                Logger.log("Shop not open yet... Retrying");
+                Client.tap(new Rectangle(642, 221, 198, 4));
+                notFoundCounter++;
+            }
         }
     }
 
@@ -597,7 +625,7 @@ public class Buy extends Task {
             if (hotspot != null) {
                 Logger.debugLog("Located Fortunato hotspot at: " + hotspot);
                 // Perform the long press at the hotspot
-                Client.longPressWithMenuAction(hotspot.x, hotspot.y, 135, 135, FortunatoLetterColors, "Trade Fortunato");
+                Client.tap(hotspot);
                 Condition.wait(this::isFortunatoShopOpen, 150, 35);
             } else {
                 Logger.debugLog("No valid hotspot found.");
@@ -637,6 +665,37 @@ public class Buy extends Task {
                 Game.instantHop(shopBuyer.hopProfile);
             }
 
+        } if (!shopBuyer.doneMESSetup) {
+            Logger.log("MES Setup is not done yet, verifying if it's set up correctly!");
+
+            if (isChatWindowOpen()) {
+                Logger.log("Chat window is open, confirmed talk-to option is the first option.");
+
+                // Locate Fortunato and long press to open the menu
+                Paint.setStatus("Locate Fortunato");
+                List<Point> foundPoints2 = Client.getPointsFromColorsInRect(fortunatoColors, fortunatoScanArea, 2);
+
+                if (!foundPoints2.isEmpty()) {
+                    Point hotspot = findPointHotSpot(foundPoints2, 25);
+
+                    if (hotspot != null) {
+                        Logger.debugLog("Located Fortunato hotspot at: " + hotspot);
+                        // Perform the long press at the hotspot
+                        Client.longPress(hotspot.x, hotspot.y);
+                        Condition.sleep(750);
+
+                        // Perform by setting up the MES stuff here
+                        if (enableMES()) {
+                            swapMESOptions("/imgs/fortunato-talk-to.png", "/imgs/fortunato-trade.png");
+                        }
+                    } else {
+                        Logger.debugLog("No valid hotspot found.");
+                    }
+                } else {
+                    Logger.debugLog("No color points found.");
+                    Condition.sleep(generateRandomDelay(400, 750));
+                }
+            }
         } else {
             Logger.log("Shop not open yet... Retrying");
             Client.tap(new Rectangle(642, 221, 198, 4));
@@ -676,7 +735,7 @@ public class Buy extends Task {
             if (hotspot != null) {
                 Logger.debugLog("Located Charter Crew hotspot at: " + hotspot);
                 // Perform the long press at the hotspot
-                Client.longPressWithMenuAction(hotspot.x, hotspot.y, 135, 300, khazardCrewLetterColors, "de Trader Crewmember");
+                Client.tap(hotspot);
                 Condition.wait(this::isKhazardShopOpen, 150, 35);
             } else {
                 Logger.debugLog("No valid hotspot found.");
@@ -717,9 +776,42 @@ public class Buy extends Task {
             }
 
         } else {
-            Logger.log("Shop not open yet... Retrying");
-            Client.tap(new Rectangle(642, 221, 198, 4));
-            notFoundCounter++;
+            if (!shopBuyer.doneMESSetup) {
+                Logger.log("MES Setup is not done yet, verifying if it's set up correctly!");
+
+                if (isChatWindowOpen()) {
+                    Logger.log("Chat window is open, confirmed talk-to option is the first option.");
+
+                    // Locate Charter Crew and long press it for the menu
+                    Paint.setStatus("Locate Charter Crew");
+                    List<Point> foundPoints2 = Client.getPointsFromColorsInRect(khazardCrewColors, khazardCrewScanArea, 5);
+
+                    if (!foundPoints2.isEmpty()) {
+                        Point hotspot = findPointHotSpot(foundPoints2, 25);
+
+                        if (hotspot != null) {
+                            Logger.debugLog("Located Charter Crew hotspot at: " + hotspot);
+                            // Perform the long press at the hotspot
+                            Client.longPress(hotspot.x, hotspot.y);
+                            Condition.sleep(750);
+
+                            // Perform by setting up the MES stuff here
+                            if (enableMES()) {
+                                swapMESOptions("/imgs/khazard-talk-to.png", "/imgs/khazard-trade.png");
+                            }
+                        } else {
+                            Logger.debugLog("No valid hotspot found.");
+                        }
+                    } else {
+                        Logger.debugLog("No color points found.");
+                        Condition.sleep(generateRandomDelay(400, 750));
+                    }
+                }
+            } else {
+                Logger.log("Shop not open yet... Retrying");
+                Client.tap(new Rectangle(642, 221, 198, 4));
+                notFoundCounter++;
+            }
         }
     }
 
@@ -737,6 +829,92 @@ public class Buy extends Task {
                 Walker.webWalk(khazardRecoverTile);
             }
         }
+    }
+
+    private boolean enableMES() {
+        Rectangle mesEnabled = null;
+        Rectangle mesDisabled = null;
+
+        mesEnabled = Objects.getBestMatch("/imgs/enabled-mes.png", 0.8);
+
+        if (mesEnabled != null) {
+            Logger.debugLog("Found the MES enabled option, Menu Entry Swapper menu is enabled!");
+            return true;
+        } else {
+            Logger.debugLog("Could not find the MES enabled option, trying to find the disabled option...");
+            mesDisabled = Objects.getBestMatch("/imgs/disabled-mes.png", 0.8);
+        }
+
+        if (mesDisabled != null) {
+            Logger.debugLog("Found the MES disabled option, enabling MES!");
+            Client.tap(mesDisabled);
+            Condition.sleep(1500);
+            return true;
+        } else {
+            Logger.debugLog("Failed to find the MES disabled option!");
+        }
+
+        if (mesDisabled == null && mesEnabled == null) {
+            Logger.log("Both MES options could not be found, stopping script, please manually set up your menu entry swapper!");
+            Script.stop();
+        }
+        return false;
+    }
+
+    private boolean swapMESOptions(String talkToImgPath, String tradeImgPath) {
+        Rectangle talkOption = null;
+        Rectangle tradeOption = null;
+        Rectangle mesEnabled = null;
+
+        Logger.debugLog("Finding the talk-to option.");
+        talkOption = Objects.getBestMatch(talkToImgPath, 0.8);
+
+        Logger.debugLog("Finding the trade option.");
+        tradeOption = Objects.getBestMatch(tradeImgPath, 0.8);
+
+        if (talkOption != null) {
+            Logger.debugLog("Talk option was found: " + talkOption.toString());
+        } else {
+            Logger.debugLog("Talk option was NOT FOUND");
+        }
+
+        if (tradeOption != null) {
+            Logger.debugLog("Trade option was found: " + tradeOption.toString());
+        } else {
+            Logger.debugLog("Trade option was NOT FOUND");
+        }
+
+        if (talkOption != null && tradeOption != null) {
+            Logger.log("Talk and trade options both found, trying to swap the menu entries");
+
+            // Create new rectangles with the same height and only the first 15 pixels in width
+            Rectangle talkOptionShort = new Rectangle(talkOption.x, talkOption.y, 15, talkOption.height);
+            Rectangle tradeOptionShort = new Rectangle(tradeOption.x, tradeOption.y, 15, tradeOption.height);
+
+            // Check if the Trade option is above the Talk-to option
+            if (tradeOption.y < talkOption.y) {
+                Logger.debugLog("Trade option is above the Talk-to option.");
+                Logger.debugLog("No action needed.");
+                shopBuyer.doneMESSetup = true;
+            } else {
+                Logger.debugLog("Talk-to option is above the Trade option.");
+                Logger.debugLog("Perform swap of options, as trade needs to be on top.");
+                Client.drag(tradeOptionShort, talkOptionShort, 500);
+                Condition.sleep(1500);
+                shopBuyer.doneMESSetup = true;
+            }
+        }
+
+        mesEnabled = Objects.getBestMatch("/imgs/enabled-mes.png", 0.8);
+
+        if (mesEnabled != null) {
+            Logger.debugLog("Disabling MES option menu");
+            Client.tap(mesEnabled);
+            Condition.sleep(generateRandomDelay(500, 1000));
+            return true;
+        }
+
+        return false;
     }
 
     public static int generateRandomDelay(int lowerBound, int upperBound) {
