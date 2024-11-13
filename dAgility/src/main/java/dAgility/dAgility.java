@@ -22,9 +22,10 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAgility",
         description = "Trains agility at various courses. World hopping and eating food is supported, as well as picking up Marks of Grace when running a rooftop course.",
-        version = "1.15",
+        version = "1.16",
         categories = {ScriptCategory.Agility},
-        guideLink = "https://wiki.mufasaclient.com/docs/dagility/"
+        guideLink = "https://wiki.mufasaclient.com/docs/dagility/",
+        skipZoomSetup = true
 )
 @ScriptConfiguration.List(
         {
@@ -1071,7 +1072,7 @@ public class dAgility extends AbstractScript {
                 obstacles.add(new Obstacle("Obstacle 2",
                         new Area(new Tile(6601, 11441, 1), new Tile(6643, 11493, 1)),
                         new Tile(6619, 11453, 1), new Tile(6595, 11389, 1),
-                        new Rectangle(442, 284, 13, 12), new Rectangle(485, 366, 15, 19),
+                        new Rectangle(442, 284, 13, 12), new Rectangle(487, 370, 10, 12),
                         new Tile(6611, 11473, 1), noMarks, false, null, false));
                 obstacles.add(new Obstacle("Obstacle 3",
                         new Area(new Tile(6581, 11361, 1), new Tile(6613, 11401, 1)),
@@ -1104,7 +1105,7 @@ public class dAgility extends AbstractScript {
                 obstacles.add(new Obstacle("Obstacle 2",
                         new Area(new Tile(6601, 11441, 1), new Tile(6643, 11493, 1)),
                         new Tile(6619, 11453, 1), new Tile(6595, 11389, 1),
-                        new Rectangle(442, 284, 13, 12), new Rectangle(485, 366, 15, 19),
+                        new Rectangle(442, 284, 13, 12), new Rectangle(487, 370, 10, 12),
                         new Tile(6611, 11473, 1), noMarks, false, null, false));
                 obstacles.add(new Obstacle("Obstacle 3",
                         new Area(new Tile(6581, 11361, 1), new Tile(6613, 11401, 1)),
@@ -1153,6 +1154,9 @@ public class dAgility extends AbstractScript {
         if (zoomLevel != null) {
             Logger.debugLog(courseChosen + " course - setting zoom level " + zoomLevel + ".");
             Game.setZoom(zoomLevel);
+        } else {
+            Logger.debugLog(courseChosen + " course - setting zoom level 3");
+            Game.setZoom("3");
         }
 
         if (GameTabs.isSettingsTabOpen()) {
@@ -1355,6 +1359,7 @@ public class dAgility extends AbstractScript {
 
         // Update our counters here before we wait for the end tile
         if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm")) {
+            generateRandomDelay(150, 250);
             // Generate a random number between 0 and 100 to check for 15% activation chance
             int randomChance = random.nextInt(100);
 
