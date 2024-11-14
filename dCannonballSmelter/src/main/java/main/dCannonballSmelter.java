@@ -20,7 +20,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dCannonball Smelter",
         description = "Smelts steel bars into cannonballs at various locations. Supports hopping worlds.",
-        version = "2.00",
+        version = "2.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dcannonball-smelter/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Moneymaking, ScriptCategory.Ironman},
         skipZoomSetup = true
@@ -67,6 +67,7 @@ public class dCannonballSmelter extends AbstractScript {
     public static boolean setupDone = false;
     public static long lastProcessTime = System.currentTimeMillis();
     private long lastLocationUpdateTime = System.currentTimeMillis();
+    public static int retrycount = 0;
 
     // Tiles
     public static Tile edgeBankTile = new Tile(12383, 13725, 0);

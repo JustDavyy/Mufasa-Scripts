@@ -22,8 +22,12 @@ public class Smelt extends Task {
     @Override
     public boolean execute() {
 
-        Paint.setStatus("Smelt cannonballs");
+        if (retrycount != 0) {
+            retrycount = 0;
+            Logger.debugLog("Set retry count to: " + retrycount);
+        }
 
+        Paint.setStatus("Smelt cannonballs");
         // Check if we have leveled up
         if (Player.leveledUp()) {
             // Initiate re-smelt here

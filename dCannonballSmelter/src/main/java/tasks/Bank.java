@@ -19,6 +19,19 @@ public class Bank extends Task {
         Paint.setStatus("Bank");
         Logger.log("Banking.");
 
+        if (retrycount > 3) {
+            Logger.log("No steel bars in the inventory after 3 banking attempts. Assuming we ran out of bars.");
+            Logger.log("Logging out and stopping script!");
+            if (Bank.isOpen()) {
+                Bank.close();
+            }
+
+            Logout.logout();
+            Script.stop();
+        } else if (retrycount >= 1) {
+            Logger.log("No steel bars in the inventory after " + retrycount + " attempts. Retrying!");
+        }
+
         if (!Bank.isOpen()) {
             openBank();
         }
@@ -47,6 +60,9 @@ public class Bank extends Task {
         Bank.close();
         Condition.wait(() -> !Bank.isOpen(),250,20);
         Condition.sleep(generateDelay(250, 400));
+
+        retrycount++;
+        Logger.debugLog("Set retry count to: " + retrycount);
 
         return false;
     }
