@@ -15,30 +15,13 @@ public class Helpers {
         Logger.debugLog("Running food count.");
         foodAmountInInventory = 0; // Reset before counting
 
-        if (selectedFood.equals("Rejuv Potion")) {
-            Map<Integer, Integer> foodIdsWithMultipliers = Map.of(
-                    ItemList.REJUVENATION_POTION__1__20702, 1,
-                    ItemList.REJUVENATION_POTION__2__20701, 2,
-                    ItemList.REJUVENATION_POTION__3__20700, 3,
-                    ItemList.REJUVENATION_POTION__4__20699, 4
-            );
-            countItemsInInventory(foodIdsWithMultipliers, 0.95);
-        } else if (selectedFood.equals("Cakes")) {
-            Map<Integer, Integer> foodIdsWithMultipliers = Map.of(
-                    1891, 3, // Full cake counts as 3
-                    1893, 2, // Half cake counts as 2
-                    1895, 1  // Slice counts as 1
-            );
-            countItemsInInventory(foodIdsWithMultipliers, 0.85);
-        } else {
-            Paint.setStatus("Counting initial food");
-            Logger.debugLog("Counting initial food in inventory");
-
-            int count = Inventory.count(foodID, 0.85);
-            Logger.debugLog("Found " + count + " items with ID " + foodID);
-            foodAmountInInventory = count;
-            Logger.log("Total food in inventory: " + foodAmountInInventory);
-        }
+        Map<Integer, Integer> foodIdsWithMultipliers = Map.of(
+                ItemList.REJUVENATION_POTION__1__20702, 1,
+                ItemList.REJUVENATION_POTION__2__20701, 2,
+                ItemList.REJUVENATION_POTION__3__20700, 3,
+                ItemList.REJUVENATION_POTION__4__20699, 4
+        );
+        countItemsInInventory(foodIdsWithMultipliers, 0.95);
     }
 
     private static void countItemsInInventory(Map<Integer, Integer> foodIdsWithMultipliers, double accuracy) {

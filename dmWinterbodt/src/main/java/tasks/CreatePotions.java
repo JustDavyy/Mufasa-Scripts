@@ -14,28 +14,20 @@ import static utils.Helpers.countFoodInInventory;
 public class CreatePotions extends Task {
     Tile herbTile = new Tile(6503, 15661, 0);
     Rectangle herbRect = new Rectangle(388, 260, 18, 26);
-
     Tile potionTile = new Tile(6507, 15677, 0);
+    Tile brewmaTile = new Tile(6535, 15693, 0);
     Rectangle potionRect = new Rectangle(399, 260, 15, 19);
-
-    Area safeAreaToStep = new Area(
-            new Tile(6477, 15640, 0),
-            new Tile(6562, 15710, 0)
-    );
-
+    Rectangle brewmaRect = new Rectangle(499, 244, 8, 25);
     int brumaHerbItem = ItemList.BRUMA_HERB_20698;
     int rejuvPotionUnf = ItemList.REJUVENATION_POTION__UNF__20697;
-
     Area topLeftArea = new Area(
             new Tile(6413, 15738, 0),
             new Tile(6520, 15880, 0)
     );
-
     Area topRightArea = new Area(
             new Tile(6527, 15739, 0),
             new Tile(6609, 15877, 0)
     );
-
     Tile[] topLeftRecoveryPath = new Tile[] {
             new Tile(6499, 15838, 0),
             new Tile(6479, 15825, 0),
@@ -47,7 +39,6 @@ public class CreatePotions extends Task {
             new Tile(6510, 15704, 0),
             new Tile(6523, 15685, 0)
     };
-
     Tile[] topRightRecoveryPath = new Tile[] {
             new Tile(6546, 15837, 0),
             new Tile(6565, 15825, 0),
@@ -59,14 +50,9 @@ public class CreatePotions extends Task {
             new Tile(6528, 15707, 0),
             new Tile(6521, 15685, 0)
     };
-
     @Override
     public boolean activate() {
-        if (!selectedFood.equals("Rejuv Potion")) {
-            return false;
-        }
-
-        return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing || foodAmountInInventory < foodAmountLeftToBank & isGameGoing & Player.within(lobby);
+        return foodAmountInInventory < foodAmountLeftToBank && !isGameGoing || foodAmountInInventory < foodAmountLeftToBank & isGameGoing && Player.within(lobby) || foodAmountInInventory == 0 && isGameGoing && shouldEat;
     }
 
     @Override
@@ -96,7 +82,12 @@ public class CreatePotions extends Task {
         }
 
         if (hasBrumaHerb && hasRejuvUnf) {
-            processInventory();
+            if (druidicRitualCompleted) {
+                processInventoryWithQuest();
+            } else {
+                Walker.step(brewmaTile);
+                processInventoryWithoutQuest();
+            }
         }
 
         return false;
@@ -165,9 +156,9 @@ public class CreatePotions extends Task {
     }
 
     /**
-     * Processes the inventory by combining herbs and potions.
+     * Processes the inventory by combining herbs and potions using herblore.
      */
-    private void processInventory() {
+    private void processInventoryWithQuest() {
         Logger.log("Combining herbs and unfinished potions in inventory.");
         Inventory.tapItem(brumaHerbItem, 0.75);
         Condition.sleep(generateRandomDelay(200, 400));
@@ -176,9 +167,61 @@ public class CreatePotions extends Task {
 
         if (Player.leveledUp()) {
             Logger.log("We leveled up, restarting!");
-            processInventory(); //Start the action again! recursive.. I know..
+            processInventoryWithQuest(); //Start the action again! recursive.. I know..
         }
 
         countFoodInInventory();
+    }
+
+    /**
+     * Processes the inventory by combining herbs and potions using herblore.
+     */
+    private void processInventoryWithoutQuest() {
+        Logger.log("Using Brew'ma to combine pots and herbs.");
+        if (!Player.atTile(brewmaTile)) {
+            Walker.step(brewmaTile);
+        }
+
+        if (Player.atTile(brewmaTile)) {
+            boolean tappedHerb = Math.random() < 0.5;
+
+            if (tappedHerb) {
+                Inventory.tapItem(brumaHerbItem, 0.75);
+            } else {
+                Inventory.tapItem(rejuvPotionUnf, 0.96);
+            }
+            Condition.sleep(generateRandomDelay(100, 150));
+
+            Client.longPress(brewmaRect);
+            Condition.sleep(generateRandomDelay(100, 200));
+
+            if (tappedHerb) {
+                Logger.debugLog("Finding the use bruma herb on Brew'ma menu option...");
+                Rectangle brumaHerbOption = Objects.getBestMatch("/imgs/usebrumaherb.png", 0.8);
+
+                if (brumaHerbOption != null) {
+                    Client.tap(brumaHerbOption);
+                } else {
+                    Logger.debugLog("Use bruma herb menu option could not be located.");
+                }
+            } else {
+                Logger.debugLog("Finding the use rejuv pot on Brew'ma menu option...");
+                Rectangle rejuvPotOption = Objects.getBestMatch("/imgs/userejuvpot.png", 0.8);
+
+                if (rejuvPotOption != null) {
+                    Client.tap(rejuvPotOption);
+                } else {
+                    Logger.debugLog("Use rejuv pot menu option could not be located.");
+                }
+            }
+
+            Condition.wait(() -> !Inventory.contains(brumaHerbItem, 0.75), 300, 60);
+            // Close the chatbox menu
+            Client.sendKeystroke("space");
+
+            countFoodInInventory();
+        } else {
+            Logger.debugLog("Failed to move to Brew'ma tile.");
+        }
     }
 }

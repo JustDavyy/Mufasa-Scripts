@@ -22,15 +22,10 @@ public class Eat extends Task {
                     ItemList.REJUVENATION_POTION__2__20701,
                     ItemList.REJUVENATION_POTION__3__20700,
                     ItemList.REJUVENATION_POTION__4__20699
-            },
-            "Cakes", new int[] { 1895, 1893, 1891 } // Slice, half, full cake
+            }
     );
 
     // Map for tolerance values
-    Map<String, Double> toleranceMap = Map.of(
-            "Rejuv Potion", 0.95,
-            "Cakes", 0.75
-    );
 
     @Override
     public boolean execute() {
@@ -40,16 +35,13 @@ public class Eat extends Task {
         GameTabs.openInventoryTab();
 
         // Check if selected food is in the map
-        if (foodMap.containsKey(selectedFood)) {
-            int[] foodIds = foodMap.get(selectedFood);
-            double tolerance = toleranceMap.get(selectedFood);
+        if (foodMap.containsKey("Rejuv Potion")) {
+            int[] foodIds = foodMap.get("Rejuv Potion");
 
             // Try to consume one of the food items
-            return consumeFood(foodIds, tolerance);
-        } else {
-            // Handle generic food (with a fixed tolerance of 0.75)
-            return consumeFood(new int[] { foodID }, 0.75);
+            return consumeFood(foodIds, 0.95);
         }
+        return false;
     }
 
     // Helper method to check and eat food from the inventory

@@ -25,51 +25,31 @@ import static utils.SideManager.pickRandomSide;
 @ScriptManifest(
         name = "dmWinterbodt",
         description = "Completes the Wintertodt minigame. Start inside the Wintertodt minigame area",
-        version = "2.24",
+        version = "2.25",
         guideLink = "https://wiki.mufasaclient.com/docs/dmwinterbodt/",
         categories = {ScriptCategory.Firemaking, ScriptCategory.Minigames}
 )
 @ScriptConfiguration.List(
         {
                 @ScriptConfiguration(
-                        name = "Food",
-                        description = "Select which food to use",
-                        defaultValue = "Rejuv Potion",
-                        allowedValues = {
-                                @AllowedValue(optionIcon = "20699", optionName = "Rejuv Potion"),
-                                @AllowedValue(optionIcon = "1891", optionName = "Cakes"),
-                                @AllowedValue(optionIcon = "379", optionName = "Lobster"),
-                                @AllowedValue(optionIcon = "373", optionName = "Swordfish"),
-                                @AllowedValue(optionIcon = "385", optionName = "Shark"),
-                                @AllowedValue(optionIcon = "359", optionName = "Tuna"),
-                                @AllowedValue(optionIcon = "333", optionName = "Trout"),
-                                @AllowedValue(optionIcon = "329", optionName = "Salmon"),
-                                @AllowedValue(optionIcon = "365", optionName = "Bass"),
-                                @AllowedValue(optionIcon = "3144", optionName = "Cooked karambwan"),
-                                @AllowedValue(optionIcon = "391", optionName = "Manta ray"),
-                                @AllowedValue(optionIcon = "13441", optionName = "Anglerfish")
-                        },
-                        optionType = OptionType.STRING
-                ),
-                @ScriptConfiguration(
-                        name = "BankTab",
-                        description = "What bank tab are your food located in?",
-                        defaultValue = "1",
-                        optionType = OptionType.BANKTABS
-                ),
-                @ScriptConfiguration(
-                        name = "Potion/food amount",
+                        name = "Potion amount",
                         description = "Select the amount of potions or food you'd like to bring",
                         defaultValue = "5",
-                        minMaxIntValues = {1, 15},
+                        minMaxIntValues = {1, 10},
                         optionType = OptionType.INTEGER_SLIDER
                 ),
                 @ScriptConfiguration(
-                        name = "Potion sips/food amount left to obtain more",
+                        name = "Potion sips left before obtaining more",
                         description = "Select the amount of potion sips or food bites required to have for each game",
                         defaultValue = "8",
-                        minMaxIntValues = {6, 28},
+                        minMaxIntValues = {4, 36},
                         optionType = OptionType.INTEGER_SLIDER
+                ),
+                @ScriptConfiguration(
+                        name = "Druidic ritual completed?",
+                        description = "Does this account have the Druidic Ritual quest completed?",
+                        defaultValue = "True",
+                        optionType = OptionType.BOOLEAN
                 ),
                 @ScriptConfiguration(
                         name = "Side",
@@ -103,20 +83,12 @@ public class dmWinterbodt extends AbstractScript {
     public static int crateIndex;
     public static int brazierIndex;
     public static String hopProfile;
-    public static Boolean hopEnabled;
-    public static Boolean useWDH;
-    public static String selectedFood;
+    public static boolean hopEnabled;
+    public static boolean useWDH;
+    public static boolean druidicRitualCompleted;
     public static int foodAmount;
     public static int foodAmountLeftToBank;
-    public static int bankTab;
-    public static int foodID;
     public static boolean burnOnly;
-    public static Rectangle bankSearchArea = new Rectangle(410, 144, 429, 358);
-    public static List<Color> bankChest = List.of(
-            Color.decode("#2c3737"),
-            Color.decode("#2a3535")
-    );
-
     public static boolean preGameFoodCheck = true;
     public static boolean gameAt13Percent;
     public static boolean gameAt20Percent;
@@ -136,7 +108,6 @@ public class dmWinterbodt extends AbstractScript {
     public static long lastActivity = System.currentTimeMillis();
     public static boolean isMoreThan40Seconds;
     public static boolean weDied;
-    public static boolean alreadyBanked;
     public static int totalGameCount = 0;
     public static int totalCrateCount = 0;
     public static int totalRepairCount = 0;
@@ -145,17 +116,7 @@ public class dmWinterbodt extends AbstractScript {
             new Tile(6492, 15609, 0),
             new Tile(6551, 15695, 0)
     );
-    public static Tile bankTile = new Tile(6559, 15521, 0);
-    public static Area bankTentArea = new Area(
-            new Tile(6550, 15511, 0),
-            new Tile(6568, 15535, 0)
-    );
-    public static Tile[] outsideToBankPath =  new Tile[] {
-            new Tile(6527, 15549, 0),
-            new Tile(6558, 15519, 0)
-    };
     public static Rectangle enterDoorRect = new Rectangle(323, 75, 307, 122);
-    public static Rectangle exitDoorRect = new Rectangle(379, 260, 176, 116);
     public static Area insideArea = new Area(
             new Tile(6401, 15633, 0),
             new Tile(6645, 15873, 0)
@@ -172,10 +133,6 @@ public class dmWinterbodt extends AbstractScript {
             new Tile(6484, 15572, 0),
             new Tile(6566, 15631, 0)
     ); //this one is both at door from inside & outside
-    public static Area atDoorInside = new Area(
-            new Tile(6492, 15609, 0),
-            new Tile(6552, 15626, 0)
-    );
     public static Area leftWTArea = new Area(
             new Tile(6440, 15695, 0),
             new Tile(6498, 15751, 0)
@@ -223,7 +180,6 @@ public class dmWinterbodt extends AbstractScript {
             new CheckGear(),
             new BreakManager(), // I think it should be here?
             new GoToSafety(),
-            new Bank(),
             new Eat(),
             new FailSafe(), // I think it should be here?
             new CreatePotions(),
@@ -261,19 +217,14 @@ public class dmWinterbodt extends AbstractScript {
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
-        foodAmount = Integer.parseInt(configs.get("Potion/food amount"));
-        foodAmountLeftToBank = Integer.parseInt(configs.get("Potion sips/food amount left to obtain more"));
+        foodAmount = Integer.parseInt(configs.get("Potion amount"));
+        foodAmountLeftToBank = Integer.parseInt(configs.get("Potion sips left before obtaining more"));
         pickedSide = configs.get("Side");
         burnOnly = Boolean.parseBoolean(configs.get("Burn only?"));
-        selectedFood = configs.get("Food");
-        bankTab = Integer.parseInt(configs.get("BankTab"));
-
-        if (!selectedFood.equals("Rejuv Potion")) {
-            setupFoodIDs();
-        }
+        druidicRitualCompleted = Boolean.parseBoolean(configs.get("Druidic ritual completed?"));
 
         // 24-63, 24-62, 24-61, 25-63, 25-62, 25-61, 26-63, 26-62, 26-61, 24-60, 25-60, 26-60, 50-50
-        Walker.setup(new MapChunk(new String[]{"24-63", "24-62", "24-61", "25-63", "25-62", "25-61", "26-63", "26-62", "26-61", "24-60", "25-60", "26-60", "50-50"}, "0"));
+        Walker.setup(new MapChunk(new String[]{"24-63", "24-62", "24-61", "25-63", "25-62", "25-61", "26-63", "26-62", "26-61", "24-60", "50-50"}, "0"));
 
         // Creating the Paint object
         Logger.debugLog("Creating paint object.");
@@ -312,50 +263,6 @@ public class dmWinterbodt extends AbstractScript {
         // Disable break and AFK handlers, as we use custom breaks
         Client.disableBreakHandler();
         Client.disableAFKHandler();
-    }
-
-    private void setupFoodIDs() {
-        Paint.setStatus("Setting up food IDs");
-        Logger.debugLog("Setting up food IDs");
-        switch (selectedFood) {
-            case "Cakes":
-                foodID = 1891;
-                break;
-            case "Lobster":
-                foodID = 379;
-                break;
-            case "Swordfish":
-                foodID = 373;
-                break;
-            case "Shark":
-                foodID = 385;
-                break;
-            case "Tuna":
-                foodID = 359;
-                break;
-            case "Trout":
-                foodID = 333;
-                break;
-            case "Salmon":
-                foodID = 329;
-                break;
-            case "Bass":
-                foodID = 365;
-                break;
-            case "Cooked karambwan":
-                foodID = 3144;
-                break;
-            case "Manta ray":
-                foodID = 391;
-                break;
-            case "Anglerfish":
-                foodID = 13441;
-                break;
-            default:
-                Logger.log("Invalid food configuration, please restart script");
-                Script.stop();
-                break;
-        }
     }
 
     @Override

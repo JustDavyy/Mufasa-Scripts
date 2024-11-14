@@ -67,16 +67,6 @@ public class GoBackToGame extends Task {
         } else return walkToLobbyFromDoor();
     }
 
-    private boolean walkToBranchTileFromLobby() {
-        if (Player.isTileWithinArea(currentLocation, lobby)) {
-            Paint.setStatus("Walking to branch tile from lobby");
-            Walker.step(SideManager.getBranchTile());
-            currentLocation = Walker.getPlayerPosition();
-            return true;
-        }
-        return false;
-    }
-
     private boolean walkToDoorFromOutside() {
         if (Player.isTileWithinArea(currentLocation, outsideArea)) {
             Paint.setStatus("Walking to the door from outside");
@@ -86,17 +76,6 @@ public class GoBackToGame extends Task {
             Condition.sleep(generateRandomDelay(700, 1300));
             Client.tap(enterDoorRect);
             Condition.sleep(generateRandomDelay(4250, 5300));
-            currentLocation = Walker.getPlayerPosition();
-            return true;
-        }
-        return false;
-    }
-
-    private boolean walkToGameFromDoor() {
-        if (Player.isTileWithinArea(currentLocation, insideArea)) {
-            Paint.setStatus("Walking to game from the door");
-            Walker.walkPath(SideManager.getDoorToGamePath());
-            Condition.wait(SideManager::isWithinGameArea, 100, 20);
             currentLocation = Walker.getPlayerPosition();
             return true;
         }
