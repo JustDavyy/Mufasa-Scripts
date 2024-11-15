@@ -13,12 +13,10 @@ import java.util.Map;
 
 import static helpers.Interfaces.*;
 
-import java.util.Random;
-
 @ScriptManifest(
         name = "dCamTorumMiner",
         description = "Mines the calcified rocks in the Cam Torum mine",
-        version = "1.00",
+        version = "1.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dcamtorumminer/",
         categories = {ScriptCategory.Mining, ScriptCategory.Prayer}
 )
@@ -35,7 +33,6 @@ import java.util.Random;
 
 public class dCamTorumMiner extends AbstractScript {
     // Creating the strings for later use
-    public static Random random = new Random();
     public static String hopProfile;
     public static Boolean hopEnabled;
     Boolean useWDH;

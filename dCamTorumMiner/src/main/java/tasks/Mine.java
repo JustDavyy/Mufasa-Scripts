@@ -30,12 +30,6 @@ public class Mine extends Task {
             new Tile(6077, 37938, 1)
     );
 
-    Area mineArea = new Area(
-            new Tile(6043, 37889, 1),
-            new Tile(6098, 37943, 1)
-    );
-
-    Tile currentPosition;
     Tile northTile = new Tile(6059, 37929, 1);
     Tile eastTile = new Tile(6079, 37917, 1);
 
@@ -78,7 +72,7 @@ public class Mine extends Task {
 
             if (foundPoints.isEmpty()) {
                 Logger.debugLog("No points found at the east area, moving to north area.");
-                Walker.step(eastTile);
+                Walker.step(northTile);
                 lastAction = System.currentTimeMillis();
             }
         } else {
@@ -93,15 +87,43 @@ public class Mine extends Task {
         }
 
         if (!foundPoints.isEmpty()) {
-            Point clusterCenter = findNearestClusterCenter(foundPoints, centerPoint);
-            if (clusterCenter != null) {
-                Client.tap(clusterCenter);
+            Point targetPoint = selectTargetPoint(foundPoints);
+            if (targetPoint != null) {
+                Client.tap(targetPoint);
                 lastAction = System.currentTimeMillis();
 
-                // Wait atleast 5 seconds before we continue
+                // Wait at least 5 seconds before we continue
                 Condition.sleep(5000);
             }
         }
+    }
+
+    /**
+     * Selects a target point based on the given requirements:
+     * - If more than 15 points are found, pick one of the closest 15 to (447, 270).
+     * - If 15 or fewer points are found, pick a random one.
+     *
+     * @param points List of points found.
+     * @return The selected target point, or null if no points are available.
+     */
+    private Point selectTargetPoint(List<Point> points) {
+        Point referencePoint = new Point(447, 270);
+
+        if (points.size() > 15) {
+            // Sort points by distance to (447, 270)
+            points.sort((p1, p2) -> Double.compare(p1.distance(referencePoint), p2.distance(referencePoint)));
+
+            // Keep only the closest 15 points
+            points = points.subList(0, 15);
+
+            // Pick one of these 15 randomly
+            return points.get((int) (Math.random() * points.size()));
+        } else if (!points.isEmpty()) {
+            // Pick a random point from the available points
+            return points.get((int) (Math.random() * points.size()));
+        }
+
+        return null; // No points available
     }
 
     private boolean isIdle() {
@@ -116,63 +138,6 @@ public class Mine extends Task {
         }
 
         return idleYN;
-    }
-
-    private Point findNearestClusterCenter(List<Point> points, Point center) {
-        List<List<Point>> clusters = groupPointsIntoClusters(points);
-
-        // Calculate the center of each cluster
-        Point nearestClusterCenter = null;
-        double minDistance = Double.MAX_VALUE;
-
-        for (List<Point> cluster : clusters) {
-            Point clusterCenter = calculateCentroid(cluster);
-            double distance = clusterCenter.distance(center);
-
-            if (distance < minDistance) {
-                minDistance = distance;
-                nearestClusterCenter = clusterCenter;
-            }
-        }
-
-        return nearestClusterCenter;
-    }
-
-    private List<List<Point>> groupPointsIntoClusters(List<Point> points) {
-        List<List<Point>> clusters = new ArrayList<>();
-        double clusteringThreshold = 10.0;
-
-        for (Point point : points) {
-            boolean addedToCluster = false;
-
-            for (List<Point> cluster : clusters) {
-                for (Point clusteredPoint : cluster) {
-                    if (point.distance(clusteredPoint) <= clusteringThreshold) {
-                        cluster.add(point);
-                        addedToCluster = true;
-                        break;
-                    }
-                }
-                if (addedToCluster) break;
-            }
-
-            if (!addedToCluster) {
-                List<Point> newCluster = new ArrayList<>();
-                newCluster.add(point);
-                clusters.add(newCluster);
-            }
-        }
-
-        return clusters;
-    }
-
-    private Point calculateCentroid(List<Point> points) {
-        int sumX = 0, sumY = 0;
-        for (Point p : points) {
-            sumX += p.x;
-            sumY += p.y;
-        }
-        return new Point(sumX / points.size(), sumY / points.size());
     }
 
     public static void updatePaintBar() {
