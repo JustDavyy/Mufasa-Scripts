@@ -18,7 +18,7 @@ import static helpers.Interfaces.*;
         description = "Mines the calcified rocks in the Cam Torum mine",
         version = "1.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dcamtorumminer/",
-        categories = {ScriptCategory.Mining, ScriptCategory.Prayer}
+        categories = {ScriptCategory.Ironman, ScriptCategory.Mining}
 )
 @ScriptConfiguration.List(
         {
