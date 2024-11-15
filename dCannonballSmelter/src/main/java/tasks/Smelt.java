@@ -171,7 +171,7 @@ public class Smelt extends Task {
                 }
                 break;
             case "Neitiznot":
-                Client.tap(neitFurnaceRect);
+                Client.tap(neitFurnaceRectAtFurnace);
                 Condition.wait(this::makeMenuOpen, 100, 30);
                 if (makeMenuOpen()) {
                     Client.sendKeystroke("space");

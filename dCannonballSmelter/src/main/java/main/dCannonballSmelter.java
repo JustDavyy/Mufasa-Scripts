@@ -20,7 +20,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dCannonball Smelter",
         description = "Smelts steel bars into cannonballs at various locations. Supports hopping worlds.",
-        version = "2.01",
+        version = "2.02",
         guideLink = "https://wiki.mufasaclient.com/docs/dcannonball-smelter/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Moneymaking, ScriptCategory.Ironman},
         skipZoomSetup = true
@@ -111,8 +111,22 @@ public class dCannonballSmelter extends AbstractScript {
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
 
-        // Create the MapChunk with chunks of our location
-        MapChunk chunks = new MapChunk(new String[]{"48-54", "20-59", "20-60", "36-59"}, "0");
+        MapChunk chunks = null;
+        switch (location) {
+            case "Edgeville":
+                chunks = new MapChunk(new String[]{"48-54"}, "0");
+                break;
+            case "Mount Karuulm":
+                chunks = new MapChunk(new String[]{"20-59"}, "0");
+                break;
+            case "Neitiznot":
+                chunks = new MapChunk(new String[]{"36-59"}, "0");
+                break;
+            default:
+                Logger.log("Unknown location: " + location);
+                Script.stop();
+                break;
+        }
 
         // Set up the walker with the created MapChunk
         Walker.setup(chunks);
@@ -154,12 +168,8 @@ public class dCannonballSmelter extends AbstractScript {
         // Open inventory tab
         GameTabs.openTab(UITabs.INVENTORY);
 
-        // Update currentLocation every 10 seconds
-        if (System.currentTimeMillis() - lastLocationUpdateTime >= 10000) { // 10 seconds in milliseconds
-            currentLocation = Walker.getPlayerPosition();
-            lastLocationUpdateTime = System.currentTimeMillis();
-            Logger.debugLog("Updated current location: " + currentLocation.toString());
-        }
+        currentLocation = Walker.getPlayerPosition();
+        Logger.debugLog("Updated current location: " + currentLocation.toString());
 
         // Run tasks
         for (Task task : tasks) {
