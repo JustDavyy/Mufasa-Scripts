@@ -26,11 +26,14 @@ public class Drop extends Task {
         // Uncuts
         if (Inventory.contains(ItemList.UNCUT_SAPPHIRE_1623, 0.8)) {
             Inventory.tapAllItems(ItemList.UNCUT_SAPPHIRE_1623, 0.8);
-        } else if (Inventory.contains(ItemList.UNCUT_EMERALD_1621, 0.8)) {
+        }
+        if (Inventory.contains(ItemList.UNCUT_EMERALD_1621, 0.8)) {
             Inventory.tapAllItems(ItemList.UNCUT_EMERALD_1621, 0.8);
-        } else if (Inventory.contains(ItemList.UNCUT_RUBY_1619, 0.8)) {
+        }
+        if (Inventory.contains(ItemList.UNCUT_RUBY_1619, 0.8)) {
             Inventory.tapAllItems(ItemList.UNCUT_RUBY_1619, 0.8);
-        } else if (Inventory.contains(ItemList.UNCUT_DIAMOND_1617, 0.8)) {
+        }
+        if (Inventory.contains(ItemList.UNCUT_DIAMOND_1617, 0.8)) {
             Inventory.tapAllItems(ItemList.UNCUT_DIAMOND_1617, 0.8);
         }
 

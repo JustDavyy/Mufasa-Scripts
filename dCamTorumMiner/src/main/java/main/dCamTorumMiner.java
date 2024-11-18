@@ -16,7 +16,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dCamTorumMiner",
         description = "Mines the calcified rocks in the Cam Torum mine",
-        version = "1.01",
+        version = "1.02",
         guideLink = "https://wiki.mufasaclient.com/docs/dcamtorumminer/",
         categories = {ScriptCategory.Ironman, ScriptCategory.Mining, ScriptCategory.Prayer}
 )
