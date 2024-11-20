@@ -51,6 +51,9 @@ public class Ardougne extends Task {
 
                 if (!markHandled) {
                     Paint.setStatus("Traverse obstacle " + obstacle.name);
+                    if (obstacle.name.equals("Obstacle 3") || obstacle.name.equals("Obstacle 6") || obstacle.name.equals("Obstacle 6-2")) {
+                        Condition.sleep(generateRandomDelay(200, 300));
+                    }
                     proceedWithTraversal(obstacle, currentLocation);
                     if (obstacle.name.equals("Obstacle 7")) {
                         lapCount++;
@@ -63,6 +66,7 @@ public class Ardougne extends Task {
 
         // Block that assumes we are not within any of those areas, which means we've fallen or wandered off somewhere?
         if (Player.isTileWithinArea(currentLocation, ardougneArea)) {
+            Condition.sleep(generateRandomDelay(450, 600));
             Logger.debugLog("Not within any obstacle area, webwalking back to start obstacle");
             Paint.setStatus("Recover after fall/failure");
             Walker.webWalk(startTile);
