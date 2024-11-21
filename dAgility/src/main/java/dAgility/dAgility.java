@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAgility",
         description = "Trains agility at various courses. World hopping and eating food is supported, as well as picking up Marks of Grace when running a rooftop course.",
-        version = "1.18",
+        version = "1.19",
         categories = {ScriptCategory.Agility},
         guideLink = "https://wiki.mufasaclient.com/docs/dagility/",
         skipZoomSetup = true
@@ -794,51 +794,51 @@ public class dAgility extends AbstractScript {
                 obstacles.add(new Obstacle("Obstacle 1",
                         new Area(new Tile(10664, 12900, 0), new Tile(10711, 12950, 0)),
                         new Tile(10691, 12937, 0), new Tile(10683, 12945, 3),
-                        new Rectangle(443, 249, 11, 9), new Rectangle(527, 248, 14, 9),
+                        new Rectangle(443, 246, 10, 9), new Rectangle(528, 249, 13, 9),
                         new Tile(10671, 12937, 0), noMarks, false, null, false));
 
                 obstacles.add(new Obstacle("Obstacle 2",
                         new Area(new Tile(10676, 12937, 3), new Tile(10694, 12996, 3)),
                         new Tile(10683, 12981, 3), new Tile(10659, 13021, 3),
-                        new Rectangle(430, 221, 12, 28), new Rectangle(433, 111, 10, 22),
+                        new Rectangle(430, 221, 12, 28), new Rectangle(435, 113, 9, 19),
                         new Tile(10683, 12945, 3), noMarks, false,
                         new Area(new Tile(10581, 12945, 0), new Tile(10708, 13051, 0)), true));
 
                 obstacles.add(new Obstacle("Obstacle 3",
                         new Area(new Tile(10639, 13011, 3), new Tile(10670, 13027, 3)),
                         new Tile(10647, 13021, 3), new Tile(10623, 13021, 3),
-                        new Rectangle(422, 268, 12, 5), new Rectangle(374, 267, 13, 6),
+                        new Rectangle(422, 268, 12, 5), new Rectangle(375, 267, 10, 6),
                         new Tile(10659, 13021, 3), noMarks, false, null, false));
 
                 obstacles.add(new Obstacle("Obstacle 4",
                         new Area(new Tile(10609, 13011, 3), new Tile(10637, 13028, 3)),
                         new Tile(10615, 13021, 3), new Tile(10611, 13005, 3),
-                        new Rectangle(419, 264, 14, 17), new Rectangle(383, 266, 14, 16),
+                        new Rectangle(419, 264, 14, 17), new Rectangle(386, 264, 10, 16),
                         new Tile(10623, 13021, 3), ardyObstacle4Mark, true,
                         new Area(new Tile(10581, 12945, 0), new Tile(10708, 13051, 0)), true));
 
                 obstacles.add(new Obstacle("Obstacle 5",
                         new Area(new Tile(10609, 12982, 3), new Tile(10621, 13007, 3)),
                         new Tile(10611, 12989, 3), new Tile(10603, 12985, 3),
-                        new Rectangle(436, 279, 15, 31), new Rectangle(438, 356, 13, 31),
+                        new Rectangle(436, 279, 15, 31), new Rectangle(439, 358, 12, 27),
                         new Tile(10611, 13005, 3), noMarks, false, null, false));
 
                 obstacles.add(new Obstacle("Obstacle 6",
                         new Area(new Tile(10600, 12957, 3), new Tile(10610, 12987, 3)),
                         new Tile(10611, 12953, 3), new Tile(10623, 12937, 3),
-                        new Rectangle(462, 282, 8, 12), new Rectangle(502, 443, 12, 14),
+                        new Rectangle(462, 282, 8, 12), new Rectangle(502, 444, 11, 10),
                         new Tile(10603, 12985, 3), noMarks, false, null, false));
 
                 obstacles.add(new Obstacle("Obstacle 6-2",
                         new Area(new Tile(10601, 12944, 3), new Tile(10622, 12967, 3)),
                         new Tile(10611, 12953, 3), new Tile(10623, 12937, 3),
-                        new Rectangle(462, 282, 8, 12), new Rectangle(502, 443, 12, 14),
+                        new Rectangle(462, 282, 8, 12), new Rectangle(502, 444, 11, 10),
                         new Tile(10603, 12985, 3), noMarks, false, null, false));
 
                 obstacles.add(new Obstacle("Obstacle 7",
                         new Area(new Tile(10620, 12904, 3), new Tile(10636, 12944, 3)),
                         new Tile(10623, 12937, 3), new Tile(10671, 12937, 0),
-                        new Rectangle(450, 273, 13, 19), new Rectangle(450, 273, 13, 19),
+                        new Rectangle(450, 273, 13, 19), new Rectangle(452, 272, 12, 16),
                         new Tile(10623, 12937, 3), noMarks, false, null, false));
 
                 break;
@@ -977,32 +977,6 @@ public class dAgility extends AbstractScript {
                         new Tile(13443, 11757, 2), new Tile(13451, 11741, 0),
                         new Rectangle(547, 302, 65, 64), new Rectangle(616, 223, 64, 61),
                         new Tile(13435, 11749, 2), pollyObstacle9Mark, true, null, false));
-
-                // Start tiles
-                startTiles = Arrays.asList(
-                        new startTileStorage(new Tile(13411, 11597, 0), new Rectangle(341, 259, 15, 16)),
-                        new startTileStorage(new Tile(13407, 11601, 0), new Rectangle(386, 300, 14, 15)),
-                        new startTileStorage(new Tile(13407, 11597, 0), new Rectangle(389, 266, 11, 16)),
-                        new startTileStorage(new Tile(13407, 11593, 0), new Rectangle(390, 228, 13, 14)),
-                        new startTileStorage(new Tile(13403, 11593, 0), new Rectangle(434, 225, 14, 16)),
-                        new startTileStorage(new Tile(13411, 11593, 0), new Rectangle(356, 228, 11, 14)),
-                        new startTileStorage(new Tile(13415, 11593, 0), new Rectangle(311, 227, 13, 18)),
-                        new startTileStorage(new Tile(13419, 11593, 0), new Rectangle(265, 228, 14, 17)),
-                        new startTileStorage(new Tile(13419, 11597, 0), new Rectangle(264, 260, 13, 17)),
-                        new startTileStorage(new Tile(13419, 11601, 0), new Rectangle(258, 302, 14, 17)),
-                        new startTileStorage(new Tile(13423, 11601, 0), new Rectangle(211, 303, 13, 17)),
-                        new startTileStorage(new Tile(13423, 11597, 0), new Rectangle(216, 270, 15, 15)),
-                        new startTileStorage(new Tile(13423, 11593, 0), new Rectangle(222, 228, 13, 16)),
-                        new startTileStorage(new Tile(13423, 11605, 0), new Rectangle(204, 345, 14, 17)),
-                        new startTileStorage(new Tile(13427, 11605, 0), new Rectangle(156, 346, 13, 16)),
-                        new startTileStorage(new Tile(13427, 11609, 0), new Rectangle(148, 392, 16, 17)),
-                        new startTileStorage(new Tile(13423, 11609, 0), new Rectangle(184, 391, 15, 18)),
-                        new startTileStorage(new Tile(13407, 11605, 0), new Rectangle(385, 343, 15, 17)),
-                        new startTileStorage(new Tile(13407, 11609, 0), new Rectangle(383, 392, 16, 18)),
-                        new startTileStorage(new Tile(13411, 11605, 0), new Rectangle(348, 355, 13, 17)),
-                        new startTileStorage(new Tile(13407, 11613, 0), new Rectangle(383, 442, 14, 17)),
-                        new startTileStorage(new Tile(13411, 11613, 0), new Rectangle(344, 440, 14, 19))
-                );
                 break;
             case "Seers":
             case "Seers - teleport":
@@ -1254,7 +1228,7 @@ public class dAgility extends AbstractScript {
             double elapsedTimeInHours = (currentTime - startTime) / (1000.0 * 60 * 60);
 
             // Calculate MoGs per hour and laps per hour
-            double MoGsPerHour = mogCount / elapsedTimeInHours;
+            double MoGsPerHour = mogTotal / elapsedTimeInHours;
             double LapsPerHour = lapCount / elapsedTimeInHours;
 
             // Format MoGs per hour and laps per hour with one decimal place

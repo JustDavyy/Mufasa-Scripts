@@ -42,6 +42,9 @@ public class Ardougne extends Task {
                             Client.tap(mark.checkArea);
                             Condition.sleep(generateRandomDelay(1750, 2300));
                             Client.tap(mark.tapArea);
+                            mogTotal++;
+                            Paint.updateBox(0, mogTotal);
+                            Logger.log("Total Marks of grace gathered so far: " + mogTotal);
                             Condition.wait(() -> Player.atTile(mark.endTile), 250, 110);
                             markHandled = true;
                             break;
@@ -51,9 +54,7 @@ public class Ardougne extends Task {
 
                 if (!markHandled) {
                     Paint.setStatus("Traverse obstacle " + obstacle.name);
-                    if (obstacle.name.equals("Obstacle 3") || obstacle.name.equals("Obstacle 6") || obstacle.name.equals("Obstacle 6-2")) {
-                        Condition.sleep(generateRandomDelay(200, 300));
-                    }
+                    Condition.sleep(generateRandomDelay(200, 300));
                     proceedWithTraversal(obstacle, currentLocation);
                     if (obstacle.name.equals("Obstacle 7")) {
                         lapCount++;
