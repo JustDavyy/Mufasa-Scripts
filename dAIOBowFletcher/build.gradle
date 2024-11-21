@@ -3,12 +3,12 @@ plugins {
 }
 
 repositories {
-    mavenCentral()
-    maven { url "https://repo1.maven.org/maven2" }
-    maven { url "https://openpnp.github.io/maven" }
-    maven { url 'https://jitpack.io' }
-    google()
-}
+        mavenCentral()
+        maven { url "https://repo1.maven.org/maven2" }
+        maven { url "https://openpnp.github.io/maven" }
+        maven { url 'https://jitpack.io' }
+        google()
+    }
 
 configurations.all {
     resolutionStrategy {
@@ -17,7 +17,7 @@ configurations.all {
 }
 
 dependencies {
-    implementation('com.github.Mufasa-SDK:SDKRepo:1.2.31') {
+    implementation('com.github.Mufasa-SDK:SDKRepo:1.2.77') {
         changing = true
     }
 }
