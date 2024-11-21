@@ -89,7 +89,6 @@ public class dAIOBowFletcher extends AbstractScript {
     public static int bankItemCount = 0;
     public static int bowstringCount = 0;
     public static long lastProcessTime = System.currentTimeMillis();
-    public static long lastBankTime = System.currentTimeMillis();
     public static String hopProfile;
     public static Boolean hopEnabled;
     public static Boolean useWDH;

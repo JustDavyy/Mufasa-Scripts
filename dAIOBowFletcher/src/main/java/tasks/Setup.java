@@ -45,7 +45,6 @@ public class Setup extends Task {
             Script.stop();
         }
 
-        lastBankTime = System.currentTimeMillis();
         Condition.sleep(generateDelay(450, 600));
         setupDone = true;
         return true;
