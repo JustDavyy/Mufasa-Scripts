@@ -55,15 +55,15 @@ public class Bank extends Task {
         Condition.wait(() -> Bank.isOpen(), 100, 25);
 
         if (method.equals("Cut")) {
-            if (bankItemCount <= 27) {
-                Logger.debugLog("Bank item count is 27 or below, using non-cached bank withdraw method instead.");
+            if (bankItemCount <= 28) {
+                Logger.debugLog("Bank item count is 28 or below, using non-cached bank withdraw method instead.");
                 bankCut(false);
             } else {
                 bankCut(true);
             }
         } else {
-            if (bankItemCount <= 14) {
-                Logger.log("Bank item count is 14 or below, using non-cached bank withdraw method instead.");
+            if (bankItemCount <= 15) {
+                Logger.log("Bank item count is 15 or below, using non-cached bank withdraw method instead.");
                 bankString(false);
             } else {
                 bankString(true);
@@ -161,19 +161,19 @@ public class Bank extends Task {
             // Withdraw new unstrung bows
             if (product.equals("Shortbow")) {
                 Logger.debugLog("Withdrawing unstrung shortbows");
-                Bank.withdrawItem(Integer.parseInt(shortbowU), useCache, 0.75);
                 updatePreviousBankItemCount();
                 bankItemCount = Bank.stackSize(Integer.parseInt(shortbowU));
+                Bank.withdrawItem(Integer.parseInt(shortbowU), useCache, 0.75);
             } else {
                 Logger.debugLog("Withdrawing unstrung longbows");
-                Bank.withdrawItem(Integer.parseInt(longbowU), useCache, 0.75);
                 updatePreviousBankItemCount();
                 bankItemCount = Bank.stackSize(Integer.parseInt(longbowU));
+                Bank.withdrawItem(Integer.parseInt(longbowU), useCache, 0.75);
             }
 
             // Withdraw new bow strings
-            Bank.withdrawItem(ItemList.BOW_STRING_1777, useCache, 0.75);
             bowstringCount = Bank.stackSize(ItemList.BOW_STRING_1777);
+            Bank.withdrawItem(ItemList.BOW_STRING_1777, useCache, 0.75);
             Condition.wait(() -> Inventory.contains(ItemList.BOW_STRING_1777, 0.75), 100,30);
             if (bowstringCount < bankItemCount & bowstringCount != -1) {
                 updatePreviousBankItemCount();

@@ -106,18 +106,18 @@ public class Bank extends Task {
 
     private void withdrawItems(boolean useCache) {
         // Withdraw first item and update our current stacksize
-        Bank.withdrawItem(ItemList.GRAPES_1987, useCache, 0.75);
         updatePreviousBankItemCount(1);
         bankItem1Count = Bank.stackSize(ItemList.GRAPES_1987);
+        Bank.withdrawItem(ItemList.GRAPES_1987, useCache, 0.75);
         printItemStateDebug(1, "Grapes");
 
         // Wait for a small bit
         Condition.sleep(generateDelay(125, 250));
 
         // Withdraw second item
-        Bank.withdrawItem(ItemList.JUG_OF_WATER_1937, useCache, 0.7, Color.decode("#6769c8"));
         updatePreviousBankItemCount(2);
         bankItem2Count = Bank.stackSize(ItemList.JUG_OF_WATER_1937);
+        Bank.withdrawItem(ItemList.JUG_OF_WATER_1937, useCache, 0.7, Color.decode("#6769c8"));
         printItemStateDebug(2, "Jug of Water");
     }
 

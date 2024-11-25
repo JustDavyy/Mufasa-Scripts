@@ -210,13 +210,13 @@ public class Setup extends Task {
 
             // Withdraw the first set of items
             if (product.equals("Shortbow")) {
-                Bank.withdrawItem(shortbowU, 0.75);
                 updatePreviousBankItemCount();
                 bankItemCount = Bank.stackSize(Integer.parseInt(shortbowU));
+                Bank.withdrawItem(shortbowU, 0.75);
             } else {
-                Bank.withdrawItem(longbowU, 0.75);
                 updatePreviousBankItemCount();
                 bankItemCount = Bank.stackSize(Integer.parseInt(longbowU));
+                Bank.withdrawItem(longbowU, 0.75);
             }
             Condition.sleep(generateDelay(150, 300));
 

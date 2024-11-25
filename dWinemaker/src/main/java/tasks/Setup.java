@@ -57,15 +57,15 @@ public class Setup extends Task {
 
     private void withdrawFirstItems() {
         // Withdraw first item
-        Bank.withdrawItem(ItemList.GRAPES_1987, 0.75);
         bankItem1Count = Bank.stackSize(ItemList.GRAPES_1987);
+        Bank.withdrawItem(ItemList.GRAPES_1987, 0.75);
 
         // Wait for a small bit
         Condition.sleep(generateDelay(125, 250));
 
         // Withdraw second item
-        Bank.withdrawItem(ItemList.JUG_OF_WATER_1937, 0.7, Color.decode("#6769c8"));
         bankItem2Count = Bank.stackSize(ItemList.JUG_OF_WATER_1937);
+        Bank.withdrawItem(ItemList.JUG_OF_WATER_1937, 0.7, Color.decode("#6769c8"));
     }
 
     private void findDynamicBank() {
