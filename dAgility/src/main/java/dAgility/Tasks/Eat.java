@@ -71,7 +71,20 @@ public class Eat extends Task {
     public void eat(String food){
         Logger.debugLog("Eating food now.");
         Inventory.eat(food, 0.8);
-        Condition.sleep(3000);
+        if (foodID.equals("1993")) {
+            Logger.debugLog("Using wine, we need to drop the jug.");
+            if (!Game.isTapToDropEnabled()) {
+                Game.enableTapToDrop();
+                Condition.sleep(generateRandomDelay(750, 1000));
+            }
+            Inventory.tapItem(food, 0.8);
+            Game.disableTapToDrop();
+            Condition.sleep(generateRandomDelay(250, 500));
+            Game.closeHotkeymenu();
+            Condition.sleep(generateRandomDelay(250, 500));
+        } else {
+            Condition.sleep(generateRandomDelay(2750, 3250));
+        }
         currentHP = Player.getHP();
         GameTabs.closeTab(UITabs.INVENTORY);
         Condition.wait(() -> !GameTabs.isTabOpen(UITabs.INVENTORY), 250, 20);
