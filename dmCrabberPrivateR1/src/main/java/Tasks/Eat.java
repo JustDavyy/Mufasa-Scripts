@@ -12,7 +12,7 @@ import static main.dmCrabberPrivate.*;
 
 public class Eat extends Task {
     private final List<Integer> cakeIds = Arrays.asList(1895, 1893, 1891);
-    private final Tile bankTile = new Tile(6875, 13609, 0);
+    final static Tile bankTile = new Tile(6875, 13609, 0);
 
     public boolean activate() {
         currentHP = Player.getHP();
@@ -61,7 +61,6 @@ public class Eat extends Task {
         }
 
 
-        GameTabs.closeInventoryTab();
         Logger.log("Done eating food.");
         return true;
     }

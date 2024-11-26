@@ -2,79 +2,80 @@ package Tasks;
 
 import helpers.utils.Tile;
 import helpers.utils.ItemList;
+import main.dmCrabberPrivate;
 import utils.Task;
 
-import static Tasks.PerformCrabbing.startTime;
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
+
 import static helpers.Interfaces.*;
 import static main.dmCrabberPrivate.*;
 
 public class Baank extends Task {
     private final Tile bankTile = new Tile(6875, 13609, 0);
-    public static Boolean IronEquippedWithdrawed = false;
-    public static Boolean AddyEquippedWithdrawed = false;
-    public static Boolean LeatherEquippedWithdrawed = false;
-    public static Boolean SnakeSkinEquippedWithdrawed = false;
-    public static Boolean GreenDhideEquippedWithdrawed = false;
-    public static Boolean RuneScimitarWithdrawed = false;
-    public static Boolean GraniteHammerWithdrawed = false;
-    public static Boolean WillowShortBowWithdrawed = false;
-    public static Boolean MagicShortBowWithdrawed = false;
-    String dynamicBank = "Hosidius_crab_bank";
+    private final Map<String, Boolean> gearWithdrawn = new HashMap<>();
+    private String dynamicBank = "Hosidius_crab_bank";
+    Color itemColor = null;
 
-    // I'm guessing we should just withdraw full inv of food?
+
+    public Baank() {
+        // Initialize withdrawal status for all equipment types
+        for (String key : SkillTracker.getEquipmentStatus().keySet()) {
+            gearWithdrawn.put(key, false);
+        }
+    }
+
+
+
     @Override
     public boolean activate() {
-        if (!usingPots && selectedFood.equals("None")) {
-            return false;
-        }
-
-        if (!GameTabs.isInventoryTabOpen()) {
-            GameTabs.openInventoryTab();
-            Condition.wait(() -> GameTabs.isInventoryTabOpen(), 100, 10);
-        }
-
-        return (!Inventory.contains(foodID, 0.80) || outOfPots);
+        // Activate only if food or potions are needed, or gear needs equipping
+        boolean needsGear = SkillTracker.getEquipmentStatus().values().stream()
+                .anyMatch(status -> status == SkillTracker.EquipmentStatus.TO_EQUIP);
+        return (!Inventory.contains(foodID, 0.80) || outOfPots || needsGear);
     }
 
     @Override
     public boolean execute() {
-        startTime = 0; // Reset the perform crabbing start time
+        Logger.debugLog("Banking started");
 
         navigateToBankArea();
-        if (Player.isTileWithinArea(currentLocation, bankArea)) {
+
+        if (Player.within(bankArea)) {
             handleBanking();
         }
 
-        outOfPots = false;
+        outOfPots = false; // Reset pot status
         return true;
     }
 
     private void navigateToBankArea() {
         Logger.debugLog("Navigating to the bank area");
-        // Check if player needs to walk to the bank area
-        if (!Player.isTileWithinArea(currentLocation, bankArea)) {
-            Walker.webWalk(bankTile, true);
-            currentLocation = Walker.getPlayerPosition();
-        }
 
-        // Check if player needs to step to the bank tile
-        if (!Player.tileEquals(currentLocation, bankTile)) {
+        // Walk to the bank area if not already there
+        if (!Player.within(bankArea)) {
+            Walker.webWalk(bankTile, true);
+        }
+        // Step to the bank tile if needed
+        if (!Player.atTile(bankTile)) {
             Walker.step(bankTile);
-            currentLocation = Walker.getPlayerPosition();
         }
     }
 
     private void handleBanking() {
         Logger.debugLog("Banking");
-        if (dynamicBank == null) {
-            dynamicBank = Bank.setupDynamicBank();
-        } else {
-            Bank.stepToBank(dynamicBank);
-        }
-
         if (!Bank.isOpen()) {
-            Bank.open(dynamicBank);
-            Condition.wait(() -> Bank.isOpen(), 500, 10);
+            if (dynamicBank == null) {
+                dynamicBank = Bank.setupDynamicBank();
+            } else if (!Player.atTile(bankTile)) {
+                Bank.stepToBank(dynamicBank);
+            }
+
+            if (Player.atTile(bankTile)) {
+                Bank.open(dynamicBank);
+                Condition.wait(Bank::isOpen, 500, 10);
+            }
         }
 
         if (Bank.isOpen()) {
@@ -89,152 +90,119 @@ public class Baank extends Task {
 
     private void depositItems() {
         Bank.tapDepositInventoryButton();
+        Logger.debugLog("Deposited inventory");
     }
 
     private void selectBankTab() {
         if (!Bank.isSelectedBankTab(selectedBankTab)) {
             Bank.openTab(selectedBankTab);
             Condition.wait(() -> Bank.isSelectedBankTab(selectedBankTab), 250, 12);
-            Logger.debugLog("Opened bank tab " + selectedBankTab);
+            Logger.debugLog("Opened bank tab: " + selectedBankTab);
         }
     }
 
     private void withdrawGear() {
+        Map<String, SkillTracker.EquipmentStatus> equipmentStatus = SkillTracker.getEquipmentStatus();
 
-        if (!IronEquippedWithdrawed && SkillTracker.changeToEquipment.getOrDefault("Iron", false)) {
-            Bank.withdrawItem(ItemList.IRON_PLATEBODY_1115, 0.8); // iron platebody
-            Condition.wait(() -> Inventory.contains(ItemList.IRON_PLATEBODY_1115, 0.8),250,12);
+        for (Map.Entry<String, SkillTracker.EquipmentStatus> entry : equipmentStatus.entrySet()) {
+            String equipmentType = entry.getKey();
+            SkillTracker.EquipmentStatus status = entry.getValue();
 
-            Bank.withdrawItem(ItemList.IRON_PLATELEGS_1067, 0.8); // iron platelegs
-            Condition.wait(() -> Inventory.contains(ItemList.IRON_PLATELEGS_1067, 0.8),250,12);
+            // Skip if gear is already equipped or withdrawn
+            if (gearWithdrawn.getOrDefault(equipmentType, false) || status != SkillTracker.EquipmentStatus.TO_EQUIP) {
+                continue;
+            }
 
-            Bank.withdrawItem(ItemList.IRON_FULL_HELM_1153, 0.8); // iron full helmet
-            Condition.wait(() -> Inventory.contains(ItemList.IRON_FULL_HELM_1153, 0.8),250,12);
+            Logger.debugLog("Withdrawing gear for: " + equipmentType);
+            withdrawItemsForGear(equipmentType);
 
-            Bank.withdrawItem(ItemList.IRON_KITESHIELD_1191, 0.8); // iron kite shield
-            Condition.wait(() -> Inventory.contains(ItemList.IRON_KITESHIELD_1191, 0.8),250,12);
-
-            Bank.withdrawItem(ItemList.IRON_SCIMITAR_1323, 0.8); // iron scimitar
-            Condition.wait(() -> Inventory.contains(ItemList.IRON_SCIMITAR_1323, 0.8),250,12);
-            IronEquippedWithdrawed = true;
-            Logger.debugLog("Done withdrawing Iron gear");
+            gearWithdrawn.put(equipmentType, true); // Mark as withdrawn
         }
-
-        if (!AddyEquippedWithdrawed && SkillTracker.changeToEquipment.getOrDefault("Addy", false)) {
-            Bank.withdrawItem(ItemList.ADAMANT_PLATEBODY_1123, 0.8); // Adamant platebody
-            Condition.wait(() -> Inventory.contains(ItemList.ADAMANT_PLATEBODY_1123, 0.8),250,12);
-            
-            Bank.withdrawItem(ItemList.ADAMANT_PLATELEGS_1073, 0.8); // Adamant platelegs
-            Condition.wait(() -> Inventory.contains(ItemList.ADAMANT_PLATELEGS_1073, 0.8),250,12);
-
-            Bank.withdrawItem(ItemList.ADAMANT_FULL_HELM_1161, 0.8); // Adamant full helmet
-            Condition.wait(() -> Inventory.contains(ItemList.ADAMANT_FULL_HELM_1161, 0.8),250,12);
-
-            Bank.withdrawItem(ItemList.ADAMANT_KITESHIELD_1199, 0.8); // Adamant kite shield
-            Condition.wait(() -> Inventory.contains(ItemList.ADAMANT_KITESHIELD_1199, 0.8),250,12);
-
-            Bank.withdrawItem(ItemList.ADAMANT_SCIMITAR_1331, 0.8); // Adamant Scimitar
-            Condition.wait(() -> Inventory.contains(ItemList.ADAMANT_SCIMITAR_1331, 0.8),250,12);
-            AddyEquippedWithdrawed = true;
-            Logger.debugLog("Done withdrawing Adamant gear");
-        } 
-
-        if (!LeatherEquippedWithdrawed && SkillTracker.changeToEquipment.getOrDefault("Leather", false)) {
-            Bank.withdrawItem(ItemList.LEATHER_BODY_1129, 0.8); // Leather platebody
-            Condition.wait(() -> Inventory.contains(ItemList.LEATHER_BODY_1129, 0.8),250,12);
-            
-            Bank.withdrawItem(ItemList.LEATHER_CHAPS_1095, 0.8); // leather chaps
-            Condition.wait(() -> Inventory.contains(ItemList.LEATHER_CHAPS_1095, 0.8),250,12);
-
-            Bank.withdrawItem(ItemList.LEATHER_COWL_1167, 0.8); // leather cowl
-            Condition.wait(() -> Inventory.contains(ItemList.LEATHER_COWL_1167, 0.8),250,12);
-
-            Bank.withdrawItem(ItemList.LEATHER_VAMBRACES_1063, 0.8); // leather vambraces
-            Condition.wait(() -> Inventory.contains(ItemList.LEATHER_VAMBRACES_1063, 0.8),250,12);
-
-            Bank.withdrawItem(ItemList.SHORTBOW_841, 0.8); // shortbow
-            Condition.wait(() -> Inventory.contains(ItemList.SHORTBOW_841, 0.8),250,12);
-
-            Bank.withdrawItem(ItemList.OAK_SHORTBOW_843, 0.8); // Oak shortbow taking with us since it only 4 levels to use.
-            Condition.wait(() -> Inventory.contains(ItemList.OAK_SHORTBOW_843, 0.8),250,12);
-            LeatherEquippedWithdrawed = true;
-            Logger.debugLog("Done withdrawing Leather gear");
-        }
-
-        if (!SnakeSkinEquippedWithdrawed && SkillTracker.changeToEquipment.getOrDefault("Snakeskin", false)) {
-            Bank.withdrawItem(ItemList.SNAKESKIN_BODY_6322, 0.8); // Snakeskin body
-            Condition.wait(() -> Inventory.contains(ItemList.SNAKESKIN_BODY_6322, 0.8),250,12);
-            
-            Bank.withdrawItem(ItemList.SNAKESKIN_CHAPS_6324, 0.8); // Snakeskin legs
-            Condition.wait(() -> Inventory.contains(ItemList.SNAKESKIN_CHAPS_6324, 0.8),250,12);
-
-            Bank.withdrawItem(ItemList.SNAKESKIN_BANDANA_6326, 0.8); // snakeskin bandana
-            Condition.wait(() -> Inventory.contains(ItemList.SNAKESKIN_BANDANA_6326, 0.8),250,12);
-
-            Bank.withdrawItem(ItemList.SNAKESKIN_BOOTS_6328, 0.8); // snakeskin boots
-            Condition.wait(() -> Inventory.contains(ItemList.SNAKESKIN_BOOTS_6328, 0.8),250,12);
-
-            Bank.withdrawItem(ItemList.SNAKESKIN_VAMBRACES_6330, 0.8); // snakeskin vambracers
-            Condition.wait(() -> Inventory.contains(ItemList.SNAKESKIN_VAMBRACES_6330, 0.8),250,12);
-            SnakeSkinEquippedWithdrawed = true;
-            Logger.debugLog("Done withdrawing Snakeskin gear");
-        }
-
-        if (!GreenDhideEquippedWithdrawed && SkillTracker.changeToEquipment.getOrDefault("GreenDhide", false)) {
-            Bank.withdrawItem(ItemList.GREEN_D_HIDE_BODY_1135, 0.8); // Green D'hide body
-            Condition.wait(() -> Inventory.contains(ItemList.GREEN_D_HIDE_BODY_1135, 0.8),250,12);
-            
-            Bank.withdrawItem(ItemList.GREEN_D_HIDE_CHAPS_1099, 0.8); // Green D'hide chaps
-            Condition.wait(() -> Inventory.contains(ItemList.GREEN_D_HIDE_CHAPS_1099, 0.8),250,12);
-
-            Bank.withdrawItem(ItemList.GREEN_D_HIDE_VAMBRACES_1065, 0.8); // Green D'hide Vampbraces
-            Condition.wait(() -> Inventory.contains(ItemList.GREEN_D_HIDE_VAMBRACES_1065, 0.8),250,12);
-
-            GreenDhideEquippedWithdrawed = true;
-            Logger.debugLog("Done withdrawing GreenDhide gear");
-        } 
-        
-        if (!RuneScimitarWithdrawed && SkillTracker.changeToEquipment.getOrDefault("RuneScimitar", false)) {
-            Bank.withdrawItem(ItemList.RUNE_SCIMITAR_1333, 0.8); // Rune Scimitar
-            RuneScimitarWithdrawed = true;
-            Condition.wait(() -> Inventory.contains(ItemList.RUNE_SCIMITAR_1333, 0.8),250,12);
-            Logger.debugLog("Done withdrawing Rune scimitar");
-        }
-
-        if (!GraniteHammerWithdrawed && SkillTracker.changeToEquipment.getOrDefault("GraniteHammer", false)) {
-            Bank.withdrawItem(ItemList.GRANITE_HAMMER_21742, 0.8); // Granite Hammer
-            GraniteHammerWithdrawed = true;
-            Condition.wait(() -> Inventory.contains(ItemList.GRANITE_HAMMER_21742, 0.8),250,12);
-            Logger.debugLog("Done withdrawing Granite hammer");
-        }
-
-        if (!WillowShortBowWithdrawed && SkillTracker.changeToEquipment.getOrDefault("WillowShortBow", false)) {
-            Bank.withdrawItem(ItemList.WILLOW_SHORTBOW_849, 0.8); // Granite Hammer
-            Condition.wait(() -> Inventory.contains(ItemList.WILLOW_SHORTBOW_849, 0.8),250,12);
-            Logger.debugLog("Done withdrawing Willow shortbow");
-
-            Bank.withdrawItem(ItemList.MITHRIL_ARROW_1_921, 0.8);
-            Condition.wait(() -> Inventory.contains(ItemList.MITHRIL_ARROW_1_921, 0.8),250,12);
-            Logger.debugLog("Done withdrawing Mithril arrows");
-
-            WillowShortBowWithdrawed = true;
-        }
-
-        if (!MagicShortBowWithdrawed && SkillTracker.changeToEquipment.getOrDefault("MagicShortBow", false)) {
-            Bank.withdrawItem(ItemList.MAGIC_SHORTBOW_861, 0.8); // Granite Hammer
-            MagicShortBowWithdrawed = true;
-            Condition.wait(() -> Inventory.contains(ItemList.MAGIC_SHORTBOW_861, 0.8),250,12);
-            Logger.debugLog("Done withdrawing Magic shortbow");
-        }
-
     }
 
+    private void withdrawItemsForGear(String equipmentType) {
+        switch (equipmentType) {
+            case "Iron":
+                itemColor = dmCrabberPrivate.IronPlatebodyColor;
+                withdrawItem(ItemList.IRON_PLATEBODY_1115, itemColor);
+                withdrawItem(ItemList.IRON_PLATELEGS_1067, itemColor);
+                withdrawItem(ItemList.IRON_FULL_HELM_1153, itemColor);
+                withdrawItem(ItemList.IRON_KITESHIELD_1191, itemColor);
+                withdrawItem(ItemList.IRON_SCIMITAR_1323, dmCrabberPrivate.IronScimitarColor);
+                break;
+
+            case "Addy":
+                itemColor = dmCrabberPrivate.AdamantPlateBodyColor;
+                withdrawItem(ItemList.ADAMANT_PLATEBODY_1123, itemColor);
+                withdrawItem(ItemList.ADAMANT_PLATELEGS_1073, itemColor);
+                withdrawItem(ItemList.ADAMANT_FULL_HELM_1161, itemColor);
+                withdrawItem(ItemList.ADAMANT_KITESHIELD_1199, itemColor);
+                withdrawItem(ItemList.ADAMANT_SCIMITAR_1331, dmCrabberPrivate.AdamantScimitarColor);
+                break;
+
+            case "Leather":
+                itemColor = null;
+                withdrawItem(ItemList.LEATHER_BODY_1129, itemColor);
+                withdrawItem(ItemList.LEATHER_CHAPS_1095, itemColor);
+                withdrawItem(ItemList.LEATHER_COWL_1167, itemColor);
+                withdrawItem(ItemList.LEATHER_VAMBRACES_1063, itemColor);
+                withdrawItem(ItemList.SHORTBOW_841, itemColor);
+                withdrawItem(ItemList.OAK_SHORTBOW_843, itemColor);
+                break;
+
+            case "Snakeskin":
+                itemColor = null;
+                withdrawItem(ItemList.SNAKESKIN_BODY_6322, itemColor);
+                withdrawItem(ItemList.SNAKESKIN_CHAPS_6324, itemColor);
+                withdrawItem(ItemList.SNAKESKIN_BANDANA_6326, itemColor);
+                withdrawItem(ItemList.SNAKESKIN_BOOTS_6328, itemColor);
+                withdrawItem(ItemList.SNAKESKIN_VAMBRACES_6330, itemColor);
+                break;
+
+            case "GreenDhide":
+                itemColor = null;
+                withdrawItem(ItemList.GREEN_D_HIDE_BODY_1135, itemColor);
+                withdrawItem(ItemList.GREEN_D_HIDE_CHAPS_1099, itemColor);
+                withdrawItem(ItemList.GREEN_D_HIDE_VAMBRACES_1065, itemColor);
+                break;
+
+            case "RuneScimitar":
+                itemColor = dmCrabberPrivate.RuneScimitarColor;
+                withdrawItem(ItemList.RUNE_SCIMITAR_1333, dmCrabberPrivate.RuneScimitarColor);
+                break;
+
+            case "GraniteHammer":
+                itemColor = null;
+                withdrawItem(ItemList.GRANITE_HAMMER_21742, itemColor);
+                break;
+
+            case "WillowShortBow":
+                itemColor = null;
+                withdrawItem(ItemList.WILLOW_SHORTBOW_849, itemColor);
+                withdrawItem(ItemList.MITHRIL_ARROW_1_921, itemColor);
+                break;
+
+            case "MagicShortBow":
+                itemColor = null;
+                withdrawItem(ItemList.MAGIC_SHORTBOW_861, itemColor);
+                break;
+
+            default:
+                Logger.debugLog("No items defined for: " + equipmentType);
+        }
+    }
+
+    private void withdrawItem(int itemId, Color itemColor) {
+        Bank.withdrawItem(itemId, 0.8, itemColor);
+        Condition.wait(() -> Inventory.contains(itemId, 0.8, itemColor), 350, 12);
+        Logger.debugLog("Withdrawn item with ID: " + itemId);
+    }
 
     private void withdrawPotions() {
         if (!potions.equals("None")) {
             if (!Bank.isSelectedQuantity5Button()) {
                 Bank.tapQuantity5Button();
-                Condition.wait(() -> Bank.isSelectedQuantity5Button(), 250, 12);
+                Condition.wait(Bank::isSelectedQuantity5Button, 350, 12);
             }
 
             for (int i = 0; i < 3; i++) {
@@ -243,7 +211,7 @@ public class Baank extends Task {
 
             if (!Bank.isSelectedQuantity1Button()) {
                 Bank.tapQuantity1Button();
-                Condition.wait(() -> Bank.isSelectedQuantity1Button(), 250, 12);
+                Condition.wait(Bank::isSelectedQuantity1Button, 350, 12);
             }
         }
     }
@@ -251,17 +219,14 @@ public class Baank extends Task {
     private void withdrawFood() {
         if (!Bank.isSelectedQuantityAllButton()) {
             Bank.tapQuantityAllButton();
-            Condition.wait(() -> Bank.isSelectedQuantityAllButton(), 250, 12);
+            Condition.wait(Bank::isSelectedQuantityAllButton, 350, 12);
         }
         Bank.withdrawItem(foodID, 0.8);
     }
 
     private void closeBank() {
         Bank.close();
-        Condition.wait(() -> Bank.isOpen(), 500, 10);
-
-        if (Bank.isOpen()) {
-            Bank.close();
-        }
+        Condition.wait(() -> !Bank.isOpen(), 500, 10);
     }
+    
 }
