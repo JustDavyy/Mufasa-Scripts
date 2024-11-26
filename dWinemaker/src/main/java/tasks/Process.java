@@ -76,7 +76,17 @@ public class Process extends Task {
         Paint.setStatus("Process items");
         Logger.log("Process items");
         // Tap the items with a small random delay in between actions
-        Inventory.tapItem(ItemList.JUG_OF_WATER_1937, useCache, 0.75);
+        if (lastWineRect != null) {
+            if (useCache) {
+                Client.tap(lastWineRect);
+            } else {
+                lastWineRect = Inventory.lastItemPosition(ItemList.JUG_OF_WATER_1937, 0.75);
+                Client.tap(lastWineRect);
+            }
+        } else {
+            lastWineRect = Inventory.lastItemPosition(ItemList.JUG_OF_WATER_1937, 0.75);
+            Client.tap(lastWineRect);
+        }
         Condition.sleep(generateDelay(100, 200));
         Inventory.tapItem(ItemList.GRAPES_1987, useCache, 0.75);
 

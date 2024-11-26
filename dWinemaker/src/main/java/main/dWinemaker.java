@@ -11,16 +11,18 @@ import tasks.Process;
 import tasks.Setup;
 import utils.Task;
 
+import java.awt.*;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
+import java.util.List;
 
 import static helpers.Interfaces.*;
 
 @ScriptManifest(
         name = "dWinemaker",
         description = "Creates well fermented wine for those juicy cooking gains. Supports dynamic banking.",
-        version = "2.00",
+        version = "2.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dwinemaker/",
         categories = {ScriptCategory.Cooking}
 )
@@ -55,6 +57,7 @@ public class dWinemaker extends AbstractScript {
     public static int currentUsedSlots = 0;
     public static boolean initialActiondone = false;
     public static int lastUsedSlots = 0;
+    public static Rectangle lastWineRect = null;
 
     // Banking stuff we need to prevent releasing placeholders
     public static boolean prepareScriptStop = false;
