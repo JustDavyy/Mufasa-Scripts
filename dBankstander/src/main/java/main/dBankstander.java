@@ -20,9 +20,9 @@ import static helpers.Interfaces.*;
 
 @ScriptManifest(
         name = "dBankstander",
-        description = "Blows molten glass into glass objects to train crafting. Supports all options and dynamic banking.",
+        description = "Bank stander script, uses dynamic banking to support a variety of banks around Gielinor. Current supported operations: Glassblowing and Gem cutting",
         version = "1.00",
-        guideLink = "https://wiki.mufasaclient.com/docs/dglass-blower/",
+        guideLink = "https://wiki.mufasaclient.com/docs/dbankstander/",
         categories = {ScriptCategory.Crafting}
 )
 @ScriptConfiguration.List(
