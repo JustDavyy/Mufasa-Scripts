@@ -4,7 +4,7 @@ import helpers.utils.ItemList;
 import utils.Task;
 
 import static helpers.Interfaces.*;
-import static main.dGlassblower.*;
+import static main.dBankstander.*;
 
 public class Process extends Task {
 
@@ -18,7 +18,7 @@ public class Process extends Task {
             }
         }
 
-        return Inventory.contains(ItemList.MOLTEN_GLASS_1775, 0.75);
+        return Inventory.contains(sourceItem, 0.75);
     }
 
     @Override
@@ -70,19 +70,50 @@ public class Process extends Task {
         return true;
     }
 
+    private void sendMakeOption() {
+        switch (activity) {
+            case "Glassblowing":
+                if (Chatbox.isMakeMenuVisible()) {
+                    Client.sendKeystroke(String.valueOf(makeOption));
+                }
+                break;
+            case "Gemcutting":
+                if (Chatbox.isMakeMenuVisible()) {
+                    Client.sendKeystroke("space");
+                }
+                break;
+            default:
+                Logger.debugLog("Unknown activity (not sending keystroke): " + activity);
+        }
+    }
+
+    private void tapActivityItems(boolean useCache) {
+        switch (activity) {
+            case "Glassblowing":
+                Inventory.tapItem(ItemList.GLASSBLOWING_PIPE_1785, useCache, 0.75);
+                Condition.sleep(generateDelay(100, 200));
+                Inventory.tapItem(ItemList.MOLTEN_GLASS_1775, useCache, 0.75);
+                break;
+            case "Gemcutting":
+                Inventory.tapItem(ItemList.CHISEL_1755, useCache, 0.75);
+                Condition.sleep(generateDelay(100, 200));
+                Inventory.tapItem(sourceItem, useCache, 0.75);
+                break;
+            default:
+                Logger.debugLog("Unknown activity (not sending keystroke): " + activity);
+        }
+    }
+
     private void processItems(boolean useCache) {
         Paint.setStatus("Process items");
         Logger.log("Process items");
         // Tap the items with a small random delay in between actions
-        Inventory.tapItem(ItemList.GLASSBLOWING_PIPE_1785, useCache, 0.75);
-        Condition.sleep(generateDelay(100, 200));
-        Inventory.tapItem(ItemList.MOLTEN_GLASS_1775, useCache, 0.75);
+        tapActivityItems(useCache);
 
         // Wait for the make menu to be visible
         Paint.setStatus("Wait for make menu");
         Condition.wait(Chatbox::isMakeMenuVisible, 100, 40);
-        if (Chatbox.isMakeMenuVisible()) {
-            Client.sendKeystroke(String.valueOf(makeOption));
-        }
+        sendMakeOption();
+        Condition.sleep(generateDelay(750, 1000));
     }
 }

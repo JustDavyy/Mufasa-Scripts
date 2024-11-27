@@ -3,17 +3,15 @@ package tasks;
 import helpers.utils.ItemList;
 import utils.Task;
 
-import java.awt.*;
-
 import static helpers.Interfaces.*;
 import static helpers.Interfaces.Logger;
-import static main.dGlassblower.*;
+import static main.dBankstander.*;
 
 public class Bank extends Task {
 
     @Override
     public boolean activate() {
-        return !Inventory.contains(ItemList.MOLTEN_GLASS_1775, 0.75);
+        return !Inventory.contains(sourceItem, 0.75);
     }
 
     @Override
@@ -95,7 +93,7 @@ public class Bank extends Task {
     }
 
     private boolean checkItems() {
-        return Inventory.contains(ItemList.MOLTEN_GLASS_1775, 0.75);
+        return Inventory.contains(sourceItem, 0.75);
     }
 
     private void depositItems() {
@@ -107,9 +105,9 @@ public class Bank extends Task {
     private void withdrawItems(boolean useCache) {
         // Withdraw first item and update our current stacksize
         updatePreviousBankItemCount(1);
-        bankItem1Count = Bank.stackSize(ItemList.MOLTEN_GLASS_1775);
-        Bank.withdrawItem(ItemList.MOLTEN_GLASS_1775, useCache, 0.75);
-        printItemStateDebug(1, "Molten glass");
+        bankItem1Count = Bank.stackSize(sourceItem);
+        Bank.withdrawItem(sourceItem, useCache, 0.75);
+        printItemStateDebug(1);
 
         // Wait for a small bit
         Condition.sleep(generateDelay(125, 250));
@@ -132,10 +130,28 @@ public class Bank extends Task {
         updatePaintBar(PROCESS_COUNT);
     }
 
-    private void printItemStateDebug(int itemNr, String itemName) {
+    private void printItemStateDebug(int itemNr) {
         if (itemNr == 1) {
-            Logger.debugLog(itemName + " previously left in bank: " + previousBankItem1Count);
-            Logger.debugLog(itemName + " currently left in bank: " + bankItem1Count);
+            Logger.debugLog(getItemName() + " previously left in bank: " + previousBankItem1Count);
+            Logger.debugLog(getItemName() + " currently left in bank: " + bankItem1Count);
+        }
+    }
+
+    private String getItemName() {
+        switch (activity) {
+            case "Glassblowing":
+                return "Molten glass";
+            case "Gemcutting":
+                return product;
+            default:
+                Logger.debugLog("Unknown activity: " + activity + " aborting script.");
+                if (Bank.isOpen()) {
+                    Bank.close();
+                    Condition.sleep(generateDelay(1200, 1800));
+                }
+                Logout.logout();
+                Script.stop();
+                return "Invalid item";
         }
     }
 

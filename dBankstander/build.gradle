@@ -17,13 +17,13 @@ configurations.all {
 }
 
 dependencies {
-    implementation('com.github.Mufasa-SDK:SDKRepo:1.2.77') {
+    implementation('com.github.Mufasa-SDK:SDKRepo:1.2.81') {
         changing = true
     }
 }
 
 jar {
-    archiveFileName = 'dGlassblower.jar'
+    archiveFileName = 'dBankstander.jar'
     destinationDirectory = file('jar/')
 
     manifest {

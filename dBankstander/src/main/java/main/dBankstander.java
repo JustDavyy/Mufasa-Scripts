@@ -19,9 +19,9 @@ import java.util.*;
 import static helpers.Interfaces.*;
 
 @ScriptManifest(
-        name = "dGlassblower",
+        name = "dBankstander",
         description = "Blows molten glass into glass objects to train crafting. Supports all options and dynamic banking.",
-        version = "2.00",
+        version = "1.00",
         guideLink = "https://wiki.mufasaclient.com/docs/dglass-blower/",
         categories = {ScriptCategory.Crafting}
 )
@@ -32,6 +32,7 @@ import static helpers.Interfaces.*;
                         description = "What glass product would you like to make?",
                         defaultValue = "Lantern lens",
                         allowedValues = {
+                                @AllowedValue(optionName = "GLASSBLOWING OPTIONS"),
                                 @AllowedValue(optionIcon = "1919", optionName = "Beer glass"),
                                 @AllowedValue(optionIcon = "4527", optionName = "Empty candle lantern"),
                                 @AllowedValue(optionIcon = "4525", optionName = "Empty oil lamp"),
@@ -39,7 +40,18 @@ import static helpers.Interfaces.*;
                                 @AllowedValue(optionIcon = "6667", optionName = "Empty fishbowl"),
                                 @AllowedValue(optionIcon = "567", optionName = "Unpowered orb"),
                                 @AllowedValue(optionIcon = "4542", optionName = "Lantern lens"),
-                                @AllowedValue(optionIcon = "10980", optionName = "Empty light orb")
+                                @AllowedValue(optionIcon = "10980", optionName = "Empty light orb"),
+                                @AllowedValue(optionName = "GEM CUT OPTIONS"),
+                                @AllowedValue(optionIcon = "1625", optionName = "Uncut opal"),
+                                @AllowedValue(optionIcon = "1627", optionName = "Uncut jade"),
+                                @AllowedValue(optionIcon = "1629", optionName = "Uncut red topaz"),
+                                @AllowedValue(optionIcon = "1623", optionName = "Uncut sapphire"),
+                                @AllowedValue(optionIcon = "1621", optionName = "Uncut emerald"),
+                                @AllowedValue(optionIcon = "1619", optionName = "Uncut ruby"),
+                                @AllowedValue(optionIcon = "1617", optionName = "Uncut diamond"),
+                                @AllowedValue(optionIcon = "1631", optionName = "Uncut dragonstone"),
+                                @AllowedValue(optionIcon = "6571", optionName = "Uncut onyx"),
+                                @AllowedValue(optionIcon = "19496", optionName = "Uncut zenyte")
                         },
                         optionType = OptionType.STRING
                 ),
@@ -58,7 +70,7 @@ import static helpers.Interfaces.*;
         }
 )
 
-public class dGlassblower extends AbstractScript {
+public class dBankstander extends AbstractScript {
     public static String product;
     static String hopProfile;
     static Boolean hopEnabled;
@@ -69,6 +81,8 @@ public class dGlassblower extends AbstractScript {
     public static final Random random = new Random();
     public static int makeOption;
     public static int targetItem;
+    public static int sourceItem;
+    public static String activity;
 
     // Process stuff we need to re-initiate actions
     public static long lastProcessTime = System.currentTimeMillis();
@@ -102,7 +116,7 @@ public class dGlassblower extends AbstractScript {
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
 
-        Logger.log("Thank you for using the dGlassblower script!\nSetting up everything for your gains now...");
+        Logger.log("Thank you for using the dBankstander script!\nSetting up everything for your gains now...");
 
         // Initialize what we need to before proceeding
         initializeOptions();
@@ -213,35 +227,101 @@ public class dGlassblower extends AbstractScript {
         switch (product) {
             case "Beer glass":
                 makeOption = 1;
+                sourceItem = ItemList.MOLTEN_GLASS_1775;
                 targetItem = ItemList.BEER_GLASS_1919;
+                activity = "Glassblowing";
                 break;
             case "Empty candle lantern":
                 makeOption = 2;
+                sourceItem = ItemList.MOLTEN_GLASS_1775;
                 targetItem = ItemList.EMPTY_CANDLE_LANTERN_4527;
+                activity = "Glassblowing";
                 break;
             case "Empty oil lamp":
                 makeOption = 3;
+                sourceItem = ItemList.MOLTEN_GLASS_1775;
                 targetItem = ItemList.EMPTY_OIL_LAMP_4525;
+                activity = "Glassblowing";
                 break;
             case "Vial":
                 makeOption = 4;
+                sourceItem = ItemList.MOLTEN_GLASS_1775;
                 targetItem = ItemList.VIAL_229;
+                activity = "Glassblowing";
                 break;
             case "Empty fishbowl":
                 makeOption = 5;
+                sourceItem = ItemList.MOLTEN_GLASS_1775;
                 targetItem = ItemList.EMPTY_FISHBOWL_6667;
+                activity = "Glassblowing";
                 break;
             case "Unpowered orb":
                 makeOption = 6;
+                sourceItem = ItemList.MOLTEN_GLASS_1775;
                 targetItem = ItemList.UNPOWERED_ORB_567;
+                activity = "Glassblowing";
                 break;
             case "Lantern lens":
                 makeOption = 7;
+                sourceItem = ItemList.MOLTEN_GLASS_1775;
                 targetItem = ItemList.LANTERN_LENS_4542;
+                activity = "Glassblowing";
                 break;
             case "Empty light orb":
                 makeOption = 8;
+                sourceItem = ItemList.MOLTEN_GLASS_1775;
                 targetItem = ItemList.EMPTY_LIGHT_ORB_10980;
+                activity = "Glassblowing";
+                break;
+            case "Uncut opal":
+                sourceItem = ItemList.UNCUT_OPAL_1625;
+                targetItem = ItemList.OPAL_1609;
+                activity = "Gemcutting";
+                break;
+            case "Uncut jade":
+                sourceItem = ItemList.UNCUT_JADE_1627;
+                targetItem = ItemList.JADE_1611;
+                activity = "Gemcutting";
+                break;
+            case "Uncut red topaz":
+                sourceItem = ItemList.UNCUT_RED_TOPAZ_1629;
+                targetItem = ItemList.RED_TOPAZ_1613;
+                activity = "Gemcutting";
+                break;
+            case "Uncut sapphire":
+                sourceItem = ItemList.UNCUT_SAPPHIRE_1623;
+                targetItem = ItemList.SAPPHIRE_1607;
+                activity = "Gemcutting";
+                break;
+            case "Uncut emerald":
+                sourceItem = ItemList.UNCUT_EMERALD_1621;
+                targetItem = ItemList.EMERALD_1605;
+                activity = "Gemcutting";
+                break;
+            case "Uncut ruby":
+                sourceItem = ItemList.UNCUT_RUBY_1619;
+                targetItem = ItemList.RUBY_1603;
+                activity = "Gemcutting";
+                break;
+            case "Uncut diamond":
+                sourceItem = ItemList.UNCUT_DIAMOND_1617;
+                targetItem = ItemList.DIAMOND_1601;
+                activity = "Gemcutting";
+                break;
+            case "Uncut dragonstone":
+                sourceItem = ItemList.UNCUT_DRAGONSTONE_1631;
+                targetItem = ItemList.DRAGONSTONE_1615;
+                activity = "Gemcutting";
+                break;
+            case "Uncut onyx":
+                sourceItem = ItemList.UNCUT_ONYX_6571;
+                targetItem = ItemList.ONYX_6573;
+                activity = "Gemcutting";
+                break;
+            case "Uncut zenyte":
+                sourceItem = ItemList.UNCUT_ZENYTE_19496;
+                targetItem = ItemList.ZENYTE_19493;
+                activity = "Gemcutting";
                 break;
             default:
                 Logger.log("Unknown product: " + product + " stopping script.");
