@@ -21,7 +21,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dOffering",
         description = "Offers bones and ashes using the Arceuus spellbook for quick prayer gains.",
-        version = "2.00",
+        version = "2.01",
         guideLink = "https://wiki.mufasaclient.com/docs/doffering/",
         categories = {ScriptCategory.Prayer, ScriptCategory.Magic}
 )

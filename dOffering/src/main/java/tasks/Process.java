@@ -1,6 +1,7 @@
 package tasks;
 
 import helpers.utils.ItemList;
+import helpers.utils.Spells;
 import helpers.utils.UITabs;
 import utils.Task;
 
@@ -83,11 +84,11 @@ public class Process extends Task {
         if (product.endsWith("ashes")) {
             Paint.setStatus("Cast Demonic offering");
             Logger.log("Casting Demonic offering");
-            Magic.tapDemonicOfferingSpell();
+            Magic.castSpell(Spells.DEMONIC_OFFERING);
         } else if (product.endsWith("bones")) {
             Paint.setStatus("Cast Sinister offering");
             Logger.log("Casting Sinister offering");
-            Magic.tapSinisterOfferingSpell();
+            Magic.castSpell(Spells.SINISTER_OFFERING);
         } else {
             Logger.debugLog("Invalid product, stopping script.");
             Logout.logout();
