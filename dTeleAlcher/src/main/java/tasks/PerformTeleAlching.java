@@ -1,6 +1,7 @@
 package tasks;
 
 import helpers.utils.ItemList;
+import helpers.utils.Spells;
 import main.dTeleAlcher;
 import utils.Task;
 
@@ -39,13 +40,13 @@ public class PerformTeleAlching extends Task {
             case "Camelot teleport":
             case "Ardougne teleport":
                 Logger.log("Pressing High Alchemy spell");
-                Magic.tapHighLevelAlchemySpell();
+                Magic.castSpell(Spells.HIGH_LEVEL_ALCHEMY);
                 Condition.wait(GameTabs::isInventoryTabOpen, 100, 40);
                 break;
             case "Camelot teleport - Low Alchemy":
             case "Varrock teleport":
                 Logger.log("Pressing Low Alchemy spell");
-                Magic.tapLowLevelAlchemySpell();
+                Magic.castSpell(Spells.LOW_LEVEL_ALCHEMY);
                 Condition.wait(GameTabs::isInventoryTabOpen, 100, 40);
                 break;
         }
@@ -63,15 +64,15 @@ public class PerformTeleAlching extends Task {
             case "Camelot teleport - Low Alchemy":
             case "Camelot teleport":
                 Logger.log("Teleporting");
-                Magic.tapCamelotTeleportSpell();
+                Magic.castSpell(Spells.CAMELOT_TELEPORT);
                 break;
             case "Ardougne teleport":
                 Logger.log("Teleporting");
-                Magic.tapArdougneTeleportSpell();
+                Magic.castSpell(Spells.ARDOUGNE_TELEPORT);
                 break;
             case "Varrock teleport":
                 Logger.log("Teleporting");
-                Magic.tapVarrockTeleportSpell();
+                Magic.castSpell(Spells.VARROCK_TELEPORT);
                 break;
         }
 
