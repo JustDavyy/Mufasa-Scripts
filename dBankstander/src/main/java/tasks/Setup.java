@@ -65,48 +65,52 @@ public class Setup extends Task {
             case "Unpowered orb":
             case "Lantern lens":
             case "Empty light orb":
-                Bank.withdrawItem(ItemList.MOLTEN_GLASS_1775, 0.75);
-                bankItem1Count = Bank.stackSize(ItemList.MOLTEN_GLASS_1775);
+            case "Amethyst Bolt tips":
+            case "Amethyst Arrow tips":
+            case "Amethyst Javelin heads":
+            case "Amethyst Dart tips":
+                bankItem1Count = Bank.stackSize(sourceItem);
+                Bank.withdrawItem(sourceItem, 0.75);
                 break;
             case "Uncut opal":
-                Bank.withdrawItem(ItemList.UNCUT_OPAL_1625, 0.75, Color.decode("#999989"));
                 bankItem1Count = Bank.stackSize(ItemList.UNCUT_OPAL_1625, Color.decode("#999989"));
+                Bank.withdrawItem(ItemList.UNCUT_OPAL_1625, 0.75, Color.decode("#999989"));
                 break;
             case "Uncut jade":
-                Bank.withdrawItem(ItemList.UNCUT_JADE_1627, 0.75, Color.decode("#8c9986"));
                 bankItem1Count = Bank.stackSize(ItemList.UNCUT_JADE_1627, Color.decode("#8c9986"));
+                Bank.withdrawItem(ItemList.UNCUT_JADE_1627, 0.75, Color.decode("#8c9986"));
                 break;
             case "Uncut red topaz":
-                Bank.withdrawItem(ItemList.UNCUT_RED_TOPAZ_1629, 0.75, Color.decode("#ac0d60"));
                 bankItem1Count = Bank.stackSize(ItemList.UNCUT_RED_TOPAZ_1629, Color.decode("#ac0d60"));
+                Bank.withdrawItem(ItemList.UNCUT_RED_TOPAZ_1629, 0.75, Color.decode("#ac0d60"));
                 break;
             case "Uncut sapphire":
-                Bank.withdrawItem(ItemList.UNCUT_SAPPHIRE_1623, 0.75, Color.decode("#0a0d89"));
                 bankItem1Count = Bank.stackSize(ItemList.UNCUT_SAPPHIRE_1623, Color.decode("#0a0d89"));
+                Bank.withdrawItem(ItemList.UNCUT_SAPPHIRE_1623, 0.75, Color.decode("#0a0d89"));
                 break;
             case "Uncut emerald":
-                Bank.withdrawItem(ItemList.UNCUT_EMERALD_1621, 0.75, Color.decode("#08800b"));
                 bankItem1Count = Bank.stackSize(ItemList.UNCUT_EMERALD_1621, Color.decode("#08800b"));
+                Bank.withdrawItem(ItemList.UNCUT_EMERALD_1621, 0.75, Color.decode("#08800b"));
                 break;
             case "Uncut ruby":
-                Bank.withdrawItem(ItemList.UNCUT_RUBY_1619, 0.75, Color.decode("#6e1006"));
                 bankItem1Count = Bank.stackSize(ItemList.UNCUT_RUBY_1619, Color.decode("#6e1006"));
+                Bank.withdrawItem(ItemList.UNCUT_RUBY_1619, 0.75, Color.decode("#6e1006"));
                 break;
             case "Uncut diamond":
-                Bank.withdrawItem(ItemList.UNCUT_DIAMOND_1617, 0.75, Color.decode("#afaeae"));
                 bankItem1Count = Bank.stackSize(ItemList.UNCUT_DIAMOND_1617, Color.decode("#afaeae"));
+                Bank.withdrawItem(ItemList.UNCUT_DIAMOND_1617, 0.75, Color.decode("#afaeae"));
                 break;
             case "Uncut dragonstone":
-                Bank.withdrawItem(ItemList.UNCUT_DRAGONSTONE_1631, 0.75, Color.decode("#580877"));
                 bankItem1Count = Bank.stackSize(ItemList.UNCUT_DRAGONSTONE_1631, Color.decode("#580877"));
+                Bank.withdrawItem(ItemList.UNCUT_DRAGONSTONE_1631, 0.75, Color.decode("#580877"));
                 break;
             case "Uncut onyx":
-                Bank.withdrawItem(ItemList.UNCUT_ONYX_6571, 0.75, Color.decode("#0b0b1f"));
                 bankItem1Count = Bank.stackSize(ItemList.UNCUT_ONYX_6571, Color.decode("#0b0b1f"));
+                Bank.withdrawItem(ItemList.UNCUT_ONYX_6571, 0.75, Color.decode("#0b0b1f"));
                 break;
             case "Uncut zenyte":
-                Bank.withdrawItem(ItemList.UNCUT_ZENYTE_19496, 0.75, Color.decode("#ac600d"));
                 bankItem1Count = Bank.stackSize(ItemList.UNCUT_ZENYTE_19496, Color.decode("#ac600d"));
+                Bank.withdrawItem(ItemList.UNCUT_ZENYTE_19496, 0.75, Color.decode("#ac600d"));
                 break;
             default:
                 Logger.log("Unknown product: " + product + " stopping script.");
@@ -162,6 +166,7 @@ public class Setup extends Task {
                 withdrawTool(ItemList.GLASSBLOWING_PIPE_1785, "Glassblowing", null);
                 break;
             case "Gemcutting":
+            case "AmethystCutting":
                 withdrawTool(ItemList.CHISEL_1755, "Chisel", null);
                 break;
             default:
@@ -179,7 +184,10 @@ public class Setup extends Task {
         switch (activity) {
             case "Glassblowing":
             case "Gemcutting":
-                Bank.tapQuantityAllButton();
+            case "AmethystCutting":
+                if (!Bank.isSelectedQuantityAllButton()) {
+                    Bank.tapQuantityAllButton();
+                }
                 break;
             default:
                 Logger.debugLog("Unknown activity: " + activity + " aborting script.");

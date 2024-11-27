@@ -42,7 +42,7 @@ public class Process extends Task {
         }
 
         // Check current used slots
-        currentUsedSlots = Inventory.count(targetItem, 0.75);
+        currentUsedSlots = getUsedSlots();
 
         // Check if an item has been processed in the last 5 seconds
         if (currentUsedSlots != lastUsedSlots) {
@@ -70,17 +70,26 @@ public class Process extends Task {
         return true;
     }
 
+    private int getUsedSlots() {
+        if ("AmethystCutting".equals(activity)) {
+            return Inventory.stackSize(targetItem);
+        } else {
+            return Inventory.count(targetItem, 0.75);
+        }
+    }
+
     private void sendMakeOption() {
+        if (!Chatbox.isMakeMenuVisible()) {
+            return; // Exit early if the make menu is not visible
+        }
+
         switch (activity) {
             case "Glassblowing":
-                if (Chatbox.isMakeMenuVisible()) {
-                    Client.sendKeystroke(String.valueOf(makeOption));
-                }
+            case "AmethystCutting":
+                Client.sendKeystroke(String.valueOf(makeOption));
                 break;
             case "Gemcutting":
-                if (Chatbox.isMakeMenuVisible()) {
-                    Client.sendKeystroke("space");
-                }
+                Client.sendKeystroke("space");
                 break;
             default:
                 Logger.debugLog("Unknown activity (not sending keystroke): " + activity);
@@ -95,6 +104,7 @@ public class Process extends Task {
                 Inventory.tapItem(ItemList.MOLTEN_GLASS_1775, useCache, 0.75);
                 break;
             case "Gemcutting":
+            case "AmethystCutting":
                 Inventory.tapItem(ItemList.CHISEL_1755, useCache, 0.75);
                 Condition.sleep(generateDelay(100, 200));
                 Inventory.tapItem(sourceItem, useCache, 0.75);

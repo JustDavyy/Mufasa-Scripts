@@ -97,7 +97,6 @@ public class Bank extends Task {
     }
 
     private void depositItems() {
-        // As we have no tools, we can simply deposit our inventory
         Inventory.tapItem(targetItem, 0.75);
         Condition.sleep(generateDelay(150, 300));
     }
@@ -123,8 +122,13 @@ public class Bank extends Task {
     }
 
     private void updateProcessedItems() {
-        // Update our process count
-        PROCESS_COUNT = PROCESS_COUNT + Inventory.count(targetItem, 0.85);
+        if ("AmethystCutting".equals(activity)) {
+            // Update our process count
+            PROCESS_COUNT = PROCESS_COUNT + Inventory.stackSize(targetItem);
+        } else {
+            // Update our process count
+            PROCESS_COUNT = PROCESS_COUNT + Inventory.count(targetItem, 0.85);
+        }
 
         // Update the paint bar with this new count
         updatePaintBar(PROCESS_COUNT);
@@ -142,6 +146,7 @@ public class Bank extends Task {
             case "Glassblowing":
                 return "Molten glass";
             case "Gemcutting":
+            case "AmethystCutting":
                 return product;
             default:
                 Logger.debugLog("Unknown activity: " + activity + " aborting script.");

@@ -20,8 +20,8 @@ import static helpers.Interfaces.*;
 
 @ScriptManifest(
         name = "dBankstander",
-        description = "Bank stander script, uses dynamic banking to support a variety of banks around Gielinor. Current supported operations: Glassblowing and Gem cutting",
-        version = "1.00",
+        description = "Bank stander script, uses dynamic banking to support a variety of banks around Gielinor. Current supported operations: Glassblowing, Gem cutting and Amethyst cutting",
+        version = "1.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dbankstander/",
         categories = {ScriptCategory.Crafting}
 )
@@ -51,7 +51,12 @@ import static helpers.Interfaces.*;
                                 @AllowedValue(optionIcon = "1617", optionName = "Uncut diamond"),
                                 @AllowedValue(optionIcon = "1631", optionName = "Uncut dragonstone"),
                                 @AllowedValue(optionIcon = "6571", optionName = "Uncut onyx"),
-                                @AllowedValue(optionIcon = "19496", optionName = "Uncut zenyte")
+                                @AllowedValue(optionIcon = "19496", optionName = "Uncut zenyte"),
+                                @AllowedValue(optionName = "AMETHYST CUT OPTIONS"),
+                                @AllowedValue(optionIcon = "4768", optionName = "Amethyst Bolt tips"),
+                                @AllowedValue(optionIcon = "21350", optionName = "Amethyst Arrow tips"),
+                                @AllowedValue(optionIcon = "13220", optionName = "Amethyst Javelin heads"),
+                                @AllowedValue(optionIcon = "25853", optionName = "Amethyst Dart tips")
                         },
                         optionType = OptionType.STRING
                 ),
@@ -322,6 +327,30 @@ public class dBankstander extends AbstractScript {
                 sourceItem = ItemList.UNCUT_ZENYTE_19496;
                 targetItem = ItemList.ZENYTE_19493;
                 activity = "Gemcutting";
+                break;
+            case "Amethyst Bolt tips":
+                makeOption = 1;
+                sourceItem = ItemList.AMETHYST_21347;
+                targetItem = 4768;
+                activity = "AmethystCutting";
+                break;
+            case "Amethyst Arrow tips":
+                makeOption = 2;
+                sourceItem = ItemList.AMETHYST_21347;
+                targetItem = ItemList.AMETHYST_ARROWTIPS_21350;
+                activity = "AmethystCutting";
+                break;
+            case "Amethyst Javelin heads":
+                makeOption = 3;
+                sourceItem = ItemList.AMETHYST_21347;
+                targetItem = 13220;
+                activity = "AmethystCutting";
+                break;
+            case "Amethyst Dart tips":
+                makeOption = 4;
+                sourceItem = ItemList.AMETHYST_21347;
+                targetItem = ItemList.AMETHYST_DART_TIP_25853;
+                activity = "AmethystCutting";
                 break;
             default:
                 Logger.log("Unknown product: " + product + " stopping script.");
