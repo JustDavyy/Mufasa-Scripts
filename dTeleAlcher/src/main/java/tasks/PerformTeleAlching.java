@@ -21,6 +21,7 @@ public class PerformTeleAlching extends Task {
 
     @Override
     public boolean execute() {
+        // Davvy with the 69 swag
         if (!Inventory.contains(itemID, 0.69) && Inventory.contains(ItemList.LAW_RUNE_563, 0.69) && GameTabs.isInventoryTabOpen()) {
             Logger.log("Ran out of items to alch or law runes, stopping script");
             Logout.logout();
@@ -44,6 +45,8 @@ public class PerformTeleAlching extends Task {
                 Condition.wait(GameTabs::isInventoryTabOpen, 100, 40);
                 break;
             case "Camelot teleport - Low Alchemy":
+            case "Falador teleport":
+            case "Lumbridge teleport":
             case "Varrock teleport":
                 Logger.log("Pressing Low Alchemy spell");
                 Magic.castSpell(Spells.LOW_LEVEL_ALCHEMY);
@@ -73,6 +76,14 @@ public class PerformTeleAlching extends Task {
             case "Varrock teleport":
                 Logger.log("Teleporting");
                 Magic.castSpell(Spells.VARROCK_TELEPORT);
+                break;
+            case "Falador teleport":
+                Logger.log("Teleporting");
+                Magic.castSpell(Spells.FALADOR_TELEPORT);
+                break;
+            case "Lumbridge teleport":
+                Logger.log("Teleporting");
+                Magic.castSpell(Spells.LUMBRIDGE_TELEPORT);
                 break;
         }
 
