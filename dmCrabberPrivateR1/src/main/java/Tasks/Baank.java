@@ -148,6 +148,7 @@ public class Baank extends Task {
                 withdrawItem(ItemList.LEATHER_VAMBRACES_1063, itemColor);
                 withdrawItem(ItemList.SHORTBOW_841, itemColor);
                 withdrawItem(ItemList.OAK_SHORTBOW_843, itemColor);
+                withdrawItem(ItemList.BRONZE_ARROW_1_897, itemColor);
                 break;
 
             case "Snakeskin":
