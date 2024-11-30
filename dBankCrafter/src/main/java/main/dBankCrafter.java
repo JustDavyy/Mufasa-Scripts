@@ -19,10 +19,10 @@ import java.util.*;
 import static helpers.Interfaces.*;
 
 @ScriptManifest(
-        name = "dBankstander",
-        description = "Bank stander script, uses dynamic banking to support a variety of banks around Gielinor. Current supported operations: Glassblowing, Gem cutting and Amethyst cutting",
-        version = "1.01",
-        guideLink = "https://wiki.mufasaclient.com/docs/dbankstander/",
+        name = "dBankCrafter",
+        description = "Bank stander script for the Crafting skill, uses dynamic banking to support a variety of banks around Gielinor. Current supported operations: Glassblowing, Gem cutting, Amethyst cutting, battlestaff crafting and crafting leather/hide crafting. For jewellery crafting use the dMoltenMaestro script.",
+        version = "1.02",
+        guideLink = "https://wiki.mufasaclient.com/docs/dbankcrafter/",
         categories = {ScriptCategory.Crafting}
 )
 @ScriptConfiguration.List(
@@ -56,7 +56,33 @@ import static helpers.Interfaces.*;
                                 @AllowedValue(optionIcon = "4768", optionName = "Amethyst Bolt tips"),
                                 @AllowedValue(optionIcon = "21350", optionName = "Amethyst Arrow tips"),
                                 @AllowedValue(optionIcon = "13220", optionName = "Amethyst Javelin heads"),
-                                @AllowedValue(optionIcon = "25853", optionName = "Amethyst Dart tips")
+                                @AllowedValue(optionIcon = "25853", optionName = "Amethyst Dart tips"),
+                                @AllowedValue(optionName = "BATTLESTAFF OPTIONS"),
+                                @AllowedValue(optionIcon = "1397", optionName = "Air battlestaff"),
+                                @AllowedValue(optionIcon = "1395", optionName = "Water battlestaff"),
+                                @AllowedValue(optionIcon = "1399", optionName = "Earth battlestaff"),
+                                @AllowedValue(optionIcon = "1393", optionName = "Fire battlestaff"),
+                                @AllowedValue(optionName = "HIDE CRAFTING OPTIONS"),
+                                @AllowedValue(optionIcon = "1059", optionName = "Leather gloves"),
+                                @AllowedValue(optionIcon = "1061", optionName = "Leather boots"),
+                                @AllowedValue(optionIcon = "1167", optionName = "Leather cowl"),
+                                @AllowedValue(optionIcon = "1063", optionName = "Leather vambraces"),
+                                @AllowedValue(optionIcon = "1129", optionName = "Leather body"),
+                                @AllowedValue(optionIcon = "1095", optionName = "Leather chaps"),
+                                @AllowedValue(optionIcon = "1131", optionName = "Hardleather body"),
+                                @AllowedValue(optionIcon = "1169", optionName = "Coif"),
+                                @AllowedValue(optionIcon = "1065", optionName = "Green d'hide vambraces"),
+                                @AllowedValue(optionIcon = "1099", optionName = "Green d'hide chaps"),
+                                @AllowedValue(optionIcon = "1135", optionName = "Green d'hide body"),
+                                @AllowedValue(optionIcon = "2487", optionName = "Blue d'hide vambraces"),
+                                @AllowedValue(optionIcon = "2493", optionName = "Blue d'hide chaps"),
+                                @AllowedValue(optionIcon = "2499", optionName = "Blue d'hide body"),
+                                @AllowedValue(optionIcon = "2489", optionName = "Red d'hide vambraces"),
+                                @AllowedValue(optionIcon = "2495", optionName = "Red d'hide chaps"),
+                                @AllowedValue(optionIcon = "2501", optionName = "Red d'hide body"),
+                                @AllowedValue(optionIcon = "2491", optionName = "Black d'hide vambraces"),
+                                @AllowedValue(optionIcon = "2497", optionName = "Black d'hide chaps"),
+                                @AllowedValue(optionIcon = "2503", optionName = "Black d'hide body")
                         },
                         optionType = OptionType.STRING
                 ),
@@ -75,7 +101,7 @@ import static helpers.Interfaces.*;
         }
 )
 
-public class dBankstander extends AbstractScript {
+public class dBankCrafter extends AbstractScript {
     public static String product;
     static String hopProfile;
     static Boolean hopEnabled;
@@ -102,6 +128,7 @@ public class dBankstander extends AbstractScript {
     public static int retrycount = 0;
     public static int bankItem1Count = 0;
     public static int previousBankItem1Count = 0;
+    public static int tempBankCountHolder = 0;
 
     // PaintBar stuff we need
     private static long currentTime = System.currentTimeMillis();
@@ -121,7 +148,7 @@ public class dBankstander extends AbstractScript {
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
 
-        Logger.log("Thank you for using the dBankstander script!\nSetting up everything for your gains now...");
+        Logger.log("Thank you for using the dBankCrafter script!\nSetting up everything for your gains now...");
 
         // Initialize what we need to before proceeding
         initializeOptions();
@@ -165,6 +192,8 @@ public class dBankstander extends AbstractScript {
 
         if (prepareScriptStop) {
             Logger.debugLog("Script has been marked to stop by script dev set situation after this iteration!");
+            Paint.setStatus("Stop after iteration");
+            Condition.sleep(2000);
             stopScript = true;
         }
 
@@ -351,6 +380,146 @@ public class dBankstander extends AbstractScript {
                 sourceItem = ItemList.AMETHYST_21347;
                 targetItem = ItemList.AMETHYST_DART_TIP_25853;
                 activity = "AmethystCutting";
+                break;
+            case "Air battlestaff":
+                sourceItem = ItemList.AIR_ORB_573;
+                targetItem = ItemList.AIR_BATTLESTAFF_1397;
+                activity = "StaffCrafting";
+                break;
+            case "Water battlestaff":
+                sourceItem = ItemList.WATER_ORB_571;
+                targetItem = ItemList.WATER_BATTLESTAFF_1395;
+                activity = "StaffCrafting";
+                break;
+            case "Earth battlestaff":
+                sourceItem = ItemList.EARTH_ORB_575;
+                targetItem = ItemList.EARTH_BATTLESTAFF_1399;
+                activity = "StaffCrafting";
+                break;
+            case "Fire battlestaff":
+                sourceItem = ItemList.FIRE_ORB_569;
+                targetItem = ItemList.FIRE_BATTLESTAFF_1393;
+                activity = "StaffCrafting";
+                break;
+            case "Leather gloves":
+                makeOption = 1;
+                sourceItem = ItemList.LEATHER_1741;
+                targetItem = ItemList.LEATHER_GLOVES_1059;
+                activity = "HideCrafting";
+                break;
+            case "Leather boots":
+                makeOption = 2;
+                sourceItem = ItemList.LEATHER_1741;
+                targetItem = ItemList.LEATHER_BOOTS_1061;
+                activity = "HideCrafting";
+                break;
+            case "Leather cowl":
+                makeOption = 3;
+                sourceItem = ItemList.LEATHER_1741;
+                targetItem = ItemList.LEATHER_COWL_1167;
+                activity = "HideCrafting";
+                break;
+            case "Leather vambraces":
+                makeOption = 4;
+                sourceItem = ItemList.LEATHER_1741;
+                targetItem = ItemList.LEATHER_VAMBRACES_1063;
+                activity = "HideCrafting";
+                break;
+            case "Leather body":
+                makeOption = 5;
+                sourceItem = ItemList.LEATHER_1741;
+                targetItem = ItemList.LEATHER_BODY_1129;
+                activity = "HideCrafting";
+                break;
+            case "Leather chaps":
+                makeOption = 6;
+                sourceItem = ItemList.LEATHER_1741;
+                targetItem = ItemList.LEATHER_CHAPS_1095;
+                activity = "HideCrafting";
+                break;
+            case "Hardleather body":
+                makeOption = 1;
+                sourceItem = ItemList.HARD_LEATHER_1743;
+                targetItem = ItemList.HARDLEATHER_BODY_1131;
+                activity = "HideCrafting";
+                break;
+            case "Coif":
+                makeOption = 7;
+                sourceItem = ItemList.LEATHER_1741;
+                targetItem = ItemList.COIF_1169;
+                activity = "HideCrafting";
+                break;
+            case "Green d'hide vambraces":
+                makeOption = 2;
+                sourceItem = ItemList.GREEN_DRAGON_LEATHER_1745;
+                targetItem = ItemList.GREEN_D_HIDE_VAMBRACES_1065;
+                activity = "HideCrafting";
+                break;
+            case "Green d'hide chaps":
+                makeOption = 3;
+                sourceItem = ItemList.GREEN_DRAGON_LEATHER_1745;
+                targetItem = ItemList.GREEN_D_HIDE_CHAPS_1099;
+                activity = "HideCrafting";
+                break;
+            case "Green d'hide body":
+                makeOption = 1;
+                sourceItem = ItemList.GREEN_DRAGON_LEATHER_1745;
+                targetItem = ItemList.GREEN_D_HIDE_BODY_1135;
+                activity = "HideCrafting";
+                break;
+            case "Blue d'hide vambraces":
+                makeOption = 2;
+                sourceItem = ItemList.BLUE_DRAGON_LEATHER_2505;
+                targetItem = ItemList.BLUE_D_HIDE_VAMBRACES_2487;
+                activity = "HideCrafting";
+                break;
+            case "Blue d'hide chaps":
+                makeOption = 3;
+                sourceItem = ItemList.BLUE_DRAGON_LEATHER_2505;
+                targetItem = ItemList.BLUE_D_HIDE_CHAPS_2493;
+                activity = "HideCrafting";
+                break;
+            case "Blue d'hide body":
+                makeOption = 1;
+                sourceItem = ItemList.BLUE_DRAGON_LEATHER_2505;
+                targetItem = ItemList.BLUE_D_HIDE_BODY_2499;
+                activity = "HideCrafting";
+                break;
+            case "Red d'hide vambraces":
+                makeOption = 2;
+                sourceItem = ItemList.RED_DRAGON_LEATHER_2507;
+                targetItem = ItemList.RED_D_HIDE_VAMBRACES_2489;
+                activity = "HideCrafting";
+                break;
+            case "Red d'hide chaps":
+                makeOption = 3;
+                sourceItem = ItemList.RED_DRAGON_LEATHER_2507;
+                targetItem = ItemList.RED_D_HIDE_CHAPS_2495;
+                activity = "HideCrafting";
+                break;
+            case "Red d'hide body":
+                makeOption = 1;
+                sourceItem = ItemList.RED_DRAGON_LEATHER_2507;
+                targetItem = ItemList.RED_D_HIDE_BODY_2501;
+                activity = "HideCrafting";
+                break;
+            case "Black d'hide vambraces":
+                makeOption = 2;
+                sourceItem = ItemList.BLACK_DRAGON_LEATHER_2509;
+                targetItem = ItemList.BLACK_D_HIDE_VAMBRACES_2491;
+                activity = "HideCrafting";
+                break;
+            case "Black d'hide chaps":
+                makeOption = 3;
+                sourceItem = ItemList.BLACK_DRAGON_LEATHER_2509;
+                targetItem = ItemList.BLACK_D_HIDE_CHAPS_2497;
+                activity = "HideCrafting";
+                break;
+            case "Black d'hide body":
+                makeOption = 1;
+                sourceItem = ItemList.BLACK_DRAGON_LEATHER_2509;
+                targetItem = ItemList.BLACK_D_HIDE_BODY_2503;
+                activity = "HideCrafting";
                 break;
             default:
                 Logger.log("Unknown product: " + product + " stopping script.");

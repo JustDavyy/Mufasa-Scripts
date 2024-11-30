@@ -23,7 +23,7 @@ dependencies {
 }
 
 jar {
-    archiveFileName = 'dBankstander.jar'
+    archiveFileName = 'dBankCrafter.jar'
     destinationDirectory = file('jar/')
 
     manifest {

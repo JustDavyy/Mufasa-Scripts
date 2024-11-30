@@ -5,13 +5,21 @@ import utils.Task;
 
 import static helpers.Interfaces.*;
 import static helpers.Interfaces.Logger;
-import static main.dBankstander.*;
+import static main.dBankCrafter.*;
 
 public class Bank extends Task {
 
     @Override
     public boolean activate() {
-        return !Inventory.contains(sourceItem, 0.75);
+        if ("StaffCrafting".equals(activity)) {
+            return !Inventory.contains(sourceItem, 0.75) && !Inventory.contains(ItemList.BATTLESTAFF_1391, 0.75);
+        } else {
+            if ("HideCrafting".equals(activity) && product.endsWith("body")) {
+                return Inventory.count(sourceItem, 0.75) <= 2;
+            } else {
+                return !Inventory.contains(sourceItem, 0.75);
+            }
+        }
     }
 
     @Override
@@ -42,11 +50,20 @@ public class Bank extends Task {
         Bank.open(bankloc);
         Condition.wait(() -> Bank.isOpen(), 100, 25);
 
-        if (bankItem1Count <= 28) {
-            Logger.debugLog("Bank item count is 28 or below, using non-cached bank withdraw method instead.");
-            performBank(false);
+        if ("StaffCrafting".equals(activity)) {
+            if (bankItem1Count <= 15) {
+                Logger.debugLog("Bank item count is 15 or below, using non-cached bank withdraw method instead.");
+                performBank(false);
+            } else {
+                performBank(true);
+            }
         } else {
-            performBank(true);
+            if (bankItem1Count <= 28) {
+                Logger.debugLog("Bank item count is 28 or below, using non-cached bank withdraw method instead.");
+                performBank(false);
+            } else {
+                performBank(true);
+            }
         }
 
         return false;
@@ -78,9 +95,16 @@ public class Bank extends Task {
             withdrawItems(useCache);
             Condition.wait(this::checkItems, 100,30);
 
-            if (bankItem1Count <= 28) {
-                Logger.log("We're (almost) out of supplies, marking script to stop after this iteration!");
-                prepareScriptStop = true;
+            if ("StaffCrafting".equals(activity)) {
+                if (bankItem1Count <= 15) {
+                    Logger.log("We're (almost) out of supplies, marking script to stop after this iteration!");
+                    prepareScriptStop = true;
+                }
+            } else {
+                if (bankItem1Count <= 28) {
+                    Logger.log("We're (almost) out of supplies, marking script to stop after this iteration!");
+                    prepareScriptStop = true;
+                }
             }
 
             // Close the bank
@@ -104,9 +128,21 @@ public class Bank extends Task {
     private void withdrawItems(boolean useCache) {
         // Withdraw first item and update our current stacksize
         updatePreviousBankItemCount(1);
-        bankItem1Count = Bank.stackSize(sourceItem);
-        Bank.withdrawItem(sourceItem, useCache, 0.75);
-        printItemStateDebug(1);
+        if ("StaffCrafting".equals(activity)) {
+            bankItem1Count = Bank.stackSize(sourceItem);
+            Bank.withdrawItem(sourceItem, useCache, 0.75);
+            Condition.sleep(generateDelay(150, 300));
+            tempBankCountHolder = Bank.stackSize(ItemList.BATTLESTAFF_1391);
+            if (tempBankCountHolder != 0 && tempBankCountHolder != -1 && tempBankCountHolder < bankItem1Count) {
+                bankItem1Count = tempBankCountHolder;
+            }
+            Bank.withdrawItem(ItemList.BATTLESTAFF_1391, 0.75);
+            printItemStateDebug(1);
+        } else {
+            bankItem1Count = Bank.stackSize(sourceItem);
+            Bank.withdrawItem(sourceItem, useCache, 0.75);
+            printItemStateDebug(1);
+        }
 
         // Wait for a small bit
         Condition.sleep(generateDelay(125, 250));
@@ -147,9 +183,12 @@ public class Bank extends Task {
                 return "Molten glass";
             case "Gemcutting":
             case "AmethystCutting":
+            case "HideCrafting":
                 return product;
+            case "StaffCrafting":
+                return product.replace(" battlestaff", " orb/battlestaves");
             default:
-                Logger.debugLog("Unknown activity: " + activity + " aborting script.");
+                Logger.debugLog("Unknown activity (inside getItemName): " + activity + " aborting script.");
                 if (Bank.isOpen()) {
                     Bank.close();
                     Condition.sleep(generateDelay(1200, 1800));

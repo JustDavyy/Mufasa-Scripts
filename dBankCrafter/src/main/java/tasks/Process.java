@@ -4,7 +4,7 @@ import helpers.utils.ItemList;
 import utils.Task;
 
 import static helpers.Interfaces.*;
-import static main.dBankstander.*;
+import static main.dBankCrafter.*;
 
 public class Process extends Task {
 
@@ -18,7 +18,15 @@ public class Process extends Task {
             }
         }
 
-        return Inventory.contains(sourceItem, 0.75);
+        if ("StaffCrafting".equals(activity)) {
+            return Inventory.contains(sourceItem, 0.75) && Inventory.contains(ItemList.BATTLESTAFF_1391, 0.75);
+        } else {
+            if ("HideCrafting".equals(activity) && product.endsWith("body")) {
+                return Inventory.count(sourceItem, 0.75) > 2;
+            } else {
+                return Inventory.contains(sourceItem, 0.75);
+            }
+        }
     }
 
     @Override
@@ -44,19 +52,19 @@ public class Process extends Task {
         // Check current used slots
         currentUsedSlots = getUsedSlots();
 
-        // Check if an item has been processed in the last 5 seconds
+        // Check if an item has been processed in the last 6 seconds
         if (currentUsedSlots != lastUsedSlots) {
             lastProcessTime = System.currentTimeMillis(); // Update last process time
             lastUsedSlots = currentUsedSlots; // Update last used slots count
         }
 
-        // Check if 5 seconds have passed without processing an item
-        if (System.currentTimeMillis() - lastProcessTime > 5000) {
+        // Check if 6 seconds have passed without processing an item
+        if (System.currentTimeMillis() - lastProcessTime > 6000) {
             if (stopScript) {
                 doneBanking = true;
                 return true;
             }
-            Logger.debugLog("No item processed in the last 5 seconds, attempting to re-initiate action");
+            Logger.debugLog("No item processed in the last 6 seconds, attempting to re-initiate action");
             processItems(false);
             lastProcessTime = System.currentTimeMillis(); // Update last process time
         } else {
@@ -86,13 +94,15 @@ public class Process extends Task {
         switch (activity) {
             case "Glassblowing":
             case "AmethystCutting":
+            case "HideCrafting":
                 Client.sendKeystroke(String.valueOf(makeOption));
                 break;
             case "Gemcutting":
+            case "StaffCrafting":
                 Client.sendKeystroke("space");
                 break;
             default:
-                Logger.debugLog("Unknown activity (not sending keystroke): " + activity);
+                Logger.debugLog("Unknown activity (inside sendMakeOption) (not sending keystroke): " + activity);
         }
     }
 
@@ -109,19 +119,33 @@ public class Process extends Task {
                 Condition.sleep(generateDelay(100, 200));
                 Inventory.tapItem(sourceItem, useCache, 0.75);
                 break;
+            case "HideCrafting":
+                Inventory.tapItem(ItemList.NEEDLE_1733, useCache, 0.75);
+                Condition.sleep(generateDelay(100, 200));
+                Inventory.tapItem(sourceItem, useCache, 0.75);
+                break;
+            case "StaffCrafting":
+                Inventory.tapItem(sourceItem, useCache, 0.75);
+                Condition.sleep(generateDelay(100, 200));
+                Inventory.tapItem(ItemList.BATTLESTAFF_1391, useCache, 0.75);
+                break;
             default:
-                Logger.debugLog("Unknown activity (not sending keystroke): " + activity);
+                Logger.debugLog("Unknown activity (inside tapActivityItems) (not sending keystroke): " + activity);
         }
     }
 
     private void processItems(boolean useCache) {
         Paint.setStatus("Process items");
         Logger.log("Process items");
+        boolean fromLevelup = Player.leveledUp();
         // Tap the items with a small random delay in between actions
         tapActivityItems(useCache);
 
         // Wait for the make menu to be visible
         Paint.setStatus("Wait for make menu");
+        if (fromLevelup) {
+            Condition.sleep(generateDelay(900, 1200));
+        }
         Condition.wait(Chatbox::isMakeMenuVisible, 100, 40);
         sendMakeOption();
         Condition.sleep(generateDelay(750, 1000));
