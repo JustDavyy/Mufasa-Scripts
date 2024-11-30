@@ -290,7 +290,7 @@ public class dmCrabberPrivate extends AbstractScript {
         Map<String, int[]> gearItems = Map.of(
             "Iron", new int[]{ItemList.IRON_PLATEBODY_1115, ItemList.IRON_PLATELEGS_1067, ItemList.IRON_FULL_HELM_1153, ItemList.IRON_KITESHIELD_1191, ItemList.IRON_SCIMITAR_1323},
             "Addy", new int[]{ItemList.ADAMANT_PLATEBODY_1123, ItemList.ADAMANT_PLATELEGS_1073, ItemList.ADAMANT_FULL_HELM_1161, ItemList.ADAMANT_KITESHIELD_1199, ItemList.ADAMANT_SCIMITAR_1331},
-            "Leather", new int[]{ItemList.LEATHER_BODY_1129, ItemList.LEATHER_CHAPS_1095, ItemList.LEATHER_COWL_1167, ItemList.LEATHER_VAMBRACES_1063, ItemList.SHORTBOW_841, ItemList.OAK_SHORTBOW_843},
+            "Leather", new int[]{ItemList.LEATHER_BODY_1129, ItemList.LEATHER_CHAPS_1095, ItemList.LEATHER_COWL_1167, ItemList.LEATHER_VAMBRACES_1063, ItemList.SHORTBOW_841, ItemList.OAK_SHORTBOW_843, ItemList.BRONZE_ARROW_1_897},
             "Snakeskin", new int[]{ItemList.SNAKESKIN_BODY_6322, ItemList.SNAKESKIN_CHAPS_6324, ItemList.SNAKESKIN_BANDANA_6326, ItemList.SNAKESKIN_BOOTS_6328, ItemList.SNAKESKIN_VAMBRACES_6330},
             "GreenDhide", new int[]{ItemList.GREEN_D_HIDE_BODY_1135, ItemList.GREEN_D_HIDE_CHAPS_1099, ItemList.GREEN_D_HIDE_VAMBRACES_1065},
             "RuneScimitar", new int[]{ItemList.RUNE_SCIMITAR_1333},
