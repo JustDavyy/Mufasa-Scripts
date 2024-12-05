@@ -35,8 +35,8 @@ public class Bank extends Task {
         Paint.setStatus("Bank");
         Logger.log("Banking.");
 
-        if (retrycount >= 2) {
-            Logger.log("Not all needed items in the inventory after 2 banking attempts. Assuming we ran out of supplies.");
+        if (retrycount >= 4) {
+            Logger.log("Not all needed items in the inventory after 4 banking attempts. Assuming we ran out of supplies.");
             Logger.log("Logging out and stopping script!");
             if (Bank.isOpen()) {
                 Bank.close();
@@ -51,14 +51,14 @@ public class Bank extends Task {
         Condition.wait(() -> Bank.isOpen(), 100, 25);
 
         if ("StaffCrafting".equals(activity)) {
-            if (bankItem1Count <= 15) {
+            if (bankItem1Count <= 15  && bankItem1Count != -1) {
                 Logger.debugLog("Bank item count is 15 or below, using non-cached bank withdraw method instead.");
                 performBank(false);
             } else {
                 performBank(true);
             }
         } else {
-            if (bankItem1Count <= 28) {
+            if (bankItem1Count <= 28  && bankItem1Count != -1) {
                 Logger.debugLog("Bank item count is 28 or below, using non-cached bank withdraw method instead.");
                 performBank(false);
             } else {
@@ -96,12 +96,12 @@ public class Bank extends Task {
             Condition.wait(this::checkItems, 100,30);
 
             if ("StaffCrafting".equals(activity)) {
-                if (bankItem1Count <= 15) {
+                if (bankItem1Count <= 15 && bankItem1Count != -1) {
                     Logger.log("We're (almost) out of supplies, marking script to stop after this iteration!");
                     prepareScriptStop = true;
                 }
             } else {
-                if (bankItem1Count <= 28) {
+                if (bankItem1Count <= 28 && bankItem1Count != -1) {
                     Logger.log("We're (almost) out of supplies, marking script to stop after this iteration!");
                     prepareScriptStop = true;
                 }
