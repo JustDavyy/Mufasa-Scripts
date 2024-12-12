@@ -21,7 +21,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dBankCrafter",
         description = "Bank stander script for the Crafting skill, uses dynamic banking to support a variety of banks around Gielinor. Current supported operations: Glassblowing, Gem cutting, Amethyst cutting, battlestaff crafting and leather/hide crafting. For jewellery crafting use the dMoltenMaestro script.",
-        version = "1.03",
+        version = "1.04",
         guideLink = "https://wiki.mufasaclient.com/docs/dbankcrafter/",
         categories = {ScriptCategory.Crafting}
 )

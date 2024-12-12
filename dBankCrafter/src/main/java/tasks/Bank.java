@@ -122,6 +122,14 @@ public class Bank extends Task {
 
     private void depositItems() {
         Inventory.tapItem(targetItem, 0.75);
+        if (activity.equals("Gemcutting")) {
+            if (product.equals("Uncut opal") || product.equals("Uncut jade") || product.equals("Uncut red topaz")) {
+                if (Inventory.contains(ItemList.CRUSHED_GEM_1633, 0.75)) {
+                    Condition.sleep(generateDelay(150, 300));
+                    Inventory.tapItem(ItemList.CRUSHED_GEM_1633, 0.75);
+                }
+            }
+        }
         Condition.sleep(generateDelay(150, 300));
     }
 
