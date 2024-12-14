@@ -49,6 +49,7 @@ public class Bank extends Task {
         // Open the bank (and this steps to the bank if needed)
         Bank.open(bankloc);
         Condition.wait(() -> Bank.isOpen(), 100, 25);
+        Condition.sleep(generateDelay(300, 400));
 
         if ("StaffCrafting".equals(activity)) {
             if (bankItem1Count <= 15  && bankItem1Count != -1) {
@@ -159,9 +160,12 @@ public class Bank extends Task {
     private void closeBank() {
         Bank.close();
         Condition.wait(() -> !Bank.isOpen(), 100, 30);
+        Condition.sleep(generateDelay(400, 600));
 
         if (Bank.isOpen()) {
             Bank.close();
+            Condition.wait(() -> !Bank.isOpen(), 100, 30);
+            Condition.sleep(generateDelay(400, 600));
         }
     }
 
