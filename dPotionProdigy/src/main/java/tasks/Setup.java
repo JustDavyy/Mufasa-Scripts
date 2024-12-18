@@ -383,28 +383,28 @@ public class Setup extends Task {
                 withdrawHelper(ItemList.GRIMY_GUAM_LEAF_199, 0.7, "#044104", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Marrentill":
-                withdrawHelper(ItemList.GRIMY_MARRENTILL_201, 0.7, "#076c0a", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                withdrawHelper(ItemList.GRIMY_MARRENTILL_201, 0.8, "#076c0a", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Tarromin":
-                withdrawHelper(ItemList.GRIMY_TARROMIN_203, 0.7, "#076c2f", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                withdrawHelper(ItemList.GRIMY_TARROMIN_203, 0.8, "#076c2f", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Harralander":
-                withdrawHelper(ItemList.GRIMY_HARRALANDER_205, 0.7, "#456807", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                withdrawHelper(ItemList.GRIMY_HARRALANDER_205, 0.92, "#456807", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Ranarr weed":
-                withdrawHelper(ItemList.GRIMY_RANARR_WEED_207, 0.7, "#335904", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                withdrawHelper(ItemList.GRIMY_RANARR_WEED_207, 0.87, "#335904", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Toadflax":
                 withdrawHelper(ItemList.GRIMY_TOADFLAX_3049, 0.7, "#002100", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Irit leaf":
-                withdrawHelper(ItemList.GRIMY_IRIT_LEAF_209, 0.7, "#47702c", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                withdrawHelper(ItemList.GRIMY_IRIT_LEAF_209, 0.92, "#47702c", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Avantoe":
                 withdrawHelper(ItemList.GRIMY_AVANTOE_211, 0.7, "#0c4c1e", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Kwuarm":
-                withdrawHelper(ItemList.GRIMY_KWUARM_213, 0.7, "#455004", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                withdrawHelper(ItemList.GRIMY_KWUARM_213, 0.89, "#455004", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Huasca":
                 withdrawHelper(ItemList.GRIMY_HUASCA_30094, 0.7, "#4c2f41", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);

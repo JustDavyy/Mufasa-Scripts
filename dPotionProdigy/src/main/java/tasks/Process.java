@@ -555,37 +555,37 @@ public class Process extends Task {
                 tapAllItemHelper(ItemList.GRIMY_GUAM_LEAF_199, 0.7, "#044104", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Marrentill":
-                tapAllItemHelper(ItemList.GRIMY_MARRENTILL_201, 0.7, "#076c0a", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                tapAllItemHelper(ItemList.GRIMY_MARRENTILL_201, 0.8, "#076c0a", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Tarromin":
-                tapAllItemHelper(ItemList.GRIMY_TARROMIN_203, 0.7, "#076c2f", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                tapAllItemHelper(ItemList.GRIMY_TARROMIN_203, 0.8, "#076c2f", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Harralander":
-                tapAllItemHelper(ItemList.GRIMY_HARRALANDER_205, 0.7, "#456807", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                tapAllItemHelper(ItemList.GRIMY_HARRALANDER_205, 0.92, "#456807", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Ranarr weed":
-                tapAllItemHelper(ItemList.GRIMY_RANARR_WEED_207, 0.7, "#335904", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                tapAllItemHelper(ItemList.GRIMY_RANARR_WEED_207, 0.87, "#335904", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Toadflax":
                 tapAllItemHelper(ItemList.GRIMY_TOADFLAX_3049, 0.7, "#002100", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Irit leaf":
-                tapAllItemHelper(ItemList.GRIMY_IRIT_LEAF_209, 0.7, "#47702c", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                tapAllItemHelper(ItemList.GRIMY_IRIT_LEAF_209, 0.92, "#47702c", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Avantoe":
                 tapAllItemHelper(ItemList.GRIMY_AVANTOE_211, 0.7, "#0c4c1e", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Kwuarm":
-                tapAllItemHelper(ItemList.GRIMY_KWUARM_213, 0.7, "#455004", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                tapAllItemHelper(ItemList.GRIMY_KWUARM_213, 0.89, "#455004", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Huasca":
-                tapAllItemHelper(ItemList.GRIMY_HUASCA_30094, 0.7, "#4c2f41", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                tapAllItemHelper(ItemList.GRIMY_HUASCA_30094, 0.88, "#4c2f41", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Snapdragon":
-                tapAllItemHelper(ItemList.GRIMY_SNAPDRAGON_3051, 0.7, "#344104", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                tapAllItemHelper(ItemList.GRIMY_SNAPDRAGON_3051, 0.89, "#344104", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Cadantine":
-                tapAllItemHelper(ItemList.GRIMY_CADANTINE_215, 0.7, "#3c4715", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                tapAllItemHelper(ItemList.GRIMY_CADANTINE_215, 0.87, "#3c4715", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
                 break;
             case "Lantadyme":
                 tapAllItemHelper(ItemList.GRIMY_LANTADYME_2485, 0.7, "#04463a", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);

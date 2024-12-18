@@ -23,7 +23,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dPotionProdigy",
         description = "IN BETA: Bank stander script for the Herblore skill, uses dynamic banking to support a variety of banks around Gielinor. Current supported operations: Cleaning herbs, making tars and mixing unfinished, finished and barbarian potions.",
-        version = "1.00",
+        version = "1.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dpotionprodigy/",
         categories = {ScriptCategory.Herblore, ScriptCategory.Moneymaking}
 )
@@ -1143,27 +1143,27 @@ public class dPotionProdigy extends AbstractScript {
             case "Guam leaf":
                 return containsHelper(ItemList.GRIMY_GUAM_LEAF_199, 0.7, "#044104", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Marrentill":
-                return containsHelper(ItemList.GRIMY_MARRENTILL_201, 0.7, "#076c0a", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                return containsHelper(ItemList.GRIMY_MARRENTILL_201, 0.8, "#076c0a", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Tarromin":
-                return containsHelper(ItemList.GRIMY_TARROMIN_203, 0.7, "#076c2f", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                return containsHelper(ItemList.GRIMY_TARROMIN_203, 0.8, "#076c2f", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Harralander":
-                return containsHelper(ItemList.GRIMY_HARRALANDER_205, 0.7, "#456807", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                return containsHelper(ItemList.GRIMY_HARRALANDER_205, 0.92, "#456807", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Ranarr weed":
-                return containsHelper(ItemList.GRIMY_RANARR_WEED_207, 0.7, "#335904", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                return containsHelper(ItemList.GRIMY_RANARR_WEED_207, 0.87, "#335904", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Toadflax":
                 return containsHelper(ItemList.GRIMY_TOADFLAX_3049, 0.7, "#002100", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Irit leaf":
-                return containsHelper(ItemList.GRIMY_IRIT_LEAF_209, 0.7, "#47702c", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                return containsHelper(ItemList.GRIMY_IRIT_LEAF_209, 0.92, "#47702c", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Avantoe":
                 return containsHelper(ItemList.GRIMY_AVANTOE_211, 0.7, "#0c4c1e", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Kwuarm":
-                return containsHelper(ItemList.GRIMY_KWUARM_213, 0.7, "#455004", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                return containsHelper(ItemList.GRIMY_KWUARM_213, 0.89, "#455004", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Huasca":
-                return containsHelper(ItemList.GRIMY_HUASCA_30094, 0.7, "#4c2f41", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                return containsHelper(ItemList.GRIMY_HUASCA_30094, 0.88, "#4c2f41", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Snapdragon":
-                return containsHelper(ItemList.GRIMY_SNAPDRAGON_3051, 0.7, "#344104", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                return containsHelper(ItemList.GRIMY_SNAPDRAGON_3051, 0.89, "#344104", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Cadantine":
-                return containsHelper(ItemList.GRIMY_CADANTINE_215, 0.7, "#3c4715", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                return containsHelper(ItemList.GRIMY_CADANTINE_215, 0.87, "#3c4715", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Lantadyme":
                 return containsHelper(ItemList.GRIMY_LANTADYME_2485, 0.7, "#04463a", -1, -1, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Dwarf weed":
