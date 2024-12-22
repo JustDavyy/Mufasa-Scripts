@@ -21,7 +21,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dMoltenMaestro",
         description = "Creates jewellery, bars, molten glass and cannonballs using furnaces at different locations",
-        version = "1.00",
+        version = "1.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dmoltenmaestro/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Crafting, ScriptCategory.Ironman},
         skipZoomSetup = true
@@ -121,6 +121,8 @@ public class dMoltenMaestro extends AbstractScript {
     public static int bankItem2Count = 0;
     public static int previousBankItem1Count = 0;
     public static int previousBankItem2Count = 0;
+    public static int delayInMS = 0;
+    public static int delayInS = 0;
 
     // Tiles
     public static Tile edgeBankTile = new Tile(12383, 13725, 0);
@@ -311,7 +313,7 @@ public class dMoltenMaestro extends AbstractScript {
             case "Slayer":
                 resourceItemID1 = ItemList.ENCHANTED_GEM_4155;
                 resourceItemID2 = ItemList.GOLD_BAR_2357;
-                resultItemID = ItemList.SLAYER_RING__8__11866;
+                resultItemID = ItemList.SLAYER_RING_8_11866;
                 break;
             case "Molten glass":
                 resourceItemID1 = ItemList.SODA_ASH_1781;
@@ -324,6 +326,15 @@ public class dMoltenMaestro extends AbstractScript {
             default:
                 Logger.debugLog("Invalid resource (not in switch logic): " + resource);
                 break;
+        }
+
+        Paint.setStatus("Set up delays");
+        if (resource.equals("Cannonball")) {
+            delayInS = 10;
+            delayInMS = 10000;
+        } else {
+            delayInS = 7;
+            delayInMS = 7000;
         }
     }
 
@@ -394,7 +405,7 @@ public class dMoltenMaestro extends AbstractScript {
             case "Slayer":
                 resourceItemID1 = ItemList.ENCHANTED_GEM_4155;
                 resourceItemID2 = ItemList.GOLD_BAR_2357;
-                resultItemID = ItemList.SLAYER_RING__8__11866;
+                resultItemID = ItemList.SLAYER_RING_8_11866;
                 productIndex = Paint.createBox("Slayer ring (8)", resultItemID, 0);
                 break;
             case "Molten glass":

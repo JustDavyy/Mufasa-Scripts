@@ -65,9 +65,10 @@ public class Smelt extends Task {
                 lastUsedSlots = currentUsedSlots; // Update last used slots count
             }
 
-            // Check if 7 seconds have passed without processing an item
-            if (System.currentTimeMillis() - lastProcessTime > 7000) {
-                Logger.debugLog("No item processed in the last 7 seconds, attempting to re-smelt.");
+
+            // Check if X seconds have passed without processing an item
+            if (System.currentTimeMillis() - lastProcessTime > delayInMS) {
+                Logger.debugLog("No item processed in the last " + delayInS + " seconds, attempting to re-smelt.");
                 if ("Opal".equals(resource) || "Gold".equals(resource) || "Jade".equals(resource) ||
                         "Topaz".equals(resource) || "Sapphire".equals(resource) || "Emerald".equals(resource) ||
                         "Ruby".equals(resource) || "Diamond".equals(resource) || "Dragonstone".equals(resource) ||
@@ -77,7 +78,7 @@ public class Smelt extends Task {
                     doCraftOption(false);
                 } else {
                     if ("Cannonball".equals(resource)) {
-                        if (System.currentTimeMillis() - lastProcessTime > 10000) {
+                        if (System.currentTimeMillis() - lastProcessTime > delayInMS) {
                             doSmeltOption(true);
                         }
                     } else {
