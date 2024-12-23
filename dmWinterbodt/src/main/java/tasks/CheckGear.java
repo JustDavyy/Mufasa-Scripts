@@ -2,6 +2,7 @@ package tasks;
 
 import helpers.utils.EquipmentSlot;
 import helpers.utils.ItemList;
+import helpers.utils.UITabs;
 import main.dmWinterbodt;
 import utils.Task;
 
@@ -77,10 +78,10 @@ public class CheckGear extends Task {
     }
 
     private void ensureInventoryOpen() {
-        if (!GameTabs.isInventoryTabOpen()) {
+        if (!GameTabs.isTabOpen(UITabs.INVENTORY)) {
             Paint.setStatus("Opening inventory");
-            GameTabs.openInventoryTab();
-            Condition.wait(() -> GameTabs.isInventoryTabOpen(), 50, 10);
+            GameTabs.openTab(UITabs.INVENTORY);
+            Condition.wait(() -> GameTabs.isTabOpen(UITabs.INVENTORY), 50, 10);
         }
     }
 
@@ -106,9 +107,9 @@ public class CheckGear extends Task {
                 Logger.debugLog("Axe in inventory, continuing");
                 checkedForAxe = true;
             } else {
-                if (!GameTabs.isEquipTabOpen()) {
-                    GameTabs.openEquipTab();
-                    Condition.wait(() -> GameTabs.isEquipTabOpen(), 50, 10);
+                if (!GameTabs.isTabOpen(UITabs.EQUIP)) {
+                    GameTabs.openTab(UITabs.EQUIP);
+                    Condition.wait(() -> GameTabs.isTabOpen(UITabs.EQUIP), 50, 10);
                 }
                 for (int axe : axeIDs) {
                     if (Equipment.itemAt(EquipmentSlot.WEAPON, axe)) {
@@ -130,9 +131,9 @@ public class CheckGear extends Task {
                 Logger.log("Tinderbox or Bruma in inventory, continuing");
                 checkedForTinderboxOrBruma = true;
             } else {
-                if (!GameTabs.isEquipTabOpen()) {
-                    GameTabs.openEquipTab();
-                    Condition.wait(() -> GameTabs.isEquipTabOpen(), 50, 10);
+                if (!GameTabs.isTabOpen(UITabs.EQUIP)) {
+                    GameTabs.openTab(UITabs.EQUIP);
+                    Condition.wait(() -> GameTabs.isTabOpen(UITabs.EQUIP), 50, 10);
                 }
                 if (Equipment.itemAt(EquipmentSlot.WEAPON, ItemList.BRUMA_TORCH_20720)) {
                     checkedForTinderboxOrBruma = true;

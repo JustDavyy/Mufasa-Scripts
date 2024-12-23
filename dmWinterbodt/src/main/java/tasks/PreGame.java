@@ -1,5 +1,6 @@
 package tasks;
 
+import helpers.utils.UITabs;
 import utils.SideManager;
 import utils.StateUpdater;
 import utils.Task;
@@ -7,8 +8,6 @@ import utils.Task;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static helpers.Interfaces.*;
 import static main.dmWinterbodt.*;
@@ -39,10 +38,10 @@ public class PreGame extends Task {
         }
 
         if (preGameFoodCheck) {
-            if (!GameTabs.isInventoryTabOpen()) {
+            if (!GameTabs.isTabOpen(UITabs.INVENTORY)) {
                 Logger.log("Checking inventory for food in pre-game");
-                GameTabs.openInventoryTab();
-                Condition.wait(() -> GameTabs.isInventoryTabOpen(), 100, 10);
+                GameTabs.openTab(UITabs.INVENTORY);
+                Condition.wait(() -> GameTabs.isTabOpen(UITabs.INVENTORY), 100, 10);
                 countFoodInInventory();
                 preGameFoodCheck = false;
             }
@@ -68,6 +67,13 @@ public class PreGame extends Task {
             // Update our current location
             currentLocation = SideManager.getBurnTile();
         }
+
+        gameAt15Percent = false;
+        gameAt20Percent = false;
+        gameAt70Percent = false;
+        isGameGoing = false;
+        inventoryHasLogs = false;
+        inventoryHasKindlings = false;
 
         // Read the timer on the WT bar
         int results = Chatbox.readDigitsInArea(startTimerRect, blackColor);
@@ -134,6 +140,7 @@ public class PreGame extends Task {
                         Paint.updateBox(crateIndex, totalGameCount - 1);
                         Logger.debugLog("Current game count since break: " + BreakManager.currentGameCount);
                         Logger.log("Games till next break: " + (BreakManager.shouldBreakAt - BreakManager.currentGameCount));
+                        StateUpdater.updateGameAt15();
 
                         Paint.setStatus("Resetting states");
                         StateUpdater.mageDeadTimestamps.put("Left", -1L);

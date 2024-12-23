@@ -28,7 +28,7 @@ public class BurnBranches extends Task {
         //Logger.debugLog("Inside BurnBranches activate()");
 
         StateUpdater.updateIsGameGoing();
-        StateUpdater.updateGameAt13();
+        StateUpdater.updateGameAt15();
 
         // Regular check condition
         if (inventoryHasKindlings && !inventoryHasLogs) {
@@ -69,7 +69,7 @@ public class BurnBranches extends Task {
         Logger.debugLog("Inside BurnBranches execute()");
 
         // This is the logic to walk to safety when the game is near end, and we're out of burns.
-        if (!inventoryHasLogs & !inventoryHasKindlings && isGameGoing && Player.tileEquals(currentLocation, SideManager.getBurnTile()) && gameAt13Percent && !burnOnly) {
+        if (!inventoryHasLogs & !inventoryHasKindlings && isGameGoing && Player.tileEquals(currentLocation, SideManager.getBurnTile()) && gameAt15Percent && !burnOnly) {
             Logger.log("Out of items to burn, and game near end. Heading to lobby to prevent getting hit.");
             Paint.setStatus("Walking to safety");
             Condition.sleep(generateRandomDelay(1250, 2000));
@@ -82,7 +82,7 @@ public class BurnBranches extends Task {
             currentLocation = Walker.getPlayerPosition();
             lastWalkToSafety = System.currentTimeMillis();
             return false;
-        } else if (!inventoryHasLogs && !inventoryHasKindlings && isGameGoing && Player.isTileWithinArea(currentLocation, lobby) && gameAt13Percent) {
+        } else if (!inventoryHasLogs && !inventoryHasKindlings && isGameGoing && Player.isTileWithinArea(currentLocation, lobby) && gameAt15Percent) {
             Logger.log("Waiting in lobby for game to end to prevent getting hit.");
             Paint.setStatus("Waiting inside the lobby");
             return false;

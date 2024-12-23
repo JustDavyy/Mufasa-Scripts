@@ -1,6 +1,7 @@
 package tasks;
 
 import helpers.utils.Tile;
+import helpers.utils.UITabs;
 import utils.SideManager;
 import utils.StateUpdater;
 import utils.Task;
@@ -33,7 +34,7 @@ public class GoBackToGame extends Task {
                 // Prevent DCing because of idling
                 if (System.currentTimeMillis() - lastActivity > 240000) {
                     Game.antiAFK();
-                    GameTabs.openInventoryTab();
+                    GameTabs.openTab(UITabs.INVENTORY);
                     lastActivity = System.currentTimeMillis();
                 }
 

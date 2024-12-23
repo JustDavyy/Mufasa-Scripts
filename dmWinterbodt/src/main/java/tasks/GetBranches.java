@@ -15,11 +15,12 @@ public class GetBranches extends Task {
         //Logger.debugLog("Inside GetBranches activate()");
         StateUpdater.updateStates(states);
 
-        if (!Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing && !gameAt13Percent) {
+        if (!Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing && !gameAt15Percent) {
+            Logger.debugLog("Getting branches: TRUE");
             gettingBranches = true;
         }
 
-        return gettingBranches || !Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing && !gameAt13Percent || !Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing && gameAt20Percent && burnOnly && !isBurning && Inventory.count(brumaRoot, 0.8) < 7;
+        return gettingBranches || !Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing && !gameAt15Percent || !Inventory.isFull() && SideManager.isWithinGameArea() && !waitingForGameEnded && isGameGoing && gameAt20Percent && burnOnly && !isBurning && Inventory.count(brumaRoot, 0.8) < 7;
     }
 
     @Override
@@ -31,17 +32,16 @@ public class GetBranches extends Task {
         }
 
         Logger.debugLog("Inside GetBranches execute()");
-        if (!Player.atTile(SideManager.getBranchTile())) {
+        if (!Player.tileEquals(SideManager.getBranchTile(), currentLocation)) {
             Paint.setStatus("Stepping to branch tile");
             Logger.log("Stepping to branch tile!");
             Walker.step(SideManager.getBranchTile());
-            Condition.wait(() -> Player.atTile(SideManager.getBranchTile()), 200, 20);
             lastActivity = System.currentTimeMillis();
-            currentLocation = Walker.getPlayerPosition();
+            currentLocation = SideManager.getBranchTile();
             return true;
         }
 
-        if (Player.atTile(SideManager.getBranchTile())) {
+        if (Player.tileEquals(SideManager.getBranchTile(), currentLocation)) {
             Paint.setStatus("Initiating chop action");
             Logger.log("Initiating chop action!");
             Client.tap(SideManager.getBranchRect());
@@ -53,13 +53,15 @@ public class GetBranches extends Task {
                 SideManager.updateStates();
                 XpBar.getXP();
 
-                if (gameAt13Percent) {
-                    if (Inventory.count(brumaRoot, 0.8) >= 7) {
+                if (gameAt15Percent) {
+                    if (Inventory.count(brumaRoot, 0.8) >= 5) {
                         shouldBurn = true;
+                    } else {
+                        shouldBurn = false;
                     }
                 }
 
-                return Inventory.isFull() || shouldEat || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
+                return Inventory.isFull() || shouldEat || Player.leveledUp() || shouldBurn;
             }, 200, 150);
             return true;
         }

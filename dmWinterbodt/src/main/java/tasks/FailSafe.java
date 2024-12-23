@@ -2,6 +2,7 @@ package tasks;
 
 import helpers.utils.Area;
 import helpers.utils.Tile;
+import helpers.utils.UITabs;
 import utils.SideManager;
 import utils.Task;
 
@@ -110,7 +111,7 @@ public class FailSafe extends Task {
             Script.stop();
         }
 
-        GameTabs.openInventoryTab();
+        GameTabs.openTab(UITabs.INVENTORY);
         return false;
     }
 }

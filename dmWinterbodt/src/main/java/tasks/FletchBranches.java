@@ -1,5 +1,6 @@
 package tasks;
 
+import helpers.utils.UITabs;
 import utils.Helpers;
 import utils.SideManager;
 import utils.Task;
@@ -28,7 +29,7 @@ public class FletchBranches extends Task {
         Logger.log("Initiating fletching action.");
         Paint.setStatus("Initiating fletching action");
 
-        GameTabs.openInventoryTab();
+        GameTabs.openTab(UITabs.INVENTORY);
 
         Inventory.tapItem(knife, true, 0.60);
         Condition.sleep(generateRandomDelay(75, 150));
@@ -44,7 +45,7 @@ public class FletchBranches extends Task {
             SideManager.updateStates();
             XpBar.getXP();
 
-            return !inventoryHasLogs || Helpers.countItemUnchanged(brumaRoot) || shouldEat || Player.leveledUp() || shouldBurn || gameAt13Percent && isGameGoing;
+            return !inventoryHasLogs || Helpers.countItemUnchanged(brumaRoot) || shouldEat || Player.leveledUp() || shouldBurn || gameAt15Percent && isGameGoing;
         }, 200, 150);
 
         return true;

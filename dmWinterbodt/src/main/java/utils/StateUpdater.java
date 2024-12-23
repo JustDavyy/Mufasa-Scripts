@@ -19,7 +19,7 @@ import static tasks.GetBranches.gettingBranches;
 public class StateUpdater {
     //    static Rectangle gameCheckRect = new Rectangle(54, 29, 5, 20);
     static Rectangle warmthPercentReadRect = new Rectangle(189, 7, 33, 12);
-    static Rectangle energyPercentReadRect = new Rectangle(198, 23, 29, 13);
+    static Rectangle energyPercentReadRect = new Rectangle(205, 23, 36, 14);
     static List<Color> blackColor = Arrays.asList(
             java.awt.Color.decode("#000001")
     );
@@ -124,7 +124,7 @@ public class StateUpdater {
             }
 
             // Update the game state boolean (true if wt game is 15% or less left.
-            updateGameAt13();
+            updateGameAt15();
             updateGameAt20();
             updateGameAt70();
             updateIsGameGoing();
@@ -156,7 +156,7 @@ public class StateUpdater {
             }
 
             // Update the game state boolean (true if wt game is 15% or less left.
-            updateGameAt13();
+            updateGameAt15();
             updateGameAt20();
             updateGameAt70();
             updateIsGameGoing();
@@ -218,21 +218,25 @@ public class StateUpdater {
         return isMageDead;
     }
 
-    public static void updateGameAt13() {
+    public static void updateGameAt15() {
         // Use readDigitsInArea to check the energy percentage
         int energyPercentage = Chatbox.readDigitsInArea(energyPercentReadRect, blackColor);
 
         // Check if the energy percentage is exactly 15 or lower (and valid)
         if (energyPercentage != -1 && energyPercentage <= 15) {
-            if (!gameAt13Percent) {
+            if (!gameAt15Percent) {
                 Logger.debugLog("Game at 15% true with CF OCR");
+                gameAt15Percent = true;
             }
-            gameAt13Percent = true;
         } else if (energyPercentage > 15) {
-            gameAt13Percent = false;
+            gameAt15Percent = false;
         } else {
             // Fallback to color check if the OCR result is invalid
-            gameAt13Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt13CheckRect, 10);
+            if (isGameGoing) {
+                gameAt15Percent = Client.isColorInRect(StateColor.GAME_RED_COLOR.getColor(), gameAt13CheckRect, 10);
+            } else {
+                gameAt15Percent = false;
+            }
         }
     }
 
@@ -275,11 +279,11 @@ public class StateUpdater {
     private static void updateShouldBurn() {
         shouldBurn = (
                 // for regular mode
-                gameAt13Percent && (inventoryHasKindlings || inventoryHasLogs) && Inventory.usedSlots() >= 18) && !burnOnly
-                || isGameGoing && gameAt13Percent && (inventoryHasLogs || inventoryHasKindlings) && !burnOnly
+                gameAt15Percent && (inventoryHasKindlings || inventoryHasLogs) && Inventory.usedSlots() >= 18) && !burnOnly
+                || isGameGoing && gameAt15Percent && (inventoryHasLogs || inventoryHasKindlings) && !burnOnly
                 // for burn only!
                 || burnOnly && isGameGoing && inventoryHasLogs && Inventory.isFull() && Player.tileEquals(currentLocation, SideManager.getBranchTile())
-                || burnOnly && isGameGoing && inventoryHasLogs && gameAt13Percent
+                || burnOnly && isGameGoing && inventoryHasLogs && gameAt15Percent
                 || burnOnly && isGameGoing && inventoryHasLogs && Player.tileEquals(currentLocation, SideManager.getBurnTile());
     }
 
@@ -314,7 +318,7 @@ public class StateUpdater {
         waitingForGameToStart = false;
         inventoryHasKindlings = false;
         inventoryHasLogs = false;
-        gameAt13Percent = false;
+        gameAt15Percent = false;
         gameAt20Percent = false;
         gameAt70Percent = false;
         shouldBurn = false;

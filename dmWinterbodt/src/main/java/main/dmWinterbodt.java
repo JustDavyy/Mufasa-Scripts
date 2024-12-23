@@ -25,7 +25,7 @@ import static utils.SideManager.pickRandomSide;
 @ScriptManifest(
         name = "dmWinterbodt",
         description = "Completes the Wintertodt minigame. Start inside the Wintertodt minigame area",
-        version = "2.26",
+        version = "2.27",
         guideLink = "https://wiki.mufasaclient.com/docs/dmwinterbodt/",
         categories = {ScriptCategory.Firemaking, ScriptCategory.Minigames}
 )
@@ -90,7 +90,7 @@ public class dmWinterbodt extends AbstractScript {
     public static int foodAmountLeftToBank;
     public static boolean burnOnly;
     public static boolean preGameFoodCheck = true;
-    public static boolean gameAt13Percent;
+    public static boolean gameAt15Percent;
     public static boolean gameAt20Percent;
     public static boolean gameAt70Percent;
     public static boolean shouldBurn;
@@ -240,7 +240,7 @@ public class dmWinterbodt extends AbstractScript {
 
         // Make sure the inventory is open
         Paint.setStatus("Opening inventory");
-        GameTabs.openInventoryTab();
+        GameTabs.openTab(UITabs.INVENTORY);
 
         if (pickedSide.equals("Random")) {
             Paint.setStatus("Picking random side");
@@ -254,9 +254,9 @@ public class dmWinterbodt extends AbstractScript {
         Paint.setStatus("Closing chatbox");
         Chatbox.closeChatbox();
 
-        if (!GameTabs.isInventoryTabOpen()) {
-            GameTabs.openInventoryTab();
-            Condition.wait(() -> GameTabs.isInventoryTabOpen(), 100, 20);
+        if (!GameTabs.isTabOpen(UITabs.INVENTORY)) {
+            GameTabs.openTab(UITabs.INVENTORY);
+            Condition.wait(() -> GameTabs.isTabOpen(UITabs.INVENTORY), 100, 20);
         }
         countFoodInInventory(); // Initial food count!
 
@@ -267,9 +267,9 @@ public class dmWinterbodt extends AbstractScript {
 
     @Override
     public void poll() {
-        if (!GameTabs.isInventoryTabOpen()) {
-            GameTabs.openInventoryTab();
-            Condition.wait(() -> GameTabs.isInventoryTabOpen(), 100, 10);
+        if (!GameTabs.isTabOpen(UITabs.INVENTORY)) {
+            GameTabs.openTab(UITabs.INVENTORY);
+            Condition.wait(() -> GameTabs.isTabOpen(UITabs.INVENTORY), 100, 10);
         }
 
         SideManager.updateStates();

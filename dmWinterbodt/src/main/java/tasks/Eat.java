@@ -1,6 +1,7 @@
 package tasks;
 
 import helpers.utils.ItemList;
+import helpers.utils.UITabs;
 import utils.Task;
 
 import java.util.Map;
@@ -32,7 +33,7 @@ public class Eat extends Task {
         Logger.debugLog("Inside Eat execute()");
         Paint.setStatus("Eating");
 
-        GameTabs.openInventoryTab();
+        GameTabs.openTab(UITabs.INVENTORY);
 
         // Check if selected food is in the map
         if (foodMap.containsKey("Rejuv Potion")) {
