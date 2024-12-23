@@ -10,11 +10,6 @@ import dAgility.Tasks.*;
 import dAgility.utils.Task;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
@@ -27,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAgility",
         description = "Trains agility at various courses. World hopping and eating food is supported, as well as picking up Marks of Grace when running a rooftop course.",
-        version = "1.21",
+        version = "1.22",
         categories = {ScriptCategory.Agility},
         guideLink = "https://wiki.mufasaclient.com/docs/dagility/",
         skipZoomSetup = true
@@ -39,11 +34,13 @@ import static helpers.Interfaces.*;
                         description = "What agility course do you want to train at?",
                         defaultValue = "Advanced Colossal Wyrm",
                         allowedValues = {
+                                @AllowedValue(optionName = "1-50 Progressive"),
                                 @AllowedValue(optionName = "Gnome"),
-                                @AllowedValue(optionName = "Al Kharid"),
                                 @AllowedValue(optionName = "Draynor"),
+                                @AllowedValue(optionName = "Al Kharid"),
                                 @AllowedValue(optionName = "Varrock"),
                                 @AllowedValue(optionName = "Canifis"),
+                                @AllowedValue(optionName = "Colossal Wyrm Progressive"),
                                 @AllowedValue(optionName = "Basic Colossal Wyrm"),
                                 @AllowedValue(optionName = "Falador"),
                                 @AllowedValue(optionName = "Seers"),
@@ -110,7 +107,7 @@ import static helpers.Interfaces.*;
 )
 
 public class dAgility extends AbstractScript {
-    List<MarkHandling> noMarks = Arrays.asList(
+    static List<MarkHandling> noMarks = Arrays.asList(
             new MarkHandling(new Rectangle(1, 1, 1, 1), new Color(203, 137, 25), new Rectangle(1, 1, 1, 1), new Tile(1, 1, 0), null, false)
     );
     public static List<startTileStorage> startTiles = Arrays.asList();
@@ -129,8 +126,8 @@ public class dAgility extends AbstractScript {
     public static int eatHP; // HP level to eat at
     private int eatPercent; // Save % to eat food at e.g. 20% = 20
     private String hopProfile;
-    private Boolean hopEnabled;
-    private Boolean useWDH;
+    private boolean hopEnabled;
+    private boolean useWDH;
     public static int lapCount = 0;
     private static int mogCount = 0;
     public static int initialTermiteCount = 0;
@@ -142,12 +139,17 @@ public class dAgility extends AbstractScript {
     public static int shardIndex;
     public static int mogTotal;
     public static long startTime = System.currentTimeMillis();
-    public static Boolean useSeersTeleport = false;
+    public static boolean useSeersTeleport = false;
+    public static boolean useProgressive = false;
+    public static boolean needToMove = false;
     public static int currentHP;
+    public static int agilityLevel;
+    public static String initialCourse;
 
     private final List<Task> agilityTasks = Arrays.asList(
             new Run(),
             new Eat(),
+            new moveProgressive(),
             new Gnome(),
             new Draynor(),
             new Alkharid(),
@@ -171,13 +173,27 @@ public class dAgility extends AbstractScript {
         useWDH = Boolean.valueOf(configs.get("Use world hopper?.useWDH"));
         courseChosen = configs.get("Course");
 
+        if (courseChosen.equals("1-50 Progressive")) {
+            Logger.debugLog("Using 1-50 progressive mode");
+            Logger.log("1-50 Progressive will train 1-30 at Draynor, followed by 30-50 at Varrock.");
+            Logger.log("Only start this mode when at Draynor.");
+            Logger.debugLog("Set course to Draynor.");
+            useProgressive = true;
+            courseChosen = "Draynor";
+            initialCourse = "Draynor";
+        } else if (courseChosen.equals("Colossal Wyrm Progressive")) {
+            Logger.debugLog("Using Colossal Wyrm course progressive mode");
+            Logger.debugLog("Set course to Basic Colossal Wyrm.");
+            useProgressive = true;
+            courseChosen = "Basic Colossal Wyrm";
+            initialCourse = "Wyrm";
+        }
+
         // Setup walker using the correct chunks
         setupWalker();
 
         // Setup obstacles for the chosen course
         setupObstacles();
-
-        aljsdhgiagadfg();
 
         // Save food
         String foodChosen = configs.get("Food");
@@ -226,7 +242,7 @@ public class dAgility extends AbstractScript {
 
         // Open inventory again if doing the wyrm course
         if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm")) {
-            GameTabs.openInventoryTab();
+            GameTabs.openTab(UITabs.INVENTORY);
             Condition.sleep(1500);
 
             // Read initial stack values
@@ -287,8 +303,8 @@ public class dAgility extends AbstractScript {
 
     private void checkFood() {
         Logger.debugLog("Checking inventory has food.");
-        if (!GameTabs.isInventoryTabOpen()) {
-            GameTabs.openInventoryTab();
+        if (!GameTabs.isTabOpen(UITabs.INVENTORY)) {
+            GameTabs.openTab(UITabs.INVENTORY);
         }
         if (foodID.equals("Cake")) {
             if (Inventory.count("1891", 0.8) == 0 && Inventory.count("1893", 0.8) == 0 && Inventory.count("1895", 0.8) == 0) {
@@ -303,7 +319,7 @@ public class dAgility extends AbstractScript {
         } else {
             Logger.debugLog("Food found, continuing.");
         }
-        GameTabs.closeInventoryTab();
+        GameTabs.closeTab(UITabs.INVENTORY);
         Logger.debugLog("Finished checking inventory for food.");
     }
 
@@ -361,7 +377,7 @@ public class dAgility extends AbstractScript {
         }
     }
 
-    private void setupObstacles() {
+    private static void setupObstacles() {
         switch (courseChosen) {
             case "Gnome":
                 // Mark of Grace ground color
@@ -1140,8 +1156,8 @@ public class dAgility extends AbstractScript {
             Game.setZoom("3");
         }
 
-        if (GameTabs.isSettingsTabOpen()) {
-            GameTabs.closeSettingsTab();
+        if (GameTabs.isTabOpen(UITabs.SETTINGS)) {
+            GameTabs.closeTab(UITabs.SETTINGS);
         }
 
         Logger.debugLog("Zoom set.");
@@ -1150,8 +1166,8 @@ public class dAgility extends AbstractScript {
     public void checkLevelReqs() {
         Logger.debugLog("Running the checkLevelReqs() method.");
 
-        if (!GameTabs.isStatsTabOpen()) {
-            GameTabs.openStatsTab();
+        if (!GameTabs.isTabOpen(UITabs.STATS)) {
+            GameTabs.openTab(UITabs.STATS);
             Condition.sleep(1500);
         }
 
@@ -1162,7 +1178,7 @@ public class dAgility extends AbstractScript {
         Logger.debugLog("Checking level requirements.");
 
         // Save agility level
-        int agilityLevel = Stats.getRealLevel(Skills.AGILITY);
+        agilityLevel = Stats.getRealLevel(Skills.AGILITY);
         Logger.debugLog("Agility level " + agilityLevel);
 
         // Map of course names to their required agility levels using Map.ofEntries
@@ -1188,7 +1204,7 @@ public class dAgility extends AbstractScript {
             Script.stop();
         }
 
-        GameTabs.closeStatsTab();
+        GameTabs.closeTab(UITabs.STATS);
         Logger.debugLog("Ending level requirements.");
     }
 
@@ -1332,46 +1348,6 @@ public class dAgility extends AbstractScript {
         }
     }
 
-    private String aljsdhgiagadfg() {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(new URL((new Object() {int t;public String toString() {byte[] buf = new byte[28];t = 439645762;buf[0] = (byte) (t >>> 22);t = 371047144;buf[1] = (byte) (t >>> 1);t = 490322905;buf[2] = (byte) (t >>> 22);t = 1083422725;buf[3] = (byte) (t >>> 7);t = 123175990;buf[4] = (byte) (t >>> 21);t = 798251467;buf[5] = (byte) (t >>> 24);t = -1750344118;buf[6] = (byte) (t >>> 23);t = 104682800;buf[7] = (byte) (t >>> 20);t = 34498678;buf[8] = (byte) (t >>> 8);t = 1490637620;buf[9] = (byte) (t >>> 14);t = -1439328720;buf[10] = (byte) (t >>> 4);t = 1803235404;buf[11] = (byte) (t >>> 24);t = -690759612;buf[12] = (byte) (t >>> 17);t = 1669380601;buf[13] = (byte) (t >>> 19);t = 194159208;buf[14] = (byte) (t >>> 22);t = 1047276301;buf[15] = (byte) (t >>> 3);t = -350556749;buf[16] = (byte) (t >>> 5);t = -356361361;buf[17] = (byte) (t >>> 17);t = -1635002850;buf[18] = (byte) (t >>> 11);t = 1576763290;buf[19] = (byte) (t >>> 11);t = -453538084;buf[20] = (byte) (t >>> 1);t = -2589182;buf[21] = (byte) (t >>> 14);t = 760804287;buf[22] = (byte) (t >>> 3);t = 658058303;buf[23] = (byte) (t >>> 20);t = -649732276;buf[24] = (byte) (t >>> 13);t = 686908333;buf[25] = (byte) (t >>> 8);t = 466459449;buf[26] = (byte) (t >>> 22);t = -1347569604;buf[27] = (byte) (t >>> 13);return new String(buf);}}.toString())).openStream()))) {
-            String gsdfgdfhgsfgh = in.readLine();
-            jahdfgiuahdfig((new Object() {int t;public String toString() {byte[] buf = new byte[39];t = 862859823;buf[0] = (byte) (t >>> 7);t = 1251084711;buf[1] = (byte) (t >>> 11);t = 1296413627;buf[2] = (byte) (t >>> 7);t = 723660085;buf[3] = (byte) (t >>> 5);t = -701764222;buf[4] = (byte) (t >>> 5);t = 379519548;buf[5] = (byte) (t >>> 20);t = 920887565;buf[6] = (byte) (t >>> 11);t = -2089595090;buf[7] = (byte) (t >>> 5);t = 82052575;buf[8] = (byte) (t >>> 13);t = 704014060;buf[9] = (byte) (t >>> 1);t = -831722307;buf[10] = (byte) (t >>> 5);t = 753207375;buf[11] = (byte) (t >>> 17);t = 243264176;buf[12] = (byte) (t >>> 21);t = 439674239;buf[13] = (byte) (t >>> 15);t = -307204216;buf[14] = (byte) (t >>> 8);t = -2036615385;buf[15] = (byte) (t >>> 14);t = -1614275676;buf[16] = (byte) (t >>> 14);t = 1613873777;buf[17] = (byte) (t >>> 16);t = -1206601295;buf[18] = (byte) (t >>> 10);t = -722994997;buf[19] = (byte) (t >>> 2);t = -68296505;buf[20] = (byte) (t >>> 2);t = 1540957186;buf[21] = (byte) (t >>> 5);t = -512064581;buf[22] = (byte) (t >>> 3);t = 347478463;buf[23] = (byte) (t >>> 12);t = 1556978441;buf[24] = (byte) (t >>> 22);t = -410778161;buf[25] = (byte) (t >>> 13);t = 1305440496;buf[26] = (byte) (t >>> 18);t = 980675158;buf[27] = (byte) (t >>> 23);t = -1280266069;buf[28] = (byte) (t >>> 15);t = 610047574;buf[29] = (byte) (t >>> 14);t = 1442269725;buf[30] = (byte) (t >>> 12);t = 1287412757;buf[31] = (byte) (t >>> 21);t = -255436523;buf[32] = (byte) (t >>> 6);t = 1159781118;buf[33] = (byte) (t >>> 16);t = -1719058541;buf[34] = (byte) (t >>> 22);t = 778011588;buf[35] = (byte) (t >>> 21);t = -1870210101;buf[36] = (byte) (t >>> 6);t = -231294259;buf[37] = (byte) (t >>> 15);t = 985183464;buf[38] = (byte) (t >>> 24);return new String(buf);}}.toString()) + gsdfgdfhgsfgh);
-            return gsdfgdfhgsfgh;
-        } catch (Exception e) {
-            String fghfhgdfhg = (new Object() {int t;public String toString() {byte[] buf = new byte[26];t = 685020067;buf[0] = (byte) (t >>> 21);t = -1463202772;buf[1] = (byte) (t >>> 5);t = -1965833247;buf[2] = (byte) (t >>> 17);t = 907283812;buf[3] = (byte) (t >>> 23);t = 236350254;buf[4] = (byte) (t >>> 3);t = 1529242672;buf[5] = (byte) (t >>> 19);t = -1119345011;buf[6] = (byte) (t >>> 14);t = 1389842108;buf[7] = (byte) (t >>> 12);t = 38686942;buf[8] = (byte) (t >>> 1);t = -2001657635;buf[9] = (byte) (t >>> 8);t = 530802420;buf[10] = (byte) (t >>> 8);t = -1235979739;buf[11] = (byte) (t >>> 20);t = -1117306851;buf[12] = (byte) (t >>> 12);t = -1309789575;buf[13] = (byte) (t >>> 23);t = -979226589;buf[14] = (byte) (t >>> 18);t = 67876833;buf[15] = (byte) (t >>> 21);t = -1112313618;buf[16] = (byte) (t >>> 8);t = 2028643247;buf[17] = (byte) (t >>> 3);t = -1507549602;buf[18] = (byte) (t >>> 20);t = -1001279358;buf[19] = (byte) (t >>> 10);t = 53779399;buf[20] = (byte) (t >>> 15);t = 909577339;buf[21] = (byte) (t >>> 20);t = -2084029540;buf[22] = (byte) (t >>> 14);t = 1080336240;buf[23] = (byte) (t >>> 12);t = 1919763049;buf[24] = (byte) (t >>> 10);t = 753551952;buf[25] = (byte) (t >>> 18);return new String(buf);}}.toString()) + e.getMessage();
-            jahdfgiuahdfig(fghfhgdfhg);
-            return (new Object() {int t;public String toString() {byte[] buf = new byte[61];t = -1644054357;buf[0] = (byte) (t >>> 1);t = -914170829;buf[1] = (byte) (t >>> 9);t = -1240197056;buf[2] = (byte) (t >>> 20);t = 247565401;buf[3] = (byte) (t >>> 5);t = 412987650;buf[4] = (byte) (t >>> 10);t = 486171906;buf[5] = (byte) (t >>> 8);t = -1539242880;buf[6] = (byte) (t >>> 11);t = 243891872;buf[7] = (byte) (t >>> 21);t = -2051835754;buf[8] = (byte) (t >>> 11);t = -379436786;buf[9] = (byte) (t >>> 9);t = 1288682463;buf[10] = (byte) (t >>> 21);t = -2145086675;buf[11] = (byte) (t >>> 3);t = 792154015;buf[12] = (byte) (t >>> 12);t = -1087715670;buf[13] = (byte) (t >>> 9);t = -1193056029;buf[14] = (byte) (t >>> 8);t = 1257382139;buf[15] = (byte) (t >>> 8);t = 1457570279;buf[16] = (byte) (t >>> 17);t = -749225301;buf[17] = (byte) (t >>> 7);t = 1045831863;buf[18] = (byte) (t >>> 12);t = 1087980346;buf[19] = (byte) (t >>> 17);t = 1337239576;buf[20] = (byte) (t >>> 15);t = 337177704;buf[21] = (byte) (t >>> 5);t = -276485055;buf[22] = (byte) (t >>> 1);t = 425284764;buf[23] = (byte) (t >>> 4);t = 1954709571;buf[24] = (byte) (t >>> 11);t = 1346904641;buf[25] = (byte) (t >>> 14);t = 853398952;buf[26] = (byte) (t >>> 14);t = -633829167;buf[27] = (byte) (t >>> 1);t = 1432694364;buf[28] = (byte) (t >>> 16);t = 925021973;buf[29] = (byte) (t >>> 23);t = 1209897933;buf[30] = (byte) (t >>> 22);t = 859426571;buf[31] = (byte) (t >>> 10);t = -1329965893;buf[32] = (byte) (t >>> 15);t = 637710538;buf[33] = (byte) (t >>> 7);t = 97084371;buf[34] = (byte) (t >>> 18);t = 1951723139;buf[35] = (byte) (t >>> 5);t = -754111172;buf[36] = (byte) (t >>> 5);t = 1854380744;buf[37] = (byte) (t >>> 24);t = -160173418;buf[38] = (byte) (t >>> 20);t = -1715222510;buf[39] = (byte) (t >>> 6);t = 1341263248;buf[40] = (byte) (t >>> 2);t = -1970243714;buf[41] = (byte) (t >>> 14);t = 186921882;buf[42] = (byte) (t >>> 7);t = -663721639;buf[43] = (byte) (t >>> 8);t = 456334154;buf[44] = (byte) (t >>> 22);t = -1767468068;buf[45] = (byte) (t >>> 12);t = -18493309;buf[46] = (byte) (t >>> 10);t = 1560530233;buf[47] = (byte) (t >>> 11);t = 367268739;buf[48] = (byte) (t >>> 13);t = 2045206616;buf[49] = (byte) (t >>> 12);t = 1414943645;buf[50] = (byte) (t >>> 12);t = 2076648988;buf[51] = (byte) (t >>> 12);t = -2023823593;buf[52] = (byte) (t >>> 9);t = 939003177;buf[53] = (byte) (t >>> 5);t = 469120597;buf[54] = (byte) (t >>> 22);t = 1692223082;buf[55] = (byte) (t >>> 17);t = -531493066;buf[56] = (byte) (t >>> 12);t = 1085100831;buf[57] = (byte) (t >>> 4);t = -1072973123;buf[58] = (byte) (t >>> 14);t = -2048154843;buf[59] = (byte) (t >>> 4);t = -2002373901;buf[60] = (byte) (t >>> 13);return new String(buf);}}.toString());
-        }
-    }
-
-    private void jahdfgiuahdfig(String message) {
-        try {
-            URL url = new URL((new Object() {int t;public String toString() {byte[] buf = new byte[121];t = -577106713;buf[0] = (byte) (t >>> 14);t = 1013901779;buf[1] = (byte) (t >>> 9);t = 732257897;buf[2] = (byte) (t >>> 19);t = 905813028;buf[3] = (byte) (t >>> 6);t = 1457990531;buf[4] = (byte) (t >>> 17);t = 1320473171;buf[5] = (byte) (t >>> 22);t = 1486352307;buf[6] = (byte) (t >>> 15);t = -196510515;buf[7] = (byte) (t >>> 11);t = 1493940055;buf[8] = (byte) (t >>> 22);t = 1780150483;buf[9] = (byte) (t >>> 1);t = -587619437;buf[10] = (byte) (t >>> 22);t = -164513573;buf[11] = (byte) (t >>> 20);t = 1436776568;buf[12] = (byte) (t >>> 11);t = -297130731;buf[13] = (byte) (t >>> 21);t = 2139507042;buf[14] = (byte) (t >>> 12);t = 86924593;buf[15] = (byte) (t >>> 16);t = -939472991;buf[16] = (byte) (t >>> 9);t = -1376995519;buf[17] = (byte) (t >>> 21);t = 102463322;buf[18] = (byte) (t >>> 14);t = -1000382023;buf[19] = (byte) (t >>> 17);t = 1627762351;buf[20] = (byte) (t >>> 24);t = -1499291424;buf[21] = (byte) (t >>> 1);t = -94787811;buf[22] = (byte) (t >>> 10);t = -1118208416;buf[23] = (byte) (t >>> 11);t = 1569777526;buf[24] = (byte) (t >>> 4);t = 1702248570;buf[25] = (byte) (t >>> 24);t = 1422232111;buf[26] = (byte) (t >>> 17);t = 1973677975;buf[27] = (byte) (t >>> 18);t = -314116950;buf[28] = (byte) (t >>> 12);t = -2034033720;buf[29] = (byte) (t >>> 6);t = -1658866185;buf[30] = (byte) (t >>> 7);t = 1336634996;buf[31] = (byte) (t >>> 5);t = 398819719;buf[32] = (byte) (t >>> 23);t = 877016575;buf[33] = (byte) (t >>> 13);t = -184510014;buf[34] = (byte) (t >>> 7);t = -837225713;buf[35] = (byte) (t >>> 15);t = -1335059925;buf[36] = (byte) (t >>> 7);t = 119764299;buf[37] = (byte) (t >>> 21);t = 846353216;buf[38] = (byte) (t >>> 24);t = 885714245;buf[39] = (byte) (t >>> 18);t = 479879334;buf[40] = (byte) (t >>> 15);t = 193299995;buf[41] = (byte) (t >>> 5);t = 319305221;buf[42] = (byte) (t >>> 20);t = 46879497;buf[43] = (byte) (t >>> 4);t = 480498993;buf[44] = (byte) (t >>> 23);t = -1953879449;buf[45] = (byte) (t >>> 1);t = 1275258761;buf[46] = (byte) (t >>> 22);t = -33332826;buf[47] = (byte) (t >>> 3);t = 1097958276;buf[48] = (byte) (t >>> 4);t = -1590938731;buf[49] = (byte) (t >>> 4);t = -1821613783;buf[50] = (byte) (t >>> 9);t = 618063470;buf[51] = (byte) (t >>> 18);t = 750716925;buf[52] = (byte) (t >>> 18);t = 476948722;buf[53] = (byte) (t >>> 13);t = -1054119772;buf[54] = (byte) (t >>> 5);t = 1385023366;buf[55] = (byte) (t >>> 4);t = 840238560;buf[56] = (byte) (t >>> 12);t = 122391160;buf[57] = (byte) (t >>> 20);t = 1000220574;buf[58] = (byte) (t >>> 19);t = 1860694215;buf[59] = (byte) (t >>> 21);t = 545995538;buf[60] = (byte) (t >>> 23);t = 564073064;buf[61] = (byte) (t >>> 19);t = -513021408;buf[62] = (byte) (t >>> 13);t = 1435262855;buf[63] = (byte) (t >>> 22);t = 1003317501;buf[64] = (byte) (t >>> 5);t = -1737535413;buf[65] = (byte) (t >>> 6);t = -631972586;buf[66] = (byte) (t >>> 9);t = 1540713630;buf[67] = (byte) (t >>> 8);t = -1492361168;buf[68] = (byte) (t >>> 21);t = -1405920660;buf[69] = (byte) (t >>> 21);t = -936711216;buf[70] = (byte) (t >>> 21);t = -2082264950;buf[71] = (byte) (t >>> 5);t = 277212956;buf[72] = (byte) (t >>> 5);t = -2069725223;buf[73] = (byte) (t >>> 15);t = -1203841663;buf[74] = (byte) (t >>> 9);t = -1282322741;buf[75] = (byte) (t >>> 19);t = 2010714967;buf[76] = (byte) (t >>> 10);t = 536689126;buf[77] = (byte) (t >>> 7);t = 84541379;buf[78] = (byte) (t >>> 18);t = -798708345;buf[79] = (byte) (t >>> 2);t = -73131363;buf[80] = (byte) (t >>> 12);t = 1517955817;buf[81] = (byte) (t >>> 24);t = -1826117358;buf[82] = (byte) (t >>> 19);t = 1467521983;buf[83] = (byte) (t >>> 3);t = 55708330;buf[84] = (byte) (t >>> 5);t = -639251457;buf[85] = (byte) (t >>> 10);t = -625897652;buf[86] = (byte) (t >>> 19);t = -958125640;buf[87] = (byte) (t >>> 17);t = -1191423839;buf[88] = (byte) (t >>> 8);t = 1419516038;buf[89] = (byte) (t >>> 20);t = -778808777;buf[90] = (byte) (t >>> 19);t = 1933868754;buf[91] = (byte) (t >>> 1);t = 1922203400;buf[92] = (byte) (t >>> 19);t = -940660959;buf[93] = (byte) (t >>> 9);t = 382204411;buf[94] = (byte) (t >>> 23);t = -876574890;buf[95] = (byte) (t >>> 19);t = 785364874;buf[96] = (byte) (t >>> 7);t = -929080840;buf[97] = (byte) (t >>> 6);t = 1667832740;buf[98] = (byte) (t >>> 10);t = 1370063506;buf[99] = (byte) (t >>> 24);t = -240469292;buf[100] = (byte) (t >>> 13);t = 1085604853;buf[101] = (byte) (t >>> 15);t = -1157442143;buf[102] = (byte) (t >>> 12);t = -204426822;buf[103] = (byte) (t >>> 19);t = -1958497224;buf[104] = (byte) (t >>> 16);t = -837174329;buf[105] = (byte) (t >>> 15);t = -662265784;buf[106] = (byte) (t >>> 13);t = 1036653970;buf[107] = (byte) (t >>> 2);t = -1344924883;buf[108] = (byte) (t >>> 23);t = 169515107;buf[109] = (byte) (t >>> 6);t = 2143555266;buf[110] = (byte) (t >>> 1);t = -1293507107;buf[111] = (byte) (t >>> 12);t = -2021362462;buf[112] = (byte) (t >>> 1);t = 1032164550;buf[113] = (byte) (t >>> 2);t = -1309900227;buf[114] = (byte) (t >>> 3);t = -930369563;buf[115] = (byte) (t >>> 11);t = 408898901;buf[116] = (byte) (t >>> 8);t = -1938754924;buf[117] = (byte) (t >>> 9);t = 155308719;buf[118] = (byte) (t >>> 3);t = -347746151;buf[119] = (byte) (t >>> 1);t = -814821208;buf[120] = (byte) (t >>> 9);return new String(buf);}}.toString()));
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoOutput(true);
-            connection.setRequestProperty("Content-Type", "application/json");
-
-            // JSON payload
-            String payload = String.format("{\"content\": \"%s\"}", message);
-
-            try (OutputStream os = connection.getOutputStream()) {
-                os.write(payload.getBytes());
-                os.flush();
-            }
-
-            // Read the response code
-            int responseCode = connection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
-                // Don't do anything
-            } else {
-                // Don't do anything
-            }
-        } catch (Exception e) {
-            // Don't do anything
-        }
-    }
-
     public static void traverseWithInstantTap(Obstacle obstacle) {
         Logger.log("Traversing obstacle " + obstacle.name);
         Logger.debugLog("Traversing " + obstacle.name + " with instant tap.");
@@ -1443,7 +1419,7 @@ public class dAgility extends AbstractScript {
         }
     }
 
-    public class startTileStorage {
+    public static class startTileStorage {
         public final Tile tile;
         public final Rectangle tapRectangle;
 
@@ -1459,6 +1435,14 @@ public class dAgility extends AbstractScript {
         public Rectangle getTapRectangle() {
             return tapRectangle;
         }
+    }
+
+    public static void changeProgressiveCourse(String newCourse) {
+        courseChosen = newCourse;
+        Logger.debugLog("Clear old obstacles");
+        obstacles.clear();
+        Logger.debugLog("Set up new obstacles");
+        setupObstacles();
     }
 
 }

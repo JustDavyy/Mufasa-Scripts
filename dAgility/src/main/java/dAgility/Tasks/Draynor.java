@@ -3,14 +3,15 @@ package dAgility.Tasks;
 import dAgility.dAgility;
 import dAgility.utils.Task;
 import helpers.utils.Area;
+import helpers.utils.Skills;
 import helpers.utils.Tile;
+import helpers.utils.UITabs;
 
 import java.awt.*;
 import java.util.Arrays;
 
 import static dAgility.dAgility.*;
 import static helpers.Interfaces.*;
-import static dAgility.dAgility.startTileStorage.*;
 
 public class Draynor extends Task {
 
@@ -42,6 +43,43 @@ public class Draynor extends Task {
 
     @Override
     public boolean execute() {
+        // Progressive mode block
+        if (useProgressive) {
+            if (Player.leveledUp()) {
+                Logger.debugLog("Agility level: " + agilityLevel);
+                Logger.debugLog("Leveled up!");
+                agilityLevel++;
+                Logger.debugLog("Agility level is now: " + agilityLevel);
+            }
+            if (agilityLevel >= 30 && Player.within(obstacle7EndArea)) {
+                Logger.debugLog("Agility level is 30 or higher (" + agilityLevel + "), double checking...");
+                if (!GameTabs.isTabOpen(UITabs.STATS)) {
+                    Logger.debugLog("Open Stats tab...");
+                    GameTabs.openTab(UITabs.STATS);
+                }
+
+                agilityLevel = Stats.getRealLevel(Skills.AGILITY);
+
+                Logger.debugLog("Agility level after verification: " + agilityLevel);
+
+                if (agilityLevel >= 30) {
+                    Logger.debugLog("Agility level verified to be level 30 or higher. We need to move to Varrock!");
+                    GameTabs.closeTab(UITabs.STATS);
+                    Condition.sleep(generateRandomDelay(500, 750));
+                    needToMove = true;
+                    if (GameTabs.isTabOpen(UITabs.STATS)) {
+                        GameTabs.closeTab(UITabs.STATS);
+                    }
+                    return true;
+                }
+                GameTabs.closeTab(UITabs.STATS);
+                Condition.sleep(generateRandomDelay(500, 750));
+                if (GameTabs.isTabOpen(UITabs.STATS)) {
+                    GameTabs.closeTab(UITabs.STATS);
+                }
+            }
+        }
+
         Paint.setStatus("Fetch player position");
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);

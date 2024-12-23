@@ -3,7 +3,9 @@ package dAgility.Tasks;
 import dAgility.dAgility;
 import dAgility.utils.Task;
 import helpers.utils.Area;
+import helpers.utils.Spells;
 import helpers.utils.Tile;
+import helpers.utils.UITabs;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -67,7 +69,7 @@ public class Seers extends Task {
             if (useSeersTeleport) {
                 Logger.debugLog("Teleporting back to the start obstacle");
                 Paint.setStatus("Teleport to start obstacle");
-                Magic.tapCamelotTeleportSpell();
+                Magic.castSpell(Spells.CAMELOT_TELEPORT);
                 Condition.wait(() -> Player.within(teleportArea), 150, 50);
             } else {
                 Logger.debugLog("Walking back to the start obstacle");
@@ -142,7 +144,7 @@ public class Seers extends Task {
                     proceedWithTraversal(obstacle, currentLocation);
                     if (obstacle.name.equals("Obstacle 6")) {
                         if (useSeersTeleport) {
-                            GameTabs.openMagicTab();
+                            GameTabs.openTab(UITabs.MAGIC);
                         }
                         lapCount++;
                     }

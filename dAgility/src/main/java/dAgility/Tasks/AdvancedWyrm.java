@@ -2,13 +2,18 @@ package dAgility.Tasks;
 
 import dAgility.dAgility;
 import dAgility.utils.Task;
-import helpers.utils.ItemList;
-import helpers.utils.UITabs;
+import helpers.utils.Area;
+import helpers.utils.Tile;
 
 import static dAgility.dAgility.*;
 import static helpers.Interfaces.*;
 
 public class AdvancedWyrm extends Task {
+    private final Area wyrmCourseArea = new Area(
+            new Tile(6423, 11553, 0),
+            new Tile(6684, 11316, 0)
+    );
+    private final Tile startTile = new Tile(6603, 11473, 0);
 
     public AdvancedWyrm(){
         super();
@@ -54,6 +59,16 @@ public class AdvancedWyrm extends Task {
 
                 return true;
             }
+        }
+
+        // Block that assumes we are not within any of those areas, which means we've wandered off somewhere?
+        if (Player.isTileWithinArea(currentLocation, wyrmCourseArea)) {
+            Logger.debugLog("Not within any obstacle area, webwalking back to start obstacle");
+            Paint.setStatus("Recover after fall/failure");
+            Walker.webWalk(startTile);
+            Player.waitTillNotMoving(17);
+            Walker.step(startTile);
+            return true;
         }
         return false;
     }

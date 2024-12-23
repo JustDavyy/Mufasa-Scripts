@@ -32,8 +32,8 @@ public class Eat extends Task {
 
         else {
             Logger.log("Below HP threshold, eating food.");
-            if (!GameTabs.isInventoryTabOpen()) {
-                GameTabs.openInventoryTab();
+            if (!GameTabs.isTabOpen(UITabs.INVENTORY)) {
+                GameTabs.openTab(UITabs.INVENTORY);
                 Condition.sleep(1500);
             }
             Logger.debugLog("Eating food til above threshold.");
