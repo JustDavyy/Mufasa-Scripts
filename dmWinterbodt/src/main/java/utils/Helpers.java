@@ -16,10 +16,10 @@ public class Helpers {
         foodAmountInInventory = 0; // Reset before counting
 
         Map<Integer, Integer> foodIdsWithMultipliers = Map.of(
-                ItemList.REJUVENATION_POTION__1__20702, 1,
-                ItemList.REJUVENATION_POTION__2__20701, 2,
-                ItemList.REJUVENATION_POTION__3__20700, 3,
-                ItemList.REJUVENATION_POTION__4__20699, 4
+                ItemList.REJUVENATION_POTION_1_20702, 1,
+                ItemList.REJUVENATION_POTION_2_20701, 2,
+                ItemList.REJUVENATION_POTION_3_20700, 3,
+                ItemList.REJUVENATION_POTION_4_20699, 4
         );
         countItemsInInventory(foodIdsWithMultipliers, 0.95);
     }

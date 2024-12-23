@@ -19,7 +19,7 @@ public class CreatePotions extends Task {
     Rectangle potionRect = new Rectangle(399, 260, 15, 19);
     Rectangle brewmaRect = new Rectangle(499, 244, 8, 25);
     int brumaHerbItem = ItemList.BRUMA_HERB_20698;
-    int rejuvPotionUnf = ItemList.REJUVENATION_POTION__UNF__20697;
+    int rejuvPotionUnf = ItemList.REJUVENATION_POTION_UNF_20697;
     Area topLeftArea = new Area(
             new Tile(6413, 15738, 0),
             new Tile(6520, 15880, 0)

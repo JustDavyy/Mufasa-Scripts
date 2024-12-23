@@ -18,10 +18,10 @@ public class Eat extends Task {
     // Map food types to their IDs and tolerance levels
     Map<String, int[]> foodMap = Map.of(
             "Rejuv Potion", new int[] {
-                    ItemList.REJUVENATION_POTION__1__20702,
-                    ItemList.REJUVENATION_POTION__2__20701,
-                    ItemList.REJUVENATION_POTION__3__20700,
-                    ItemList.REJUVENATION_POTION__4__20699
+                    ItemList.REJUVENATION_POTION_1_20702,
+                    ItemList.REJUVENATION_POTION_2_20701,
+                    ItemList.REJUVENATION_POTION_3_20700,
+                    ItemList.REJUVENATION_POTION_4_20699
             }
     );
 
