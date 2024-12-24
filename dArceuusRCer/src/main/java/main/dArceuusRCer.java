@@ -264,7 +264,8 @@ public class dArceuusRCer extends AbstractScript {
     );
 
     public static List<Color> obstacleColors = Arrays.asList(
-            Color.decode("#20ff26")
+            Color.decode("#20ff26"),
+            Color.decode("#1cff22")
     );
     public static List<Color> venerateAltarColors = Arrays.asList(
             Color.decode("#8f51ba"),
