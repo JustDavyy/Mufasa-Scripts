@@ -10,7 +10,6 @@ import static helpers.Interfaces.*;
 import main.dArceuusRCer;
 
 import java.awt.*;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,6 +23,9 @@ public class moveBackToMine extends Task {
             new Tile(7092, 15240, 0),
             new Tile(7125, 15272, 0)
     );
+
+    private final Rectangle soulObstacleRect = new Rectangle(444, 282, 10, 9);
+    private final Tile soulObstacleTile = new Tile(7103, 15281, 0);
 
     @Override
     public boolean activate() {
@@ -215,87 +217,57 @@ public class moveBackToMine extends Task {
         }
         Logger.debugLog("Now walking from Soul Altar to the agility shortcut.");
         Walker.walkPath(dArceuusRCer.soulBackToObstaclePath);
-        waitTillStopped(8);
+        waitTillStopped(3);
     }
 
     private void traverseSoulShortcutIn() {
 
         Logger.debugLog("Crossing the northern rocks obstacle.");
 
-        List<Point> foundPoints = Client.getPointsFromColorsInRect(dArceuusRCer.obstacleColors, new Rectangle(340, 196, 248, 208), 3);
+        if (!Player.atTile(soulObstacleTile)) {
+            Walker.step(soulObstacleTile);
+        }
 
-        // Calculate the centroid of the points
-        Point centroid = calculateCentroid(foundPoints);
+        if (!Player.atTile(soulObstacleTile)) {
+            Walker.step(soulObstacleTile);
+        }
 
-        if (centroid.x != -1 && centroid.y != -1) {
-            // Sort points by distance to the centroid
-            foundPoints.sort(Comparator.comparingDouble(p -> distance(p, centroid)));
-
-            // Select the top 4-5 most central points
-            List<Point> mostCentralPoints = foundPoints.subList(0, Math.min(5, foundPoints.size()));
-
-            if (!foundPoints.isEmpty()) {
-                Logger.debugLog("Located the obstacle using the color finder, tapping.");
-                Client.tap(mostCentralPoints, false);
-                waitTillStopped(8);
-            }
-        } else {
-            Logger.debugLog("Couldn't locate the obstacle with the color finder, using fallback method.");
-
-            Walker.step(dArceuusRCer.obstacleNorthBackFromSoulAltarTile);
+        if (Player.atTile(soulObstacleTile)) {
+            Client.tap(soulObstacleRect);
             waitTillStopped(8);
+        }
 
-            if (!Player.atTile(dArceuusRCer.obstacleNorthBackFromSoulAltarTile)) {
-                Logger.debugLog("Failed to move to specific tile, retrying...");
-                Walker.step(dArceuusRCer.obstacleNorthBackFromSoulAltarTile);
-                waitTillStopped(8);
-
-                if (!Player.atTile(dArceuusRCer.obstacleNorthBackFromSoulAltarTile)) {
-                    Logger.debugLog("Failed to move to specific tile, retrying...");
-                    Client.tap(new Rectangle(442, 284, 13, 10));
-                    waitTillStopped(3);
-
-                    if (Player.within(soulRockObstacleSuccessArea)) {
-                        Logger.debugLog("Successfully traversed the obstacle this time!");
-                        return;
-                    }
-                }
+        if (Player.within(soulRockObstacleSuccessArea)) {
+            Logger.debugLog("Successfully traversed the obstacle this time!");
+        } else {
+            if (!Player.atTile(soulObstacleTile)) {
+                Walker.step(soulObstacleTile);
             }
 
-            if (Player.atTile(dArceuusRCer.obstacleNorthBackFromSoulAltarTile)) {
-                Client.tap(new Rectangle(442, 284, 13, 10));
+            if (!Player.atTile(soulObstacleTile)) {
+                Walker.step(soulObstacleTile);
+            }
+
+            if (Player.atTile(soulObstacleTile)) {
+                Client.tap(soulObstacleRect);
                 waitTillStopped(8);
+            }
 
-                if (!Player.within(soulRockObstacleSuccessArea)) {
-                    Logger.debugLog("Looks like we failed the obstacle, what a shame... Retrying!");
-                    Walker.step(dArceuusRCer.obstacleNorthBackFromSoulAltarTile);
-                    waitTillStopped(8);
-
-                    Client.tap(new Rectangle(442, 284, 13, 10));
-                    waitTillStopped(8);
-                    if (!Player.within(soulRockObstacleSuccessArea)) {
-                        Logger.debugLog("Looks like we failed the obstacle again, what a shame... Retrying!");
-                        Walker.step(dArceuusRCer.obstacleNorthBackFromSoulAltarTile);
-                        waitTillStopped(8);
-
-                        Client.tap(new Rectangle(442, 284, 13, 10));
-                        waitTillStopped(8);
-
-                        if (!Player.within(soulRockObstacleSuccessArea)) {
-                            Logger.debugLog("Seems like we failed to use the soul obstacle multiple times, we'll walk back via the venerate altar instead.");
-                            Walker.walkPath(dArceuusRCer.soulObstacleBackViaVenerate);
-                            waitTillStopped(4);
-                            Walker.step(dArceuusRCer.obstacleOutsideTile);
-                            waitTillStopped(4);
-                        }
-                    }
-                }
+            if (Player.within(soulRockObstacleSuccessArea)) {
+                Logger.debugLog("Successfully traversed the obstacle this time!");
             } else {
-                Logger.debugLog("Seems like we failed to use the soul obstacle, we'll walk back via the venerate altar instead.");
-                Walker.walkPath(dArceuusRCer.soulObstacleBackViaVenerate);
-                waitTillStopped(4);
-                Walker.step(dArceuusRCer.obstacleOutsideTile);
-                waitTillStopped(4);
+                if (!Player.atTile(soulObstacleTile)) {
+                    Walker.step(soulObstacleTile);
+                }
+
+                if (!Player.atTile(soulObstacleTile)) {
+                    Walker.step(soulObstacleTile);
+                }
+
+                if (Player.atTile(soulObstacleTile)) {
+                    Client.tap(soulObstacleRect);
+                    waitTillStopped(8);
+                }
             }
         }
     }
