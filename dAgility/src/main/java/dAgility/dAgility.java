@@ -1,4 +1,4 @@
-package agi_sdk;
+package dAgility;
 
 
 import helpers.*;
@@ -6,8 +6,8 @@ import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.*;
-import agi_sdk.Tasks.*;
-import agi_sdk.utils.Task;
+import dAgility.Tasks.*;
+import dAgility.utils.Task;
 
 import java.awt.*;
 import java.text.DecimalFormat;

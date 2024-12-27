@@ -1,11 +1,11 @@
-package agi_sdk.Tasks;
+package dAgility.Tasks;
 
-import agi_sdk.dAgility;
-import agi_sdk.utils.Task;
+import dAgility.dAgility;
+import dAgility.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Tile;
 
-import static agi_sdk.dAgility.*;
+import static dAgility.dAgility.*;
 import static helpers.Interfaces.*;
 
 public class Falador extends Task {
@@ -19,7 +19,7 @@ public class Falador extends Task {
     }
     @Override
     public boolean activate() {
-        return (agi_sdk.courseChosen.equals("Falador"));
+        return (dAgility.courseChosen.equals("Falador"));
     }
 
     @Override

@@ -1,6 +1,6 @@
-package agi_sdk.Tasks;
+package dAgility.Tasks;
 
-import agi_sdk.utils.Task;
+import dAgility.utils.Task;
 
 import static helpers.Interfaces.*;
 

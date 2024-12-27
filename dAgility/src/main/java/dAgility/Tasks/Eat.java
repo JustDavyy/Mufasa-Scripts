@@ -1,10 +1,10 @@
-package agi_sdk.Tasks;
+package dAgility.Tasks;
 
-import agi_sdk.utils.Task;
+import dAgility.utils.Task;
 import helpers.utils.UITabs;
 
 import static helpers.Interfaces.*;
-import static agi_sdk.dAgility.*;
+import static dAgility.dAgility.*;
 
 public class Eat extends Task {
 

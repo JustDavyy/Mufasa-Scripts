@@ -1,14 +1,14 @@
-package agi_sdk.Tasks;
+package dAgility.Tasks;
 
-import agi_sdk.dAgility;
-import agi_sdk.utils.Task;
+import dAgility.dAgility;
+import dAgility.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Tile;
 
 import java.awt.*;
 import java.util.Arrays;
 
-import static agi_sdk.dAgility.*;
+import static dAgility.dAgility.*;
 import static helpers.Interfaces.*;
 
 public class Rellekka extends Task {
@@ -39,7 +39,7 @@ public class Rellekka extends Task {
     }
     @Override
     public boolean activate() {
-        return (agi_sdk.courseChosen.equals("Rellekka"));
+        return (dAgility.courseChosen.equals("Rellekka"));
     }
 
     @Override

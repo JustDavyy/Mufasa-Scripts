@@ -1,11 +1,11 @@
-package agi_sdk.Tasks;
+package dAgility.Tasks;
 
-import agi_sdk.dAgility;
-import agi_sdk.utils.Task;
+import dAgility.dAgility;
+import dAgility.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Tile;
 
-import static agi_sdk.dAgility.*;
+import static dAgility.dAgility.*;
 import static helpers.Interfaces.*;
 
 public class Alkharid extends Task {
@@ -28,7 +28,7 @@ public class Alkharid extends Task {
     }
     @Override
     public boolean activate() {
-        return (agi_sdk.courseChosen.equals("Al Kharid"));
+        return (dAgility.courseChosen.equals("Al Kharid"));
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Alkharid extends Task {
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
         // Handle most of the start tiles without using color finder for speed
-        for (agi_sdk.startTileStorage tileTap : startTiles) {
+        for (dAgility.startTileStorage tileTap : startTiles) {
             if (Player.tileEquals(currentLocation, tileTap.getTile())) {
                 Logger.debugLog("Player is on known start tile: " + tileTap.getTile());
                 Paint.setStatus("Tap start obstacle");
