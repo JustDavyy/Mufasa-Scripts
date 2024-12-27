@@ -21,7 +21,7 @@ dependencies {
 
 jar {
     archiveFileName = 'agi_sdk.jar'
-    destinationDirectory = file('jar/')
+    destinationDirectory = file('sdk_jar/')
 
     manifest {
         attributes(
