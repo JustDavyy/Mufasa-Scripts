@@ -1,140 +1,35 @@
 package agi_sdk;
 
-
-import helpers.*;
-import helpers.annotations.AllowedValue;
-import helpers.annotations.ScriptConfiguration;
-import helpers.annotations.ScriptManifest;
-import helpers.utils.*;
 import agi_sdk.Tasks.*;
+import agi_sdk.helpers.MarkHandling;
+import agi_sdk.helpers.Obstacle;
+import agi_sdk.helpers.StartTileStorage;
 import agi_sdk.utils.Task;
+import helpers.utils.*;
 
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.AbstractMap;
+import java.util.*;
 
 import static helpers.Interfaces.*;
 
-@ScriptManifest(
-        name = "dAgility",
-        description = "Trains agility at various courses. World hopping and eating food is supported, as well as picking up Marks of Grace when running a rooftop course.",
-        version = "1.22",
-        categories = {ScriptCategory.Agility},
-        guideLink = "https://wiki.mufasaclient.com/docs/dagility/",
-        skipZoomSetup = true
-)
-@ScriptConfiguration.List(
-        {
-                @ScriptConfiguration(
-                        name =  "Course",
-                        description = "What agility course do you want to train at?",
-                        defaultValue = "Advanced Colossal Wyrm",
-                        allowedValues = {
-                                @AllowedValue(optionName = "1-50 Progressive"),
-                                @AllowedValue(optionName = "Gnome"),
-                                @AllowedValue(optionName = "Draynor"),
-                                @AllowedValue(optionName = "Al Kharid"),
-                                @AllowedValue(optionName = "Varrock"),
-                                @AllowedValue(optionName = "Canifis"),
-                                @AllowedValue(optionName = "Colossal Wyrm Progressive"),
-                                @AllowedValue(optionName = "Basic Colossal Wyrm"),
-                                @AllowedValue(optionName = "Falador"),
-                                @AllowedValue(optionName = "Seers"),
-                                @AllowedValue(optionName = "Seers - teleport"),
-                                @AllowedValue(optionName = "Advanced Colossal Wyrm"),
-                                @AllowedValue(optionName = "Pollnivneach"),
-                                @AllowedValue(optionName = "Rellekka"),
-                                @AllowedValue(optionName = "Ardougne")
-                        },
-                        optionType = OptionType.STRING
-                ),
-                @ScriptConfiguration(
-                        name =  "Food",
-                        description = "Which food to use?",
-                        defaultValue = "None",
-                        allowedValues = {
-                                @AllowedValue(optionName = "None"),
-                                @AllowedValue(optionIcon = "1891", optionName = "Cake"),
-                                @AllowedValue(optionIcon = "333", optionName = "Trout"),
-                                @AllowedValue(optionIcon = "329", optionName = "Salmon"),
-                                @AllowedValue(optionIcon = "361", optionName = "Tuna"),
-                                @AllowedValue(optionIcon = "1993", optionName = "Jug of wine"),
-                                @AllowedValue(optionIcon = "379", optionName = "Lobster"),
-                                @AllowedValue(optionIcon = "373", optionName = "Swordfish"),
-                                @AllowedValue(optionIcon = "6705", optionName = "Potato with cheese"),
-                                @AllowedValue(optionIcon = "7946", optionName = "Monkfish"),
-                                @AllowedValue(optionIcon = "3144", optionName = "Karambwan"),
-                                @AllowedValue(optionIcon = "385", optionName = "Shark"),
-                                @AllowedValue(optionIcon = "391", optionName = "Manta ray"),
-                                @AllowedValue(optionIcon = "13441", optionName = "Anglerfish")
-                        },
-                        optionType = OptionType.STRING
-                ),
-                @ScriptConfiguration(
-                        name =  "EatPercent",
-                        description = "What percent to eat at?",
-                        defaultValue = "60%",
-                        allowedValues = {
-                                @AllowedValue(optionName = "20%"),
-                                @AllowedValue(optionName = "25%"),
-                                @AllowedValue(optionName = "30%"),
-                                @AllowedValue(optionName = "35%"),
-                                @AllowedValue(optionName = "40%"),
-                                @AllowedValue(optionName = "45%"),
-                                @AllowedValue(optionName = "50%"),
-                                @AllowedValue(optionName = "55%"),
-                                @AllowedValue(optionName = "60%"),
-                                @AllowedValue(optionName = "65%"),
-                                @AllowedValue(optionName = "70%"),
-                                @AllowedValue(optionName = "75%"),
-                                @AllowedValue(optionName = "80%"),
-                                @AllowedValue(optionName = "85%"),
-                                @AllowedValue(optionName = "90%"),
-                        },
-                        optionType = OptionType.STRING
-                ),
-                @ScriptConfiguration(
-                        name =  "Use world hopper?",
-                        description = "Would you like to hop worlds based on your hop profile settings?",
-                        defaultValue = "0",
-                        optionType = OptionType.WORLDHOPPER
-                )
-        }
-)
-
-public class dAgility extends AbstractScript {
-    static List<MarkHandling> noMarks = Arrays.asList(
-            new MarkHandling(new Rectangle(1, 1, 1, 1), new Color(203, 137, 25), new Rectangle(1, 1, 1, 1), new Tile(1, 1, 0), null, false)
-    );
-    public static List<startTileStorage> startTiles = Arrays.asList();
-    public static final List<Obstacle> obstacles = new ArrayList<dAgility.Obstacle>();
+public class agi_sdk {
+    public static final List<Obstacle> obstacles = new ArrayList<>();
     public static final Random random = new Random();
-    private final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
-    private final DecimalFormat MoGsFormat = new DecimalFormat("#,##0.0", symbols);
-    private final DecimalFormat LapsFormat = new DecimalFormat("#,##0.0", symbols);
-    private final DecimalFormat ShardsFormat = new DecimalFormat("#,##0", symbols);
-    private final DecimalFormat TermitesFormat = new DecimalFormat("#,##0", symbols);
-
+    public static List<StartTileStorage> startTiles;
     public static Tile currentLocation;
-
     public static String courseChosen; // Save agility course name
     public static String foodID; // Save food
     public static int eatHP; // HP level to eat at
-    private int eatPercent; // Save % to eat food at e.g. 20% = 20
-    private String hopProfile;
-    private boolean hopEnabled;
-    private boolean useWDH;
     public static int lapCount = 0;
-    private static int mogCount = 0;
+    public static int mogCount = 0;
     public static int initialTermiteCount = 0;
     public static int initialBoneShardCount = 0;
     public static int termiteCount = 0;
     public static int boneShardCount = 0;
-    private static int MoGIndex;
+    public static int MoGIndex;
     public static int termiteIndex;
     public static int shardIndex;
     public static int mogTotal;
@@ -145,7 +40,15 @@ public class dAgility extends AbstractScript {
     public static int currentHP;
     public static int agilityLevel;
     public static String initialCourse;
-
+    static List<MarkHandling> noMarks = List.of(
+            new MarkHandling(new Rectangle(1, 1, 1, 1), new Color(203, 137, 25), new Rectangle(1, 1, 1, 1), new Tile(1, 1, 0), null, false)
+    );
+    private static String foodChosen;
+    private final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+    private final DecimalFormat MoGsFormat = new DecimalFormat("#,##0.0", symbols);
+    private final DecimalFormat LapsFormat = new DecimalFormat("#,##0.0", symbols);
+    private final DecimalFormat ShardsFormat = new DecimalFormat("#,##0", symbols);
+    private final DecimalFormat TermitesFormat = new DecimalFormat("#,##0", symbols);
     private final List<Task> agilityTasks = Arrays.asList(
             new Run(),
             new Eat(),
@@ -164,226 +67,13 @@ public class dAgility extends AbstractScript {
             new AdvancedWyrm()
     );
 
-    @Override
-    public void onStart() {
-        Logger.log("Initialising dAgility...");
-        Map<String, String> configs = getConfigurations(); //Get the script configuration
-        hopProfile = configs.get("Use world hopper?");
-        hopEnabled = Boolean.valueOf(configs.get("Use world hopper?.enabled"));
-        useWDH = Boolean.valueOf(configs.get("Use world hopper?.useWDH"));
-        courseChosen = configs.get("Course");
-
-        if (courseChosen.equals("1-50 Progressive")) {
-            Logger.debugLog("Using 1-50 progressive mode");
-            Logger.log("1-50 Progressive will train 1-30 at Draynor, followed by 30-50 at Varrock.");
-            Logger.log("Only start this mode when at Draynor.");
-            Logger.debugLog("Set course to Draynor.");
-            useProgressive = true;
-            courseChosen = "Draynor";
-            initialCourse = "Draynor";
-        } else if (courseChosen.equals("Colossal Wyrm Progressive")) {
-            Logger.debugLog("Using Colossal Wyrm course progressive mode");
-            Logger.debugLog("Set course to Basic Colossal Wyrm.");
-            useProgressive = true;
-            courseChosen = "Basic Colossal Wyrm";
-            initialCourse = "Wyrm";
-        }
-
-        // Setup walker using the correct chunks
-        setupWalker();
-
-        // Setup obstacles for the chosen course
-        setupObstacles();
-
-        // Save food
-        String foodChosen = configs.get("Food");
-        eatPercent = Integer.parseInt(configs.get("EatPercent").replaceAll("%", ""));
-        initializeItemIDs(foodChosen);
-
-        // Creating the Paint object
-        Logger.debugLog("Creating paint object.");
-        Paint.Create("/logo/davyy.png");
-
-        // Create image box(es), to show the amount of obtained marks
-        if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm")) {
-            termiteIndex = Paint.createBox("Termites", 30038, 0);
-            Condition.sleep(500);
-            shardIndex = Paint.createBox("Bl. Bone Shards", ItemList.BLESSED_BONE_SHARDS_29381, 0);
-        } else {
-            MoGIndex = Paint.createBox("Marks of Grace", ItemList.MARK_OF_GRACE_11849, 0);
-        }
-
-        // Set the two top headers of paintUI.
-        Paint.setStatus("Initializing...");
-
-        Paint.setStatus("Close chatbox");
-        Chatbox.closeChatbox();
-
-        // Check level reqs
-        Paint.setStatus("Check level reqs");
-        checkLevelReqs();
-        if (!foodID.equals("None")) {
-            Paint.setStatus("Check food");
-            checkFood();
-        }
-        Paint.setStatus("Set zoom level");
-        courseZoom();
-        Paint.setStatus("Init hop timer");
-        hopActions();
-
-        // Set teleport boolean if needed
-        if (courseChosen.equals("Seers - teleport")) {
-            Paint.setStatus("Set teleport to TRUE");
-            useSeersTeleport = true;
-        }
-
-        // Logs for debugging purposes
-        Logger.log("Chosen agility course: " + courseChosen);
-
-        // Open inventory again if doing the wyrm course
-        if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm")) {
-            GameTabs.openTab(UITabs.INVENTORY);
-            Condition.sleep(1500);
-
-            // Read initial stack values
-            initialTermiteCount = Inventory.stackSize(30038);
-            initialBoneShardCount = Inventory.stackSize(ItemList.BLESSED_BONE_SHARDS_29381);
-
-            Logger.debugLog("Initial Termites count: " + initialTermiteCount);
-            Logger.debugLog("Initial Blessed Bone shard count: " + initialBoneShardCount);
-        }
-
-        // Logs for debugging purposes
-        Logger.log("Starting dAgility!");
-        Paint.setStatus("End of onStart");
-    }
-
-    @Override
-    public void poll() {
-        // Looped tasks go here.
-        hopActions();
-        updateStatLabel();
-        GameTabs.closeTab(UITabs.INVENTORY);
-
-        for (Task task : agilityTasks) {
-            if (task.activate()) {
-                task.execute();
-                readXP();
-                return;
-            }
-        }
-    }
-
-    public void initializeItemIDs(String logName) {
-        Logger.debugLog("Running the initializeItemIDs() method.");
-
-        Map<String, String[]> itemIDs = new HashMap<>();
-
-        // Map of itemIDs for foodID (1)
-        itemIDs.put("None", new String[] {"None"});
-        itemIDs.put("Cake", new String[] {"Cake"});
-        itemIDs.put("Trout", new String[] {"333"});
-        itemIDs.put("Salmon", new String[] {"329"});
-        itemIDs.put("Tuna", new String[] {"361"});
-        itemIDs.put("Jug of wine", new String[] {"1993"});
-        itemIDs.put("Lobster", new String[] {"379"});
-        itemIDs.put("Swordfish", new String[] {"373"});
-        itemIDs.put("Potato with cheese", new String[] {"6705"});
-        itemIDs.put("Monkfish", new String[] {"7946"});
-        itemIDs.put("Karambwan", new String[] {"3144"});
-        itemIDs.put("Shark", new String[] {"385"});
-        itemIDs.put("Manta ray", new String[] {"391"});
-        itemIDs.put("Anglerfish", new String[] {"13441"});
-        String[] itemIds = itemIDs.get(logName);
-        foodID = itemIds[0];
-
-        Logger.debugLog("Ending the initializeItemIDs() method.");
-    }
-
-
-    private void checkFood() {
-        Logger.debugLog("Checking inventory has food.");
-        if (!GameTabs.isTabOpen(UITabs.INVENTORY)) {
-            GameTabs.openTab(UITabs.INVENTORY);
-        }
-        if (foodID.equals("Cake")) {
-            if (Inventory.count("1891", 0.8) == 0 && Inventory.count("1893", 0.8) == 0 && Inventory.count("1895", 0.8) == 0) {
-                Logger.log("Not enough food, stopping script.");
-                Logout.logout();
-                Script.stop();
-            }
-        } else if (Inventory.count(foodID, 0.8) == 0) {
-            Logger.log("Not enough food, stopping script.");
-            Logout.logout();
-            Script.stop();
-        } else {
-            Logger.debugLog("Food found, continuing.");
-        }
-        GameTabs.closeTab(UITabs.INVENTORY);
-        Logger.debugLog("Finished checking inventory for food.");
-    }
-
-    private void setupWalker() {
-        switch (courseChosen) {
-            case "Gnome":
-                MapChunk gnomeChunks = new MapChunk(new String[]{"38-53", "39-53"}, "0", "1", "2");
-                Walker.setup(gnomeChunks);
-                break;
-            case "Al Kharid":
-                MapChunk alkharidChunks = new MapChunk(new String[]{"51-49"}, "0", "1", "2", "3");
-                Walker.setup(alkharidChunks);
-                break;
-            case "Varrock":
-                MapChunk varrockChunks = new MapChunk(new String[]{"50-53"}, "0", "1", "3");
-                Walker.setup(varrockChunks);
-                break;
-            case "Canifis":
-                MapChunk canifisChunks = new MapChunk(new String[]{"54-54"}, "0", "2", "3");
-                Walker.setup(canifisChunks);
-                break;
-            case "Falador":
-                MapChunk faladorChunks = new MapChunk(new String[]{"47-52"}, "0", "3");
-                Walker.setup(faladorChunks);
-                break;
-            case "Rellekka":
-                MapChunk rellekkaChunks = new MapChunk(new String[]{"41-57"}, "0", "3");
-                Walker.setup(rellekkaChunks);
-                break;
-            case "Ardougne":
-                MapChunk ardyChunks = new MapChunk(new String[]{"41-51"}, "0", "3");
-                Walker.setup(ardyChunks);
-                break;
-            case "Draynor":
-                MapChunk draynorChunks = new MapChunk(new String[]{"48-51"}, "0", "3");
-                Walker.setup(draynorChunks);
-                break;
-            case "Pollnivneach":
-                MapChunk pollyChunks = new MapChunk(new String[]{"52-46"}, "0", "1", "2");
-                Walker.setup(pollyChunks);
-                break;
-            case "Seers":
-            case "Seers - teleport":
-                MapChunk seersChunks = new MapChunk(new String[]{"42-54"}, "0", "2", "3");
-                Walker.setup(seersChunks);
-                break;
-            case "Advanced Colossal Wyrm":
-            case "Basic Colossal Wyrm":
-                MapChunk colossalWyrmChunks = new MapChunk(new String[]{"25-45"}, "0", "1", "2");
-                Walker.setup(colossalWyrmChunks);
-                break;
-            default:
-                Logger.log("This is a unknown course, no chunks to set up.");
-                Script.stop();
-        }
-    }
-
     private static void setupObstacles() {
         switch (courseChosen) {
             case "Gnome":
                 // Mark of Grace ground color
                 Color gnomeMogColor = new Color(Integer.parseInt("cb8919", 16));
                 // Mark of Graces
-                List<MarkHandling> gnomeObstacle5Mark = Arrays.asList(
+                List<MarkHandling> gnomeObstacle5Mark = List.of(
                         new MarkHandling(new Rectangle(493, 265, 10, 11), gnomeMogColor, new Rectangle(469, 279, 20, 17), new Tile(9947, 13429, 0), null, false)
                 );
                 // Obstacles
@@ -432,13 +122,13 @@ public class dAgility extends AbstractScript {
                 // Mark of Grace ground color
                 Color alkharidMogColor = new Color(Integer.parseInt("c98818", 16));
                 // Mark of Graces
-                List<MarkHandling> alkharidObstacle2Mark = Arrays.asList(
+                List<MarkHandling> alkharidObstacle2Mark = List.of(
                         new MarkHandling(new Rectangle(517, 377, 9, 10), alkharidMogColor, new Rectangle(349, 359, 9, 10), new Tile(13087, 12437, 3), null, false)
                 );
-                List<MarkHandling> alkharidObstacle3Mark = Arrays.asList(
+                List<MarkHandling> alkharidObstacle3Mark = List.of(
                         new MarkHandling(new Rectangle(312, 445, 10, 9), alkharidMogColor, new Rectangle(494, 219, 7, 8), new Tile(13087, 12437, 3), null, false)
                 );
-                List<MarkHandling> alkharidObstacle4Mark = Arrays.asList(
+                List<MarkHandling> alkharidObstacle4Mark = List.of(
                         new MarkHandling(new Rectangle(491, 210, 8, 7), alkharidMogColor, new Rectangle(769, 390, 33, 19), new Tile(13087, 12437, 3), null, false)
                 );
                 // Obstacles
@@ -494,28 +184,28 @@ public class dAgility extends AbstractScript {
 
                 // Start tiles
                 startTiles = Arrays.asList(
-                        new startTileStorage(new Tile(13095, 12541, 0), new Rectangle(423, 325, 9, 4)),
-                        new startTileStorage(new Tile(13091, 12545, 0), new Rectangle(443, 344, 9, 5)),
-                        new startTileStorage(new Tile(13095, 12545, 0), new Rectangle(426, 344, 7, 3)),
-                        new startTileStorage(new Tile(13099, 12545, 0), new Rectangle(408, 343, 10, 3)),
-                        new startTileStorage(new Tile(13099, 12541, 0), new Rectangle(408, 329, 11, 3)),
-                        new startTileStorage(new Tile(13099, 12537, 0), new Rectangle(408, 308, 11, 5)),
-                        new startTileStorage(new Tile(13095, 12537, 0), new Rectangle(424, 308, 9, 3)),
-                        new startTileStorage(new Tile(13091, 12537, 0), new Rectangle(442, 308, 10, 4)),
-                        new startTileStorage(new Tile(13087, 12537, 0), new Rectangle(459, 308, 11, 6))
+                        new StartTileStorage(new Tile(13095, 12541, 0), new Rectangle(423, 325, 9, 4)),
+                        new StartTileStorage(new Tile(13091, 12545, 0), new Rectangle(443, 344, 9, 5)),
+                        new StartTileStorage(new Tile(13095, 12545, 0), new Rectangle(426, 344, 7, 3)),
+                        new StartTileStorage(new Tile(13099, 12545, 0), new Rectangle(408, 343, 10, 3)),
+                        new StartTileStorage(new Tile(13099, 12541, 0), new Rectangle(408, 329, 11, 3)),
+                        new StartTileStorage(new Tile(13099, 12537, 0), new Rectangle(408, 308, 11, 5)),
+                        new StartTileStorage(new Tile(13095, 12537, 0), new Rectangle(424, 308, 9, 3)),
+                        new StartTileStorage(new Tile(13091, 12537, 0), new Rectangle(442, 308, 10, 4)),
+                        new StartTileStorage(new Tile(13087, 12537, 0), new Rectangle(459, 308, 11, 6))
                 );
                 break;
             case "Varrock":
                 // Mark of Grace ground color
                 Color varrockMogColor = new Color(Integer.parseInt("c98718", 16));
                 // Mark of Graces
-                List<MarkHandling> varrockObstacle4Mark = Arrays.asList(
+                List<MarkHandling> varrockObstacle4Mark = List.of(
                         new MarkHandling(new Rectangle(408, 267, 10, 8), varrockMogColor, new Rectangle(368, 262, 31, 31), new Tile(12767, 13373, 3), null, false)
                 );
-                List<MarkHandling> varrockObstacle6Mark = Arrays.asList(
+                List<MarkHandling> varrockObstacle6Mark = List.of(
                         new MarkHandling(new Rectangle(316, 319, 8, 8), varrockMogColor, new Rectangle(800, 219, 16, 29), new Tile(12871, 13345, 3), null, false)
                 );
-                List<MarkHandling> varrockObstacle8Mark = Arrays.asList(
+                List<MarkHandling> varrockObstacle8Mark = List.of(
                         new MarkHandling(new Rectangle(472, 193, 9, 7), varrockMogColor, new Rectangle(406, 230, 85, 32), new Tile(12943, 13389, 3), null, false)
                 );
                 // Obstacles
@@ -585,19 +275,19 @@ public class dAgility extends AbstractScript {
                 // Mark of Grace ground color
                 Color canifisMogColor = new Color(Integer.parseInt("cb8a19", 16));
                 // Mark of Graces
-                List<MarkHandling> canifisObstacle2Mark = Arrays.asList(
+                List<MarkHandling> canifisObstacle2Mark = List.of(
                         new MarkHandling(new Rectangle(445, 225, 5, 5), canifisMogColor, new Rectangle(415, 218, 15, 11), new Tile(14007, 13765, 2), null, false)
                 );
-                List<MarkHandling> canifisObstacle3Mark = Arrays.asList(
+                List<MarkHandling> canifisObstacle3Mark = List.of(
                         new MarkHandling(new Rectangle(428, 253, 8, 7), canifisMogColor, new Rectangle(359, 269, 17, 20), new Tile(13968, 13765, 2), null, false)
                 );
-                List<MarkHandling> canifisObstacle4Mark = Arrays.asList(
+                List<MarkHandling> canifisObstacle4Mark = List.of(
                         new MarkHandling(new Rectangle(405, 319, 7, 6), canifisMogColor, new Rectangle(359, 293, 13, 15), new Tile(13915, 13745, 3), null, false)
                 );
-                List<MarkHandling> canifisObstacle5Mark = Arrays.asList(
+                List<MarkHandling> canifisObstacle5Mark = List.of(
                         new MarkHandling(new Rectangle(425, 321, 5, 5), canifisMogColor, new Rectangle(436, 334, 17, 31), new Tile(13911, 13693, 2), null, false)
                 );
-                List<MarkHandling> canifisObstacle6Mark = Arrays.asList(
+                List<MarkHandling> canifisObstacle6Mark = List.of(
                         new MarkHandling(new Rectangle(444, 307, 5, 5), canifisMogColor, new Rectangle(480, 289, 5, 2), new Tile(13955, 13653, 3), null, false)
                 );
                 // Obstacles
@@ -654,16 +344,16 @@ public class dAgility extends AbstractScript {
                 // Mark of Grace ground color
                 Color faladorMogColor = new Color(Integer.parseInt("cb8a19", 16));
                 // Mark of Graces
-                List<MarkHandling> faladorObstacle3Mark = Arrays.asList(
+                List<MarkHandling> faladorObstacle3Mark = List.of(
                         new MarkHandling(new Rectangle(404, 249, 14, 15), faladorMogColor, new Rectangle(531, 171, 4, 11), new Tile(12199, 13177, 3), null, false)
                 );
-                List<MarkHandling> faladorObstacle4Mark = Arrays.asList(
+                List<MarkHandling> faladorObstacle4Mark = List.of(
                         new MarkHandling(new Rectangle(421, 267, 15, 11), faladorMogColor, new Rectangle(426, 232, 6, 7), new Tile(12191, 13193, 3), null, false)
                 );
-                List<MarkHandling> faladorObstacle9Mark = Arrays.asList(
+                List<MarkHandling> faladorObstacle9Mark = List.of(
                         new MarkHandling(new Rectangle(419, 279, 12, 14), faladorMogColor, new Rectangle(389, 313, 5, 6), new Tile(12055, 13133, 3), null, false)
                 );
-                List<MarkHandling> faladorObstacle12Mark = Arrays.asList(
+                List<MarkHandling> faladorObstacle12Mark = List.of(
                         new MarkHandling(new Rectangle(475, 268, 8, 7), faladorMogColor, new Rectangle(475, 263, 16, 10), new Tile(12075, 13081, 3), null, false)
                 );
                 // Obstacles
@@ -750,7 +440,7 @@ public class dAgility extends AbstractScript {
                 // Mark of Grace ground color
                 Color rellekkaMogColor = new Color(Integer.parseInt("d38f1a", 16));
                 // Mark of Graces
-                List<MarkHandling> rellekkaObstacle2Mark = Arrays.asList(
+                List<MarkHandling> rellekkaObstacle2Mark = List.of(
                         new MarkHandling(new Rectangle(404, 282, 9, 8), rellekkaMogColor, new Rectangle(400, 333, 52, 49), new Tile(10487, 14421, 3), null, false)
                 );
                 List<MarkHandling> rellekkaObstacle4Mark = Arrays.asList(
@@ -809,7 +499,7 @@ public class dAgility extends AbstractScript {
                 // Mark of Grace ground color
                 Color ardyMogColor = new Color(Integer.parseInt("c98718", 16));
                 // Mark of Graces
-                List<MarkHandling> ardyObstacle4Mark = Arrays.asList(
+                List<MarkHandling> ardyObstacle4Mark = List.of(
                         new MarkHandling(new Rectangle(456, 265, 10, 9), ardyMogColor, new Rectangle(384, 262, 14, 22), new Tile(10611, 13005, 3), null, false)
                 );
 
@@ -869,13 +559,13 @@ public class dAgility extends AbstractScript {
                 // Mark of Grace ground color
                 Color draynorMogColor = new Color(Integer.parseInt("d38f1a", 16));
                 // Mark of Graces
-                List<MarkHandling> draynorObstacle2Mark = Arrays.asList(
+                List<MarkHandling> draynorObstacle2Mark = List.of(
                         new MarkHandling(new Rectangle(247, 174, 19, 16), draynorMogColor, new Rectangle(427, 455, 29, 28), new Tile(12359, 12853, 3), null, false)
                 );
-                List<MarkHandling> draynorObstacle3Mark = Arrays.asList(
+                List<MarkHandling> draynorObstacle3Mark = List.of(
                         new MarkHandling(new Rectangle(381, 364, 23, 16), draynorMogColor, new Rectangle(559, 195, 25, 22), new Tile(12367, 12813, 3), null, false)
                 );
-                List<MarkHandling> draynorObstacle4Mark = Arrays.asList(
+                List<MarkHandling> draynorObstacle4Mark = List.of(
                         new MarkHandling(new Rectangle(535, 273, 27, 25), draynorMogColor, new Rectangle(216, 375, 26, 21), new Tile(12351, 12793, 3), null, false)
                 );
                 List<MarkHandling> draynorObstacle7Marks = Arrays.asList(
@@ -930,19 +620,19 @@ public class dAgility extends AbstractScript {
                 // Mark of Grace ground color
                 Color pollyMogColor = new Color(Integer.parseInt("cb8a19", 16));
                 // Mark of Graces
-                List<MarkHandling> pollyObstacle2Mark = Arrays.asList(
+                List<MarkHandling> pollyObstacle2Mark = List.of(
                         new MarkHandling(new Rectangle(228, 114, 15, 13), pollyMogColor, new Rectangle(575, 111, 39, 100), new Tile(13407, 11641, 1), null, false)
                 );
-                List<MarkHandling> pollyObstacle3Mark = Arrays.asList(
+                List<MarkHandling> pollyObstacle3Mark = List.of(
                         new MarkHandling(new Rectangle(487, 188, 15, 15), pollyMogColor, new Rectangle(569, 95, 68, 67), new Tile(13439, 11657, 1), null, false)
                 );
-                List<MarkHandling> pollyObstacle7Mark = Arrays.asList(
+                List<MarkHandling> pollyObstacle7Mark = List.of(
                         new MarkHandling(new Rectangle(148, 253, 21, 19), pollyMogColor, new Rectangle(344, 143, 66, 81), new Tile(13431, 11713, 2), null, false)
                 );
-                List<MarkHandling> pollyObstacle8Mark = Arrays.asList(
+                List<MarkHandling> pollyObstacle8Mark = List.of(
                         new MarkHandling(new Rectangle(606, 187, 14, 17), pollyMogColor, new Rectangle(354, 109, 21, 29), new Tile(13435, 11749, 2), null, false)
                 );
-                List<MarkHandling> pollyObstacle9Mark = Arrays.asList(
+                List<MarkHandling> pollyObstacle9Mark = List.of(
                         new MarkHandling(new Rectangle(349, 188, 12, 13), pollyMogColor, new Rectangle(705, 293, 95, 94), new Tile(13451, 11741, 0), null, false)
                 );
                 // Obstacles
@@ -1006,17 +696,17 @@ public class dAgility extends AbstractScript {
                 // Mark of Grace ground color
                 Color seersMogColor = new Color(Integer.parseInt("ca8818", 16));
                 // Mark of Graces
-                List<MarkHandling> seersObstacle2Mark = Arrays.asList(
+                List<MarkHandling> seersObstacle2Mark = List.of(
                         new MarkHandling(new Rectangle(358, 190, 15, 13), seersMogColor, new Rectangle(112, 164, 35, 140), new Tile(10851, 13725, 2), null, false)
                 );
                 List<MarkHandling> seersObstacle3Mark = Arrays.asList(
                         new MarkHandling(new Rectangle(253, 315, 18, 15), seersMogColor, new Rectangle(476, 453, 30, 32), new Tile(10839, 13669, 2), null, false),
                         new MarkHandling(new Rectangle(114, 318, 16, 11), seersMogColor, new Rectangle(624, 452, 30, 31), new Tile(10839, 13669, 2), null, false)
                 );
-                List<MarkHandling> seersObstacle4Mark = Arrays.asList(
+                List<MarkHandling> seersObstacle4Mark = List.of(
                         new MarkHandling(new Rectangle(522, 235, 16, 14), seersMogColor, new Rectangle(317, 475, 275, 59), new Tile(10847, 13637, 3), null, false)
                 );
-                List<MarkHandling> seersObstacle6Mark = Arrays.asList(
+                List<MarkHandling> seersObstacle6Mark = List.of(
                         new MarkHandling(new Rectangle(259, 273, 16, 14), seersMogColor, new Rectangle(670, 249, 27, 139), new Tile(10815, 13605, 0), null, false)
                 );
                 // Obstacles
@@ -1131,8 +821,181 @@ public class dAgility extends AbstractScript {
         }
     }
 
-    public void courseZoom() {
+    public static int generateRandomDelay(int lowerBound, int upperBound) {
+        if (lowerBound > upperBound) {
+            int temp = lowerBound;
+            lowerBound = upperBound;
+            upperBound = temp;
+        }
+        return lowerBound + random.nextInt(upperBound - lowerBound + 1);
+    }
 
+    public static void changeProgressiveCourse(String newCourse) {
+        courseChosen = newCourse;
+        Logger.debugLog("Clear old obstacles");
+        obstacles.clear();
+        Logger.debugLog("Set up new obstacles");
+        setupObstacles();
+    }
+
+    // This would have to be run prior to calling it!
+    public void setSettings(String course, String food, int eatHitpoints) {
+        courseChosen = course;
+        foodChosen = food;
+        eatHP = eatHitpoints;
+
+        // Can also call preStart() directly here. I prefer not, since you can setSettings in onStart in main script before even needing it.
+        // That way it's ready to go and only needs preStart.
+    }
+
+    // If you still want an "onStart", you can manually call this once after the setSettings.
+    public void preStart() {
+        Logger.log("Initialising agility module...");
+
+        if (courseChosen.equals("1-50 Progressive")) {
+            Logger.debugLog("Using 1-50 progressive mode");
+            Logger.log("1-50 Progressive will train 1-30 at Draynor, followed by 30-50 at Varrock.");
+            Logger.log("Only start this mode when at Draynor.");
+            Logger.debugLog("Set course to Draynor.");
+            useProgressive = true;
+            courseChosen = "Draynor";
+            initialCourse = "Draynor";
+        } else if (courseChosen.equals("Colossal Wyrm Progressive")) {
+            Logger.debugLog("Using Colossal Wyrm course progressive mode");
+            Logger.debugLog("Set course to Basic Colossal Wyrm.");
+            useProgressive = true;
+            courseChosen = "Basic Colossal Wyrm";
+            initialCourse = "Wyrm";
+        }
+
+        // Setup walker using the correct chunks
+        setupWalker();
+
+        // Setup obstacles for the chosen course
+        setupObstacles();
+
+        // Save food
+        initializeItemIDs(foodChosen);
+
+        Paint.setStatus("Set zoom level");
+        courseZoom();
+
+        // Set teleport boolean if needed
+        if (courseChosen.equals("Seers - teleport")) {
+            Paint.setStatus("Set teleport to TRUE");
+            useSeersTeleport = true;
+        }
+
+        // Open inventory again if doing the wyrm course
+        if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm")) {
+            GameTabs.openTab(UITabs.INVENTORY);
+            Condition.sleep(1500);
+
+            // Read initial stack values
+            initialTermiteCount = Inventory.stackSize(30038);
+            initialBoneShardCount = Inventory.stackSize(ItemList.BLESSED_BONE_SHARDS_29381);
+
+            Logger.debugLog("Initial Termites count: " + initialTermiteCount);
+            Logger.debugLog("Initial Blessed Bone shard count: " + initialBoneShardCount);
+        }
+    }
+
+    // Keep poll() which you can then loop from main script
+    public void runCourse() {
+        // Looped tasks go here.
+        updateStatLabel();
+        GameTabs.closeTab(UITabs.INVENTORY);
+
+        for (Task task : agilityTasks) {
+            if (task.activate()) {
+                task.execute();
+                readXP();
+                return;
+            }
+        }
+    }
+
+    public void initializeItemIDs(String logName) {
+        Logger.debugLog("Running the initializeItemIDs() method.");
+
+        Map<String, String[]> itemIDs = new HashMap<>();
+
+        // Map of itemIDs for foodID (1)
+        itemIDs.put("None", new String[]{"None"});
+        itemIDs.put("Cake", new String[]{"Cake"});
+        itemIDs.put("Trout", new String[]{"333"});
+        itemIDs.put("Salmon", new String[]{"329"});
+        itemIDs.put("Tuna", new String[]{"361"});
+        itemIDs.put("Jug of wine", new String[]{"1993"});
+        itemIDs.put("Lobster", new String[]{"379"});
+        itemIDs.put("Swordfish", new String[]{"373"});
+        itemIDs.put("Potato with cheese", new String[]{"6705"});
+        itemIDs.put("Monkfish", new String[]{"7946"});
+        itemIDs.put("Karambwan", new String[]{"3144"});
+        itemIDs.put("Shark", new String[]{"385"});
+        itemIDs.put("Manta ray", new String[]{"391"});
+        itemIDs.put("Anglerfish", new String[]{"13441"});
+        String[] itemIds = itemIDs.get(logName);
+        foodID = itemIds[0];
+
+        Logger.debugLog("Ending the initializeItemIDs() method.");
+    }
+
+    private void setupWalker() {
+        switch (courseChosen) {
+            case "Gnome":
+                MapChunk gnomeChunks = new MapChunk(new String[]{"38-53", "39-53"}, "0", "1", "2");
+                Walker.setup(gnomeChunks);
+                break;
+            case "Al Kharid":
+                MapChunk alkharidChunks = new MapChunk(new String[]{"51-49"}, "0", "1", "2", "3");
+                Walker.setup(alkharidChunks);
+                break;
+            case "Varrock":
+                MapChunk varrockChunks = new MapChunk(new String[]{"50-53"}, "0", "1", "3");
+                Walker.setup(varrockChunks);
+                break;
+            case "Canifis":
+                MapChunk canifisChunks = new MapChunk(new String[]{"54-54"}, "0", "2", "3");
+                Walker.setup(canifisChunks);
+                break;
+            case "Falador":
+                MapChunk faladorChunks = new MapChunk(new String[]{"47-52"}, "0", "3");
+                Walker.setup(faladorChunks);
+                break;
+            case "Rellekka":
+                MapChunk rellekkaChunks = new MapChunk(new String[]{"41-57"}, "0", "3");
+                Walker.setup(rellekkaChunks);
+                break;
+            case "Ardougne":
+                MapChunk ardyChunks = new MapChunk(new String[]{"41-51"}, "0", "3");
+                Walker.setup(ardyChunks);
+                break;
+            case "Draynor":
+                MapChunk draynorChunks = new MapChunk(new String[]{"48-51"}, "0", "3");
+                Walker.setup(draynorChunks);
+                break;
+            case "Pollnivneach":
+                MapChunk pollyChunks = new MapChunk(new String[]{"52-46"}, "0", "1", "2");
+                Walker.setup(pollyChunks);
+                break;
+            case "Seers":
+            case "Seers - teleport":
+                MapChunk seersChunks = new MapChunk(new String[]{"42-54"}, "0", "2", "3");
+                Walker.setup(seersChunks);
+                break;
+            case "Advanced Colossal Wyrm":
+            case "Basic Colossal Wyrm":
+                MapChunk colossalWyrmChunks = new MapChunk(new String[]{"25-45"}, "0", "1", "2");
+                Walker.setup(colossalWyrmChunks);
+                break;
+            default:
+                Logger.log("This is a unknown course, no chunks to set up.");
+                Script.stop();
+        }
+    }
+
+    public void courseZoom() {
         // Map of course names to their zoom levels
         Map<String, String> courseZoomLevels = Map.ofEntries(
                 new AbstractMap.SimpleEntry<>("Gnome", "2"),
@@ -1163,59 +1026,8 @@ public class dAgility extends AbstractScript {
         Logger.debugLog("Zoom set.");
     }
 
-    public void checkLevelReqs() {
-        Logger.debugLog("Running the checkLevelReqs() method.");
-
-        if (!GameTabs.isTabOpen(UITabs.STATS)) {
-            GameTabs.openTab(UITabs.STATS);
-            Condition.sleep(1500);
-        }
-
-        int calc = Stats.getRealLevel(Skills.HITPOINTS);
-        eatHP = (int) (calc * (eatPercent / 100.0));
-        Logger.debugLog("HP to eat at: " + eatHP);
-
-        Logger.debugLog("Checking level requirements.");
-
-        // Save agility level
-        agilityLevel = Stats.getRealLevel(Skills.AGILITY);
-        Logger.debugLog("Agility level " + agilityLevel);
-
-        // Map of course names to their required agility levels using Map.ofEntries
-        Map<String, Integer> courseRequirements = Map.ofEntries(
-                new AbstractMap.SimpleEntry<>("Al Kharid", 20),
-                new AbstractMap.SimpleEntry<>("Varrock", 30),
-                new AbstractMap.SimpleEntry<>("Canifis", 40),
-                new AbstractMap.SimpleEntry<>("Falador", 50),
-                new AbstractMap.SimpleEntry<>("Basic Colossal Wyrm", 50),
-                new AbstractMap.SimpleEntry<>("Seers", 60),
-                new AbstractMap.SimpleEntry<>("Seers - Teleport", 60),
-                new AbstractMap.SimpleEntry<>("Advanced Colossal Wyrm", 62),
-                new AbstractMap.SimpleEntry<>("Pollnivneach", 70),
-                new AbstractMap.SimpleEntry<>("Rellekka", 80),
-                new AbstractMap.SimpleEntry<>("Ardougne", 90)
-        );
-
-        Integer requiredLevel = courseRequirements.get(courseChosen);
-
-        if (requiredLevel != null && agilityLevel < requiredLevel) {
-            Logger.log("Agility level not high enough for chosen course (" + courseChosen + "), stopping script.");
-            Logout.logout();
-            Script.stop();
-        }
-
-        GameTabs.closeTab(UITabs.STATS);
-        Logger.debugLog("Ending level requirements.");
-    }
-
     private void readXP() {
         XpBar.getXP();
-    }
-
-    public void hopActions() {
-        if(hopEnabled) {
-            Game.hop(hopProfile, useWDH, false);
-        }
     }
 
     private void updateStatLabel() {
@@ -1229,7 +1041,7 @@ public class dAgility extends AbstractScript {
             double elapsedTimeInHours = (currentTime - startTime) / (1000.0 * 60 * 60);
 
             // Calculate MoGs per hour and laps per hour
-            double TermitesPerHour = termiteCount/ elapsedTimeInHours;
+            double TermitesPerHour = termiteCount / elapsedTimeInHours;
             double ShardsPerHour = boneShardCount / elapsedTimeInHours;
             double LapsPerHour = lapCount / elapsedTimeInHours;
 
@@ -1262,187 +1074,6 @@ public class dAgility extends AbstractScript {
             String statistics = String.format("MoGs/hr: %s | Laps/hr: %s", MoGsPerHourFormatted, LapsPerHourFormatted);
             Paint.setStatistic(statistics);
         }
-    }
-
-    public static int generateRandomDelay(int lowerBound, int upperBound) {
-        if (lowerBound > upperBound) {
-            int temp = lowerBound;
-            lowerBound = upperBound;
-            upperBound = temp;
-        }
-        return lowerBound + random.nextInt(upperBound - lowerBound + 1);
-    }
-
-    public static class Obstacle {
-        public String name;
-        public Area area;
-        public Tile startTile;
-        public Tile endTile;
-        public Rectangle pressArea;
-        public Rectangle instantPressArea;
-        public Tile prevEndTile;
-        public List<MarkHandling> markHandling; // Change to a list of MarkHandling
-        public boolean checkForMark;
-        public Area failArea;
-        public boolean checkForFail;
-
-        Obstacle(String name, Area area, Tile startTile, Tile endTile, Rectangle pressArea,
-                 Rectangle instantPressArea, Tile prevEndTile, List<MarkHandling> markHandling, boolean checkForMark, Area failArea, boolean checkForFail) {
-            this.name = name;
-            this.area = area;
-            this.startTile = startTile;
-            this.endTile = endTile;
-            this.pressArea = pressArea;
-            this.instantPressArea = instantPressArea;
-            this.prevEndTile = prevEndTile;
-            this.markHandling = markHandling;
-            this.checkForMark = checkForMark;
-            this.failArea = failArea;
-            this.checkForFail = checkForFail;
-        }
-    }
-
-    public static class MarkHandling {
-        public final Rectangle checkArea;
-        public final Color targetColor;
-        public final Rectangle tapArea;
-        public final Tile endTile;
-        public final Area failArea;
-        public final boolean checkForFail;
-
-        MarkHandling(Rectangle checkArea, Color targetColor, Rectangle tapArea, Tile endTile, Area failArea, boolean checkForFail) {
-            this.checkArea = checkArea;
-            this.targetColor = targetColor;
-            this.tapArea = tapArea;
-            this.endTile = endTile;
-            this.failArea = failArea;
-            this.checkForFail = checkForFail;
-        }
-
-        public boolean isMarkPresent(Rectangle mogRectangle, Color mogColor) {
-            if (Client.isColorInRect(mogColor, mogRectangle, 10)) {
-                Logger.debugLog("Found MoG on floor");
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        public void pickUpMark(Rectangle mogRectangle, Rectangle nextObstacleRectangle, Tile endTile, Area failArea, boolean checkForFail) {
-            Paint.setStatus("Pick up MoG");
-            Client.tap(mogRectangle);
-            Player.waitTillNotMoving(30);
-            mogTotal++;
-            mogCount = mogTotal;
-            Paint.updateBox(MoGIndex, mogCount);
-            Logger.log("Total Marks of grace gathered so far: " + mogTotal);
-            Client.tap(nextObstacleRectangle);
-
-            if (failArea != null && checkForFail) {
-                Condition.wait(() -> Player.atTile(endTile) || Player.within(failArea), 100, 250);
-            } else {
-                Condition.wait(() -> Player.atTile(endTile), 100, 250);
-            }
-
-            Condition.sleep(generateRandomDelay(400, 600));
-        }
-    }
-
-    public static void traverseWithInstantTap(Obstacle obstacle) {
-        Logger.log("Traversing obstacle " + obstacle.name);
-        Logger.debugLog("Traversing " + obstacle.name + " with instant tap.");
-        Paint.setStatus("Traverse " + obstacle.name);
-        Client.tap(obstacle.instantPressArea);
-
-        // Update our counters here before we wait for the end tile
-        if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm")) {
-            generateRandomDelay(150, 250);
-            // Generate a random number between 0 and 100 to check for 15% activation chance
-            int randomChance = random.nextInt(100);
-
-            if (randomChance < 15 && (obstacle.name.equals("Obstacle 2") ||
-                    obstacle.name.equals("Obstacle 4") ||
-                    obstacle.name.equals("Obstacle 5") ||
-                    obstacle.name.equals("Obstacle 6"))) {
-
-                Logger.debugLog("Randomized activation: Open inventory to read new stack counts");
-                GameTabs.openTab(UITabs.INVENTORY);
-
-                termiteCount = Inventory.stackSize(30038) - initialTermiteCount;
-                Paint.updateBox(termiteIndex, termiteCount);
-
-                boneShardCount = Inventory.stackSize(ItemList.BLESSED_BONE_SHARDS_29381) - initialBoneShardCount;
-                Paint.updateBox(shardIndex, boneShardCount);
-
-                Logger.debugLog("Close inventory for instant obstacle tap");
-                GameTabs.closeTab(UITabs.INVENTORY);
-            }
-        }
-
-        if (obstacle.failArea != null && obstacle.checkForFail) {
-            Condition.wait(() -> Player.atTile(obstacle.endTile) || Player.within(obstacle.failArea), 100, 250);
-        } else {
-            Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 250);
-        }
-
-        Condition.sleep(generateRandomDelay(400, 600));
-    }
-
-    public static void traverseObstacle(Obstacle obstacle) {
-        Paint.setStatus("Traverse " + obstacle.name);
-        Logger.log("Traversing obstacle " + obstacle.name);
-        if (!Player.atTile(obstacle.startTile)) {
-            Logger.debugLog("Moving to start of " + obstacle.name);
-            Walker.step(obstacle.startTile);
-            Condition.wait(() -> Player.atTile(obstacle.startTile), 100, 250);
-            Condition.sleep(generateRandomDelay(550, 700));
-        }
-        if (Player.atTile(obstacle.startTile)) {
-            Logger.debugLog("At start of " + obstacle.name);
-            Client.tap(obstacle.pressArea);
-
-            if (obstacle.failArea != null && obstacle.checkForFail) {
-                Condition.wait(() -> Player.atTile(obstacle.endTile) || Player.within(obstacle.failArea), 100, 250);
-            } else {
-                Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 250);
-            }
-
-            Condition.sleep(generateRandomDelay(550, 700));
-        }
-    }
-
-    public static void proceedWithTraversal(Obstacle obstacle, Tile currentLocation) {
-        if (Player.tileEquals(obstacle.prevEndTile, currentLocation)) {
-            traverseWithInstantTap(obstacle);
-        } else {
-            traverseObstacle(obstacle);
-        }
-    }
-
-    public static class startTileStorage {
-        public final Tile tile;
-        public final Rectangle tapRectangle;
-
-        public startTileStorage(Tile tile, Rectangle tapRectangle) {
-            this.tile = tile;
-            this.tapRectangle = tapRectangle;
-        }
-
-        public Tile getTile() {
-            return tile;
-        }
-
-        public Rectangle getTapRectangle() {
-            return tapRectangle;
-        }
-    }
-
-    public static void changeProgressiveCourse(String newCourse) {
-        courseChosen = newCourse;
-        Logger.debugLog("Clear old obstacles");
-        obstacles.clear();
-        Logger.debugLog("Set up new obstacles");
-        setupObstacles();
     }
 
 }

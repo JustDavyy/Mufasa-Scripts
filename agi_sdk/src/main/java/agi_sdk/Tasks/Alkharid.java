@@ -1,11 +1,14 @@
 package agi_sdk.Tasks;
 
-import agi_sdk.dAgility;
+import agi_sdk.helpers.MarkHandling;
+import agi_sdk.helpers.Obstacle;
+import agi_sdk.helpers.StartTileStorage;
+import agi_sdk.helpers.TraverseHelpers;
 import agi_sdk.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Tile;
 
-import static agi_sdk.dAgility.*;
+import static agi_sdk.agi_sdk.*;
 import static helpers.Interfaces.*;
 
 public class Alkharid extends Task {
@@ -14,7 +17,7 @@ public class Alkharid extends Task {
     Tile obs1EndTile = new Tile(13091, 12517, 3);
     Area alkharidArea = new Area(new Tile(13041, 12317, 0), new Tile(13324, 12606, 0));
     Area obstacle8EndArea = new Area(new Tile(13179, 12499, 0), new Tile(13213, 12534, 0));
-    Tile[] pathToStart = new Tile[] {
+    Tile[] pathToStart = new Tile[]{
             new Tile(13183, 12523, 0),
             new Tile(13160, 12522, 0),
             new Tile(13139, 12531, 0),
@@ -22,13 +25,9 @@ public class Alkharid extends Task {
             new Tile(13100, 12537, 0)
     };
 
-    public Alkharid(){
-        super();
-        super.name = "Al Kharid";
-    }
     @Override
     public boolean activate() {
-        return (agi_sdk.courseChosen.equals("Al Kharid"));
+        return (courseChosen.equals("Al Kharid"));
     }
 
     @Override
@@ -48,7 +47,7 @@ public class Alkharid extends Task {
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
         // Handle most of the start tiles without using color finder for speed
-        for (agi_sdk.startTileStorage tileTap : startTiles) {
+        for (StartTileStorage tileTap : startTiles) {
             if (Player.tileEquals(currentLocation, tileTap.getTile())) {
                 Logger.debugLog("Player is on known start tile: " + tileTap.getTile());
                 Paint.setStatus("Tap start obstacle");
@@ -78,7 +77,7 @@ public class Alkharid extends Task {
 
                 if (!markHandled) {
                     Paint.setStatus("Traverse obstacle " + obstacle.name);
-                    proceedWithTraversal(obstacle, currentLocation);
+                    TraverseHelpers.proceedWithTraversal(obstacle, currentLocation);
                     if (obstacle.name.equals("Obstacle 8")) {
                         lapCount++;
                     }

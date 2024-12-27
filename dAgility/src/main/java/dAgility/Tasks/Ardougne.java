@@ -1,11 +1,11 @@
-package dAgility.Tasks;
+package agi_sdk.Tasks;
 
-import dAgility.dAgility;
-import dAgility.utils.Task;
+import agi_sdk.dAgility;
+import agi_sdk.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Tile;
 
-import static dAgility.dAgility.*;
+import static agi_sdk.dAgility.*;
 import static helpers.Interfaces.*;
 
 public class Ardougne extends Task {
@@ -19,7 +19,7 @@ public class Ardougne extends Task {
     }
     @Override
     public boolean activate() {
-        return (dAgility.courseChosen.equals("Ardougne"));
+        return (agi_sdk.courseChosen.equals("Ardougne"));
     }
 
     @Override

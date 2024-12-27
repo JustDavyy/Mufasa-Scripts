@@ -1,6 +1,9 @@
 package agi_sdk.Tasks;
 
-import agi_sdk.dAgility;
+import agi_sdk.agi_sdk;
+import agi_sdk.helpers.MarkHandling;
+import agi_sdk.helpers.Obstacle;
+import agi_sdk.helpers.TraverseHelpers;
 import agi_sdk.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Spells;
@@ -10,18 +13,17 @@ import helpers.utils.UITabs;
 import java.awt.*;
 import java.util.Arrays;
 
-import static agi_sdk.dAgility.*;
+import static agi_sdk.agi_sdk.*;
 import static helpers.Interfaces.*;
 
 public class Seers extends Task {
-
     Tile startTile = new Tile(10915, 13701, 0);
     Tile obs1EndTile = new Tile(10915, 13713, 3);
     Area seersArea = new Area(new Tile(10692, 13450, 0), new Tile(11020, 13808, 0));
     Area obstacle6EndArea = new Area(new Tile(10791, 13557, 0), new Tile(10854, 13636, 0));
     Area teleportArea = new Area(new Tile(10892, 13669, 0), new Tile(10924, 13700, 0));
     Area failArea = new Area(new Tile(10818, 13668, 0), new Tile(10878, 13744, 0));
-    Tile[] pathToStart = new Tile[] {
+    Tile[] pathToStart = new Tile[]{
             new Tile(10831, 13597, 0),
             new Tile(10850, 13596, 0),
             new Tile(10864, 13596, 0),
@@ -41,7 +43,7 @@ public class Seers extends Task {
             Color.decode("#20ff26"),
             Color.decode("#21ff27")
     );
-    Tile[] fallPathToStart = new Tile[] {
+    Tile[] fallPathToStart = new Tile[]{
             new Tile(10866, 13693, 0),
             new Tile(10880, 13684, 0),
             new Tile(10893, 13684, 0),
@@ -49,10 +51,6 @@ public class Seers extends Task {
             new Tile(10916, 13687, 0)
     };
 
-    public Seers(){
-        super();
-        super.name = "Seers";
-    }
     @Override
     public boolean activate() {
         return (agi_sdk.courseChosen.equals("Seers") || agi_sdk.courseChosen.equals("Seers - teleport"));
@@ -141,7 +139,7 @@ public class Seers extends Task {
 
                 if (!markHandled) {
                     Paint.setStatus("Traverse obstacle " + obstacle.name);
-                    proceedWithTraversal(obstacle, currentLocation);
+                    TraverseHelpers.proceedWithTraversal(obstacle, currentLocation);
                     if (obstacle.name.equals("Obstacle 6")) {
                         if (useSeersTeleport) {
                             GameTabs.openTab(UITabs.MAGIC);

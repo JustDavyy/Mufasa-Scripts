@@ -1,25 +1,19 @@
 package agi_sdk.Tasks;
 
-import agi_sdk.dAgility;
+import agi_sdk.agi_sdk;
+import agi_sdk.helpers.MarkHandling;
+import agi_sdk.helpers.Obstacle;
+import agi_sdk.helpers.TraverseHelpers;
 import agi_sdk.utils.Task;
-import helpers.utils.Area;
-import helpers.utils.Tile;
 
-import static agi_sdk.dAgility.*;
+import static agi_sdk.agi_sdk.*;
 import static helpers.Interfaces.*;
 
-public class Falador extends Task {
+public class Gnome extends Task {
 
-    Tile startTile = new Tile(12143, 13109, 0);
-    Area faladorArea = new Area(new Tile(11983, 13033, 0), new Tile(12279, 13306, 0));
-
-    public Falador(){
-        super();
-        super.name = "Falador";
-    }
     @Override
     public boolean activate() {
-        return (agi_sdk.courseChosen.equals("Falador"));
+        return (agi_sdk.courseChosen.equals("Gnome"));
     }
 
     @Override
@@ -32,39 +26,32 @@ public class Falador extends Task {
             if (Player.isTileWithinArea(currentLocation, obstacle.area)) {
                 boolean markHandled = false;
 
+                // Check for marks if applicable
                 if (obstacle.checkForMark && obstacle.markHandling != null) {
                     for (MarkHandling mark : obstacle.markHandling) {
-                        Condition.sleep(generateRandomDelay(200, 400));
                         if (mark.isMarkPresent(mark.checkArea, mark.targetColor)) {
                             Paint.setStatus("Pick up mark of grace");
                             Logger.log("Mark of grace detected, picking it up!");
                             mark.pickUpMark(mark.checkArea, mark.tapArea, mark.endTile, mark.failArea, mark.checkForFail);
                             markHandled = true;
-                            break;
+                            break; // Exit loop after handling the first detected mark
                         }
                     }
                 }
 
+                // If no marks were handled, proceed with obstacle traversal
                 if (!markHandled) {
                     Paint.setStatus("Traverse obstacle " + obstacle.name);
-                    proceedWithTraversal(obstacle, currentLocation);
-                    if (obstacle.name.equals("Obstacle 13")) {
+                    TraverseHelpers.proceedWithTraversal(obstacle, currentLocation);
+                    if (obstacle.name.equals("Obstacle 7")) {
                         lapCount++;
                     }
                 }
 
-                return true;
+                return true; // Obstacle found, exit loop and return
             }
         }
 
-        // Block that assumes we are not within any of those areas, which means we've fallen or wandered off somewhere?
-        if (Player.isTileWithinArea(currentLocation, faladorArea)) {
-            Logger.debugLog("Not within any obstacle area, webwalking back to start obstacle");
-            Paint.setStatus("Recover after fall/failure");
-            Walker.webWalk(startTile);
-            Player.waitTillNotMoving(17);
-            return true;
-        }
         return false;
     }
 }

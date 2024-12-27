@@ -1,17 +1,16 @@
 package agi_sdk.Tasks;
 
-import agi_sdk.dAgility;
 import agi_sdk.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.MapChunk;
 import helpers.utils.Tile;
 
-import static agi_sdk.dAgility.*;
+import static agi_sdk.agi_sdk.*;
 import static helpers.Interfaces.*;
 
 public class moveProgressive extends Task {
     private static final Area draynorObstacle7EndArea = new Area(new Tile(12400, 12765, 0), new Tile(12432, 12846, 0));
-    private static final Tile[] pathToVarrock = new Tile[] {
+    private static final Tile[] pathToVarrock = new Tile[]{
             new Tile(12412, 12795, 0),
             new Tile(12418, 12810, 0),
             new Tile(12413, 12833, 0),
@@ -84,10 +83,6 @@ public class moveProgressive extends Task {
     Tile varrockStartTile = new Tile(12895, 13405, 0);
     Area varrockArea = new Area(new Tile(12731, 13275, 0), new Tile(13101, 13571, 0));
 
-    public moveProgressive(){
-        super();
-        super.name = "moveProgressive";
-    }
     @Override
     public boolean activate() {
         return needToMove;

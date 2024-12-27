@@ -1,63 +1,79 @@
 package agi_sdk.Tasks;
 
-import agi_sdk.dAgility;
+import agi_sdk.agi_sdk;
+import agi_sdk.helpers.MarkHandling;
+import agi_sdk.helpers.Obstacle;
+import agi_sdk.helpers.TraverseHelpers;
 import agi_sdk.utils.Task;
 import helpers.utils.Area;
+import helpers.utils.Skills;
 import helpers.utils.Tile;
+import helpers.utils.UITabs;
 
 import java.awt.*;
 import java.util.Arrays;
 
-import static agi_sdk.dAgility.*;
+import static agi_sdk.agi_sdk.*;
 import static helpers.Interfaces.*;
 
-public class Rellekka extends Task {
+public class Varrock extends Task {
 
-    Tile startTile = new Tile(10499, 14461, 0);
-    Tile obs1EndTile = new Tile(10499, 14453, 3);
-    Area obs1Area = new Area(
-            new Tile(10477, 14430, 0),
-            new Tile(10521, 14481, 0)
-    );
-    Area rellekkaArea = new Area(new Tile(10421, 14322, 0), new Tile(10779, 14619, 0));
-    Area obstacle7EndArea = new Area(new Tile(10597, 14433, 0),new Tile(10630, 14467, 0));
-    Tile[] pathToStart = new Tile[] {
-            new Tile(10592, 14453, 0),
-            new Tile(10570, 14453, 0),
-            new Tile(10545, 14457, 0),
-            new Tile(10529, 14460, 0),
-            new Tile(10503, 14469, 0)
-    };
+    Tile startTile = new Tile(12895, 13405, 0);
+    Area varrockArea = new Area(new Tile(12731, 13275, 0), new Tile(13101, 13571, 0));
+    Area obs1Area = new Area(new Tile(12842, 13383, 0), new Tile(12975, 13453, 0));
+    Tile obs1EndTile = new Tile(12875, 13405, 3);
     java.util.List<Color> startObstacleColors = Arrays.asList(
-            Color.decode("#20ff25")
+            Color.decode("#20ff25"),
+            Color.decode("#20ff26")
     );
-    Rectangle screenROI = new Rectangle(312, 197, 220, 219);
+    Rectangle screenROI = new Rectangle(239, 160, 360, 235);
+    Area obs6MoGArea = new Area(new Tile(12724, 13309, 3), new Tile(12761, 13345, 3));
+    Tile obs6AfterMoGTile = new Tile(12794, 13331, 3);
 
-    public Rellekka(){
-        super();
-        super.name = "Rellekka";
-    }
     @Override
     public boolean activate() {
-        return (agi_sdk.courseChosen.equals("Rellekka"));
+        return (agi_sdk.courseChosen.equals("Varrock"));
     }
 
     @Override
     public boolean execute() {
+        // Progressive mode block
+        if (useProgressive) {
+            if (Player.leveledUp()) {
+                Logger.debugLog("Agility level: " + agilityLevel);
+                Logger.debugLog("Leveled up!");
+                agilityLevel++;
+                Logger.debugLog("Agility level is now: " + agilityLevel);
+            }
+            if (agilityLevel >= 50) {
+                Logger.debugLog("Agility level is 50 or higher (" + agilityLevel + "), double checking...");
+                if (!GameTabs.isTabOpen(UITabs.STATS)) {
+                    Logger.debugLog("Open Stats tab...");
+                    GameTabs.openTab(UITabs.STATS);
+                }
+
+                agilityLevel = Stats.getRealLevel(Skills.AGILITY);
+
+                Logger.debugLog("Agility level after verification: " + agilityLevel);
+
+                if (agilityLevel >= 50) {
+                    Logger.debugLog("Agility level verified to be level 50 or higher. Done progressing to level 50!");
+                    Logger.debugLog("Logging out and stopping script!");
+                    Logout.logout();
+                    Script.stop();
+                    return true;
+                }
+                GameTabs.closeTab(UITabs.STATS);
+                Condition.sleep(generateRandomDelay(500, 750));
+                if (GameTabs.isTabOpen(UITabs.STATS)) {
+                    GameTabs.closeTab(UITabs.STATS);
+                }
+            }
+        }
+
         Paint.setStatus("Fetch player position");
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
-
-        // Block that assumes we are at the end of the last obstacle
-        if (Player.isTileWithinArea(currentLocation, obstacle7EndArea)) {
-            Logger.debugLog("Walking back to the start obstacle");
-            Paint.setStatus("Walk to start obstacle");
-            Walker.walkPath(pathToStart);
-            Player.waitTillNotMoving(14);
-            Paint.setStatus("Fetch player position");
-            currentLocation = Walker.getPlayerPosition();
-            Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
-        }
 
         if (Player.isTileWithinArea(currentLocation, obs1Area)) {
             Logger.debugLog("Colorfinding start obstacle");
@@ -100,6 +116,12 @@ public class Rellekka extends Task {
             }
         }
 
+        if (Player.isTileWithinArea(currentLocation, obs6MoGArea)) {
+            Walker.walkTo(obs6AfterMoGTile);
+            Condition.sleep(generateRandomDelay(1250, 2000));
+            return true;
+        }
+
         for (Obstacle obstacle : obstacles) {
             if (Player.isTileWithinArea(currentLocation, obstacle.area)) {
                 boolean markHandled = false;
@@ -110,7 +132,7 @@ public class Rellekka extends Task {
                         if (mark.isMarkPresent(mark.checkArea, mark.targetColor)) {
                             Paint.setStatus("Pick up mark of grace");
                             Logger.log("Mark of grace detected, picking it up!");
-                            mark.pickUpMark(mark.checkArea, mark.tapArea, mark.endTile, mark.failArea, mark.checkForFail);
+                            mark.pickUpMark(mark.checkArea, mark.tapArea, mark.endTile, obstacle.failArea, obstacle.checkForFail);
                             markHandled = true;
                             break;
                         }
@@ -119,8 +141,8 @@ public class Rellekka extends Task {
 
                 if (!markHandled) {
                     Paint.setStatus("Traverse obstacle " + obstacle.name);
-                    proceedWithTraversal(obstacle, currentLocation);
-                    if (obstacle.name.equals("Obstacle 7")) {
+                    TraverseHelpers.proceedWithTraversal(obstacle, currentLocation);
+                    if (obstacle.name.equals("Obstacle 9")) {
                         lapCount++;
                     }
                 }
@@ -130,7 +152,7 @@ public class Rellekka extends Task {
         }
 
         // Block that assumes we are not within any of those areas, which means we've fallen or wandered off somewhere?
-        if (Player.isTileWithinArea(currentLocation, rellekkaArea)) {
+        if (Player.isTileWithinArea(currentLocation, varrockArea)) {
             Logger.debugLog("Not within any obstacle area, webwalking back to start obstacle");
             Paint.setStatus("Recover after fall/failure");
             Walker.webWalk(startTile);

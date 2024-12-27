@@ -1,9 +1,9 @@
-package dAgility.Tasks;
+package agi_sdk.Tasks;
 
-import dAgility.*;
-import dAgility.utils.Task;
+import agi_sdk.*;
+import agi_sdk.utils.Task;
 
-import static dAgility.dAgility.*;
+import static agi_sdk.dAgility.*;
 import static helpers.Interfaces.*;
 
 public class Gnome extends Task {
@@ -14,7 +14,7 @@ public class Gnome extends Task {
     }
     @Override
     public boolean activate() {
-        return (dAgility.courseChosen.equals("Gnome"));
+        return (agi_sdk.courseChosen.equals("Gnome"));
     }
 
     @Override

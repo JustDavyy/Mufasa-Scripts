@@ -1,7 +1,7 @@
-package dAgility.Tasks;
+package agi_sdk.Tasks;
 
-import dAgility.dAgility;
-import dAgility.utils.Task;
+import agi_sdk.dAgility;
+import agi_sdk.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Skills;
 import helpers.utils.Tile;
@@ -10,7 +10,7 @@ import helpers.utils.UITabs;
 import java.awt.*;
 import java.util.Arrays;
 
-import static dAgility.dAgility.*;
+import static agi_sdk.dAgility.*;
 import static helpers.Interfaces.*;
 
 public class Draynor extends Task {
@@ -38,7 +38,7 @@ public class Draynor extends Task {
     }
     @Override
     public boolean activate() {
-        return (dAgility.courseChosen.equals("Draynor"));
+        return (agi_sdk.courseChosen.equals("Draynor"));
     }
 
     @Override

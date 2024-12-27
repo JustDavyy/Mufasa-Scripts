@@ -1,86 +1,98 @@
 package agi_sdk.Tasks;
 
-import agi_sdk.dAgility;
+import agi_sdk.agi_sdk;
+import agi_sdk.helpers.MarkHandling;
+import agi_sdk.helpers.Obstacle;
+import agi_sdk.helpers.TraverseHelpers;
 import agi_sdk.utils.Task;
 import helpers.utils.Area;
-import helpers.utils.Spells;
+import helpers.utils.Skills;
 import helpers.utils.Tile;
 import helpers.utils.UITabs;
 
 import java.awt.*;
 import java.util.Arrays;
 
-import static agi_sdk.dAgility.*;
+import static agi_sdk.agi_sdk.*;
 import static helpers.Interfaces.*;
 
-public class Seers extends Task {
+public class Draynor extends Task {
 
-    Tile startTile = new Tile(10915, 13701, 0);
-    Tile obs1EndTile = new Tile(10915, 13713, 3);
-    Area seersArea = new Area(new Tile(10692, 13450, 0), new Tile(11020, 13808, 0));
-    Area obstacle6EndArea = new Area(new Tile(10791, 13557, 0), new Tile(10854, 13636, 0));
-    Area teleportArea = new Area(new Tile(10892, 13669, 0), new Tile(10924, 13700, 0));
-    Area failArea = new Area(new Tile(10818, 13668, 0), new Tile(10878, 13744, 0));
-    Tile[] pathToStart = new Tile[] {
-            new Tile(10831, 13597, 0),
-            new Tile(10850, 13596, 0),
-            new Tile(10864, 13596, 0),
-            new Tile(10876, 13609, 0),
-            new Tile(10881, 13621, 0),
-            new Tile(10891, 13637, 0),
-            new Tile(10899, 13649, 0),
-            new Tile(10904, 13662, 0),
-            new Tile(10909, 13674, 0),
-            new Tile(10913, 13687, 0)
-    };
-
-    Rectangle screenROI = new Rectangle(316, 4, 316, 330);
-    Area obs1Area = new Area(new Tile(10894, 13668, 0), new Tile(10939, 13715, 0));
+    Tile startTile = new Tile(12415, 12865, 0);
+    Tile obs1EndTile = new Tile(12407, 12865, 3);
+    Area draynorArea = new Area(new Tile(12275, 12663, 0), new Tile(12540, 12981, 0));
+    Area obstacle7EndArea = new Area(new Tile(12400, 12765, 0), new Tile(12432, 12846, 0));
+    Area obs1Area = new Area(new Tile(12405, 12848, 0), new Tile(12443, 12879, 0));
     java.util.List<Color> startObstacleColors = Arrays.asList(
             Color.decode("#20ff25"),
-            Color.decode("#20ff26"),
-            Color.decode("#21ff27")
+            Color.decode("#20ff26")
     );
-    Tile[] fallPathToStart = new Tile[] {
-            new Tile(10866, 13693, 0),
-            new Tile(10880, 13684, 0),
-            new Tile(10893, 13684, 0),
-            new Tile(10907, 13682, 0),
-            new Tile(10916, 13687, 0)
+    Rectangle screenROI = new Rectangle(102, 85, 408, 372);
+    Tile[] pathToStart = new Tile[]{
+            new Tile(12417, 12802, 0),
+            new Tile(12419, 12822, 0),
+            new Tile(12419, 12838, 0),
+            new Tile(12422, 12858, 0)
     };
 
-    public Seers(){
-        super();
-        super.name = "Seers";
-    }
     @Override
     public boolean activate() {
-        return (agi_sdk.courseChosen.equals("Seers") || agi_sdk.courseChosen.equals("Seers - teleport"));
+        return (agi_sdk.courseChosen.equals("Draynor"));
     }
 
     @Override
     public boolean execute() {
+        // Progressive mode block
+        if (useProgressive) {
+            if (Player.leveledUp()) {
+                Logger.debugLog("Agility level: " + agilityLevel);
+                Logger.debugLog("Leveled up!");
+                agilityLevel++;
+                Logger.debugLog("Agility level is now: " + agilityLevel);
+            }
+            if (agilityLevel >= 30 && Player.within(obstacle7EndArea)) {
+                Logger.debugLog("Agility level is 30 or higher (" + agilityLevel + "), double checking...");
+                if (!GameTabs.isTabOpen(UITabs.STATS)) {
+                    Logger.debugLog("Open Stats tab...");
+                    GameTabs.openTab(UITabs.STATS);
+                }
+
+                agilityLevel = Stats.getRealLevel(Skills.AGILITY);
+
+                Logger.debugLog("Agility level after verification: " + agilityLevel);
+
+                if (agilityLevel >= 30) {
+                    Logger.debugLog("Agility level verified to be level 30 or higher. We need to move to Varrock!");
+                    GameTabs.closeTab(UITabs.STATS);
+                    Condition.sleep(generateRandomDelay(500, 750));
+                    needToMove = true;
+                    if (GameTabs.isTabOpen(UITabs.STATS)) {
+                        GameTabs.closeTab(UITabs.STATS);
+                    }
+                    return true;
+                }
+                GameTabs.closeTab(UITabs.STATS);
+                Condition.sleep(generateRandomDelay(500, 750));
+                if (GameTabs.isTabOpen(UITabs.STATS)) {
+                    GameTabs.closeTab(UITabs.STATS);
+                }
+            }
+        }
+
         Paint.setStatus("Fetch player position");
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
 
         // Block that assumes we are at the end of the last obstacle
-        if (Player.isTileWithinArea(currentLocation, obstacle6EndArea)) {
-            if (useSeersTeleport) {
-                Logger.debugLog("Teleporting back to the start obstacle");
-                Paint.setStatus("Teleport to start obstacle");
-                Magic.castSpell(Spells.CAMELOT_TELEPORT);
-                Condition.wait(() -> Player.within(teleportArea), 150, 50);
-            } else {
-                Logger.debugLog("Walking back to the start obstacle");
-                Paint.setStatus("Walk to start obstacle");
-                Walker.walkPath(pathToStart);
-                Player.waitTillNotMoving(17);
-            }
-            currentLocation = Walker.getPlayerPosition();
-            Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
+        if (Player.isTileWithinArea(currentLocation, obstacle7EndArea)) {
+            Logger.debugLog("Walking back to the start obstacle");
+            Paint.setStatus("Walk to start obstacle");
+            Walker.walkPath(pathToStart);
+            Player.waitTillNotMoving(17);
         }
 
+        currentLocation = Walker.getPlayerPosition();
+        Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
         if (Player.isTileWithinArea(currentLocation, obs1Area)) {
             Logger.debugLog("Colorfinding start obstacle");
             Paint.setStatus("Colorfind obstacle 1");
@@ -102,7 +114,7 @@ public class Seers extends Task {
 
                 Logger.debugLog("Located the first obstacle using the color finder, tapping around the center point.");
                 Client.tap(centerPoint);
-                Condition.wait(() -> Player.atTile(obs1EndTile), 200, 45);
+                Condition.wait(() -> Player.atTile(obs1EndTile), 200, 35);
                 Paint.setStatus("Fetch player position");
                 currentLocation = Walker.getPlayerPosition();
                 Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
@@ -141,11 +153,11 @@ public class Seers extends Task {
 
                 if (!markHandled) {
                     Paint.setStatus("Traverse obstacle " + obstacle.name);
-                    proceedWithTraversal(obstacle, currentLocation);
-                    if (obstacle.name.equals("Obstacle 6")) {
-                        if (useSeersTeleport) {
-                            GameTabs.openTab(UITabs.MAGIC);
-                        }
+                    if (obstacle.name.equals("Obstacle 5")) {
+                        Condition.sleep(generateRandomDelay(500, 700));
+                    }
+                    TraverseHelpers.proceedWithTraversal(obstacle, currentLocation);
+                    if (obstacle.name.equals("Obstacle 7")) {
                         lapCount++;
                     }
                 }
@@ -154,17 +166,8 @@ public class Seers extends Task {
             }
         }
 
-        // Block that assumes we are within the fail area of seers
-        if (Player.isTileWithinArea(currentLocation, failArea)) {
-            Logger.debugLog("Within fail area, walking back to start obstacle");
-            Paint.setStatus("Recover after fall/failure");
-            Walker.walkPath(fallPathToStart);
-            Player.waitTillNotMoving(15);
-            return true;
-        }
-
         // Block that assumes we are not within any of those areas, which means we've fallen or wandered off somewhere?
-        if (Player.isTileWithinArea(currentLocation, seersArea)) {
+        if (Player.isTileWithinArea(currentLocation, draynorArea)) {
             Logger.debugLog("Not within any obstacle area, webwalking back to start obstacle");
             Paint.setStatus("Recover after fall/failure");
             Walker.webWalk(startTile);

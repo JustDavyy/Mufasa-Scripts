@@ -8,11 +8,6 @@ public class Run extends Task {
     private long lastRunCheckTime; // Last time we checked run percentage
     private int delayInSeconds; // Delay for how long we don't need to check run based on last percentage
 
-    public Run(){
-        super();
-        super.name = "Run";
-    }
-
     @Override
     public boolean activate() {
         long currentTime = System.currentTimeMillis();
