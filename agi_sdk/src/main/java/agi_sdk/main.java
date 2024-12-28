@@ -900,10 +900,11 @@ public class main {
         }
     }
 
-    // Keep poll() which you can then loop from main script
-    public void runCourse() {
+    public void runCourse(boolean updatePaint) {
         // Looped tasks go here.
-        updateStatLabel();
+        if (updatePaint) {
+            updateStatLabel();
+        }
         GameTabs.closeTab(UITabs.INVENTORY);
 
         for (Task task : agilityTasks) {

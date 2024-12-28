@@ -1,4 +1,4 @@
-import agi_sdk.agi_sdk;
+import agi_sdk.*;
 import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
@@ -39,7 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class temptestshit extends AbstractScript {
     Boolean idiot;
-    agi_sdk agility = new agi_sdk();
+    agi_sdk.main agility = new agi_sdk.main();
 
     // This is the onStart, and only gets ran once.
     @Override
@@ -58,7 +58,7 @@ public class temptestshit extends AbstractScript {
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
-        agility.runCourse();
+        agility.runCourse(false);
     }
 
     // We also dont need any additional methods, yay!
