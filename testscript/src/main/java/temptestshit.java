@@ -40,13 +40,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class temptestshit extends AbstractScript {
     Boolean idiot;
     agi_sdk agility = new agi_sdk();
-    private final Rectangle dominicHardRumbleCheckRect = new Rectangle(332, 84, 79, 52);
-
-    // Color find digit / ocr maps
-    public static final ConcurrentHashMap<String, int[][]> dominicChatPatterns = new ConcurrentHashMap<>();
-    public static List<Color> dominicChatTextColors = Arrays.asList(
-            Color.decode("#000001")
-    );
 
     // This is the onStart, and only gets ran once.
     @Override
