@@ -18,7 +18,6 @@ public class CourseSetup {
 
     private static void setupCourses() {
         // GNOME course setup
-// GNOME course setup
         Color gnomeMogColor = new Color(Integer.parseInt("cb8919", 16));
         List<MarkHandling> gnomeObstacle5Mark = List.of(
                 new MarkHandling(new Rectangle(493, 265, 10, 11), gnomeMogColor, new Rectangle(469, 279, 20, 17), new Tile(9947, 13429, 0), null, false)
@@ -385,7 +384,7 @@ public class CourseSetup {
         );
         COURSE_OBSTACLES.put(Course.RELLEKKA, rellekkaObstacles);
 
-// ARDOUGNE course setup
+        // ARDOUGNE course setup
         Color ardyMogColor = new Color(Integer.parseInt("c98718", 16));
         List<MarkHandling> ardyObstacle4Mark = List.of(
                 new MarkHandling(new Rectangle(456, 265, 10, 9), ardyMogColor, new Rectangle(384, 262, 14, 22), new Tile(10611, 13005, 3), null, false)
