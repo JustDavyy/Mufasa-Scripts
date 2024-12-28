@@ -40,7 +40,7 @@ task copyJarToDestinations(type: Copy) {
     dependsOn shadowJar // Ensure the JAR is built before copying
 
     from jar.archiveFile
-    into file('D:\\Repositories\\Mufasa-Scripts\\TEMPTESTSHIT\\src\\main\\resources\\sdks') // First destination
+    //into file('D:\\Repositories\\Mufasa-Scripts\\TEMPTESTSHIT\\src\\main\\resources\\sdks') // First destination
     //into file('path/to/destination2') // Second destination
     //into file('path/to/destination3') // Add more as needed
 }
