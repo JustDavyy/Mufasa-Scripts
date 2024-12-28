@@ -202,83 +202,31 @@ public class main {
     }
 
     private void setupWalker() {
-        switch (courseChosen) {
-            case GNOME:
-                MapChunk gnomeChunks = new MapChunk(new String[]{"38-53", "39-53"}, "0", "1", "2");
-                Walker.setup(gnomeChunks);
-                break;
-            case AL_KHARID:
-                MapChunk alkharidChunks = new MapChunk(new String[]{"51-49"}, "0", "1", "2", "3");
-                Walker.setup(alkharidChunks);
-                break;
-            case VARROCK:
-                MapChunk varrockChunks = new MapChunk(new String[]{"50-53"}, "0", "1", "3");
-                Walker.setup(varrockChunks);
-                break;
-            case CANIFIS:
-                MapChunk canifisChunks = new MapChunk(new String[]{"54-54"}, "0", "2", "3");
-                Walker.setup(canifisChunks);
-                break;
-            case FALADOR:
-                MapChunk faladorChunks = new MapChunk(new String[]{"47-52"}, "0", "3");
-                Walker.setup(faladorChunks);
-                break;
-            case RELLEKKA:
-                MapChunk rellekkaChunks = new MapChunk(new String[]{"41-57"}, "0", "3");
-                Walker.setup(rellekkaChunks);
-                break;
-            case ARDOUGNE:
-                MapChunk ardyChunks = new MapChunk(new String[]{"41-51"}, "0", "3");
-                Walker.setup(ardyChunks);
-                break;
-            case DRAYNOR:
-                MapChunk draynorChunks = new MapChunk(new String[]{"48-51"}, "0", "3");
-                Walker.setup(draynorChunks);
-                break;
-            case POLLNIVNEACH:
-                MapChunk pollyChunks = new MapChunk(new String[]{"52-46"}, "0", "1", "2");
-                Walker.setup(pollyChunks);
-                break;
-            case SEERS:
-            case SEERS_TELEPORT:
-                MapChunk seersChunks = new MapChunk(new String[]{"42-54"}, "0", "2", "3");
-                Walker.setup(seersChunks);
-                break;
-            case ADVANCED_COLOSSAL_WYRM:
-            case BASIC_COLOSSAL_WYRM:
-                MapChunk colossalWyrmChunks = new MapChunk(new String[]{"25-45"}, "0", "1", "2");
-                Walker.setup(colossalWyrmChunks);
-                break;
-            default:
-                Logger.log("This is a unknown course, no chunks to set up.");
-                Script.stop();
-        }
+        MapChunk chunk = GetMapChunk.get(courseChosen);
+        Walker.setup(chunk);
     }
 
     public void courseZoom() {
         // Map of course names to their zoom levels
-        Map<Course, String> courseZoomLevels = Map.ofEntries(
-                new AbstractMap.SimpleEntry<>(Course.GNOME, "2"),
-                new AbstractMap.SimpleEntry<>(Course.AL_KHARID, "1"),
-                new AbstractMap.SimpleEntry<>(Course.VARROCK, "1"),
-                new AbstractMap.SimpleEntry<>(Course.CANIFIS, "1"),
-                new AbstractMap.SimpleEntry<>(Course.FALADOR, "1"),
-                new AbstractMap.SimpleEntry<>(Course.RELLEKKA, "1"),
-                new AbstractMap.SimpleEntry<>(Course.ARDOUGNE, "1"),
-                new AbstractMap.SimpleEntry<>(Course.BASIC_COLOSSAL_WYRM, "1"),
-                new AbstractMap.SimpleEntry<>(Course.ADVANCED_COLOSSAL_WYRM, "1")
+        Map<Course, String> courseZoomLevels = Map.of(
+                Course.GNOME, "2",
+                Course.AL_KHARID, "1",
+                Course.VARROCK, "1",
+                Course.CANIFIS, "1",
+                Course.FALADOR, "1",
+                Course.RELLEKKA, "1",
+                Course.ARDOUGNE, "1",
+                Course.BASIC_COLOSSAL_WYRM, "1",
+                Course.ADVANCED_COLOSSAL_WYRM, "1"
         );
 
-        String zoomLevel = courseZoomLevels.get(courseChosen);
+        // Get zoom level, defaulting to "3" if the course is not found
+        String zoomLevel = courseZoomLevels.getOrDefault(courseChosen, "3");
 
-        if (zoomLevel != null) {
-            Logger.debugLog(courseChosen + " course - setting zoom level " + zoomLevel + ".");
-            Game.setZoom(zoomLevel);
-        } else {
-            Logger.debugLog(courseChosen + " course - setting zoom level 3");
-            Game.setZoom("3");
-        }
+        Logger.debugLog(courseChosen + " course - setting zoom level " + zoomLevel + ".");
+        Game.setZoom(zoomLevel);
 
+        // Close settings tab if open
         if (GameTabs.isTabOpen(UITabs.SETTINGS)) {
             GameTabs.closeTab(UITabs.SETTINGS);
         }
