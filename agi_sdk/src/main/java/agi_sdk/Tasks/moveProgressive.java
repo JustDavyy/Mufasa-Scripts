@@ -1,5 +1,6 @@
 package agi_sdk.Tasks;
 
+import agi_sdk.helpers.Course;
 import agi_sdk.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.MapChunk;
@@ -140,7 +141,7 @@ public class moveProgressive extends Task {
         if (Player.within(varrockArea)) {
             Logger.log("Reached Varrock.");
             Logger.debugLog("Set course to Varrock.");
-            changeProgressiveCourse("Varrock");
+            changeProgressiveCourse(Course.VARROCK);
             Logger.debugLog("Set needToMove state to false.");
             needToMove = false;
             Logger.debugLog("Set up walker chunks to Varrock Course");

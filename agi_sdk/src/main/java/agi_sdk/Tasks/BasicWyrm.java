@@ -1,5 +1,6 @@
 package agi_sdk.Tasks;
 
+import agi_sdk.helpers.Course;
 import agi_sdk.main;
 import agi_sdk.helpers.MarkHandling;
 import agi_sdk.helpers.Obstacle;
@@ -51,7 +52,7 @@ public class BasicWyrm extends Task {
                     Logger.debugLog("Agility level verified to be level 62 or higher. Switching to advanced course!");
                     GameTabs.closeTab(UITabs.STATS);
                     Condition.sleep(generateRandomDelay(500, 750));
-                    changeProgressiveCourse("Advanced Colossal Wyrm");
+                    changeProgressiveCourse(Course.ADVANCED_COLOSSAL_WYRM);
                     if (GameTabs.isTabOpen(UITabs.STATS)) {
                         GameTabs.closeTab(UITabs.STATS);
                     }

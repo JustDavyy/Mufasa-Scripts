@@ -1,6 +1,7 @@
 package agi_sdk;
 
 import agi_sdk.Tasks.*;
+import agi_sdk.helpers.Course;
 import agi_sdk.helpers.MarkHandling;
 import agi_sdk.helpers.Obstacle;
 import agi_sdk.helpers.StartTileStorage;
@@ -20,7 +21,7 @@ public class main {
     public static final Random random = new Random();
     public static List<StartTileStorage> startTiles;
     public static Tile currentLocation;
-    public static String courseChosen; // Save agility course name
+    public static Course courseChosen; // Save agility course name
     public static String foodID; // Save food
     public static int eatHP; // HP level to eat at
     public static int lapCount = 0;
@@ -39,7 +40,7 @@ public class main {
     public static boolean needToMove = false;
     public static int currentHP;
     public static int agilityLevel;
-    public static String initialCourse;
+    public static Course initialCourse;
     static List<MarkHandling> noMarks = List.of(
             new MarkHandling(new Rectangle(1, 1, 1, 1), new Color(203, 137, 25), new Rectangle(1, 1, 1, 1), new Tile(1, 1, 0), null, false)
     );
@@ -69,7 +70,7 @@ public class main {
 
     private static void setupObstacles() {
         switch (courseChosen) {
-            case "Gnome":
+            case GNOME:
                 // Mark of Grace ground color
                 Color gnomeMogColor = new Color(Integer.parseInt("cb8919", 16));
                 // Mark of Graces
@@ -118,7 +119,7 @@ public class main {
                         new Rectangle(432, 211, 22, 29), new Rectangle(406, 159, 19, 30),
                         new Tile(9939, 13461, 0), noMarks, false, null, false));
                 break;
-            case "Al Kharid":
+            case AL_KHARID:
                 // Mark of Grace ground color
                 Color alkharidMogColor = new Color(Integer.parseInt("c98818", 16));
                 // Mark of Graces
@@ -195,7 +196,7 @@ public class main {
                         new StartTileStorage(new Tile(13087, 12537, 0), new Rectangle(459, 308, 11, 6))
                 );
                 break;
-            case "Varrock":
+            case VARROCK:
                 // Mark of Grace ground color
                 Color varrockMogColor = new Color(Integer.parseInt("c98718", 16));
                 // Mark of Graces
@@ -271,7 +272,7 @@ public class main {
                         new Rectangle(439, 255, 15, 5), new Rectangle(441, 186, 15, 10),
                         new Tile(12943, 13389, 3), noMarks, false, null, false));
                 break;
-            case "Canifis":
+            case CANIFIS:
                 // Mark of Grace ground color
                 Color canifisMogColor = new Color(Integer.parseInt("cb8a19", 16));
                 // Mark of Graces
@@ -340,7 +341,7 @@ public class main {
                         new Rectangle(441, 243, 13, 14), new Rectangle(441, 169, 13, 10),
                         new Tile(14039, 13653, 2), noMarks, false, null, false));
                 break;
-            case "Falador":
+            case FALADOR:
                 // Mark of Grace ground color
                 Color faladorMogColor = new Color(Integer.parseInt("cb8a19", 16));
                 // Mark of Graces
@@ -436,7 +437,7 @@ public class main {
                         new Rectangle(482, 261, 14, 16), new Rectangle(536, 259, 15, 16),
                         new Tile(12075, 13081, 3), noMarks, false, null, false));
                 break;
-            case "Rellekka":
+            case RELLEKKA:
                 // Mark of Grace ground color
                 Color rellekkaMogColor = new Color(Integer.parseInt("d38f1a", 16));
                 // Mark of Graces
@@ -495,7 +496,7 @@ public class main {
                         new Rectangle(404, 248, 22, 22), new Rectangle(413, 165, 21, 23),
                         new Tile(10619, 14429, 3), noMarks, false, null, false));
                 break;
-            case "Ardougne":
+            case ARDOUGNE:
                 // Mark of Grace ground color
                 Color ardyMogColor = new Color(Integer.parseInt("c98718", 16));
                 // Mark of Graces
@@ -555,7 +556,7 @@ public class main {
                         new Tile(10623, 12937, 3), noMarks, false, null, false));
 
                 break;
-            case "Draynor":
+            case DRAYNOR:
                 // Mark of Grace ground color
                 Color draynorMogColor = new Color(Integer.parseInt("d38f1a", 16));
                 // Mark of Graces
@@ -616,7 +617,7 @@ public class main {
                         new Tile(12383, 12773, 3), draynorObstacle7Marks, true, null, false));
 
                 break;
-            case "Pollnivneach":
+            case POLLNIVNEACH:
                 // Mark of Grace ground color
                 Color pollyMogColor = new Color(Integer.parseInt("cb8a19", 16));
                 // Mark of Graces
@@ -691,8 +692,8 @@ public class main {
                         new Rectangle(547, 302, 65, 64), new Rectangle(616, 223, 64, 61),
                         new Tile(13435, 11749, 2), pollyObstacle9Mark, true, null, false));
                 break;
-            case "Seers":
-            case "Seers - teleport":
+            case SEERS:
+            case SEERS_TELEPORT:
                 // Mark of Grace ground color
                 Color seersMogColor = new Color(Integer.parseInt("ca8818", 16));
                 // Mark of Graces
@@ -749,7 +750,7 @@ public class main {
                         new Tile(10807, 13609, 2), seersObstacle6Mark, true, null, false));
 
                 break;
-            case "Basic Colossal Wyrm":
+            case BASIC_COLOSSAL_WYRM:
                 // Obstacles
                 obstacles.add(new Obstacle("Obstacle 1",
                         new Area(new Tile(6554, 11453, 0), new Tile(6618, 11502, 0)),
@@ -782,7 +783,7 @@ public class main {
                         new Rectangle(459, 251, 9, 21), new Rectangle(459, 236, 9, 22),
                         new Tile(6499, 11477, 2), noMarks, false, null, false));
                 break;
-            case "Advanced Colossal Wyrm":
+            case ADVANCED_COLOSSAL_WYRM:
                 // Obstacles
                 obstacles.add(new Obstacle("Obstacle 1",
                         new Area(new Tile(6554, 11453, 0), new Tile(6618, 11502, 0)),
@@ -830,7 +831,7 @@ public class main {
         return lowerBound + random.nextInt(upperBound - lowerBound + 1);
     }
 
-    public static void changeProgressiveCourse(String newCourse) {
+    public static void changeProgressiveCourse(Course newCourse) {
         courseChosen = newCourse;
         Logger.debugLog("Clear old obstacles");
         obstacles.clear();
@@ -839,7 +840,7 @@ public class main {
     }
 
     // This would have to be run prior to calling it!
-    public void setSettings(String course, String food, int eatHitpoints) {
+    public void setSettings(Course course, String food, int eatHitpoints) {
         courseChosen = course;
         foodChosen = food;
         eatHP = eatHitpoints;
@@ -858,14 +859,14 @@ public class main {
             Logger.log("Only start this mode when at Draynor.");
             Logger.debugLog("Set course to Draynor.");
             useProgressive = true;
-            courseChosen = "Draynor";
-            initialCourse = "Draynor";
+            courseChosen = Course.DRAYNOR;
+            initialCourse = Course.DRAYNOR;
         } else if (courseChosen.equals("Colossal Wyrm Progressive")) {
             Logger.debugLog("Using Colossal Wyrm course progressive mode");
             Logger.debugLog("Set course to Basic Colossal Wyrm.");
             useProgressive = true;
-            courseChosen = "Basic Colossal Wyrm";
-            initialCourse = "Wyrm";
+            courseChosen = Course.BASIC_COLOSSAL_WYRM;
+            initialCourse = Course.BASIC_COLOSSAL_WYRM;
         }
 
         // Setup walker using the correct chunks
@@ -944,49 +945,49 @@ public class main {
 
     private void setupWalker() {
         switch (courseChosen) {
-            case "Gnome":
+            case GNOME:
                 MapChunk gnomeChunks = new MapChunk(new String[]{"38-53", "39-53"}, "0", "1", "2");
                 Walker.setup(gnomeChunks);
                 break;
-            case "Al Kharid":
+            case AL_KHARID:
                 MapChunk alkharidChunks = new MapChunk(new String[]{"51-49"}, "0", "1", "2", "3");
                 Walker.setup(alkharidChunks);
                 break;
-            case "Varrock":
+            case VARROCK:
                 MapChunk varrockChunks = new MapChunk(new String[]{"50-53"}, "0", "1", "3");
                 Walker.setup(varrockChunks);
                 break;
-            case "Canifis":
+            case CANIFIS:
                 MapChunk canifisChunks = new MapChunk(new String[]{"54-54"}, "0", "2", "3");
                 Walker.setup(canifisChunks);
                 break;
-            case "Falador":
+            case FALADOR:
                 MapChunk faladorChunks = new MapChunk(new String[]{"47-52"}, "0", "3");
                 Walker.setup(faladorChunks);
                 break;
-            case "Rellekka":
+            case RELLEKKA:
                 MapChunk rellekkaChunks = new MapChunk(new String[]{"41-57"}, "0", "3");
                 Walker.setup(rellekkaChunks);
                 break;
-            case "Ardougne":
+            case ARDOUGNE:
                 MapChunk ardyChunks = new MapChunk(new String[]{"41-51"}, "0", "3");
                 Walker.setup(ardyChunks);
                 break;
-            case "Draynor":
+            case DRAYNOR:
                 MapChunk draynorChunks = new MapChunk(new String[]{"48-51"}, "0", "3");
                 Walker.setup(draynorChunks);
                 break;
-            case "Pollnivneach":
+            case POLLNIVNEACH:
                 MapChunk pollyChunks = new MapChunk(new String[]{"52-46"}, "0", "1", "2");
                 Walker.setup(pollyChunks);
                 break;
-            case "Seers":
-            case "Seers - teleport":
+            case SEERS:
+            case SEERS_TELEPORT:
                 MapChunk seersChunks = new MapChunk(new String[]{"42-54"}, "0", "2", "3");
                 Walker.setup(seersChunks);
                 break;
-            case "Advanced Colossal Wyrm":
-            case "Basic Colossal Wyrm":
+            case ADVANCED_COLOSSAL_WYRM:
+            case BASIC_COLOSSAL_WYRM:
                 MapChunk colossalWyrmChunks = new MapChunk(new String[]{"25-45"}, "0", "1", "2");
                 Walker.setup(colossalWyrmChunks);
                 break;
@@ -998,16 +999,16 @@ public class main {
 
     public void courseZoom() {
         // Map of course names to their zoom levels
-        Map<String, String> courseZoomLevels = Map.ofEntries(
-                new AbstractMap.SimpleEntry<>("Gnome", "2"),
-                new AbstractMap.SimpleEntry<>("Al Kharid", "1"),
-                new AbstractMap.SimpleEntry<>("Varrock", "1"),
-                new AbstractMap.SimpleEntry<>("Canifis", "1"),
-                new AbstractMap.SimpleEntry<>("Falador", "1"),
-                new AbstractMap.SimpleEntry<>("Rellekka", "1"),
-                new AbstractMap.SimpleEntry<>("Ardougne", "1"),
-                new AbstractMap.SimpleEntry<>("Basic Colossal Wyrm", "1"),
-                new AbstractMap.SimpleEntry<>("Advanced Colossal Wyrm", "1")
+        Map<Course, String> courseZoomLevels = Map.ofEntries(
+                new AbstractMap.SimpleEntry<>(Course.GNOME, "2"),
+                new AbstractMap.SimpleEntry<>(Course.AL_KHARID, "1"),
+                new AbstractMap.SimpleEntry<>(Course.VARROCK, "1"),
+                new AbstractMap.SimpleEntry<>(Course.CANIFIS, "1"),
+                new AbstractMap.SimpleEntry<>(Course.FALADOR, "1"),
+                new AbstractMap.SimpleEntry<>(Course.RELLEKKA, "1"),
+                new AbstractMap.SimpleEntry<>(Course.ARDOUGNE, "1"),
+                new AbstractMap.SimpleEntry<>(Course.BASIC_COLOSSAL_WYRM, "1"),
+                new AbstractMap.SimpleEntry<>(Course.ADVANCED_COLOSSAL_WYRM, "1")
         );
 
         String zoomLevel = courseZoomLevels.get(courseChosen);
