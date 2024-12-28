@@ -16,7 +16,7 @@ public class TraverseHelpers {
         Client.tap(obstacle.instantPressArea);
 
         // Update our counters here before we wait for the end tile
-        if (main.courseChosen.equals("Basic Colossal Wyrm") || main.courseChosen.equals("Advanced Colossal Wyrm")) {
+        if (main.courseChosen.equals(Course.BASIC_COLOSSAL_WYRM) || main.courseChosen.equals(Course.ADVANCED_COLOSSAL_WYRM)) {
             main.generateRandomDelay(150, 250);
             // Generate a random number between 0 and 100 to check for 15% activation chance
             int randomChance = main.random.nextInt(100);
