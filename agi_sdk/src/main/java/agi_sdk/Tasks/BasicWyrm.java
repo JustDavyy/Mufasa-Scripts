@@ -35,6 +35,7 @@ public class BasicWyrm extends Task {
                 Logger.debugLog("Agility level: " + agilityLevel);
                 Logger.debugLog("Leveled up!");
                 agilityLevel++;
+                lastLevelCheck = System.currentTimeMillis();
                 Logger.debugLog("Agility level is now: " + agilityLevel);
             }
             if (agilityLevel >= 62 && Player.atTile(endTile)) {
@@ -53,6 +54,7 @@ public class BasicWyrm extends Task {
                     GameTabs.closeTab(UITabs.STATS);
                     Condition.sleep(generateRandomDelay(500, 750));
                     changeProgressiveCourse(Course.ADVANCED_COLOSSAL_WYRM);
+                    lastLevelCheck = System.currentTimeMillis();
                     if (GameTabs.isTabOpen(UITabs.STATS)) {
                         GameTabs.closeTab(UITabs.STATS);
                     }

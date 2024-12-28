@@ -32,12 +32,14 @@ public class runner {
     public static int shardIndex;
     public static int mogTotal;
     public static long startTime = System.currentTimeMillis();
+    public static long lastLevelCheck = System.currentTimeMillis();
     public static boolean useSeersTeleport = false;
     public static boolean useProgressive = false;
     public static boolean needToMove = false;
     public static boolean usePaint = false;
     public static int currentHP;
     public static int agilityLevel;
+    public static int startAgilityLevel;
     public static Course initialCourse;
     public static List<MarkHandling> noMarks = List.of(
             new MarkHandling(new Rectangle(1, 1, 1, 1), new Color(203, 137, 25), new Rectangle(1, 1, 1, 1), new Tile(1, 1, 0), null, false)
@@ -167,6 +169,26 @@ public class runner {
             updateStatLabel();
         }
         GameTabs.closeTab(UITabs.INVENTORY);
+
+        if (useProgressive) {
+            if (lastLevelCheck > 0 && System.currentTimeMillis() - lastLevelCheck > 3600000) {
+                Logger.debugLog("No level up detected in an hour, checking stats tab!");
+                GameTabs.openTab(UITabs.STATS);
+                Condition.sleep(generateRandomDelay(400, 700));
+                if (!GameTabs.isTabOpen(UITabs.STATS)) {
+                    GameTabs.openTab(UITabs.STATS);
+                }
+
+                if (GameTabs.isTabOpen(UITabs.STATS)) {
+                    agilityLevel = Stats.getRealLevel(Skills.AGILITY);
+                    Logger.debugLog("Agility level is: " + agilityLevel);
+                } else {
+                    Logger.debugLog("Failed to open Stats tab.");
+                }
+
+                lastLevelCheck = System.currentTimeMillis();
+            }
+        }
 
         for (Task task : agilityTasks) {
             if (task.activate()) {

@@ -7,7 +7,9 @@ import agi_sdk.helpers.TraverseHelpers;
 import agi_sdk.runner;
 import agi_sdk.utils.Task;
 import helpers.utils.Area;
+import helpers.utils.Skills;
 import helpers.utils.Tile;
+import helpers.utils.UITabs;
 
 import static agi_sdk.runner.*;
 import static helpers.Interfaces.*;
@@ -26,6 +28,21 @@ public class AdvancedWyrm extends Task {
 
     @Override
     public boolean execute() {
+        // Progressive mode block
+        if (useProgressive) {
+            if (Player.leveledUp()) {
+                Logger.debugLog("Agility level: " + agilityLevel);
+                Logger.debugLog("Leveled up!");
+                agilityLevel++;
+                lastLevelCheck = System.currentTimeMillis();
+                Logger.debugLog("Agility level is now: " + agilityLevel);
+            } else {
+                if (lastLevelCheck > 0 && System.currentTimeMillis() - lastLevelCheck > 1800000) {
+                    lastLevelCheck = System.currentTimeMillis();
+                }
+            }
+        }
+
         runner.updateStatus("Fetch player position");
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);

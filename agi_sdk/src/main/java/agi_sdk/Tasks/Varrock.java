@@ -44,6 +44,7 @@ public class Varrock extends Task {
                 Logger.debugLog("Agility level: " + agilityLevel);
                 Logger.debugLog("Leveled up!");
                 agilityLevel++;
+                lastLevelCheck = System.currentTimeMillis();
                 Logger.debugLog("Agility level is now: " + agilityLevel);
             }
             if (agilityLevel >= 50) {
