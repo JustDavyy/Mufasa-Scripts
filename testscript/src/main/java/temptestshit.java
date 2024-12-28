@@ -53,7 +53,7 @@ public class temptestshit extends AbstractScript {
 
         Logger.debugLog("This is a test script testing the agility SDK");
 
-        agility.setSettings(Course.DRAYNOR, Food.NONE, 50, false);
+        agility.setSettings(Course.COLOSSAL_WYRM_PROGRESSIVE, Food.NONE, 50, false);
         agility.preStart();
     }
 
@@ -62,10 +62,7 @@ public class temptestshit extends AbstractScript {
     public void poll() {
         agility.runCourse();
 
-        agility.getLapCount();
-        agility.getMoGCount();
-        agility.getBoneShardCount();
-        agility.getTermiteCount();
+        Logger.debugLog("Lapcount: " + agility.getLapCount());
     }
 
     // We also dont need any additional methods, yay!
