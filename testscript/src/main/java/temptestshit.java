@@ -56,15 +56,16 @@ public class temptestshit extends AbstractScript {
 
         Logger.log("Thank you for using the temptestshit script!\nAre you an idiot: " + idiot);
 
-        Logger.log("Starting actions in 10 seconds, open the long press menu before that");
+        Logger.debugLog("This is a test script testing the agility SDK");
 
-        Condition.sleep(10000);
+        agility.setSettings("Draynor", "None", 50);
+        agility.courseZoom();
     }
 
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
-        // Do something here
+        agility.runCourse();
     }
 
     // We also dont need any additional methods, yay!
