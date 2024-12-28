@@ -136,6 +136,9 @@ public class runner {
         // Setup obstacles for the chosen course
         setupObstacles();
 
+        // Check level requirements
+        checkLevelReqs();
+
         if (usePaint) {
             runner.updateStatus("Set zoom level");
         }
@@ -314,6 +317,54 @@ public class runner {
             String statistics = String.format("MoGs/hr: %s | Laps/hr: %s", MoGsPerHourFormatted, LapsPerHourFormatted);
             updateStatistics(statistics);
         }
+    }
+
+    public void checkLevelReqs() {
+        Logger.debugLog("Running the checkLevelReqs() method.");
+
+        if (!GameTabs.isTabOpen(UITabs.STATS)) {
+            GameTabs.openTab(UITabs.STATS);
+            Condition.sleep(generateRandomDelay(500, 800));
+        }
+        if (!GameTabs.isTabOpen(UITabs.STATS)) {
+            GameTabs.openTab(UITabs.STATS);
+            Condition.sleep(generateRandomDelay(500, 800));
+        }
+
+        Logger.debugLog("HP to eat at: " + eatHP);
+
+        Logger.debugLog("Checking level requirements.");
+
+        // Save agility level
+        agilityLevel = Stats.getRealLevel(Skills.AGILITY);
+        Logger.debugLog("Agility level " + agilityLevel);
+
+        // Map of course names to their required agility levels using Map.ofEntries
+        Map<Course, Integer> courseRequirements = Map.ofEntries(
+                new AbstractMap.SimpleEntry<>(Course.AL_KHARID, 20),
+                new AbstractMap.SimpleEntry<>(Course.VARROCK, 30),
+                new AbstractMap.SimpleEntry<>(Course.CANIFIS, 40),
+                new AbstractMap.SimpleEntry<>(Course.FALADOR, 50),
+                new AbstractMap.SimpleEntry<>(Course.BASIC_COLOSSAL_WYRM, 50),
+                new AbstractMap.SimpleEntry<>(Course.PROGRESSIVE_TO_50, 50),
+                new AbstractMap.SimpleEntry<>(Course.SEERS, 60),
+                new AbstractMap.SimpleEntry<>(Course.SEERS_TELEPORT, 60),
+                new AbstractMap.SimpleEntry<>(Course.ADVANCED_COLOSSAL_WYRM, 62),
+                new AbstractMap.SimpleEntry<>(Course.POLLNIVNEACH, 70),
+                new AbstractMap.SimpleEntry<>(Course.RELLEKKA, 80),
+                new AbstractMap.SimpleEntry<>(Course.ARDOUGNE, 90)
+        );
+
+        Integer requiredLevel = courseRequirements.get(courseChosen);
+
+        if (requiredLevel != null && agilityLevel < requiredLevel) {
+            Logger.log("Agility level not high enough for chosen course (" + courseChosen + "), stopping script.");
+            Logout.logout();
+            Script.stop();
+        }
+
+        GameTabs.closeTab(UITabs.STATS);
+        Logger.debugLog("Ending level requirements.");
     }
 
 }
