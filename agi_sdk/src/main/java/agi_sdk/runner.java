@@ -19,7 +19,7 @@ public class runner {
     public static List<StartTileStorage> startTiles;
     public static Tile currentLocation;
     public static Course courseChosen; // Save agility course name
-    public static String foodID; // Save food
+    public static int foodID; // Save food
     public static int eatHP; // HP level to eat at
     public static int lapCount = 0;
     public static int mogCount = 0;
@@ -42,7 +42,6 @@ public class runner {
     public static List<MarkHandling> noMarks = List.of(
             new MarkHandling(new Rectangle(1, 1, 1, 1), new Color(203, 137, 25), new Rectangle(1, 1, 1, 1), new Tile(1, 1, 0), null, false)
     );
-    private static String foodChosen;
     private final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
     private final DecimalFormat MoGsFormat = new DecimalFormat("#,##0.0", symbols);
     private final DecimalFormat LapsFormat = new DecimalFormat("#,##0.0", symbols);
@@ -99,9 +98,9 @@ public class runner {
     }
 
     // This would have to be run prior to calling it!
-    public void setSettings(Course course, String food, int eatHitpoints, boolean usePaintBar) {
+    public void setSettings(Course course, Food food, int eatHitpoints, boolean usePaintBar) {
         courseChosen = course;
-        foodChosen = food;
+        foodID = food.getItemId();
         eatHP = eatHitpoints;
         usePaint = usePaintBar;
 
@@ -134,9 +133,6 @@ public class runner {
 
         // Setup obstacles for the chosen course
         setupObstacles();
-
-        // Save food
-        initializeItemIDs(foodChosen);
 
         if (usePaint) {
             runner.updateStatus("Set zoom level");
@@ -213,32 +209,6 @@ public class runner {
         if (usePaint) {
             Paint.setStatistic(statistics);
         }
-    }
-
-    public void initializeItemIDs(String logName) {
-        Logger.debugLog("Running the initializeItemIDs() method.");
-
-        Map<String, String[]> itemIDs = new HashMap<>();
-
-        // Map of itemIDs for foodID (1)
-        itemIDs.put("None", new String[]{"None"});
-        itemIDs.put("Cake", new String[]{"Cake"});
-        itemIDs.put("Trout", new String[]{"333"});
-        itemIDs.put("Salmon", new String[]{"329"});
-        itemIDs.put("Tuna", new String[]{"361"});
-        itemIDs.put("Jug of wine", new String[]{"1993"});
-        itemIDs.put("Lobster", new String[]{"379"});
-        itemIDs.put("Swordfish", new String[]{"373"});
-        itemIDs.put("Potato with cheese", new String[]{"6705"});
-        itemIDs.put("Monkfish", new String[]{"7946"});
-        itemIDs.put("Karambwan", new String[]{"3144"});
-        itemIDs.put("Shark", new String[]{"385"});
-        itemIDs.put("Manta ray", new String[]{"391"});
-        itemIDs.put("Anglerfish", new String[]{"13441"});
-        String[] itemIds = itemIDs.get(logName);
-        foodID = itemIds[0];
-
-        Logger.debugLog("Ending the initializeItemIDs() method.");
     }
 
     private void setupWalker() {

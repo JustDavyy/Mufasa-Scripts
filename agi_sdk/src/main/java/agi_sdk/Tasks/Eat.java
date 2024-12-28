@@ -2,6 +2,7 @@ package agi_sdk.Tasks;
 
 import agi_sdk.runner;
 import agi_sdk.utils.Task;
+import helpers.utils.ItemList;
 import helpers.utils.UITabs;
 
 import static agi_sdk.runner.*;
@@ -21,7 +22,7 @@ public class Eat extends Task {
         runner.updateStatus("Eating");
         currentHP = Player.getHP();
         Logger.debugLog("HP: " + currentHP);
-        if (foodID.equals("None")) {
+        if (foodID == 0) {
             Logger.log("Below HP threshold, no food chosen. Stopping script...");
             Logout.logout();
             Script.stop();
@@ -32,13 +33,13 @@ public class Eat extends Task {
                 Condition.sleep(1500);
             }
             Logger.debugLog("Eating food til above threshold.");
-            if (foodID.equals("Cake")) {
-                if (Inventory.contains("1895", 0.8)) { // 1/3 cake
-                    eat("1895");
-                } else if (Inventory.contains("1893", 0.8)) { // 2/3 cake
-                    eat("1893");
-                } else if (Inventory.contains("1891", 0.8)) { // 3/3 cake
-                    eat("1891");
+            if (foodID == ItemList.CAKE_1891) {
+                if (Inventory.contains(ItemList.SLICE_OF_CAKE_1895, 0.8)) { // 1/3 cake
+                    eat(ItemList.SLICE_OF_CAKE_1895);
+                } else if (Inventory.contains(1893, 0.8)) { // 2/3 cake
+                    eat(1893);
+                } else if (Inventory.contains(ItemList.CAKE_1891, 0.8)) { // 3/3 cake
+                    eat(ItemList.CAKE_1891);
                 } else {
                     Logger.log("No more food, stopping script.");
                     Logout.logout();
@@ -61,10 +62,10 @@ public class Eat extends Task {
         return false;
     }
 
-    public void eat(String food) {
+    public void eat(int food) {
         Logger.debugLog("Eating food now.");
         Inventory.eat(food, 0.8);
-        if (foodID.equals("1993")) {
+        if (foodID == 1993) {
             Logger.debugLog("Using wine, we need to drop the jug.");
             if (!Game.isTapToDropEnabled()) {
                 Game.enableTapToDrop();
