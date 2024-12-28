@@ -138,12 +138,16 @@ public class runner {
         // Save food
         initializeItemIDs(foodChosen);
 
-        Paint.setStatus("Set zoom level");
+        if (usePaint) {
+            Paint.setStatus("Set zoom level");
+        }
         courseZoom();
 
         // Set teleport boolean if needed
         if (courseChosen.equals(Course.SEERS_TELEPORT)) {
-            Paint.setStatus("Set teleport to TRUE");
+            if (usePaint) {
+                Paint.setStatus("Set teleport to TRUE");
+            }
             useSeersTeleport = true;
         }
 
