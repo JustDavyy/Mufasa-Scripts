@@ -1,5 +1,6 @@
 import agi_sdk.*;
 import agi_sdk.helpers.Course;
+import agi_sdk.helpers.Food;
 import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
@@ -52,7 +53,7 @@ public class temptestshit extends AbstractScript {
 
         Logger.debugLog("This is a test script testing the agility SDK");
 
-        agility.setSettings(Course.DRAYNOR, "None", 50, false);
+        agility.setSettings(Course.DRAYNOR, Food.NONE, 50, false);
         agility.preStart();
     }
 
