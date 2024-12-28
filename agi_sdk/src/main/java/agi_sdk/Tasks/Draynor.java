@@ -13,7 +13,7 @@ import helpers.utils.UITabs;
 import java.awt.*;
 import java.util.Arrays;
 
-import static agi_sdk.main.*;
+import static agi_sdk.runner.*;
 import static helpers.Interfaces.*;
 
 public class Draynor extends Task {

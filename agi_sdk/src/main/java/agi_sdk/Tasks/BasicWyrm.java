@@ -10,7 +10,7 @@ import helpers.utils.Skills;
 import helpers.utils.Tile;
 import helpers.utils.UITabs;
 
-import static agi_sdk.main.*;
+import static agi_sdk.runner.*;
 import static helpers.Interfaces.*;
 
 public class BasicWyrm extends Task {

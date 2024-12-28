@@ -20,6 +20,20 @@ dependencies {
     }
 }
 
+jar {
+    archiveFileName = 'agility.jar' // Name of the fat JAR
+    destinationDirectory = file('sdk_jar/') // Output directory for the JAR
+
+    archiveBaseName = 'agiSDK'
+    archiveVersion = '1.0.0'
+    manifest {
+        attributes(
+                'Manifest-Version': '1.0',
+                'Created-By': 'Mufasa'
+        )
+    }
+}
+
 shadowJar {
     archiveFileName = 'agility.jar' // Name of the fat JAR
     destinationDirectory = file('sdk_jar/') // Output directory for the JAR

@@ -1,6 +1,6 @@
 package agi_sdk.helpers;
 
-import agi_sdk.main;
+import agi_sdk.runner;
 import helpers.utils.ItemList;
 import helpers.utils.Tile;
 import helpers.utils.UITabs;
@@ -16,10 +16,10 @@ public class TraverseHelpers {
         Client.tap(obstacle.instantPressArea);
 
         // Update our counters here before we wait for the end tile
-        if (main.courseChosen.equals(Course.BASIC_COLOSSAL_WYRM) || main.courseChosen.equals(Course.ADVANCED_COLOSSAL_WYRM)) {
-            main.generateRandomDelay(150, 250);
+        if (runner.courseChosen.equals(Course.BASIC_COLOSSAL_WYRM) || runner.courseChosen.equals(Course.ADVANCED_COLOSSAL_WYRM)) {
+            runner.generateRandomDelay(150, 250);
             // Generate a random number between 0 and 100 to check for 15% activation chance
-            int randomChance = main.random.nextInt(100);
+            int randomChance = runner.random.nextInt(100);
 
             if (randomChance < 15 && (obstacle.name.equals("Obstacle 2") ||
                     obstacle.name.equals("Obstacle 4") ||
@@ -29,11 +29,11 @@ public class TraverseHelpers {
                 Logger.debugLog("Randomized activation: Open inventory to read new stack counts");
                 GameTabs.openTab(UITabs.INVENTORY);
 
-                main.termiteCount = Inventory.stackSize(30038) - main.initialTermiteCount;
-                Paint.updateBox(main.termiteIndex, main.termiteCount);
+                runner.termiteCount = Inventory.stackSize(30038) - runner.initialTermiteCount;
+                Paint.updateBox(runner.termiteIndex, runner.termiteCount);
 
-                main.boneShardCount = Inventory.stackSize(ItemList.BLESSED_BONE_SHARDS_29381) - main.initialBoneShardCount;
-                Paint.updateBox(main.shardIndex, main.boneShardCount);
+                runner.boneShardCount = Inventory.stackSize(ItemList.BLESSED_BONE_SHARDS_29381) - runner.initialBoneShardCount;
+                Paint.updateBox(runner.shardIndex, runner.boneShardCount);
 
                 Logger.debugLog("Close inventory for instant obstacle tap");
                 GameTabs.closeTab(UITabs.INVENTORY);
@@ -46,7 +46,7 @@ public class TraverseHelpers {
             Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 250);
         }
 
-        Condition.sleep(main.generateRandomDelay(400, 600));
+        Condition.sleep(runner.generateRandomDelay(400, 600));
     }
 
     public static void traverseObstacle(Obstacle obstacle) {
@@ -56,7 +56,7 @@ public class TraverseHelpers {
             Logger.debugLog("Moving to start of " + obstacle.name);
             Walker.step(obstacle.startTile);
             Condition.wait(() -> Player.atTile(obstacle.startTile), 100, 250);
-            Condition.sleep(main.generateRandomDelay(550, 700));
+            Condition.sleep(runner.generateRandomDelay(550, 700));
         }
         if (Player.atTile(obstacle.startTile)) {
             Logger.debugLog("At start of " + obstacle.name);
@@ -68,7 +68,7 @@ public class TraverseHelpers {
                 Condition.wait(() -> Player.atTile(obstacle.endTile), 100, 250);
             }
 
-            Condition.sleep(main.generateRandomDelay(550, 700));
+            Condition.sleep(runner.generateRandomDelay(550, 700));
         }
     }
 

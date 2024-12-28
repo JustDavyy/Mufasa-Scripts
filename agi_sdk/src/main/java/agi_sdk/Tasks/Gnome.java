@@ -6,7 +6,7 @@ import agi_sdk.helpers.Obstacle;
 import agi_sdk.helpers.TraverseHelpers;
 import agi_sdk.utils.Task;
 
-import static agi_sdk.main.*;
+import static agi_sdk.runner.*;
 import static helpers.Interfaces.*;
 
 public class Gnome extends Task {

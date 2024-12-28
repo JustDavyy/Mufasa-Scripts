@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import static agi_sdk.main.noMarks;
+import static agi_sdk.runner.noMarks;
 
 public class CourseSetup {
     private static final Map<Course, List<Obstacle>> COURSE_OBSTACLES = new HashMap<>();

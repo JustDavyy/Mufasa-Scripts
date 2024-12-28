@@ -13,7 +13,7 @@ import java.util.*;
 
 import static helpers.Interfaces.*;
 
-public class main {
+public class runner {
     public static final List<Obstacle> obstacles = new ArrayList<>();
     public static final Random random = new Random();
     public static List<StartTileStorage> startTiles;
@@ -103,7 +103,7 @@ public class main {
         foodChosen = food;
         eatHP = eatHitpoints;
 
-        // Can also call preStart() directly here. I prefer not, since you can setSettings in onStart in main script before even needing it.
+        // Can also call preStart() directly here. I prefer not, since you can setSettings in onStart in runner script before even needing it.
         // That way it's ready to go and only needs preStart.
     }
 

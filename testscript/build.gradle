@@ -26,8 +26,20 @@ dependencies {
     }
 }
 
+jar {
+    archiveFileName = 'tempNoShadow.jar'
+    destinationDirectory = file('jar/')
+
+    manifest {
+        attributes(
+                'Manifest-Version': '1.0',
+                'Created-By': 'JustDavyy'
+        )
+    }
+}
+
 shadowJar {
-    archiveFileName = 'TEMPTESTSHEITFUCKSAKE.jar'
+    archiveFileName = 'tempWithShadow.jar'
     destinationDirectory = file('jar/')
 
     manifest {

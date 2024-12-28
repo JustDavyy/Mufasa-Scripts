@@ -1,6 +1,6 @@
 package agi_sdk.helpers;
 
-import agi_sdk.main;
+import agi_sdk.runner;
 import helpers.utils.Area;
 import helpers.utils.Tile;
 
@@ -38,10 +38,10 @@ public class MarkHandling {
         Paint.setStatus("Pick up MoG");
         Client.tap(mogRectangle);
         Player.waitTillNotMoving(30);
-        main.mogTotal++;
-        main.mogCount = main.mogTotal;
-        Paint.updateBox(main.MoGIndex, main.mogCount);
-        Logger.log("Total Marks of grace gathered so far: " + main.mogTotal);
+        runner.mogTotal++;
+        runner.mogCount = runner.mogTotal;
+        Paint.updateBox(runner.MoGIndex, runner.mogCount);
+        Logger.log("Total Marks of grace gathered so far: " + runner.mogTotal);
         Client.tap(nextObstacleRectangle);
 
         if (failArea != null && checkForFail) {
@@ -50,6 +50,6 @@ public class MarkHandling {
             Condition.wait(() -> Player.atTile(endTile), 100, 250);
         }
 
-        Condition.sleep(main.generateRandomDelay(400, 600));
+        Condition.sleep(runner.generateRandomDelay(400, 600));
     }
 }

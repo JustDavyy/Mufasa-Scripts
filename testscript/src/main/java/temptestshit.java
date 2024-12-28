@@ -53,7 +53,7 @@ public class temptestshit extends AbstractScript {
         Logger.debugLog("This is a test script testing the agility SDK");
 
         agility.setSettings(Course.DRAYNOR, "None", 50);
-        agility.courseZoom();
+        agility.preStart();
     }
 
     // This is the main part of the script, poll gets looped constantly

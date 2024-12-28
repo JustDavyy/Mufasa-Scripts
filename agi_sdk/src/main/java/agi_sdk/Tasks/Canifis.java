@@ -8,7 +8,7 @@ import agi_sdk.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Tile;
 
-import static agi_sdk.main.*;
+import static agi_sdk.runner.*;
 import static helpers.Interfaces.*;
 
 public class Canifis extends Task {

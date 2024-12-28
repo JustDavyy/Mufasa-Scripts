@@ -11,7 +11,7 @@ import helpers.utils.Tile;
 import java.awt.*;
 import java.util.Arrays;
 
-import static agi_sdk.main.*;
+import static agi_sdk.runner.*;
 import static helpers.Interfaces.*;
 
 public class Pollnivneach extends Task {
