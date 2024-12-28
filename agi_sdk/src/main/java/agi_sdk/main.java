@@ -853,7 +853,7 @@ public class main {
     public void preStart() {
         Logger.log("Initialising agility module...");
 
-        if (courseChosen.equals("1-50 Progressive")) {
+        if (courseChosen.equals(Course.PROGRESSIVE_TO_50)) {
             Logger.debugLog("Using 1-50 progressive mode");
             Logger.log("1-50 Progressive will train 1-30 at Draynor, followed by 30-50 at Varrock.");
             Logger.log("Only start this mode when at Draynor.");
@@ -861,7 +861,7 @@ public class main {
             useProgressive = true;
             courseChosen = Course.DRAYNOR;
             initialCourse = Course.DRAYNOR;
-        } else if (courseChosen.equals("Colossal Wyrm Progressive")) {
+        } else if (courseChosen.equals(Course.COLOSSAL_WYRM_PROGRESSIVE)) {
             Logger.debugLog("Using Colossal Wyrm course progressive mode");
             Logger.debugLog("Set course to Basic Colossal Wyrm.");
             useProgressive = true;
@@ -882,13 +882,13 @@ public class main {
         courseZoom();
 
         // Set teleport boolean if needed
-        if (courseChosen.equals("Seers - teleport")) {
+        if (courseChosen.equals(Course.SEERS_TELEPORT)) {
             Paint.setStatus("Set teleport to TRUE");
             useSeersTeleport = true;
         }
 
         // Open inventory again if doing the wyrm course
-        if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm")) {
+        if (courseChosen.equals(Course.BASIC_COLOSSAL_WYRM) || courseChosen.equals(Course.ADVANCED_COLOSSAL_WYRM)) {
             GameTabs.openTab(UITabs.INVENTORY);
             Condition.sleep(1500);
 
@@ -1033,7 +1033,7 @@ public class main {
     }
 
     private void updateStatLabel() {
-        if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm")) {
+        if (courseChosen.equals(Course.BASIC_COLOSSAL_WYRM) || courseChosen.equals(Course.ADVANCED_COLOSSAL_WYRM)) {
             // Set separators
             symbols.setGroupingSeparator('.');
             symbols.setDecimalSeparator(',');
