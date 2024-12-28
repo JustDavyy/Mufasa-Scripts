@@ -32,15 +32,12 @@ jar {
 }
 
 // UNCOMMENT HERE FOR COPY TASK!
-/** Define a task to copy the JAR file to multiple locations
+//Define a task to copy the JAR file to multiple locations
 task copyJarToDestinations(type: Copy) {
     dependsOn jar // Ensure the JAR is built before copying
 
     from jar.archiveFile
-    into file('path/to/destination1') // First destination
-    into file('path/to/destination2') // Second destination
-    into file('path/to/destination3') // Add more as needed
+    into file('D:\\Repositories\\Mufasa-Scripts\\TEMPTESTSHIT\\src\\main\\resources\\sdks') // First destination
+    //into file('path/to/destination2') // Second destination
+    //into file('path/to/destination3') // Add more as needed
 }
-
-jar.dependsOn copyJarToDestinations
- **/
