@@ -1,6 +1,6 @@
 package agi_sdk.Tasks;
 
-import agi_sdk.agi_sdk;
+import agi_sdk.main;
 import agi_sdk.helpers.MarkHandling;
 import agi_sdk.helpers.Obstacle;
 import agi_sdk.helpers.TraverseHelpers;
@@ -11,7 +11,7 @@ import helpers.utils.Tile;
 import java.awt.*;
 import java.util.Arrays;
 
-import static agi_sdk.agi_sdk.*;
+import static agi_sdk.main.*;
 import static helpers.Interfaces.*;
 
 public class Pollnivneach extends Task {
@@ -39,7 +39,7 @@ public class Pollnivneach extends Task {
 
     @Override
     public boolean activate() {
-        return (agi_sdk.courseChosen.equals("Pollnivneach"));
+        return (main.courseChosen.equals("Pollnivneach"));
     }
 
     @Override

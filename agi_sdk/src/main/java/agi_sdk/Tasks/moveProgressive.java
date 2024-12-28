@@ -5,7 +5,7 @@ import helpers.utils.Area;
 import helpers.utils.MapChunk;
 import helpers.utils.Tile;
 
-import static agi_sdk.agi_sdk.*;
+import static agi_sdk.main.*;
 import static helpers.Interfaces.*;
 
 public class moveProgressive extends Task {

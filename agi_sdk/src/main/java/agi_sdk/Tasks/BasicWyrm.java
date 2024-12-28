@@ -1,6 +1,6 @@
 package agi_sdk.Tasks;
 
-import agi_sdk.agi_sdk;
+import agi_sdk.main;
 import agi_sdk.helpers.MarkHandling;
 import agi_sdk.helpers.Obstacle;
 import agi_sdk.helpers.TraverseHelpers;
@@ -10,7 +10,7 @@ import helpers.utils.Skills;
 import helpers.utils.Tile;
 import helpers.utils.UITabs;
 
-import static agi_sdk.agi_sdk.*;
+import static agi_sdk.main.*;
 import static helpers.Interfaces.*;
 
 public class BasicWyrm extends Task {
@@ -23,7 +23,7 @@ public class BasicWyrm extends Task {
 
     @Override
     public boolean activate() {
-        return (agi_sdk.courseChosen.equals("Basic Colossal Wyrm"));
+        return (main.courseChosen.equals("Basic Colossal Wyrm"));
     }
 
     @Override

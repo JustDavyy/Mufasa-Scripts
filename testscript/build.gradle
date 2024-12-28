@@ -5,7 +5,6 @@ plugins {
 repositories {
         mavenCentral()
         maven { url "https://repo1.maven.org/maven2" }
-        maven { url "https://openpnp.github.io/maven" }
         maven { url 'https://jitpack.io' }
         google()
         flatDir {
@@ -20,7 +19,7 @@ configurations.all {
 }
 
 dependencies {
-    implementation files('agi_sdk.jar')
+    implementation name: 'agility'
     implementation('com.github.Mufasa-SDK:SDKRepo:1.2.89') {
         changing = true
     }

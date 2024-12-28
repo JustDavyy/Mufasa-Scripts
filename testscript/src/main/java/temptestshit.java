@@ -1,3 +1,4 @@
+import agi_sdk.agi_sdk;
 import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
@@ -8,7 +9,6 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
 import static helpers.Interfaces.*;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
                         description = "Check = yes, uncheck = no",
                         defaultValue = "Yes",
                         allowedValues = {
-                                @AllowedValue(optionName = "Yes"),
+                      @AllowedValue(optionName = "Yes"),
                                 @AllowedValue(optionName = "No")
                         },
                         optionType = OptionType.BOOLEAN
@@ -38,8 +38,8 @@ import java.util.concurrent.ConcurrentHashMap;
 )
 
 public class temptestshit extends AbstractScript {
-    // Creating the strings for later use
     Boolean idiot;
+    agi_sdk agility = new agi_sdk();
     private final Rectangle dominicHardRumbleCheckRect = new Rectangle(332, 84, 79, 52);
 
     // Color find digit / ocr maps
@@ -59,14 +59,11 @@ public class temptestshit extends AbstractScript {
         Logger.log("Starting actions in 10 seconds, open the long press menu before that");
 
         Condition.sleep(10000);
-
-
     }
 
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
-
         // Do something here
     }
 

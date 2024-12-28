@@ -8,7 +8,7 @@ import agi_sdk.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Tile;
 
-import static agi_sdk.agi_sdk.*;
+import static agi_sdk.main.*;
 import static helpers.Interfaces.*;
 
 public class Alkharid extends Task {

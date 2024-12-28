@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 repositories {
@@ -19,14 +20,16 @@ dependencies {
     }
 }
 
-jar {
-    archiveFileName = 'agi_sdk.jar'
-    destinationDirectory = file('sdk_jar/')
+shadowJar {
+    archiveFileName = 'agility.jar' // Name of the fat JAR
+    destinationDirectory = file('sdk_jar/') // Output directory for the JAR
 
+    archiveBaseName = 'agiSDK'
+    archiveVersion = '1.0.0'
     manifest {
         attributes(
-                'Manifest-Version': '1.00',
-                'Created-By': 'Davyy'
+                'Manifest-Version': '1.0',
+                'Created-By': 'Mufasa'
         )
     }
 }
@@ -34,7 +37,7 @@ jar {
 // UNCOMMENT HERE FOR COPY TASK!
 //Define a task to copy the JAR file to multiple locations
 task copyJarToDestinations(type: Copy) {
-    dependsOn jar // Ensure the JAR is built before copying
+    dependsOn shadowJar // Ensure the JAR is built before copying
 
     from jar.archiveFile
     into file('D:\\Repositories\\Mufasa-Scripts\\TEMPTESTSHIT\\src\\main\\resources\\sdks') // First destination

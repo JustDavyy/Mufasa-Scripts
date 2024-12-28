@@ -1,6 +1,6 @@
 package agi_sdk.Tasks;
 
-import agi_sdk.agi_sdk;
+import agi_sdk.main;
 import agi_sdk.helpers.MarkHandling;
 import agi_sdk.helpers.Obstacle;
 import agi_sdk.helpers.TraverseHelpers;
@@ -9,10 +9,9 @@ import helpers.utils.Area;
 import helpers.utils.Tile;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.List;
 
-import static agi_sdk.agi_sdk.*;
+import static agi_sdk.main.*;
 import static helpers.Interfaces.*;
 
 public class Rellekka extends Task {
@@ -39,7 +38,7 @@ public class Rellekka extends Task {
 
     @Override
     public boolean activate() {
-        return (agi_sdk.courseChosen.equals("Rellekka"));
+        return (main.courseChosen.equals("Rellekka"));
     }
 
     @Override

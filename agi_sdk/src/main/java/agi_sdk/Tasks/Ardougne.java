@@ -1,6 +1,6 @@
 package agi_sdk.Tasks;
 
-import agi_sdk.agi_sdk;
+import agi_sdk.main;
 import agi_sdk.helpers.MarkHandling;
 import agi_sdk.helpers.Obstacle;
 import agi_sdk.helpers.TraverseHelpers;
@@ -8,7 +8,7 @@ import agi_sdk.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Tile;
 
-import static agi_sdk.agi_sdk.*;
+import static agi_sdk.main.*;
 import static helpers.Interfaces.*;
 
 public class Ardougne extends Task {
@@ -18,7 +18,7 @@ public class Ardougne extends Task {
 
     @Override
     public boolean activate() {
-        return (agi_sdk.courseChosen.equals("Ardougne"));
+        return (main.courseChosen.equals("Ardougne"));
     }
 
     @Override

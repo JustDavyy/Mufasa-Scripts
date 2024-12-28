@@ -1,6 +1,6 @@
 package agi_sdk.Tasks;
 
-import agi_sdk.agi_sdk;
+import agi_sdk.main;
 import agi_sdk.helpers.MarkHandling;
 import agi_sdk.helpers.Obstacle;
 import agi_sdk.helpers.TraverseHelpers;
@@ -13,7 +13,7 @@ import helpers.utils.UITabs;
 import java.awt.*;
 import java.util.Arrays;
 
-import static agi_sdk.agi_sdk.*;
+import static agi_sdk.main.*;
 import static helpers.Interfaces.*;
 
 public class Seers extends Task {
@@ -53,7 +53,7 @@ public class Seers extends Task {
 
     @Override
     public boolean activate() {
-        return (agi_sdk.courseChosen.equals("Seers") || agi_sdk.courseChosen.equals("Seers - teleport"));
+        return (main.courseChosen.equals("Seers") || main.courseChosen.equals("Seers - teleport"));
     }
 
     @Override

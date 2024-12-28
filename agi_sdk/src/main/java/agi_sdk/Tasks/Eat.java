@@ -3,7 +3,7 @@ package agi_sdk.Tasks;
 import agi_sdk.utils.Task;
 import helpers.utils.UITabs;
 
-import static agi_sdk.agi_sdk.*;
+import static agi_sdk.main.*;
 import static helpers.Interfaces.*;
 
 public class Eat extends Task {
