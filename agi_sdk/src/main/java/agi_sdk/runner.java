@@ -139,14 +139,14 @@ public class runner {
         initializeItemIDs(foodChosen);
 
         if (usePaint) {
-            Paint.setStatus("Set zoom level");
+            runner.updateStatus("Set zoom level");
         }
         courseZoom();
 
         // Set teleport boolean if needed
         if (courseChosen.equals(Course.SEERS_TELEPORT)) {
             if (usePaint) {
-                Paint.setStatus("Set teleport to TRUE");
+                runner.updateStatus("Set teleport to TRUE");
             }
             useSeersTeleport = true;
         }
@@ -195,6 +195,24 @@ public class runner {
 
     public int getBoneShardCount() {
         return boneShardCount;
+    }
+
+    public static void updateBox(int index, int value) {
+        if (usePaint) {
+            runner.updateBox(index, value);
+        }
+    }
+
+    public static void updateStatus(String status) {
+        if (usePaint) {
+            runner.updateStatus(status);
+        }
+    }
+
+    public void updateStatistics(String statistics) {
+        if (usePaint) {
+            Paint.setStatistic(statistics);
+        }
     }
 
     public void initializeItemIDs(String logName) {
@@ -282,7 +300,7 @@ public class runner {
 
             // Update the statistics label with all three stats
             String statistics = String.format("Term %s | Shard %s | Lap %s /hr", TermitesPerHourFormatted, ShardsPerHourFormatted, LapsPerHourFormatted);
-            Paint.setStatistic(statistics);
+            updateStatistics(statistics);
         } else {
             // Set separators
             symbols.setGroupingSeparator('.');
@@ -302,7 +320,7 @@ public class runner {
 
             // Update the statistics label
             String statistics = String.format("MoGs/hr: %s | Laps/hr: %s", MoGsPerHourFormatted, LapsPerHourFormatted);
-            Paint.setStatistic(statistics);
+            updateStatistics(statistics);
         }
     }
 

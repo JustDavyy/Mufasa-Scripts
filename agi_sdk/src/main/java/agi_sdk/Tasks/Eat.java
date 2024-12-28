@@ -1,5 +1,6 @@
 package agi_sdk.Tasks;
 
+import agi_sdk.runner;
 import agi_sdk.utils.Task;
 import helpers.utils.UITabs;
 
@@ -17,7 +18,7 @@ public class Eat extends Task {
 
     @Override //the code to execute if criteria met
     public boolean execute() {
-        Paint.setStatus("Eating");
+        runner.updateStatus("Eating");
         currentHP = Player.getHP();
         Logger.debugLog("HP: " + currentHP);
         if (foodID.equals("None")) {

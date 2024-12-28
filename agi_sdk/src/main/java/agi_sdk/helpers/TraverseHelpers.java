@@ -12,7 +12,7 @@ public class TraverseHelpers {
     public static void traverseWithInstantTap(Obstacle obstacle) {
         Logger.log("Traversing obstacle " + obstacle.name);
         Logger.debugLog("Traversing " + obstacle.name + " with instant tap.");
-        Paint.setStatus("Traverse " + obstacle.name);
+        runner.updateStatus("Traverse " + obstacle.name);
         Client.tap(obstacle.instantPressArea);
 
         // Update our counters here before we wait for the end tile
@@ -30,10 +30,10 @@ public class TraverseHelpers {
                 GameTabs.openTab(UITabs.INVENTORY);
 
                 runner.termiteCount = Inventory.stackSize(30038) - runner.initialTermiteCount;
-                Paint.updateBox(runner.termiteIndex, runner.termiteCount);
+                runner.updateBox(runner.termiteIndex, runner.termiteCount);
 
                 runner.boneShardCount = Inventory.stackSize(ItemList.BLESSED_BONE_SHARDS_29381) - runner.initialBoneShardCount;
-                Paint.updateBox(runner.shardIndex, runner.boneShardCount);
+                runner.updateBox(runner.shardIndex, runner.boneShardCount);
 
                 Logger.debugLog("Close inventory for instant obstacle tap");
                 GameTabs.closeTab(UITabs.INVENTORY);
@@ -50,7 +50,7 @@ public class TraverseHelpers {
     }
 
     public static void traverseObstacle(Obstacle obstacle) {
-        Paint.setStatus("Traverse " + obstacle.name);
+        runner.updateStatus("Traverse " + obstacle.name);
         Logger.log("Traversing obstacle " + obstacle.name);
         if (!Player.atTile(obstacle.startTile)) {
             Logger.debugLog("Moving to start of " + obstacle.name);

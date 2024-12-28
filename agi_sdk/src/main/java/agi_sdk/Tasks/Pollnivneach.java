@@ -4,6 +4,7 @@ import agi_sdk.helpers.Course;
 import agi_sdk.helpers.MarkHandling;
 import agi_sdk.helpers.Obstacle;
 import agi_sdk.helpers.TraverseHelpers;
+import agi_sdk.runner;
 import agi_sdk.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Tile;
@@ -44,17 +45,17 @@ public class Pollnivneach extends Task {
 
     @Override
     public boolean execute() {
-        Paint.setStatus("Fetch player position");
+        runner.updateStatus("Fetch player position");
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
 
         // Block that assumes we are at the end of the last obstacle
         if (Player.isTileWithinArea(currentLocation, obstacle9EndArea)) {
             Logger.debugLog("Walking back to the start obstacle");
-            Paint.setStatus("Walk to start obstacle");
+            runner.updateStatus("Walk to start obstacle");
             Walker.walkPath(pathToStart);
             Player.waitTillNotMoving(20);
-            Paint.setStatus("Fetch player position");
+            runner.updateStatus("Fetch player position");
             currentLocation = Walker.getPlayerPosition();
             Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
         }
@@ -62,7 +63,7 @@ public class Pollnivneach extends Task {
         // Color find start obstacle
         if (Player.isTileWithinArea(currentLocation, obs1Area)) {
             Logger.debugLog("Colorfinding start obstacle");
-            Paint.setStatus("Colorfind obstacle 1");
+            runner.updateStatus("Colorfind obstacle 1");
 
             java.util.List<Point> foundPoints = Client.getPointsFromColorsInRect(startObstacleColors, screenROI, 10);
 
@@ -82,7 +83,7 @@ public class Pollnivneach extends Task {
                 Logger.debugLog("Located the first obstacle using the color finder, tapping around the center point.");
                 Client.tap(centerPoint);
                 Condition.wait(() -> Player.atTile(obs1EndTile), 200, 45);
-                Paint.setStatus("Fetch player position");
+                runner.updateStatus("Fetch player position");
                 currentLocation = Walker.getPlayerPosition();
                 Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
             } else {
@@ -112,7 +113,7 @@ public class Pollnivneach extends Task {
                             if (obstacle.name.equals("Obstacle 8") || obstacle.name.equals("Obstacle 9")) {
                                 Condition.sleep(generateRandomDelay(850, 1100));
                             }
-                            Paint.setStatus("Pick up mark of grace");
+                            runner.updateStatus("Pick up mark of grace");
                             Logger.log("Mark of grace detected, picking it up!");
                             mark.pickUpMark(mark.checkArea, mark.tapArea, mark.endTile, mark.failArea, mark.checkForFail);
                             markHandled = true;
@@ -125,7 +126,7 @@ public class Pollnivneach extends Task {
                     if (obstacle.name.equals("Obstacle 8") || obstacle.name.equals("Obstacle 9")) {
                         Condition.sleep(generateRandomDelay(850, 1100));
                     }
-                    Paint.setStatus("Traverse obstacle " + obstacle.name);
+                    runner.updateStatus("Traverse obstacle " + obstacle.name);
                     TraverseHelpers.proceedWithTraversal(obstacle, currentLocation);
                     if (obstacle.name.equals("Obstacle 9")) {
                         lapCount++;
@@ -139,7 +140,7 @@ public class Pollnivneach extends Task {
         // Block that assumes we are not within any of those areas, which means we've fallen or wandered off somewhere?
         if (Player.isTileWithinArea(currentLocation, pollyArea)) {
             Logger.debugLog("Not within any obstacle area, webwalking back to start obstacle");
-            Paint.setStatus("Recover after fall/failure");
+            runner.updateStatus("Recover after fall/failure");
             Walker.webWalk(startTile);
             Player.waitTillNotMoving(17);
             return true;

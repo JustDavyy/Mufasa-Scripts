@@ -35,12 +35,12 @@ public class MarkHandling {
     }
 
     public void pickUpMark(Rectangle mogRectangle, Rectangle nextObstacleRectangle, Tile endTile, Area failArea, boolean checkForFail) {
-        Paint.setStatus("Pick up MoG");
+        runner.updateStatus("Pick up MoG");
         Client.tap(mogRectangle);
         Player.waitTillNotMoving(30);
         runner.mogTotal++;
         runner.mogCount = runner.mogTotal;
-        Paint.updateBox(runner.MoGIndex, runner.mogCount);
+        runner.updateBox(runner.MoGIndex, runner.mogCount);
         Logger.log("Total Marks of grace gathered so far: " + runner.mogTotal);
         Client.tap(nextObstacleRectangle);
 

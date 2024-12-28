@@ -1,5 +1,6 @@
 package agi_sdk.Tasks;
 
+import agi_sdk.runner;
 import agi_sdk.utils.Task;
 
 import static helpers.Interfaces.*;
@@ -36,7 +37,7 @@ public class Run extends Task {
 
     @Override // The code to execute if criteria met
     public boolean execute() {
-        Paint.setStatus("Turn on run");
+        runner.updateStatus("Turn on run");
         Logger.debugLog("Turning on run.");
         Player.toggleRun();
         Condition.wait(() -> Player.isRunEnabled(), 100, 100);

@@ -1,6 +1,7 @@
 package agi_sdk.Tasks;
 
 import agi_sdk.helpers.Course;
+import agi_sdk.runner;
 import agi_sdk.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.MapChunk;
@@ -91,7 +92,7 @@ public class moveProgressive extends Task {
 
     @Override
     public boolean execute() {
-        Paint.setStatus("Fetch player position");
+        runner.updateStatus("Fetch player position");
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
 
@@ -137,7 +138,7 @@ public class moveProgressive extends Task {
         }
 
         Logger.debugLog("Check if we are now at the Varrock course area.");
-        Paint.setStatus("Check reached destination");
+        runner.updateStatus("Check reached destination");
         if (Player.within(varrockArea)) {
             Logger.log("Reached Varrock.");
             Logger.debugLog("Set course to Varrock.");

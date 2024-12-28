@@ -1,6 +1,7 @@
 package agi_sdk.Tasks;
 
 import agi_sdk.helpers.*;
+import agi_sdk.runner;
 import agi_sdk.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Tile;
@@ -29,14 +30,14 @@ public class Alkharid extends Task {
 
     @Override
     public boolean execute() {
-        Paint.setStatus("Fetch player position");
+        runner.updateStatus("Fetch player position");
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
 
         // Block that assumes we are at the end of the last obstacle
         if (Player.isTileWithinArea(currentLocation, obstacle8EndArea)) {
             Logger.debugLog("Walking back to the start obstacle");
-            Paint.setStatus("Walk to start obstacle");
+            runner.updateStatus("Walk to start obstacle");
             Walker.walkPath(pathToStart);
             Player.waitTillNotMoving(20);
         }
@@ -47,7 +48,7 @@ public class Alkharid extends Task {
         for (StartTileStorage tileTap : startTiles) {
             if (Player.tileEquals(currentLocation, tileTap.getTile())) {
                 Logger.debugLog("Player is on known start tile: " + tileTap.getTile());
-                Paint.setStatus("Tap start obstacle");
+                runner.updateStatus("Tap start obstacle");
                 Client.tap(tileTap.getTapRectangle());
                 Condition.wait(() -> Player.atTile(obs1EndTile), 200, 40);
                 currentLocation = Walker.getPlayerPosition();
@@ -63,7 +64,7 @@ public class Alkharid extends Task {
                     for (MarkHandling mark : obstacle.markHandling) {
                         Condition.sleep(generateRandomDelay(200, 400));
                         if (mark.isMarkPresent(mark.checkArea, mark.targetColor)) {
-                            Paint.setStatus("Pick up mark of grace");
+                            runner.updateStatus("Pick up mark of grace");
                             Logger.log("Mark of grace detected, picking it up!");
                             mark.pickUpMark(mark.checkArea, mark.tapArea, mark.endTile, obstacle.failArea, obstacle.checkForFail);
                             markHandled = true;
@@ -73,7 +74,7 @@ public class Alkharid extends Task {
                 }
 
                 if (!markHandled) {
-                    Paint.setStatus("Traverse obstacle " + obstacle.name);
+                    runner.updateStatus("Traverse obstacle " + obstacle.name);
                     TraverseHelpers.proceedWithTraversal(obstacle, currentLocation);
                     if (obstacle.name.equals("Obstacle 8")) {
                         lapCount++;
@@ -87,7 +88,7 @@ public class Alkharid extends Task {
         // Block that assumes we are not within any of those areas, which means we've fallen or wandered off somewhere?
         if (Player.isTileWithinArea(currentLocation, alkharidArea)) {
             Logger.debugLog("Not within any obstacle area, webwalking back to start obstacle");
-            Paint.setStatus("Recover after fall/failure");
+            runner.updateStatus("Recover after fall/failure");
             Walker.webWalk(startTile);
             Player.waitTillNotMoving(17);
             return true;

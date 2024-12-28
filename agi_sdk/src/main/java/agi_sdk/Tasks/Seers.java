@@ -4,6 +4,7 @@ import agi_sdk.helpers.Course;
 import agi_sdk.helpers.MarkHandling;
 import agi_sdk.helpers.Obstacle;
 import agi_sdk.helpers.TraverseHelpers;
+import agi_sdk.runner;
 import agi_sdk.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Spells;
@@ -58,7 +59,7 @@ public class Seers extends Task {
 
     @Override
     public boolean execute() {
-        Paint.setStatus("Fetch player position");
+        runner.updateStatus("Fetch player position");
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
 
@@ -66,12 +67,12 @@ public class Seers extends Task {
         if (Player.isTileWithinArea(currentLocation, obstacle6EndArea)) {
             if (useSeersTeleport) {
                 Logger.debugLog("Teleporting back to the start obstacle");
-                Paint.setStatus("Teleport to start obstacle");
+                runner.updateStatus("Teleport to start obstacle");
                 Magic.castSpell(Spells.CAMELOT_TELEPORT);
                 Condition.wait(() -> Player.within(teleportArea), 150, 50);
             } else {
                 Logger.debugLog("Walking back to the start obstacle");
-                Paint.setStatus("Walk to start obstacle");
+                runner.updateStatus("Walk to start obstacle");
                 Walker.walkPath(pathToStart);
                 Player.waitTillNotMoving(17);
             }
@@ -81,7 +82,7 @@ public class Seers extends Task {
 
         if (Player.isTileWithinArea(currentLocation, obs1Area)) {
             Logger.debugLog("Colorfinding start obstacle");
-            Paint.setStatus("Colorfind obstacle 1");
+            runner.updateStatus("Colorfind obstacle 1");
 
             java.util.List<Point> foundPoints = Client.getPointsFromColorsInRect(startObstacleColors, screenROI, 10);
 
@@ -101,7 +102,7 @@ public class Seers extends Task {
                 Logger.debugLog("Located the first obstacle using the color finder, tapping around the center point.");
                 Client.tap(centerPoint);
                 Condition.wait(() -> Player.atTile(obs1EndTile), 200, 45);
-                Paint.setStatus("Fetch player position");
+                runner.updateStatus("Fetch player position");
                 currentLocation = Walker.getPlayerPosition();
                 Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
             } else {
@@ -128,7 +129,7 @@ public class Seers extends Task {
                     for (MarkHandling mark : obstacle.markHandling) {
                         Condition.sleep(generateRandomDelay(200, 400));
                         if (mark.isMarkPresent(mark.checkArea, mark.targetColor)) {
-                            Paint.setStatus("Pick up mark of grace");
+                            runner.updateStatus("Pick up mark of grace");
                             Logger.log("Mark of grace detected, picking it up!");
                             mark.pickUpMark(mark.checkArea, mark.tapArea, mark.endTile, mark.failArea, mark.checkForFail);
                             markHandled = true;
@@ -138,7 +139,7 @@ public class Seers extends Task {
                 }
 
                 if (!markHandled) {
-                    Paint.setStatus("Traverse obstacle " + obstacle.name);
+                    runner.updateStatus("Traverse obstacle " + obstacle.name);
                     TraverseHelpers.proceedWithTraversal(obstacle, currentLocation);
                     if (obstacle.name.equals("Obstacle 6")) {
                         if (useSeersTeleport) {
@@ -155,7 +156,7 @@ public class Seers extends Task {
         // Block that assumes we are within the fail area of seers
         if (Player.isTileWithinArea(currentLocation, failArea)) {
             Logger.debugLog("Within fail area, walking back to start obstacle");
-            Paint.setStatus("Recover after fall/failure");
+            runner.updateStatus("Recover after fall/failure");
             Walker.walkPath(fallPathToStart);
             Player.waitTillNotMoving(15);
             return true;
@@ -164,7 +165,7 @@ public class Seers extends Task {
         // Block that assumes we are not within any of those areas, which means we've fallen or wandered off somewhere?
         if (Player.isTileWithinArea(currentLocation, seersArea)) {
             Logger.debugLog("Not within any obstacle area, webwalking back to start obstacle");
-            Paint.setStatus("Recover after fall/failure");
+            runner.updateStatus("Recover after fall/failure");
             Walker.webWalk(startTile);
             Player.waitTillNotMoving(17);
             return true;

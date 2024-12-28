@@ -4,6 +4,7 @@ import agi_sdk.helpers.Course;
 import agi_sdk.helpers.MarkHandling;
 import agi_sdk.helpers.Obstacle;
 import agi_sdk.helpers.TraverseHelpers;
+import agi_sdk.runner;
 import agi_sdk.utils.Task;
 
 import static agi_sdk.runner.*;
@@ -18,7 +19,7 @@ public class Gnome extends Task {
 
     @Override
     public boolean execute() {
-        Paint.setStatus("Fetch player position");
+        runner.updateStatus("Fetch player position");
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
 
@@ -30,7 +31,7 @@ public class Gnome extends Task {
                 if (obstacle.checkForMark && obstacle.markHandling != null) {
                     for (MarkHandling mark : obstacle.markHandling) {
                         if (mark.isMarkPresent(mark.checkArea, mark.targetColor)) {
-                            Paint.setStatus("Pick up mark of grace");
+                            runner.updateStatus("Pick up mark of grace");
                             Logger.log("Mark of grace detected, picking it up!");
                             mark.pickUpMark(mark.checkArea, mark.tapArea, mark.endTile, mark.failArea, mark.checkForFail);
                             markHandled = true;
@@ -41,7 +42,7 @@ public class Gnome extends Task {
 
                 // If no marks were handled, proceed with obstacle traversal
                 if (!markHandled) {
-                    Paint.setStatus("Traverse obstacle " + obstacle.name);
+                    runner.updateStatus("Traverse obstacle " + obstacle.name);
                     TraverseHelpers.proceedWithTraversal(obstacle, currentLocation);
                     if (obstacle.name.equals("Obstacle 7")) {
                         lapCount++;
