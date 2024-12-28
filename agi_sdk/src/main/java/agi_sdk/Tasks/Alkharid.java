@@ -1,9 +1,6 @@
 package agi_sdk.Tasks;
 
-import agi_sdk.helpers.MarkHandling;
-import agi_sdk.helpers.Obstacle;
-import agi_sdk.helpers.StartTileStorage;
-import agi_sdk.helpers.TraverseHelpers;
+import agi_sdk.helpers.*;
 import agi_sdk.utils.Task;
 import helpers.utils.Area;
 import helpers.utils.Tile;
@@ -27,7 +24,7 @@ public class Alkharid extends Task {
 
     @Override
     public boolean activate() {
-        return (courseChosen.equals("Al Kharid"));
+        return (courseChosen.equals(Course.AL_KHARID));
     }
 
     @Override

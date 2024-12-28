@@ -1,6 +1,6 @@
 package agi_sdk.Tasks;
 
-import agi_sdk.main;
+import agi_sdk.helpers.Course;
 import agi_sdk.helpers.MarkHandling;
 import agi_sdk.helpers.Obstacle;
 import agi_sdk.helpers.TraverseHelpers;
@@ -26,7 +26,7 @@ public class Canifis extends Task {
 
     @Override
     public boolean activate() {
-        return (main.courseChosen.equals("Canifis"));
+        return (courseChosen.equals(Course.CANIFIS));
     }
 
     @Override

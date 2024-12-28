@@ -95,7 +95,7 @@ public class moveProgressive extends Task {
         currentLocation = Walker.getPlayerPosition();
         Logger.debugLog("Player pos: " + currentLocation.x + ", " + currentLocation.y + ", " + currentLocation.z);
 
-        if (initialCourse.equals("Draynor")) {
+        if (initialCourse.equals(Course.DRAYNOR)) {
             Logger.debugLog("Initial course was Draynor");
             moveToVarrock();
         }
