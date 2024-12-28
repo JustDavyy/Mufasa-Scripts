@@ -1,6 +1,6 @@
 package agi_sdk.Tasks;
 
-import agi_sdk.main;
+import agi_sdk.helpers.Course;
 import agi_sdk.helpers.MarkHandling;
 import agi_sdk.helpers.Obstacle;
 import agi_sdk.helpers.TraverseHelpers;
@@ -18,7 +18,7 @@ public class Falador extends Task {
 
     @Override
     public boolean activate() {
-        return (main.courseChosen.equals("Falador"));
+        return (courseChosen.equals(Course.FALADOR));
     }
 
     @Override

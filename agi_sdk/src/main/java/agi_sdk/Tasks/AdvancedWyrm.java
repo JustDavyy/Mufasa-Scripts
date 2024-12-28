@@ -1,5 +1,6 @@
 package agi_sdk.Tasks;
 
+import agi_sdk.helpers.Course;
 import agi_sdk.helpers.MarkHandling;
 import agi_sdk.helpers.Obstacle;
 import agi_sdk.helpers.TraverseHelpers;
@@ -19,7 +20,7 @@ public class AdvancedWyrm extends Task {
 
     @Override
     public boolean activate() {
-        return (courseChosen.equals("Advanced Colossal Wyrm"));
+        return (courseChosen.equals(Course.ADVANCED_COLOSSAL_WYRM));
     }
 
     @Override
