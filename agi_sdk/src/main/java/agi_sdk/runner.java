@@ -35,6 +35,7 @@ public class runner {
     public static boolean useSeersTeleport = false;
     public static boolean useProgressive = false;
     public static boolean needToMove = false;
+    public static boolean usePaint = false;
     public static int currentHP;
     public static int agilityLevel;
     public static Course initialCourse;
@@ -98,10 +99,11 @@ public class runner {
     }
 
     // This would have to be run prior to calling it!
-    public void setSettings(Course course, String food, int eatHitpoints) {
+    public void setSettings(Course course, String food, int eatHitpoints, boolean usePaintBar) {
         courseChosen = course;
         foodChosen = food;
         eatHP = eatHitpoints;
+        usePaint = usePaintBar;
 
         // Can also call preStart() directly here. I prefer not, since you can setSettings in onStart in runner script before even needing it.
         // That way it's ready to go and only needs preStart.
@@ -159,9 +161,9 @@ public class runner {
         }
     }
 
-    public void runCourse(boolean updatePaint) {
+    public void runCourse() {
         // Looped tasks go here.
-        if (updatePaint) {
+        if (usePaint) {
             updateStatLabel();
         }
         GameTabs.closeTab(UITabs.INVENTORY);
@@ -173,6 +175,22 @@ public class runner {
                 return;
             }
         }
+    }
+
+    public int getMoGCount() {
+        return mogTotal;
+    }
+
+    public int getLapCount() {
+        return lapCount;
+    }
+
+    public int getTermiteCount() {
+        return termiteCount;
+    }
+
+    public int getBoneShardCount() {
+        return boneShardCount;
     }
 
     public void initializeItemIDs(String logName) {
