@@ -1,13 +1,16 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 repositories {
         mavenCentral()
         maven { url "https://repo1.maven.org/maven2" }
-        maven { url "https://openpnp.github.io/maven" }
         maven { url 'https://jitpack.io' }
         google()
+        flatDir {
+            dirs 'src/main/resources/sdks'
+        }
     }
 
 configurations.all {
@@ -17,7 +20,8 @@ configurations.all {
 }
 
 dependencies {
-    implementation('com.github.Mufasa-SDK:SDKRepo:1.2.89') {
+    implementation name: 'agility'
+    implementation('com.github.Mufasa-SDK:SDKRepo:1.2.92') {
         changing = true
     }
 }
@@ -28,8 +32,20 @@ jar {
 
     manifest {
         attributes(
-                'Manifest-Version': '1.00',
-                'Created-By': 'Davyy'
+                'Manifest-Version': '1.0',
+                'Created-By': 'JustDavyy'
+        )
+    }
+}
+
+shadowJar {
+    archiveFileName = 'dAgility.jar'
+    destinationDirectory = file('jar/')
+
+    manifest {
+        attributes(
+                'Manifest-Version': '1.0',
+                'Created-By': 'JustDavyy'
         )
     }
 }
