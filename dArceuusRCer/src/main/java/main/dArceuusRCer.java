@@ -28,7 +28,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dArceuus RCer",
         description = "Crafts blood or soul runes at Arceuus, supports using blood essence and hopping worlds. DISCLAIMER: This script is NOT fully safe for 10HP accounts, use at own risk!",
-        version = "2.14",
+        version = "2.15",
         guideLink = "https://wiki.mufasaclient.com/docs/darceuus-rcer/",
         categories = {ScriptCategory.Runecrafting, ScriptCategory.Moneymaking}
 )
@@ -336,7 +336,7 @@ public class dArceuusRCer extends AbstractScript {
         Game.setZoom("1");
 
         // Open up the inventory
-        GameTabs.openInventoryTab();
+        GameTabs.openTab(UITabs.INVENTORY);
         Condition.sleep(800);
 
         // Check if we are using blood essence or not (only if running blood runes)
@@ -430,7 +430,7 @@ public class dArceuusRCer extends AbstractScript {
         boolean anyTaskActivated = false; // Track if any task was activated
 
         // Check invent open
-        GameTabs.openInventoryTab();
+        GameTabs.openTab(UITabs.INVENTORY);
 
         // Check if dialogue is open
         if (Chatbox.findChatboxMenu() != null) {
@@ -469,8 +469,6 @@ public class dArceuusRCer extends AbstractScript {
     public static void hopActions() {
         if(hopEnabled) {
             Game.hop(hopProfile, false, false);
-        } else {
-            // We do nothing here, as hop is disabled.
         }
     }
 

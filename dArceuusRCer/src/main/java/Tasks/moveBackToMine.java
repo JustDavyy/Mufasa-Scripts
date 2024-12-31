@@ -3,6 +3,7 @@ package Tasks;
 import helpers.utils.Area;
 import helpers.utils.ItemList;
 import helpers.utils.Tile;
+import helpers.utils.UITabs;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -40,7 +41,7 @@ public class moveBackToMine extends Task {
     public boolean execute() {
         // Have the logic that needs to be executed with the task here
         Logger.log("Executing moveBackToMine!");
-        GameTabs.openInventoryTab();
+        GameTabs.openTab(UITabs.INVENTORY);
         
         if (Player.within(dArceuusRCer.bloodAltarArea)) {
             // Check if we have to hop first

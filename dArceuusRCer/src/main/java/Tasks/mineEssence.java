@@ -1,5 +1,6 @@
 package Tasks;
 
+import helpers.utils.UITabs;
 import utils.Task;
 
 import main.dArceuusRCer;
@@ -19,7 +20,7 @@ public class mineEssence extends Task {
     @Override
     public boolean execute() {
         // check invent open
-        GameTabs.openInventoryTab();
+        GameTabs.openTab(UITabs.INVENTORY);
 
         if (!dArceuusRCer.initialCheckDone) {
             Paint.setStatus("Perform initial check");
@@ -27,6 +28,11 @@ public class mineEssence extends Task {
             dArceuusRCer.lastItemTime = System.currentTimeMillis();
             dArceuusRCer.lastEmptySlots = Inventory.emptySlots();
             dArceuusRCer.initialCheckDone = true;
+        }
+
+        if (stillNeedToCut()) {
+            Logger.debugLog("We still have essences to process while in the mining task!");
+            processEssence();
         }
 
         if (!Inventory.isFull()) {
@@ -143,6 +149,42 @@ public class mineEssence extends Task {
             Paint.setStatus("Tap south runestone");
             Client.tap(dArceuusRCer.tapSouthRuneStoneSOUTH);
             dArceuusRCer.playerPos = dArceuusRCer.southDenseRunestone;
+        }
+    }
+
+    private boolean stillNeedToCut() {
+
+        // Check if we have a cached known location for the last essence spot already, if not cache it
+        if (dArceuusRCer.essenceCachedLoc == null) {
+            return false;
+        }
+
+        // Calculate the center of the rectangle
+        int centerX = dArceuusRCer.essenceCachedLoc.x + dArceuusRCer.essenceCachedLoc.width / 2;
+        int centerY = dArceuusRCer.essenceCachedLoc.y + dArceuusRCer.essenceCachedLoc.height / 2;
+
+        // Define the 5x5 area around the center point
+        java.awt.Rectangle smallRect = new java.awt.Rectangle(centerX - 2, centerY - 2, 5, 5);
+
+        // Check if the essence is dark instead of dense to verify if we have venerated correctly
+        return Client.isColorInRect(Color.decode("#675b4e"), smallRect, 10);
+    }
+
+    private void processEssence() {
+        // Update essenceToProcess only if it is currently 0
+        if (dArceuusRCer.essenceToProcess == 0) {
+            dArceuusRCer.essenceToProcess = Inventory.count(13446, 0.95, Color.decode("#675b4e"));
+            Logger.debugLog("Essence to process: " + dArceuusRCer.essenceToProcess);
+        }
+
+        // Process a block in the inventory if we still have them (and they are dark)
+        if (!(dArceuusRCer.essenceToProcess == 0) && stillNeedToCut()) {
+            Inventory.tapItem(1755, true, 0.80);
+            dArceuusRCer.generateRandomDelay(100, 150);
+            Client.tap(dArceuusRCer.essenceCachedLoc);
+
+            // Decrease the essenceToProcess count by 1 after the actions
+            dArceuusRCer.essenceToProcess--;
         }
     }
 }

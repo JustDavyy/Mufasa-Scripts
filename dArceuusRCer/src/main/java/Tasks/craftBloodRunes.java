@@ -1,6 +1,7 @@
 package Tasks;
 
 import helpers.utils.ItemList;
+import helpers.utils.UITabs;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -18,7 +19,7 @@ public class craftBloodRunes extends Task {
 
     @Override
     public boolean execute() {
-        GameTabs.openInventoryTab();
+        GameTabs.openTab(UITabs.INVENTORY);
         // Check if we have to hop first
         Paint.setStatus("Check for hop");
         dArceuusRCer.hopActions();

@@ -1,6 +1,7 @@
 package Tasks;
 
 import helpers.utils.Tile;
+import helpers.utils.UITabs;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -21,7 +22,7 @@ public class venerateEssence extends Task {
     public boolean execute() {
         // Have the logic that needs to be executed with the task here
         Logger.log("Executing venerateEssence!");
-        GameTabs.openInventoryTab();
+        GameTabs.openTab(UITabs.INVENTORY);
 
         Paint.setStatus("Find venerate altar");
         List<Point> foundPoints = Client.getPointsFromColorsInRect(dArceuusRCer.venerateAltarColors, new Rectangle(312, 164, 205, 163), 5);
