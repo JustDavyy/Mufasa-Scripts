@@ -22,8 +22,8 @@ import static helpers.Interfaces.*;
 
 @ScriptManifest(
         name = "dPotionProdigy",
-        description = "IN BETA: Bank stander script for the Herblore skill, uses dynamic banking to support a variety of banks around Gielinor. Current supported operations: Cleaning herbs, making tars and mixing unfinished, finished and barbarian potions.",
-        version = "1.01",
+        description = "Bank stander script for the Herblore skill, uses dynamic banking to support a variety of banks around Gielinor. Current supported operations: Cleaning herbs, making tars and mixing unfinished, finished and barbarian potions.",
+        version = "1.02",
         guideLink = "https://wiki.mufasaclient.com/docs/dpotionprodigy/",
         categories = {ScriptCategory.Herblore, ScriptCategory.Moneymaking}
 )
@@ -975,7 +975,7 @@ public class dPotionProdigy extends AbstractScript {
             case "Goading potion":
                 return containsHelper(ItemList.HARRALANDER_POTION_UNF_97, 0.7, "#ab9492", ItemList.ALDARIUM_29993, 0.7, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Super strength":
-                return containsHelper(ItemList.KWUARM_POTION_UNF_105, 0.7, "#ada6a5", ItemList.LIMPWURT_ROOT_225, 0.7, null, -1, -1, null, -1, -1, null, -1, -1, null);
+                return containsWithExcludeHelper(ItemList.KWUARM_POTION_UNF_105, 0.7, "#ada6a5", "#cecccc", ItemList.LIMPWURT_ROOT_225, 0.7, null, null, -1, -1, null, null, -1, -1, null, null, -1, -1, null, null);
             case "Prayer regeneration potion":
                 return containsHelper(ItemList.HUASCA_POTION_UNF_30100, 0.7, "#927187", ItemList.ALDARIUM_29995, 0.7, null, -1, -1, null, -1, -1, null, -1, -1, null);
             case "Weapon poison":
@@ -1200,6 +1200,26 @@ public class dPotionProdigy extends AbstractScript {
     private static boolean checkItem(int itemId, double threshold, String color) {
         if (itemId == -1) return true;
         return color != null ? Inventory.contains(itemId, threshold, Color.decode(color))
+                : Inventory.contains(itemId, threshold);
+    }
+
+    private static boolean containsWithExcludeHelper(
+            int item1Id, double item1Threshold, String item1Color, String item1ExcludeColor,
+            int item2Id, double item2Threshold, String item2Color, String item2ExcludeColor,
+            int item3Id, double item3Threshold, String item3Color, String item3ExcludeColor,
+            int item4Id, double item4Threshold, String item4Color, String item4ExcludeColor,
+            int item5Id, double item5Threshold, String item5Color, String item5ExcludeColor
+    ) {
+        return checkItemWithExclude(item1Id, item1Threshold, item1Color, item1ExcludeColor) &&
+                checkItemWithExclude(item2Id, item2Threshold, item2Color, item2ExcludeColor) &&
+                checkItemWithExclude(item3Id, item3Threshold, item3Color, item3ExcludeColor) &&
+                checkItemWithExclude(item4Id, item4Threshold, item4Color, item4ExcludeColor) &&
+                checkItemWithExclude(item5Id, item5Threshold, item5Color, item5ExcludeColor);
+    }
+
+    private static boolean checkItemWithExclude(int itemId, double threshold, String color, String excludeColor) {
+        if (itemId == -1) return true;
+        return color != null ? Inventory.contains(itemId, threshold, Color.decode(color), Color.decode(excludeColor))
                 : Inventory.contains(itemId, threshold);
     }
 }
