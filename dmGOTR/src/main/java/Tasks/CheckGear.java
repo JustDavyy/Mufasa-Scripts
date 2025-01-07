@@ -2,6 +2,8 @@ package Tasks;
 
 import helpers.utils.EquipmentSlot;
 import helpers.utils.ItemList;
+import helpers.utils.UITabs;
+import utils.StateUpdater;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -17,7 +19,7 @@ public class CheckGear extends Task {
             ItemList.INFERNAL_PICKAXE_13243,
             ItemList.INFERNAL_PICKAXE_UNCHARGED_13244,
             ItemList.CRYSTAL_PICKAXE_23680,
-            ItemList.CRYSTAL_PICKAXE_UNCHARGED_23682,
+            ItemList.CRYSTAL_PICKAXE_INACTIVE_23682,
             ItemList.DRAGON_PICKAXE_11920,
             ItemList.RUNE_PICKAXE_1275,
             ItemList.GILDED_PICKAXE_23276,
@@ -39,12 +41,12 @@ public class CheckGear extends Task {
     public boolean execute() {
         Logger.log("Checking for pickaxe");
         if (!equipmentChecked) {
-            if (!GameTabs.isInventoryTabOpen()) {
-                GameTabs.openInventoryTab();
-                Condition.wait(() -> GameTabs.isInventoryTabOpen(), 50, 10);
+            if (!GameTabs.isTabOpen(UITabs.INVENTORY)) {
+                GameTabs.openTab(UITabs.INVENTORY);
+                Condition.wait(() -> GameTabs.isTabOpen(UITabs.INVENTORY), 50, 10);
             }
 
-            if (GameTabs.isInventoryTabOpen()) {
+            if (GameTabs.isTabOpen(UITabs.INVENTORY)) {
                 if (Inventory.containsAny(pickaxeIDs, 0.75)) {
                     hasPickaxe = true;
                     return true;
@@ -57,12 +59,12 @@ public class CheckGear extends Task {
         }
 
         if (!equipmentChecked) {
-            if (!GameTabs.isEquipTabOpen()) {
-                GameTabs.openEquipTab();
-                Condition.wait(() -> GameTabs.isEquipTabOpen(), 50, 10);
+            if (!GameTabs.isTabOpen(UITabs.EQUIP)) {
+                GameTabs.openTab(UITabs.EQUIP);
+                Condition.wait(() -> GameTabs.isTabOpen(UITabs.EQUIP), 50, 10);
             }
 
-            if (GameTabs.isEquipTabOpen()) {
+            if (GameTabs.isTabOpen(UITabs.EQUIP)) {
                 for (int pickaxeID : pickaxeIDs) {
                     if (Equipment.itemAt(EquipmentSlot.WEAPON, pickaxeID)) {
                         Logger.log("Pickaxe equipped, continuing");

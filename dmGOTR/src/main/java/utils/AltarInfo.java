@@ -1,49 +1,60 @@
 package utils;
 
 import helpers.utils.Area;
-import helpers.utils.RegionBox;
 import helpers.utils.Tile;
 
-import static main.dmGOTR.airAltar;
+public enum AltarInfo {
+    AIR(new Area(
+            new Tile(11322, 19012, 0),
+            new Tile(11443, 19133, 0))),
+    WATER(new Area(
+            new Tile(10767, 18958, 0),
+            new Tile(10995, 19184, 0))),
+    EARTH(new Area(
+            new Tile(10519, 18989, 0),
+            new Tile(10730, 19190, 0))),
+    FIRE(new Area(
+            new Tile(10230, 18970, 0),
+            new Tile(10475, 19192, 0))),
+    MIND(new Area(
+            new Tile(11022, 18991, 0),
+            new Tile(11228, 19192, 0))),
+    BODY(new Area(
+            new Tile(10009, 19014, 0),
+            new Tile(10164, 19182, 0))),
+    COSMIC(new Area(
+            new Tile(8471, 18963, 0),
+            new Tile(8682, 19179, 0))),
+    CHAOS(new Area(
+            new Tile(8984, 19001, 0),
+            new Tile(9198, 19192, 0))),
+    NATURE(new Area(
+            new Tile(9490, 18976, 0),
+            new Tile(9701, 19195, 0))),
+    LAW(new Area(
+            new Tile(9772, 18973, 0),
+            new Tile(9944, 19166, 0))),
+    DEATH(new Area(
+            new Tile(8729, 18997, 0),
+            new Tile(8937, 19187, 0))),
+    BLOOD(new Area(
+            new Tile(12811, 18960, 0),
+            new Tile(13040, 19189, 0)));
 
-public class AltarInfo {
-    private RegionBox regionBox;
-    private Area area1;
-    private Area area2;
+    private final Area area;
 
-    // Constructor
-    public AltarInfo(RegionBox regionBox, Area altarArea, Area entryArea) {
-        this.regionBox = regionBox;
-        this.area1 = altarArea;
-        this.area2 = entryArea;
+    // Enum constructor
+    AltarInfo(Area area) {
+        this.area = area;
     }
 
-    // Getters
-    public RegionBox getRegionBox() {
-        return regionBox;
-    }
-
-    public Area getArea1() {
-        return area1;
-    }
-
-    public Area getArea2() {
-        return area2;
+    // Getter for the area
+    public Area getArea() {
+        return area;
     }
 
     @Override
     public String toString() {
-        return "AltarInfo{" +
-                "regionBox=" + regionBox +
-                ", area1=" + area1 +
-                ", area2=" + area2 +
-                '}';
+        return name() + ": " + area;
     }
-
-    // The areas are probably not correct, btw.
-    public static final AltarInfo AIR_ALTAR = new AltarInfo(
-            airAltar,
-            new Area(new Tile(302, 114), new Tile(315, 122)), // An around for the "inside" of the altar where the actual altar is
-            new Area(new Tile(292, 104), new Tile(323, 132)) // An area for the outside, so we can check that we are WITHIN that altar area?.
-    );
 }

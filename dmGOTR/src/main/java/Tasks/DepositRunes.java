@@ -1,13 +1,19 @@
 package Tasks;
 
 import helpers.utils.ItemList;
+import utils.StateUpdater;
 import utils.Task;
 
 import static helpers.Interfaces.Condition;
 import static helpers.Interfaces.Inventory;
-import static main.dmGOTR.shouldDepositRunes;
 
 public class DepositRunes extends Task {
+    StateUpdater stateUpdater;
+
+    public DepositRunes(StateUpdater stateUpdater) {
+        this.stateUpdater = stateUpdater;
+    }
+
     int[] runeIDs = {
             ItemList.AIR_RUNE_556,
             ItemList.WATER_RUNE_555,
@@ -25,7 +31,7 @@ public class DepositRunes extends Task {
 
     @Override
     public boolean activate() {
-        return shouldDepositRunes;
+        return stateUpdater.shouldDepositRunes();
     }
 
     @Override
@@ -35,7 +41,7 @@ public class DepositRunes extends Task {
         Condition.wait(() -> !Inventory.containsAll(runeIDs, 0.80), 100, 10);
 
         if (!Inventory.containsAll(runeIDs, 0.80)) {
-            shouldDepositRunes = false;
+            stateUpdater.setShouldDepositRunes(false);
             return true;
         }
         return false;
