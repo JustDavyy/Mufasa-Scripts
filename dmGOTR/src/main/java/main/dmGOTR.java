@@ -17,7 +17,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dmGOTR",
         description = "Does Guardians of the Rift minigame.",
-        version = "1.01",
+        version = "1.00",
         guideLink = "",
         categories = {ScriptCategory.Fletching, ScriptCategory.Agility}
 )
