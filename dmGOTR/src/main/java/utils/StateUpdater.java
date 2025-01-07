@@ -45,7 +45,7 @@ public class StateUpdater {
     }
 
     //Getters for each state
-    public boolean isGamineGoing() {
+    public boolean isGameGoing() {
         return gameGoing;
     }
 
