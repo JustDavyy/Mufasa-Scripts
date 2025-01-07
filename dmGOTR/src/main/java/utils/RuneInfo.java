@@ -3,18 +3,24 @@ package utils;
 import java.awt.*;
 
 public enum RuneInfo {
-    AIR(Color.decode("#e4e1e1"), 1, RuneType.ELEMENTAL),
-    WATER(Color.decode("#151aa8"), 5, RuneType.ELEMENTAL),
-    EARTH(Color.decode("6d490d"), 9, RuneType.ELEMENTAL),
-    FIRE(Color.decode("#a82215"), 14, RuneType.ELEMENTAL),
-    MIND(Color.decode("#484609"), 2, RuneType.CATALYTIC),
-    BODY(Color.decode("#1820d0"), 20, RuneType.CATALYTIC),
-    COSMIC(Color.decode("#e0de1a"), 27, RuneType.CATALYTIC),
-    CHAOS(Color.decode("#e0a81a"), 35, RuneType.CATALYTIC),
-    NATURE(Color.decode("#118b15"), 44, RuneType.CATALYTIC),
-    LAW(Color.decode("#1a22e0"), 54, RuneType.CATALYTIC),
-    DEATH(Color.decode("e4e1e1"), 65, RuneType.CATALYTIC),
-    BLOOD(Color.decode("#8b1d11"), 77, RuneType.CATALYTIC);
+    AIR(Color.decode("#ffffff"), 1, RuneType.ELEMENTAL),
+    WATER(Color.decode("#1e55e8"), 5, RuneType.ELEMENTAL),
+    EARTH(Color.decode("#9d643a"), 9, RuneType.ELEMENTAL),
+    FIRE(Color.decode("#e90e1d"), 14, RuneType.ELEMENTAL),
+    MIND(Color.decode("#da7614"), 2, RuneType.CATALYTIC),
+    BODY(Color.decode("#1e55e8"), 20, RuneType.CATALYTIC),
+    COSMIC(Color.decode("#ffff00"), 27, RuneType.CATALYTIC),
+    CHAOS(Color.decode("#da7614"), 35, RuneType.CATALYTIC),
+    NATURE(Color.decode("#3ece27"), 44, RuneType.CATALYTIC),
+    LAW(Color.decode("#1e55e8"), 54, RuneType.CATALYTIC),
+    DEATH(Color.decode("#ffffff"), 65, RuneType.CATALYTIC),
+    BLOOD(Color.decode("#be2633"), 77, RuneType.CATALYTIC);
+
+    // LAW AND BODY HAS SAME COLOR
+    // LAW: Found and drawn points: 172
+    // BODY: Found and drawn points: 70
+    // DETERMINE IF BODY/LAW based on found points
+    // MIND AND CHAOS HAS SAME COLOR  - CHECK CHAOS WHITE COLOR #ffffff
 
     private final Color color;
     private final int requiredLevel;

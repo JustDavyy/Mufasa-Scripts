@@ -8,6 +8,7 @@ import helpers.utils.*;
 import utils.StateUpdater;
 import utils.Task;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +69,15 @@ public class dmGOTR extends AbstractScript {
             new Tile(14398, 37593, 0),
             new Tile(14517, 37672, 0)
     );
+
+    // RECTANGLES
+    public static Rectangle ELEMENTAL_RUNE_RECT = new Rectangle(107, 48, 23, 21);
+    public static Rectangle CATALYTIC_RUNE_RECT = new Rectangle(188, 49, 24, 18);
+    public static Rectangle PORTAL_CHECK_RECT = new Rectangle(271, 80, 20, 18);
+    public static Rectangle PORTAL_READ_RECT = new Rectangle(249, 103, 64, 31);
+    public static Rectangle GUARDIAN_POWER_READ_RECT = new Rectangle(186, 12, 38, 15);
+    public static Rectangle ACTIVE_GUARDIANS_READ_RECT = new Rectangle(250, 38, 54, 35);
+    public static Rectangle START_TIMER_READ_RECT = new Rectangle(137, 47, 43, 27);
 
     public static Tile currentLocation;
 

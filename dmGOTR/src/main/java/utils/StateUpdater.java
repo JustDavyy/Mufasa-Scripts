@@ -11,7 +11,8 @@ public class StateUpdater {
 
     public void updateAllStates() {
         currentLocation = Walker.getPlayerPosition();
-        // Update all states
+        updateGameGoing();
+        updateShouldRepairPouches();
     }
 
     public void resetAllStates() {
