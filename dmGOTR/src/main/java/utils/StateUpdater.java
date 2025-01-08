@@ -38,6 +38,8 @@ public class StateUpdater {
     }
 
     public void updateElementalRune() {
+        boolean matchFound = false;
+
         for (RuneInfo rune : RuneInfo.values()) {
             if (rune.getRuneType() != RuneType.ELEMENTAL || rune == RuneInfo.NOELEMENTAL) {
                 continue;
@@ -47,12 +49,21 @@ public class StateUpdater {
             if (Client.isColorInRect(rune.getColor(), ELEMENTAL_RUNE_RECT, 5)) {
                 Logger.debugLog("Current active elemental rune: " + rune.getName());
                 setElementalRune(rune);
-                break;
+                matchFound = true;
+                break; // Exit loop after finding a match
             }
+        }
+
+        // Set to NOELEMENTAL if no match was found
+        if (!matchFound) {
+            Logger.debugLog("No match found. Setting elemental rune to NOELEMENTAL.");
+            setElementalRune(RuneInfo.NOELEMENTAL);
         }
     }
 
     public void updateCatalyticRune() {
+        boolean matchFound = false;
+
         for (RuneInfo rune : RuneInfo.values()) {
             // Skip non-CATALYTIC runes and NOCATALYTIC
             if (rune.getRuneType() != RuneType.CATALYTIC || rune == RuneInfo.NOCATALYTIC) {
@@ -74,8 +85,15 @@ public class StateUpdater {
                     Logger.debugLog("Current active catalytic rune: " + rune.getName());
                     setCatalyticRune(rune);
                 }
-                break; // Exit loop after handling the first match
+                matchFound = true;
+                break; // Exit loop after finding a match
             }
+        }
+
+        // Set to NOCATALYTIC if no match was found
+        if (!matchFound) {
+            Logger.debugLog("No match found. Setting catalytic rune to NOCATALYTIC.");
+            setCatalyticRune(RuneInfo.NOCATALYTIC);
         }
     }
 
