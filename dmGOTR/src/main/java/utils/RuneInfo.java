@@ -1,8 +1,11 @@
 package utils;
 
 import java.awt.*;
+import java.util.Collections;
 
 public enum RuneInfo {
+    NOELEMENTAL(Color.decode("#000000"), 1, RuneType.ELEMENTAL),
+    NOCATALYTIC(Color.decode("#000000"), 1, RuneType.CATALYTIC),
     AIR(Color.decode("#ffffff"), 1, RuneType.ELEMENTAL),
     WATER(Color.decode("#1e55e8"), 5, RuneType.ELEMENTAL),
     EARTH(Color.decode("#9d643a"), 9, RuneType.ELEMENTAL),
@@ -15,12 +18,6 @@ public enum RuneInfo {
     LAW(Color.decode("#1e55e8"), 54, RuneType.CATALYTIC),
     DEATH(Color.decode("#ffffff"), 65, RuneType.CATALYTIC),
     BLOOD(Color.decode("#be2633"), 77, RuneType.CATALYTIC);
-
-    // LAW AND BODY HAS SAME COLOR
-    // LAW: Found and drawn points: 172
-    // BODY: Found and drawn points: 70
-    // DETERMINE IF BODY/LAW based on found points
-    // MIND AND CHAOS HAS SAME COLOR  - CHECK CHAOS WHITE COLOR #ffffff
 
     private final Color color;
     private final int requiredLevel;
@@ -38,12 +35,23 @@ public enum RuneInfo {
         return color;
     }
 
+    // Getter for color as a List<Color>
+    public java.util.List<Color> getColorAsList() {
+        return Collections.singletonList(color);
+    }
+
     // Getter for required level
     public int getRequiredLevel() {
         return requiredLevel;
     }
 
+    // Getter for rune type
     public RuneType getRuneType() {
         return runeType;
+    }
+
+    // Getter for rune name
+    public String getName() {
+        return this.name(); // The name() method is built into Java enums
     }
 }
