@@ -1,5 +1,5 @@
 import agi_sdk.helpers.Course;
-import agi_sdk.helpers.
+import agi_sdk.helpers.Food;
 import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
@@ -232,7 +232,7 @@ public class dAgility extends AbstractScript {
                 agility.setFood(Food.NONE);
                 break;
             case "Cake":
-                agility.setFood();
+                agility.setFood(Food.CAKE);
                 break;
             case "Trout":
                 agility.setFood(Food.TROUT);
