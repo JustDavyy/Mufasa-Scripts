@@ -21,7 +21,7 @@ configurations.all {
 
 dependencies {
     implementation name: 'agility'
-    implementation('com.github.Mufasa-SDK:SDKRepo:1.2.92') {
+    implementation('com.github.Mufasa-SDK:SDKRepo:1.2.95') {
         changing = true
     }
 }

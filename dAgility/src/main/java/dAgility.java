@@ -1,5 +1,5 @@
 import agi_sdk.helpers.Course;
-import agi_sdk.helpers.Food;
+import agi_sdk.helpers.
 import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
@@ -101,23 +101,22 @@ import static helpers.Interfaces.*;
 
 public class dAgility extends AbstractScript {
     agi_sdk.runner agility = new agi_sdk.runner();
+    PaintUpdater paintUpdater = new PaintUpdater();
     private String hopProfile;
     private boolean hopEnabled;
     private boolean useWDH;
     private static String courseChosen;
-    private int lapsDone = 0;
     private String foodChosen;
     private int eatPercent;
-    private static int MoGIndex;
-    private static int termiteIndex;
-    private static int shardIndex;
+    private static int MoGIndex = 99;
+    private static int termiteIndex = 99;
+    private static int shardIndex = 99;
     private final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
     private final DecimalFormat MoGsFormat = new DecimalFormat("#,##0.0", symbols);
     private final DecimalFormat LapsFormat = new DecimalFormat("#,##0.0", symbols);
     private final DecimalFormat ShardsFormat = new DecimalFormat("#,##0", symbols);
     private final DecimalFormat TermitesFormat = new DecimalFormat("#,##0", symbols);
     private static long startTime = System.currentTimeMillis();
-    private String currentStatus = null;
 
     @Override
     public void onStart(){
@@ -143,11 +142,14 @@ public class dAgility extends AbstractScript {
         // Create image box(es), to show the amount of obtained marks
         if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm") || courseChosen.equals("Colossal Wyrm Progressive")) {
             termiteIndex = Paint.createBox("Termites", 30038, 0);
-            Condition.sleep(500);
+            Condition.sleep(400, 600);
             shardIndex = Paint.createBox("Bl. Bone Shards", ItemList.BLESSED_BONE_SHARDS_29381, 0);
         } else {
             MoGIndex = Paint.createBox("Marks of Grace", ItemList.MARK_OF_GRACE_11849, 0);
         }
+
+        Logger.debugLog("Pass on the paint indexes to SDK");
+        agility.setPaintHandler(paintUpdater, MoGIndex, termiteIndex, shardIndex);
 
         // Run the 'onStart' of the agility SDK
         agility.preStart();
@@ -155,48 +157,18 @@ public class dAgility extends AbstractScript {
         // Set the first headers
         Paint.setStatus("Initializing...");
         Paint.setStatistic("Initializing...");
-
-        currentStatus = agility.getStatus();
     }
 
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
-        checkStatus();
         agility.runCourse();
-        checkStatus();
-
         hopActions();
-
-        if (agility.getLapCount() > lapsDone) {
-            lapsDone = agility.getLapCount();
-            updatePaintBoxes();
-            updateStatistics();
-            checkStatus();
-        }
     }
 
     public void hopActions() {
         if(hopEnabled) {
             Game.hop(hopProfile, useWDH, false);
-        }
-    }
-
-    public void updatePaintBoxes() {
-        if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm") || courseChosen.equals("Colossal Wyrm Progressive")) {
-            Paint.updateBox(termiteIndex, agility.getTermiteCount());
-            Condition.sleep(200);
-            Paint.updateBox(shardIndex, agility.getBoneShardCount());
-        } else {
-            Paint.updateBox(MoGIndex, agility.getMoGCount());
-        }
-    }
-
-    private void checkStatus() {
-        String newStatus = agility.getStatus();
-        if (!newStatus.equals(currentStatus)) {
-            currentStatus = newStatus;
-            Paint.setStatus(currentStatus);
         }
     }
 
@@ -260,7 +232,7 @@ public class dAgility extends AbstractScript {
                 agility.setFood(Food.NONE);
                 break;
             case "Cake":
-                agility.setFood(Food.CAKE);
+                agility.setFood();
                 break;
             case "Trout":
                 agility.setFood(Food.TROUT);
@@ -302,52 +274,6 @@ public class dAgility extends AbstractScript {
                 Logger.debugLog("Invalid food, stopping script. FOOD: " + courseChosen);
                 Logout.logout();
                 Script.stop();
-        }
-    }
-
-    private void updateStatistics() {
-        if (courseChosen.equals("Basic Colossal Wyrm") || courseChosen.equals("Advanced Colossal Wyrm")) {
-            // Set separators
-            symbols.setGroupingSeparator('.');
-            symbols.setDecimalSeparator(',');
-
-            // Calculations for MoGs and laps per hour
-            long currentTime = System.currentTimeMillis();
-            double elapsedTimeInHours = (currentTime - startTime) / (1000.0 * 60 * 60);
-
-            // Calculate MoGs per hour and laps per hour
-            double TermitesPerHour = agility.getTermiteCount() / elapsedTimeInHours;
-            double ShardsPerHour = agility.getBoneShardCount() / elapsedTimeInHours;
-            double LapsPerHour = agility.getLapCount() / elapsedTimeInHours;
-
-            // Format Termites per hour, shards per hour, and laps per hour with one decimal place
-            String TermitesPerHourFormatted = TermitesFormat.format(TermitesPerHour);
-            String ShardsPerHourFormatted = ShardsFormat.format(ShardsPerHour);
-            String LapsPerHourFormatted = LapsFormat.format(LapsPerHour);
-
-            // Update the statistics label with all three stats
-            String statistics = String.format("Term %s | Shard %s | Lap %s /hr", TermitesPerHourFormatted, ShardsPerHourFormatted, LapsPerHourFormatted);
-            Paint.setStatistic(statistics);
-        } else {
-            // Set separators
-            symbols.setGroupingSeparator('.');
-            symbols.setDecimalSeparator(',');
-
-            // Calculations for MoGs and laps per hour
-            long currentTime = System.currentTimeMillis();
-            double elapsedTimeInHours = (currentTime - startTime) / (1000.0 * 60 * 60);
-
-            // Calculate MoGs per hour and laps per hour
-            double MoGsPerHour = agility.getMoGCount() / elapsedTimeInHours;
-            double LapsPerHour = agility.getLapCount() / elapsedTimeInHours;
-
-            // Format MoGs per hour and laps per hour with one decimal place
-            String MoGsPerHourFormatted = MoGsFormat.format(MoGsPerHour);
-            String LapsPerHourFormatted = LapsFormat.format(LapsPerHour);
-
-            // Update the statistics label
-            String statistics = String.format("MoGs/hr: %s | Laps/hr: %s", MoGsPerHourFormatted, LapsPerHourFormatted);
-            Paint.setStatistic(statistics);
         }
     }
 }
