@@ -111,12 +111,6 @@ public class dAgility extends AbstractScript {
     private static int MoGIndex = 99;
     private static int termiteIndex = 99;
     private static int shardIndex = 99;
-    private final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
-    private final DecimalFormat MoGsFormat = new DecimalFormat("#,##0.0", symbols);
-    private final DecimalFormat LapsFormat = new DecimalFormat("#,##0.0", symbols);
-    private final DecimalFormat ShardsFormat = new DecimalFormat("#,##0", symbols);
-    private final DecimalFormat TermitesFormat = new DecimalFormat("#,##0", symbols);
-    private static long startTime = System.currentTimeMillis();
 
     @Override
     public void onStart(){
