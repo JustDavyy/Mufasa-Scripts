@@ -5,6 +5,7 @@ import helpers.*;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.*;
+import utils.FontGOTR;
 import utils.StateUpdater;
 import utils.Task;
 
@@ -20,7 +21,8 @@ import static helpers.Interfaces.*;
         description = "Does Guardians of the Rift minigame.",
         version = "1.00",
         guideLink = "",
-        categories = {ScriptCategory.Fletching, ScriptCategory.Agility}
+        categories = {ScriptCategory.Fletching, ScriptCategory.Agility},
+        skipClientSetup = true
 )
 @ScriptConfiguration.List(
         {
@@ -74,10 +76,9 @@ public class dmGOTR extends AbstractScript {
     public static Rectangle ELEMENTAL_RUNE_RECT = new Rectangle(107, 48, 23, 21);
     public static Rectangle CATALYTIC_RUNE_RECT = new Rectangle(188, 49, 24, 18);
     public static Rectangle PORTAL_CHECK_RECT = new Rectangle(271, 80, 20, 18);
-    public static Rectangle PORTAL_READ_RECT = new Rectangle(249, 103, 64, 31);
+    public static Rectangle PORTAL_READ_RECT = new Rectangle(276, 104, 39, 26);
     public static Rectangle GUARDIAN_POWER_READ_RECT = new Rectangle(186, 12, 38, 15);
-    public static Rectangle ACTIVE_GUARDIANS_READ_RECT = new Rectangle(250, 38, 54, 35);
-    public static Rectangle START_TIMER_READ_RECT = new Rectangle(137, 47, 43, 27);
+    public static Rectangle TIMER_READ_RECT = new Rectangle(137, 47, 43, 27);
 
     public static Tile currentLocation;
 
@@ -88,9 +89,21 @@ public class dmGOTR extends AbstractScript {
     public static boolean doBloods;
     public static boolean usePreGameMineArea;
     public static boolean usePouches;
+    public static boolean portalActive;
 
     // INTS
     public static int agilityLevel;
+    public static int guardiansPower;
+    public static int portalTime;
+
+    // COLORS
+    public static List<Color> blackColor = Arrays.asList(
+        java.awt.Color.decode("#000001")
+    );
+
+    public static List<Color> whiteColor = Arrays.asList(
+            java.awt.Color.decode("#ffffff")
+    );
 
     @Override
     public void onStart(){
@@ -104,6 +117,7 @@ public class dmGOTR extends AbstractScript {
         // 55-148, 55-147, 56-147, 56-148, 56-149, 57-149, 57-148, 57-147, 44-75, 42-75, 41-75, 40-75, 39-75, 38-75, 37-75, 36-75, 35-75, 34-75, 33-75, 32-75, 43-75, 50-75
         Walker.setup(new MapChunk(new String[]{"55-148", "55-147", "56-147", "56-148", "56-149", "57-149", "57-148", "57-147", "44-75", "42-75", "41-75", "41-75", "40-75", "39-75", "38-75", "37-75", "36-75", "35-75", "34-75", "33-75", "32-75", "43-75", "50-75"}, "0"));
 
+        // Open stats tab to check stats
         if (!GameTabs.isTabOpen(UITabs.STATS)) {
             GameTabs.openTab(UITabs.STATS);
             Condition.wait(() -> GameTabs.isTabOpen(UITabs.STATS), 100, 20);
@@ -117,6 +131,13 @@ public class dmGOTR extends AbstractScript {
             Logger.log("Agility level below 56, not using east mine in pre-game");
             usePreGameMineArea = false;
         }
+
+        // Make sure chatbox is closed
+        Chatbox.closeChatbox();
+
+        // Creating the Paint object
+        Logger.debugLog("Creating paint object.");
+        Paint.Create("/logo/dm.png");
     }
 
     // Task list!
@@ -142,12 +163,23 @@ public class dmGOTR extends AbstractScript {
 
         stateUpdater.updateAllStates();
 
-        //Run tasks
-        for (Task task : gotrTasks) {
-            if (task.activate()) {
-                task.execute();
-                return;
-            }
+        Logger.debugLog("Active elemental rune: " + stateUpdater.getElementalRune().getName());
+        Logger.debugLog("Active catalytic rune: " + stateUpdater.getCatalyticRune().getName());
+        Logger.debugLog("Guardians power: " + stateUpdater.getGuardiansPower());
+        Logger.debugLog("Portal active: " + stateUpdater.isPortalActive());
+        if (stateUpdater.isPortalActive()) {
+            Logger.debugLog("Portal time left: " + stateUpdater.getPortalTime());
         }
+        Logger.debugLog("Time till next rune switch: " + stateUpdater.timeTillRuneSwitch());
+
+        Condition.sleep(1500, 2500);
+
+        //Run tasks
+        //for (Task task : gotrTasks) {
+        //    if (task.activate()) {
+        //        task.execute();
+        //        return;
+        //    }
+        //}
     }
 }

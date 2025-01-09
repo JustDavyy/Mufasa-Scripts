@@ -1,9 +1,12 @@
 package utils;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
 
 import static helpers.Interfaces.*;
 import static main.dmGOTR.*;
+import static utils.FontGOTR.digitsTimersAndPortal;
 
 public class StateUpdater {
     boolean gameGoing;
@@ -18,6 +21,8 @@ public class StateUpdater {
         updateShouldRepairPouches();
         updateElementalRune();
         updateCatalyticRune();
+        updateGuardiansPower();
+        updatePortalActive();
     }
 
     public void resetAllStates() {
@@ -26,6 +31,7 @@ public class StateUpdater {
         shouldRepairPouches = false;
         elementalRune = RuneInfo.NOELEMENTAL;
         catalyticRune = RuneInfo.NOCATALYTIC;
+        guardiansPower = 0;
     }
 
     //Update each state
@@ -54,7 +60,7 @@ public class StateUpdater {
         }
 
         // Set to NOELEMENTAL if no match was found
-        if (!matchFound) {
+        if (!matchFound && getElementalRune() != RuneInfo.NOELEMENTAL) {
             Logger.debugLog("No match found. Setting elemental rune to NOELEMENTAL.");
             setElementalRune(RuneInfo.NOELEMENTAL);
         }
@@ -87,10 +93,18 @@ public class StateUpdater {
         }
 
         // Set to NOCATALYTIC if no match was found
-        if (!matchFound) {
+        if (!matchFound && getCatalyticRune() != RuneInfo.NOCATALYTIC) {
             Logger.debugLog("No match found. Setting catalytic rune to NOCATALYTIC.");
             setCatalyticRune(RuneInfo.NOCATALYTIC);
         }
+    }
+
+    public void updateGuardiansPower() {
+        guardiansPower = Chatbox.readDigitsInArea(GUARDIAN_POWER_READ_RECT, blackColor);
+    }
+
+    public void updatePortalActive() {
+        portalActive = Client.isColorInRect(Color.decode("#ffbb1a"), PORTAL_CHECK_RECT, 5);
     }
 
     //Set each state individually
@@ -129,6 +143,19 @@ public class StateUpdater {
 
     public RuneInfo getElementalRune() {return elementalRune;}
 
+    public int getGuardiansPower() {return guardiansPower;}
+
+    public boolean isPortalActive() {return portalActive;}
+
+    public int getPortalTime() {
+        if (portalActive) {
+            portalTime = interfaces.readCustomStackSize(PORTAL_READ_RECT, whiteColor, digitsTimersAndPortal);
+        } else {
+            portalTime = 0;
+        }
+        return portalTime;
+    }
+
     public boolean isGameGoing() {
         return gameGoing;
     }
@@ -143,6 +170,10 @@ public class StateUpdater {
         } else {
             return false;
         }
+    }
+
+    public int timeTillRuneSwitch() {
+        return interfaces.readCustomStackSize(TIMER_READ_RECT, whiteColor, digitsTimersAndPortal);
     }
 
 
