@@ -6,6 +6,7 @@ import static helpers.Interfaces.Logger;
 
 public class FontGOTR {
     public static final ConcurrentHashMap<String, int[][]> digitsTimersAndPortal = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<String, int[][]> lettersPortalLocation = new ConcurrentHashMap<>();
 
     static {
         digitsTimersAndPortal.put("0", new int[][]{
@@ -136,6 +137,45 @@ public class FontGOTR {
                 {0,0,0,0,0,1},
                 {0,0,0,0,0,1},
                 {0,0,0,0,0,1}
+        });
+
+        lettersPortalLocation.put("S", new int[][]{
+                {0,0,1,1,0},
+                {0,1,0,0,1},
+                {1,0,0,0,0},
+                {0,1,0,0,0},
+                {0,0,1,0,0},
+                {0,0,0,1,0},
+                {0,0,0,0,1},
+                {0,0,0,0,1},
+                {1,0,0,1,0},
+                {0,1,1,0,0}
+        });
+
+        lettersPortalLocation.put("E", new int[][]{
+                {1,1,1,1,1},
+                {1,0,0,0,0},
+                {1,0,0,0,0},
+                {1,0,0,0,0},
+                {1,1,1,0,0},
+                {1,0,0,0,0},
+                {1,0,0,0,0},
+                {1,0,0,0,0},
+                {1,0,0,0,0},
+                {1,1,1,1,1}
+        });
+
+        lettersPortalLocation.put("W", new int[][]{
+                {1,0,0,0,0,0,1},
+                {1,0,0,0,0,0,1},
+                {1,0,0,0,0,0,1},
+                {1,0,0,0,0,0,1},
+                {1,0,0,1,0,0,1},
+                {1,0,0,1,0,0,1},
+                {1,0,0,1,0,0,1},
+                {1,0,0,1,0,0,1},
+                {0,1,0,1,0,1,0},
+                {0,0,1,1,1,0,0}
         });
     }
 }
