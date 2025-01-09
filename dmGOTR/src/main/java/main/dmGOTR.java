@@ -6,6 +6,7 @@ import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.*;
 import utils.FontGOTR;
+import utils.PortalLocation;
 import utils.StateUpdater;
 import utils.Task;
 
@@ -77,6 +78,7 @@ public class dmGOTR extends AbstractScript {
     public static Rectangle CATALYTIC_RUNE_RECT = new Rectangle(188, 49, 24, 18);
     public static Rectangle PORTAL_CHECK_RECT = new Rectangle(271, 80, 20, 18);
     public static Rectangle PORTAL_READ_RECT = new Rectangle(276, 104, 39, 26);
+    public static Rectangle PORTAL_LOCATION_READ_RECT = new Rectangle(248, 102, 34, 32);
     public static Rectangle GUARDIAN_POWER_READ_RECT = new Rectangle(186, 12, 38, 15);
     public static Rectangle TIMER_READ_RECT = new Rectangle(137, 47, 43, 27);
 
@@ -90,6 +92,7 @@ public class dmGOTR extends AbstractScript {
     public static boolean usePreGameMineArea;
     public static boolean usePouches;
     public static boolean portalActive;
+    public static PortalLocation portalLocation = PortalLocation.NONE;
 
     // INTS
     public static int agilityLevel;
@@ -170,6 +173,7 @@ public class dmGOTR extends AbstractScript {
             Logger.debugLog("Portal active: " + stateUpdater.isPortalActive());
             if (stateUpdater.isPortalActive()) {
                 Logger.debugLog("Portal time left: " + stateUpdater.getPortalTime());
+                Logger.debugLog("Portal location: " + stateUpdater.getPortalLocation());
             }
             Logger.debugLog("Time till next rune switch: " + stateUpdater.timeTillRuneSwitch());
         } else {

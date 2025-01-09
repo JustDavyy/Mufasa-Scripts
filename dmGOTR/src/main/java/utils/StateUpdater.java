@@ -5,6 +5,7 @@ import java.awt.*;
 import static helpers.Interfaces.*;
 import static main.dmGOTR.*;
 import static utils.FontGOTR.digitsTimersAndPortal;
+import static utils.FontGOTR.lettersPortalLocation;
 
 public class StateUpdater {
     boolean gameGoing;
@@ -12,8 +13,10 @@ public class StateUpdater {
     boolean shouldRepairPouches;
     RuneInfo elementalRune = RuneInfo.NOELEMENTAL;
     RuneInfo catalyticRune = RuneInfo.NOCATALYTIC;
+    PortalLocation portalLocation = PortalLocation.NONE;
     private static int tempPowerHolder;
     private static int tempSwitchTimeHolder;
+    private static String tempPortalLocationHolder = "";
 
     public void updateAllStates() {
         currentLocation = Walker.getPlayerPosition();
@@ -23,6 +26,7 @@ public class StateUpdater {
         updateCatalyticRune();
         updateGuardiansPower();
         updatePortalActive();
+        updatePortalLocation();
     }
 
     public void resetAllStates() {
@@ -36,6 +40,7 @@ public class StateUpdater {
         portalTime = 0;
         tempPowerHolder = 0;
         tempSwitchTimeHolder = 0;
+        tempPortalLocationHolder = "";
     }
 
     //Update each state
@@ -43,18 +48,14 @@ public class StateUpdater {
         tempPowerHolder = Chatbox.readDigitsInArea(GUARDIAN_POWER_READ_RECT, blackColor);
 
         if (tempPowerHolder == -1) {
-            Logger.debugLog("tempPowerHolder equals -1, invalid power read");
-
             tempSwitchTimeHolder = timeTillRuneSwitch();
 
             if (tempSwitchTimeHolder == -1) {
-                Logger.debugLog("tempSwitchTimeHolder equals -1, game is currently not going");
                 setGameGoing(false);
             } else {
-                Logger.debugLog("tempSwitchTimeHolder equals: " + tempSwitchTimeHolder + ", game is going in pre-game phase.");
+                setGameGoing(true);
             }
         } else {
-            Logger.debugLog("tempPowerHolder equals: " + tempPowerHolder + ", the game is ongoing.");
             setGameGoing(true);
         }
     }
@@ -125,6 +126,31 @@ public class StateUpdater {
 
     public void updatePortalActive() {
         portalActive = Client.isColorInRect(Color.decode("#ffbb1a"), PORTAL_CHECK_RECT, 5);
+
+        if (portalActive) {
+            updatePortalLocation();
+        }
+    }
+
+    public void updatePortalLocation() {
+        tempPortalLocationHolder = interfaces.readCustomLettersInArea(PORTAL_LOCATION_READ_RECT, whiteColor, lettersPortalLocation);
+
+        switch (tempPortalLocationHolder) {
+            case "SW":
+                portalLocation = PortalLocation.SOUTHWEST;
+                break;
+            case "SE":
+                portalLocation = PortalLocation.SOUTHEAST;
+                break;
+            case "E":
+                portalLocation = PortalLocation.EAST;
+                break;
+            case "S":
+                portalLocation = PortalLocation.SOUTH;
+                break;
+            default:
+                portalLocation = PortalLocation.NONE;
+        }
     }
 
     //Set each state individually
@@ -175,6 +201,8 @@ public class StateUpdater {
         }
         return portalTime;
     }
+
+    public PortalLocation getPortalLocation() {return portalLocation;}
 
     public boolean isGameGoing() {
         return gameGoing;
