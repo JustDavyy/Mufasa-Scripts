@@ -163,14 +163,19 @@ public class dmGOTR extends AbstractScript {
 
         stateUpdater.updateAllStates();
 
-        Logger.debugLog("Active elemental rune: " + stateUpdater.getElementalRune().getName());
-        Logger.debugLog("Active catalytic rune: " + stateUpdater.getCatalyticRune().getName());
-        Logger.debugLog("Guardians power: " + stateUpdater.getGuardiansPower());
-        Logger.debugLog("Portal active: " + stateUpdater.isPortalActive());
-        if (stateUpdater.isPortalActive()) {
-            Logger.debugLog("Portal time left: " + stateUpdater.getPortalTime());
+        if (stateUpdater.isGameGoing()) {
+            Logger.debugLog("Active elemental rune: " + stateUpdater.getElementalRune().getName());
+            Logger.debugLog("Active catalytic rune: " + stateUpdater.getCatalyticRune().getName());
+            Logger.debugLog("Guardians power: " + stateUpdater.getGuardiansPower());
+            Logger.debugLog("Portal active: " + stateUpdater.isPortalActive());
+            if (stateUpdater.isPortalActive()) {
+                Logger.debugLog("Portal time left: " + stateUpdater.getPortalTime());
+            }
+            Logger.debugLog("Time till next rune switch: " + stateUpdater.timeTillRuneSwitch());
+        } else {
+            Logger.debugLog("Game is currently NOT going.");
         }
-        Logger.debugLog("Time till next rune switch: " + stateUpdater.timeTillRuneSwitch());
+
 
         Condition.sleep(1500, 2500);
 

@@ -1,8 +1,6 @@
 package utils;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.List;
 
 import static helpers.Interfaces.*;
 import static main.dmGOTR.*;
@@ -14,6 +12,8 @@ public class StateUpdater {
     boolean shouldRepairPouches;
     RuneInfo elementalRune = RuneInfo.NOELEMENTAL;
     RuneInfo catalyticRune = RuneInfo.NOCATALYTIC;
+    private static int tempPowerHolder;
+    private static int tempSwitchTimeHolder;
 
     public void updateAllStates() {
         currentLocation = Walker.getPlayerPosition();
@@ -32,11 +32,31 @@ public class StateUpdater {
         elementalRune = RuneInfo.NOELEMENTAL;
         catalyticRune = RuneInfo.NOCATALYTIC;
         guardiansPower = 0;
+        portalActive = false;
+        portalTime = 0;
+        tempPowerHolder = 0;
+        tempSwitchTimeHolder = 0;
     }
 
     //Update each state
     public void updateGameGoing() {
-        // CF Method I'm guessing to check if game is going.
+        tempPowerHolder = Chatbox.readDigitsInArea(GUARDIAN_POWER_READ_RECT, blackColor);
+
+        if (tempPowerHolder == -1) {
+            Logger.debugLog("tempPowerHolder equals -1, invalid power read");
+
+            tempSwitchTimeHolder = timeTillRuneSwitch();
+
+            if (tempSwitchTimeHolder == -1) {
+                Logger.debugLog("tempSwitchTimeHolder equals -1, game is currently not going");
+                setGameGoing(false);
+            } else {
+                Logger.debugLog("tempSwitchTimeHolder equals: " + tempSwitchTimeHolder + ", game is going in pre-game phase.");
+            }
+        } else {
+            Logger.debugLog("tempPowerHolder equals: " + tempPowerHolder + ", the game is ongoing.");
+            setGameGoing(true);
+        }
     }
 
     public void updateShouldRepairPouches() {
