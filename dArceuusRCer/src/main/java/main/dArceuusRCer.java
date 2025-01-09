@@ -28,7 +28,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dArceuus RCer",
         description = "Crafts blood or soul runes at Arceuus, supports using blood essence and hopping worlds. DISCLAIMER: This script is NOT fully safe for 10HP accounts, use at own risk!",
-        version = "2.15",
+        version = "2.16",
         guideLink = "https://wiki.mufasaclient.com/docs/darceuus-rcer/",
         categories = {ScriptCategory.Runecrafting, ScriptCategory.Moneymaking}
 )
@@ -387,7 +387,7 @@ public class dArceuusRCer extends AbstractScript {
 
         Paint.setStatus("Check for chisel");
         // Check if we have a chisel
-        if (!Inventory.contains(1755, 0.80)) {
+        if (!Inventory.contains(1755, 0.65)) {
             Logger.debugLog("No chisel found in our inventory, stopping script...");
             Logout.logout();
             Script.stop();
