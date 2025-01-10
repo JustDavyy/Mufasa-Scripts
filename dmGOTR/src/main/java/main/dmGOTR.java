@@ -2,8 +2,10 @@ package main;
 
 import Tasks.*;
 import helpers.*;
+import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
+import helpers.annotations.ScriptTabConfiguration;
 import helpers.utils.*;
 import utils.FontGOTR;
 import utils.PortalLocation;
@@ -25,6 +27,43 @@ import static helpers.Interfaces.*;
         categories = {ScriptCategory.Fletching, ScriptCategory.Agility},
         skipClientSetup = true
 )
+@ScriptTabConfiguration.List({
+        @ScriptTabConfiguration(
+                name = "Rune setup",
+                configurations = {
+                        @ScriptConfiguration(
+                                name = "Description",
+                                description = "Select which runes you would like to to craft",
+                                defaultValue = "",
+                                optionType = OptionType.DESCRIPTION
+                        ),
+                        @ScriptConfiguration(
+                                name = "Do Cosmic runes?",
+                                description = "This requires having Lost City completed.",
+                                defaultValue = "False",
+                                optionType = OptionType.BOOLEAN
+                        ),
+                        @ScriptConfiguration(
+                                name = "Do Law runes?",
+                                description = "This requires having Troll Stronghold completed.",
+                                defaultValue = "False",
+                                optionType = OptionType.BOOLEAN
+                        ),
+                        @ScriptConfiguration(
+                                name = "Do Death runes?",
+                                description = "This requires having Mourning's End Part II completed.",
+                                defaultValue = "False",
+                                optionType = OptionType.BOOLEAN
+                        ),
+                        @ScriptConfiguration(
+                                name = "Do Blood runes?",
+                                description = "This requires having Sins of the Father completed.",
+                                defaultValue = "False",
+                                optionType = OptionType.BOOLEAN
+                        )
+                }
+        )
+})
 @ScriptConfiguration.List(
         {
                 @ScriptConfiguration(
@@ -33,30 +72,6 @@ import static helpers.Interfaces.*;
                         defaultValue = "False",
                         optionType = OptionType.BOOLEAN
                 ),
-                @ScriptConfiguration(
-                        name = "Do Cosmic runes?",
-                        description = "This requires having Lost City completed.",
-                        defaultValue = "False",
-                        optionType = OptionType.BOOLEAN
-                ),
-                @ScriptConfiguration(
-                        name = "Do Law runes?",
-                        description = "This requires having Troll Stronghold completed.",
-                        defaultValue = "False",
-                        optionType = OptionType.BOOLEAN
-                ),
-                @ScriptConfiguration(
-                        name = "Do Death runes?",
-                        description = "This requires having Mourning's End Part II completed.",
-                        defaultValue = "False",
-                        optionType = OptionType.BOOLEAN
-                ),
-                @ScriptConfiguration(
-                        name = "Do Blood runes?",
-                        description = "This requires having Sins of the Father completed.",
-                        defaultValue = "False",
-                        optionType = OptionType.BOOLEAN
-                )
         }
 )
 
