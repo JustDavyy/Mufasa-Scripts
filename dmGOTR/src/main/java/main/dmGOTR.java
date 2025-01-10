@@ -96,8 +96,33 @@ public class dmGOTR extends AbstractScript {
     public static Rectangle PORTAL_LOCATION_READ_RECT = new Rectangle(248, 102, 34, 32);
     public static Rectangle GUARDIAN_POWER_READ_RECT = new Rectangle(186, 12, 38, 15);
     public static Rectangle TIMER_READ_RECT = new Rectangle(137, 47, 43, 27);
+    public static Rectangle MIND_GUARDIAN_TAP_RECT = new Rectangle(397, 289, 34, 47);
+    public static Rectangle BODY_GUARDIAN_TAP_RECT = new Rectangle(346, 248, 30, 45);
+    public static Rectangle CHAOS_GUARDIAN_TAP_RECT = new Rectangle(349, 201, 34, 51);
+    public static Rectangle DEATH_GUARDIAN_TAP_RECT = new Rectangle(347, 198, 27, 43);
+    public static Rectangle LAW_GUARDIAN_TAP_RECT = new Rectangle(415, 161, 25, 42);
+    public static Rectangle BLOOD_GUARDIAN_TAP_RECT = new Rectangle(462, 165, 29, 49);
+    public static Rectangle FIRE_GUARDIAN_TAP_RECT = new Rectangle(413, 163, 31, 49);
+    public static Rectangle NATURE_GUARDIAN_TAP_RECT = new Rectangle(462, 173, 22, 35);
+    public static Rectangle EARTH_GUARDIAN_TAP_RECT = new Rectangle(513, 229, 25, 33);
+    public static Rectangle WATER_GUARDIAN_TAP_RECT = new Rectangle(513, 229, 25, 33);
+    public static Rectangle COSMIC_GUARDIAN_TAP_RECT = new Rectangle(507, 266, 29, 34);
+    public static Rectangle AIR_GUARDIAN_TAP_RECT = new Rectangle(461, 290, 37, 53);
 
+    // TILES
     public static Tile currentLocation;
+    public static Tile MIND_GUARDIAN_TILE = new Tile(14451, 37733, 0);
+    public static Tile BODY_GUARDIAN_TILE = new Tile(14439, 37737, 0);
+    public static Tile CHAOS_GUARDIAN_TILE = new Tile(14431, 37749, 0);
+    public static Tile DEATH_GUARDIAN_TILE = new Tile(14431, 37769, 0);
+    public static Tile LAW_GUARDIAN_TILE = new Tile(14435, 37781, 0);
+    public static Tile BLOOD_GUARDIAN_TILE = new Tile(14447, 37789, 0);
+    public static Tile FIRE_GUARDIAN_TILE = new Tile(14471, 37789, 0);
+    public static Tile NATURE_GUARDIAN_TILE = new Tile(14483, 37781, 0);
+    public static Tile EARTH_GUARDIAN_TILE = new Tile(14487, 37769, 0);
+    public static Tile WATER_GUARDIAN_TILE = new Tile(14487, 37749, 0);
+    public static Tile COSMIC_GUARDIAN_TILE = new Tile(14479, 37737, 0);
+    public static Tile AIR_GUARDIAN_TILE = new Tile(14467, 37733, 0);
 
     // SETTINGS
     public static boolean doCosmics;

@@ -50,11 +50,7 @@ public class StateUpdater {
         if (tempPowerHolder == -1) {
             tempSwitchTimeHolder = timeTillRuneSwitch();
 
-            if (tempSwitchTimeHolder == -1) {
-                setGameGoing(false);
-            } else {
-                setGameGoing(true);
-            }
+            setGameGoing(tempSwitchTimeHolder != -1);
         } else {
             setGameGoing(true);
         }
