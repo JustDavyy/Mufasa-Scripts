@@ -118,6 +118,15 @@ public class dmGOTR extends AbstractScript {
     public static Rectangle AIR_ALTAR_FROM_PORTAL_TAP_RECT = new Rectangle(539, 59, 64, 51);
     public static Rectangle AIR_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(458, 153, 74, 55);
     public static Rectangle FIRE_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(471, 339, 63, 63);
+    public static Rectangle MIND_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(362, 154, 69, 59);
+    public static Rectangle BODY_ALTAR_FROM_PORTAL_TAP_RECT = new Rectangle(502, 43, 46, 34);
+    public static Rectangle BODY_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(464, 152, 67, 57);
+    public static Rectangle WATER_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(318, 191, 54, 53);
+    public static Rectangle COSMIC_ALTAR_NORTH_TAP_RECT = new Rectangle(428, 333, 46, 52);
+    public static Rectangle COSMIC_ALTAR_EAST_TAP_RECT = new Rectangle(318, 249, 55, 53);
+    public static Rectangle COSMIC_ALTAR_SOUTH_TAP_RECT = new Rectangle(429, 168, 49, 44);
+    public static Rectangle COSMIC_ALTAR_WEST_TAP_RECT = new Rectangle(510, 244, 51, 44);
+    public static Rectangle EARTH_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(468, 156, 56, 50);
 
     // PORTAL TAP RECTANGLES
     public static Rectangle PORTAL_TAP_RECT_FROM_HUGEREMAINS = new Rectangle(524, 140, 18, 17);
@@ -126,6 +135,14 @@ public class dmGOTR extends AbstractScript {
     public static Rectangle AIR_PORTAL_FROMALTAR_TAP_RECT = new Rectangle(341, 453, 16, 18);
     public static Rectangle FIRE_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(438, 229, 19, 17);
     public static Rectangle FIRE_PORTAL_FROMALTAR_TAP_RECT = new Rectangle(111, 15, 14, 13);
+    public static Rectangle MIND_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(437, 317, 20, 15);
+    public static Rectangle BODY_PORTAL_FROMALTAR_TAP_RECT = new Rectangle(391, 509, 21, 22);
+    public static Rectangle BODY_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(433, 323, 15, 16);
+    public static Rectangle WATER_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(485, 269, 19, 19);
+    public static Rectangle COSMIC_PORTAL_NORTHPORTAL_TAP_RECT = new Rectangle(444, 225, 17, 16);
+    public static Rectangle COSMIC_PORTAL_EASTPORTAL_TAP_RECT = new Rectangle(485, 271, 19, 16);
+    public static Rectangle COSMIC_PORTAL_SOUTHPORTAL_TAP_RECT = new Rectangle(445, 321, 18, 19);
+    public static Rectangle COSMIC_PORTAL_WESTPORTAL_TAP_RECT = new Rectangle(384, 277, 18, 17);
 
     // MINING TAP RECTANGLES
     public static Rectangle HUGE_GUARDIAN_REMAINS_TAP_RECT = new Rectangle(365, 339, 54, 57);
@@ -156,10 +173,27 @@ public class dmGOTR extends AbstractScript {
     public static Tile HUGE_REMAINS_PORTAL_TILE = new Tile(14367, 37757, 0);
     public static Tile AIR_ALTAR_LEAVE_PORTAL_TILE = new Tile(11363, 19061, 0);
     public static Tile FIRE_ALTAR_LEAVE_PORTAL_TILE = new Tile(10295, 19145, 0);
+    public static Tile MIND_ALTAR_LEAVE_PORTAL_TILE = new Tile(11171, 19061, 0);
+    public static Tile BODY_ALTAR_LEAVE_PORTAL_TILE = new Tile(10083, 19085, 0);
+    public static Tile WATER_ALTAR_LEAVE_PORTAL_TILE = new Tile(10903, 19077, 0);
+    public static Tile COSMIC_ALTAR_LEAVE_NORTH_PORTAL_TILE = new Tile(8567, 19161, 0);
+    public static Tile COSMIC_ALTAR_LEAVE_EAST_PORTAL_TILE = new Tile(10871, 19089, 0);
+    public static Tile COSMIC_ALTAR_LEAVE_SOUTH_PORTAL_TILE = new Tile(8567, 19001, 0);
+    public static Tile COSMIC_ALTAR_LEAVE_WEST_PORTAL_TILE = new Tile(8487, 19081, 0);
+    public static Tile EARTH_ALTAR_LEAVE_PORTAL_TILE = new Tile(10623, 19065, 0);
+
 
     // ALTAR TILES
     public static Tile AIR_ALTAR_TILE = new Tile(11371, 19077, 0);
     public static Tile FIRE_ALTAR_TILE = new Tile(10335, 19109, 0);
+    public static Tile MIND_ALTAR_TILE = new Tile(11147, 19105, 0);
+    public static Tile BODY_ALTAR_TILE = new Tile(10087, 19097, 0);
+    public static Tile WATER_ALTAR_TILE = new Tile(10871, 19089, 0);
+    public static Tile COSMIC_NORTH_ALTAR_TILE = new Tile(8567, 19089, 0);
+    public static Tile COSMIC_EAST_ALTAR_TILE = new Tile(8575, 19081, 0);
+    public static Tile COSMIC_SOUTH_ALTAR_TILE = new Tile(8567, 19073, 0);
+    public static Tile COSMIC_WEST_ALTAR_TILE = new Tile(8559, 19081, 0);
+    public static Tile EARTH_ALTAR_TILE = new Tile(10627, 19105, 0);
 
     // MINING TILES
     public static Tile HUGE_GUARDIAN_REMAINS_TILE = new Tile(14363, 37745, 0);
