@@ -88,7 +88,7 @@ public class dmGOTR extends AbstractScript {
             new Tile(14517, 37672, 0)
     );
 
-    // RECTANGLES
+    // GENERAL RECTANGLES
     public static Rectangle ELEMENTAL_RUNE_RECT = new Rectangle(107, 48, 23, 21);
     public static Rectangle CATALYTIC_RUNE_RECT = new Rectangle(188, 49, 24, 18);
     public static Rectangle PORTAL_CHECK_RECT = new Rectangle(271, 80, 20, 18);
@@ -96,6 +96,11 @@ public class dmGOTR extends AbstractScript {
     public static Rectangle PORTAL_LOCATION_READ_RECT = new Rectangle(248, 102, 34, 32);
     public static Rectangle GUARDIAN_POWER_READ_RECT = new Rectangle(186, 12, 38, 15);
     public static Rectangle TIMER_READ_RECT = new Rectangle(137, 47, 43, 27);
+    public static Rectangle UNCHARGED_CELL_TABLE_TAP_RECT = new Rectangle(496, 260, 32, 23);
+    public static Rectangle WORKBENCH_TAP_RECT = new Rectangle(391, 319, 55, 43);
+    public static Rectangle DEPOSIT_POOL_TAP_RECT = new Rectangle(431, 305, 21, 22);
+
+    // GUARDIANS RECTANGLES
     public static Rectangle MIND_GUARDIAN_TAP_RECT = new Rectangle(397, 289, 34, 47);
     public static Rectangle BODY_GUARDIAN_TAP_RECT = new Rectangle(346, 248, 30, 45);
     public static Rectangle CHAOS_GUARDIAN_TAP_RECT = new Rectangle(349, 201, 34, 51);
@@ -109,15 +114,30 @@ public class dmGOTR extends AbstractScript {
     public static Rectangle COSMIC_GUARDIAN_TAP_RECT = new Rectangle(507, 266, 29, 34);
     public static Rectangle AIR_GUARDIAN_TAP_RECT = new Rectangle(461, 290, 37, 53);
 
-    public static Rectangle HUGE_GUARDIAN_REMAINS_TAP_RECT = new Rectangle(365, 339, 54, 57);
+    // ALTAR TAP RECTANGLES
+    public static Rectangle AIR_ALTAR_FROM_PORTAL_TAP_RECT = new Rectangle(539, 59, 64, 51);
+    public static Rectangle AIR_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(458, 153, 74, 55);
+    public static Rectangle FIRE_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(471, 339, 63, 63);
+
+    // PORTAL TAP RECTANGLES
     public static Rectangle PORTAL_TAP_RECT_FROM_HUGEREMAINS = new Rectangle(524, 140, 18, 17);
     public static Rectangle PORTAL_TAP_RECT_ATPORTAL_HUGEREMAINS = new Rectangle(493, 254, 16, 20);
+    public static Rectangle AIR_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(433, 317, 20, 19);
+    public static Rectangle AIR_PORTAL_FROMALTAR_TAP_RECT = new Rectangle(341, 453, 16, 18);
+    public static Rectangle FIRE_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(438, 229, 19, 17);
+    public static Rectangle FIRE_PORTAL_FROMALTAR_TAP_RECT = new Rectangle(111, 15, 14, 13);
 
-    // TILES
+    // MINING TAP RECTANGLES
+    public static Rectangle HUGE_GUARDIAN_REMAINS_TAP_RECT = new Rectangle(365, 339, 54, 57);
+
+
+    // GENERAL TILES
     public static Tile currentLocation;
-    public static Tile HUGE_GUARDIAN_REMAINS_TILE = new Tile(14363, 37745, 0);
-    public static Tile HUGE_REMAINS_PORTAL_TILE = new Tile(14367, 37757, 0);
+    public static Tile UNCHARGED_CELL_TABLE_TILE = new Tile(14467, 37701, 0);
+    public static Tile WORKBENCH_TILE = new Tile(14447, 37701, 0);
+    public static Tile DEPOSIT_POOL_TILE = new Tile(14435, 37701, 0);
 
+    // GUARDIAN TILES (PORTALS TO THE ALTARS)
     public static Tile MIND_GUARDIAN_TILE = new Tile(14451, 37733, 0);
     public static Tile BODY_GUARDIAN_TILE = new Tile(14439, 37737, 0);
     public static Tile CHAOS_GUARDIAN_TILE = new Tile(14431, 37749, 0);
@@ -130,6 +150,19 @@ public class dmGOTR extends AbstractScript {
     public static Tile WATER_GUARDIAN_TILE = new Tile(14487, 37749, 0);
     public static Tile COSMIC_GUARDIAN_TILE = new Tile(14479, 37737, 0);
     public static Tile AIR_GUARDIAN_TILE = new Tile(14467, 37733, 0);
+
+
+    // PORTAL TILES
+    public static Tile HUGE_REMAINS_PORTAL_TILE = new Tile(14367, 37757, 0);
+    public static Tile AIR_ALTAR_LEAVE_PORTAL_TILE = new Tile(11363, 19061, 0);
+    public static Tile FIRE_ALTAR_LEAVE_PORTAL_TILE = new Tile(10295, 19145, 0);
+
+    // ALTAR TILES
+    public static Tile AIR_ALTAR_TILE = new Tile(11371, 19077, 0);
+    public static Tile FIRE_ALTAR_TILE = new Tile(10335, 19109, 0);
+
+    // MINING TILES
+    public static Tile HUGE_GUARDIAN_REMAINS_TILE = new Tile(14363, 37745, 0);
 
     // SETTINGS
     public static boolean doCosmics;
