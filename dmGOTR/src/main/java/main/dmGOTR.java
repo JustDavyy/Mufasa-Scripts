@@ -109,8 +109,15 @@ public class dmGOTR extends AbstractScript {
     public static Rectangle COSMIC_GUARDIAN_TAP_RECT = new Rectangle(507, 266, 29, 34);
     public static Rectangle AIR_GUARDIAN_TAP_RECT = new Rectangle(461, 290, 37, 53);
 
+    public static Rectangle HUGE_GUARDIAN_REMAINS_TAP_RECT = new Rectangle(365, 339, 54, 57);
+    public static Rectangle PORTAL_TAP_RECT_FROM_HUGEREMAINS = new Rectangle(524, 140, 18, 17);
+    public static Rectangle PORTAL_TAP_RECT_ATPORTAL_HUGEREMAINS = new Rectangle(493, 254, 16, 20);
+
     // TILES
     public static Tile currentLocation;
+    public static Tile HUGE_GUARDIAN_REMAINS_TILE = new Tile(14363, 37745, 0);
+    public static Tile HUGE_REMAINS_PORTAL_TILE = new Tile(14367, 37757, 0);
+
     public static Tile MIND_GUARDIAN_TILE = new Tile(14451, 37733, 0);
     public static Tile BODY_GUARDIAN_TILE = new Tile(14439, 37737, 0);
     public static Tile CHAOS_GUARDIAN_TILE = new Tile(14431, 37749, 0);
