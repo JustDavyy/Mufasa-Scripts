@@ -213,6 +213,7 @@ public class dmGOTR extends AbstractScript {
 
     // MINING TILES
     public static Tile HUGE_GUARDIAN_REMAINS_TILE = new Tile(14363, 37745, 0);
+    public static Tile LARGE_GUARDIAN_REMAINS_TILE = new Tile(14555, 37749, 0);
     public static Tile GUARDIAN_PARTS_TILE = new Tile(14423, 37701, 0);
 
     // SETTINGS
