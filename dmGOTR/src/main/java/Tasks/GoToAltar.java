@@ -18,8 +18,10 @@ public class GoToAltar extends Task {
         this.stateUpdater = stateUpdater;
     }
 
+    private static Area targetArea;
+
     // RUNE INFO
-    RuneInfo runeToMake;
+
 
     @Override
     public boolean activate() {
@@ -69,7 +71,7 @@ public class GoToAltar extends Task {
             tapGuardianRectangle(runeToMake);
 
             // Get the altar area based on the rune type
-            Area targetArea = getAltarAreaForRune(runeToMake);
+            targetArea = getAltarAreaForRune(runeToMake);
 
             if (targetArea == null) {
                 Logger.debugLog("No area defined for rune: " + runeToMake.getName() + ". Exiting execution.");

@@ -7,6 +7,7 @@ import helpers.annotations.ScriptManifest;
 import helpers.annotations.ScriptTabConfiguration;
 import helpers.utils.*;
 import utils.PortalLocation;
+import utils.RuneInfo;
 import utils.StateUpdater;
 import utils.Task;
 
@@ -304,6 +305,8 @@ public class dmGOTR extends AbstractScript {
     public static boolean readyToCraftEssences = false;
     public static boolean readyToCraftRunes = false;
     public static PortalLocation portalLocation = PortalLocation.NONE;
+    public static RuneInfo runeToMake = RuneInfo.NOELEMENTAL;
+
 
     // INTS
     public static int agilityLevel;

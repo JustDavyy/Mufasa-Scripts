@@ -45,6 +45,7 @@ public class StateUpdater {
         readyToCraftEssences = false;
         elementalPoints = 0;
         catalyticPoints = 0;
+        runeToMake = RuneInfo.NOELEMENTAL;
     }
 
     //Update each state
