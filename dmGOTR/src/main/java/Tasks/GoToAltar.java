@@ -1,5 +1,6 @@
 package Tasks;
 
+import helpers.utils.Area;
 import helpers.utils.Tile;
 import utils.RuneInfo;
 import utils.RuneType;
@@ -55,7 +56,7 @@ public class GoToAltar extends Task {
 
         // Retry stepping to the tile as long as we have time
         int timeTillSwitch = stateUpdater.timeTillRuneSwitch();
-        while (!Player.atTile(guardianTile) && timeTillSwitch > 5000) {
+        while (!Player.atTile(guardianTile) && timeTillSwitch > 5) {
             Walker.step(guardianTile);
             Condition.sleep(1000); // Wait for 1 second before retrying
             timeTillSwitch = stateUpdater.timeTillRuneSwitch();
@@ -65,7 +66,18 @@ public class GoToAltar extends Task {
         // Check if we successfully reached the guardian tile
         if (Player.atTile(guardianTile)) {
             Logger.debugLog("Reached guardian tile. Tapping guardian rectangle for rune: " + runeToMake.getName());
-            tapGuardianRectangle(runeToMake); // Tap the corresponding rectangle
+            tapGuardianRectangle(runeToMake);
+
+            // Get the altar area based on the rune type
+            Area targetArea = getAltarAreaForRune(runeToMake);
+
+            if (targetArea == null) {
+                Logger.debugLog("No area defined for rune: " + runeToMake.getName() + ". Exiting execution.");
+                return false; // Fallback in case of an undefined area
+            }
+
+            Logger.debugLog("Waiting until we are within the altar area");
+            Condition.wait(() -> Player.within(targetArea), 100, 100);
             return true;
         } else {
             Logger.debugLog("Failed to reach guardian tile in time. Exiting execution.");
@@ -86,7 +98,7 @@ public class GoToAltar extends Task {
         Logger.debugLog("Time till rune switch: " + timeTillSwitch + " ms");
 
         // If there's less than 10 seconds, wait for the next cycle
-        if (timeTillSwitch < 10000) {
+        if (timeTillSwitch < 10) {
             Logger.debugLog("Less than 10 seconds remaining, waiting for next cycle...");
             Condition.sleep(timeTillSwitch * 1000);
             return null;
@@ -266,6 +278,38 @@ public class GoToAltar extends Task {
                 return BLOOD_GUARDIAN_TAP_RECT;
             default:
                 return null; // Fallback for unknown runes
+        }
+    }
+
+    private Area getAltarAreaForRune(RuneInfo rune) {
+        switch (rune) {
+            case AIR:
+                return airAltarArea;
+            case WATER:
+                return waterAltarArea;
+            case EARTH:
+                return earthAltarArea;
+            case FIRE:
+                return fireAltarArea;
+            case MIND:
+                return mindAltarArea;
+            case BODY:
+                return bodyAltarArea;
+            case COSMIC:
+                return cosmicAltarArea;
+            case CHAOS:
+                return chaosAltarArea;
+            case NATURE:
+                return natureAltarArea;
+            case LAW:
+                return lawAltarArea;
+            case DEATH:
+                return deathAltarArea;
+            case BLOOD:
+                return bloodAltarArea;
+            default:
+                Logger.debugLog("Unknown rune: " + rune.getName());
+                return null; // Return null for unknown runes
         }
     }
 }

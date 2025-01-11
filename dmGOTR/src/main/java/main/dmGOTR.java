@@ -93,6 +93,55 @@ public class dmGOTR extends AbstractScript {
             new Tile(14517, 37672, 0)
     );
 
+    public static Area airAltarArea = new Area(
+            new Tile(11274, 19195, 0),
+            new Tile(11454, 18951, 0)
+    );
+    public static Area waterAltarArea = new Area(
+            new Tile(10757, 19193, 0),
+            new Tile(11003, 18948, 0)
+    );
+    public static Area earthAltarArea = new Area(
+            new Tile(10506, 19195, 0),
+            new Tile(10747, 18953, 0)
+    );
+    public static Area fireAltarArea = new Area(
+            new Tile(10217, 19195, 0),
+            new Tile(10493, 18950, 0)
+    );
+    public static Area mindAltarArea = new Area(
+            new Tile(11019, 19188, 0),
+            new Tile(11237, 19001, 0)
+    );
+    public static Area bodyAltarArea = new Area(
+            new Tile(10005, 19185, 0),
+            new Tile(10172, 19027, 0)
+    );
+    public static Area cosmicAltarArea = new Area(
+            new Tile(8457, 19195, 0),
+            new Tile(8694, 18963, 0)
+    );
+    public static Area chaosAltarArea = new Area(
+            new Tile(8977, 19195, 0),
+            new Tile(9199, 18980, 0)
+    );
+    public static Area natureAltarArea = new Area(
+            new Tile(9488, 19193, 0),
+            new Tile(9700, 18972, 0)
+    );
+    public static Area lawAltarArea = new Area(
+            new Tile(9747, 19193, 0),
+            new Tile(9966, 18963, 0)
+    );
+    public static Area deathAltarArea = new Area(
+            new Tile(8707, 19195, 0),
+            new Tile(8958, 18989, 0)
+    );
+    public static Area bloodAltarArea = new Area(
+            new Tile(12806, 19192, 0),
+            new Tile(13046, 18952, 0)
+    );
+
     // PATHS
     public static final Tile[] agilShortcutToWorkbench = new Tile[] {
             new Tile(14518, 37745, 0),
@@ -360,7 +409,6 @@ public class dmGOTR extends AbstractScript {
             }
         }
     }
-
 
     public static void setStatusAndDebugLog(String stringToLog) {
         Paint.setStatus(stringToLog);

@@ -77,6 +77,7 @@ public class MineEssence extends Task {
                         Player.waitTillNotMoving(10);
                         Walker.step(WORKBENCH_TILE);
                         readyToCraftEssences = true;
+                        return false;
                     }
                 }
             }
@@ -135,6 +136,7 @@ public class MineEssence extends Task {
                     lastFragmentGaintime = 0;
                     tempFragmentHolder = 0;
                     readyToCraftEssences = true;
+                    return false;
                 }
             }
 
