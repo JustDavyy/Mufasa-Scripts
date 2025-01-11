@@ -67,6 +67,12 @@ public class PreGame extends Task {
                     Client.tap(UNCHARGED_CELL_TABLE_TAP_RECT);
                     Condition.wait(() -> (Inventory.stackSize(ItemList.UNCHARGED_CELL_26882) > 6), 100, 85);
                 }
+
+                // Verify we have uncharged cells
+                if (!Inventory.contains(ItemList.UNCHARGED_CELL_26882, 0.7)) {
+                    Logger.debugLog("Failed to obtain uncharged cells");
+                    return false;
+                }
             }
 
             if (usePreGameMineArea) {
