@@ -3,11 +3,10 @@ package Tasks;
 import helpers.utils.EquipmentSlot;
 import helpers.utils.ItemList;
 import helpers.utils.UITabs;
-import utils.StateUpdater;
 import utils.Task;
 
 import static helpers.Interfaces.*;
-import static helpers.Interfaces.Script;
+import static main.dmGOTR.*;
 
 public class CheckGear extends Task {
     boolean equipmentChecked = false;

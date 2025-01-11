@@ -4,8 +4,8 @@ import helpers.utils.ItemList;
 import utils.StateUpdater;
 import utils.Task;
 
-import static helpers.Interfaces.Condition;
-import static helpers.Interfaces.Inventory;
+import static helpers.Interfaces.*;
+import static main.dmGOTR.*;
 
 public class DepositRunes extends Task {
     StateUpdater stateUpdater;

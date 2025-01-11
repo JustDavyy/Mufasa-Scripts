@@ -3,7 +3,8 @@ package Tasks;
 import utils.StateUpdater;
 import utils.Task;
 
-import static helpers.Interfaces.Inventory;
+import static helpers.Interfaces.*;
+import static main.dmGOTR.*;
 
 public class MineEssence extends Task {
     private final StateUpdater stateUpdater;
@@ -14,7 +15,7 @@ public class MineEssence extends Task {
 
     @Override
     public boolean activate() {
-        return !Inventory.isFull();
+        return false;
     }
 
     @Override

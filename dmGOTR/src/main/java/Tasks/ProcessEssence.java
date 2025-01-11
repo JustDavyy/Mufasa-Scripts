@@ -3,7 +3,8 @@ package Tasks;
 import utils.StateUpdater;
 import utils.Task;
 
-import static helpers.Interfaces.Inventory;
+import static helpers.Interfaces.*;
+import static main.dmGOTR.*;
 
 public class ProcessEssence extends Task {
     private final StateUpdater stateUpdater;

@@ -5,6 +5,7 @@ import utils.StateUpdater;
 import utils.Task;
 
 import static helpers.Interfaces.*;
+import static main.dmGOTR.*;
 
 public class BreakManager extends Task {
     private final StateUpdater stateUpdater;

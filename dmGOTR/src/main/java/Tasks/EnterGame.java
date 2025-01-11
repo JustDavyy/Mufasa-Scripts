@@ -3,9 +3,8 @@ package Tasks;
 import utils.StateUpdater;
 import utils.Task;
 
-import static helpers.Interfaces.Player;
-import static main.dmGOTR.currentLocation;
-import static main.dmGOTR.gameLobby;
+import static helpers.Interfaces.*;
+import static main.dmGOTR.*;
 
 public class EnterGame extends Task {
     private final StateUpdater stateUpdater;
