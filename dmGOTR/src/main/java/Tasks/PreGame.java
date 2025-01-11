@@ -79,7 +79,7 @@ public class PreGame extends Task {
                     Walker.walkTo(EAST_INSIDE_GAME_TILE);
                 }
 
-                Player.waitTillNotMoving(15);
+                Player.waitTillNotMoving(10);
                 Walker.step(AGILITY_OUTSIDE_TILE);
 
                 // Check if we are on the tile, if yes proceed

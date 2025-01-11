@@ -83,7 +83,7 @@ import static helpers.Interfaces.*;
 public class dmGOTR extends AbstractScript {
     StateUpdater stateUpdater = new StateUpdater();
 
-    // REGIONS
+    // AREAS
     public static Area gameArea = new Area(
             new Tile(14281, 37673, 0),
             new Tile(14639, 37836, 0)
@@ -92,6 +92,24 @@ public class dmGOTR extends AbstractScript {
             new Tile(14398, 37593, 0),
             new Tile(14517, 37672, 0)
     );
+
+    // PATHS
+    public static final Tile[] agilShortcutToWorkbench = new Tile[] {
+            new Tile(14518, 37745, 0),
+            new Tile(14502, 37730, 0),
+            new Tile(14487, 37723, 0),
+            new Tile(14465, 37715, 0),
+            new Tile(14448, 37707, 0)
+    };
+
+    public static final Tile[] entranceToShortcut = new Tile[] {
+            new Tile(14464, 37695, 0),
+            new Tile(14483, 37705, 0),
+            new Tile(14495, 37719, 0),
+            new Tile(14514, 37728, 0),
+            new Tile(14521, 37739, 0),
+            new Tile(14531, 37754, 0)
+    };
 
     // GENERAL RECTANGLES
     public static Rectangle ELEMENTAL_RUNE_RECT = new Rectangle(107, 48, 23, 21);

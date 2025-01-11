@@ -67,11 +67,15 @@ public class MineEssence extends Task {
                 if (Inventory.stackSize(ItemList.GUARDIAN_FRAGMENTS_26878) >= fragmentsToMine) {
                     setStatusAndDebugLog("Fragments goal reached");
                     Client.tap(LARGE_GUARDIAN_AGILITYSHORTCUT_FROMREMAINS_TAP_RECT);
+                    Condition.wait(() -> Player.atTile(AGILITY_OUTSIDE_TILE), 100, 100);
 
                     if (Player.atTile(AGILITY_OUTSIDE_TILE)) {
                         startedMiningFragments = false;
                         lastFragmentGaintime = 0;
                         tempFragmentHolder = 0;
+                        Walker.walkPath(agilShortcutToWorkbench);
+                        Player.waitTillNotMoving(10);
+                        Walker.step(WORKBENCH_TILE);
                     }
                 }
             }
@@ -80,6 +84,7 @@ public class MineEssence extends Task {
             if (!startedMiningFragments) {
                 setStatusAndDebugLog("Start mining");
                 Client.tap(LARGE_GUARDIAN_REMAINS_ATREMAINS_TAP_RECT);
+                startedMiningFragments = true;
                 Condition.wait(() -> Inventory.contains(ItemList.GUARDIAN_FRAGMENTS_26878, 0.7), 100, 100);
                 lastFragmentGaintime = System.currentTimeMillis();
                 tempFragmentHolder = Inventory.stackSize(ItemList.GUARDIAN_FRAGMENTS_26878);
@@ -138,6 +143,7 @@ public class MineEssence extends Task {
             if (!startedMiningFragments) {
                 setStatusAndDebugLog("Start mining");
                 Client.tap(GUARDIAN_PARTS_TAP_RECT);
+                startedMiningFragments = true;
                 Condition.wait(() -> Inventory.contains(ItemList.GUARDIAN_FRAGMENTS_26878, 0.7), 100, 100);
                 lastFragmentGaintime = System.currentTimeMillis();
                 tempFragmentHolder = Inventory.stackSize(ItemList.GUARDIAN_FRAGMENTS_26878);
