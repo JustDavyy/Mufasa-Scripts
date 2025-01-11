@@ -76,6 +76,7 @@ public class MineEssence extends Task {
                         Walker.walkPath(agilShortcutToWorkbench);
                         Player.waitTillNotMoving(10);
                         Walker.step(WORKBENCH_TILE);
+                        readyToCraftEssences = true;
                     }
                 }
             }
@@ -130,12 +131,10 @@ public class MineEssence extends Task {
                     setStatusAndDebugLog("Fragments goal reached");
                     setStatusAndDebugLog("Go to workbench");
                     Walker.step(WORKBENCH_TILE);
-
-                    if (Player.atTile(WORKBENCH_TILE)) {
-                        startedMiningFragments = false;
-                        lastFragmentGaintime = 0;
-                        tempFragmentHolder = 0;
-                    }
+                    startedMiningFragments = false;
+                    lastFragmentGaintime = 0;
+                    tempFragmentHolder = 0;
+                    readyToCraftEssences = true;
                 }
             }
 

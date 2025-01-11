@@ -196,6 +196,7 @@ public class dmGOTR extends AbstractScript {
     public static Tile CELL_PLACE_TILE = new Tile(14483, 37761, 0);
 
     // GUARDIAN TILES (PORTALS TO THE ALTARS)
+    public static Tile GUARDIANS_MIDDLE_AREA_TILE = new Tile(14459, 37741, 0);
     public static Tile MIND_GUARDIAN_TILE = new Tile(14451, 37733, 0);
     public static Tile BODY_GUARDIAN_TILE = new Tile(14439, 37737, 0);
     public static Tile CHAOS_GUARDIAN_TILE = new Tile(14431, 37749, 0);
@@ -249,6 +250,8 @@ public class dmGOTR extends AbstractScript {
     public static boolean usePreGameMineArea;
     public static boolean usePouches;
     public static boolean portalActive;
+    public static boolean readyToCraftEssences = false;
+    public static boolean readyToCraftRunes = false;
     public static PortalLocation portalLocation = PortalLocation.NONE;
 
     // INTS
