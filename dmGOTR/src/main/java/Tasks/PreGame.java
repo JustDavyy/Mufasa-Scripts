@@ -41,7 +41,7 @@ public class PreGame extends Task {
     public boolean execute() {
         setStatusAndDebugLog("Reset all states");
         stateUpdater.resetAllStates();
-        
+
         setStatusAndDebugLog("Start PreGame");
 
         // Logic if we are inside the game area

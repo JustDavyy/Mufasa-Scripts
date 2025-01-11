@@ -283,7 +283,7 @@ public class GoToAltar extends Task {
         }
     }
 
-    private Area getAltarAreaForRune(RuneInfo rune) {
+    public static Area getAltarAreaForRune(RuneInfo rune) {
         switch (rune) {
             case AIR:
                 return airAltarArea;

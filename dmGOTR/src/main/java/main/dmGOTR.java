@@ -142,6 +142,22 @@ public class dmGOTR extends AbstractScript {
             new Tile(12806, 19192, 0),
             new Tile(13046, 18952, 0)
     );
+    public static Area cosmicAltarNorth = new Area(
+            new Tile(8548, 19186, 0),
+            new Tile(8596, 19140, 0)
+    );
+    public static Area cosmicAltarEast = new Area(
+            new Tile(8631, 19104, 0),
+            new Tile(8675, 19054, 0)
+    );
+    public static Area cosmicAltarSouth = new Area(
+            new Tile(8547, 19017, 0),
+            new Tile(8591, 18973, 0)
+    );
+    public static Area cosmicAltarWest = new Area(
+            new Tile(8464, 19100, 0),
+            new Tile(8509, 19058, 0)
+    );
 
     // PATHS
     public static final Tile[] agilShortcutToWorkbench = new Tile[] {
