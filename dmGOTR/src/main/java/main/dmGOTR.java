@@ -2,12 +2,10 @@ package main;
 
 import Tasks.*;
 import helpers.*;
-import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.annotations.ScriptTabConfiguration;
 import helpers.utils.*;
-import utils.FontGOTR;
 import utils.PortalLocation;
 import utils.StateUpdater;
 import utils.Task;
@@ -268,15 +266,27 @@ public class dmGOTR extends AbstractScript {
             usePreGameMineArea = false;
         }
 
-        // Make sure chatbox is closed
-        Chatbox.closeChatbox();
-
-        // Zoom all the way out, zoom level 1
-        Game.setZoom("1");
-
         // Creating the Paint object
         Logger.debugLog("Creating paint object.");
         Paint.Create("/logo/dm.png");
+
+        setStatusAndDebugLog("Initializing...");
+        Paint.setStatistic("Initializing...");
+
+        // Make sure chatbox is closed
+        setStatusAndDebugLog("Close chatbox");
+        Chatbox.closeChatbox();
+
+        // Zoom all the way out, zoom level 1
+        setStatusAndDebugLog("Set zoom 1");
+        Game.setZoom("1");
+
+        // Disable AFK handler, we don't do that shit here
+        setStatusAndDebugLog("Disable AFK Handler");
+        Client.disableAFKHandler();
+
+        setStatusAndDebugLog("Set postpone breaks TRUE");
+        Client.postponeBreaks();
     }
 
     // Task list!
@@ -326,5 +336,11 @@ public class dmGOTR extends AbstractScript {
         //        return;
         //    }
         //}
+    }
+
+
+    public static void setStatusAndDebugLog(String stringToLog) {
+        Paint.setStatus(stringToLog);
+        Logger.debugLog(stringToLog);
     }
 }
