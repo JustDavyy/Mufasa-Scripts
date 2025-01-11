@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
         description = "Does Guardians of the Rift minigame.",
         version = "1.00",
         guideLink = "",
-        categories = {ScriptCategory.Fletching, ScriptCategory.Agility},
+        categories = {ScriptCategory.Runecrafting, ScriptCategory.Minigames},
         skipClientSetup = true
 )
 @ScriptTabConfiguration.List({
@@ -36,26 +36,26 @@ import static helpers.Interfaces.*;
                                 optionType = OptionType.DESCRIPTION
                         ),
                         @ScriptConfiguration(
-                                name = "Do Cosmic runes?",
-                                description = "This requires having Lost City completed.",
+                                name = "Cosmic runes",
+                                description = "Would you like to craft Cosmic Runes? This requires having Lost City completed.",
                                 defaultValue = "False",
                                 optionType = OptionType.BOOLEAN
                         ),
                         @ScriptConfiguration(
-                                name = "Do Law runes?",
-                                description = "This requires having Troll Stronghold completed.",
+                                name = "Law runes",
+                                description = "Would you like to craft Law Runes? This requires having Troll Stronghold completed.",
                                 defaultValue = "False",
                                 optionType = OptionType.BOOLEAN
                         ),
                         @ScriptConfiguration(
-                                name = "Do Death runes?",
-                                description = "This requires having Mourning's End Part II completed.",
+                                name = "Death runes",
+                                description = "Would you like to craft Death Runes? This requires having Mourning's End Part II completed.",
                                 defaultValue = "False",
                                 optionType = OptionType.BOOLEAN
                         ),
                         @ScriptConfiguration(
-                                name = "Do Blood runes?",
-                                description = "This requires having Sins of the Father completed.",
+                                name = "Blood runes",
+                                description = "Would you like to craft Blood Runes? This requires having Sins of the Father completed.",
                                 defaultValue = "False",
                                 optionType = OptionType.BOOLEAN
                         )
@@ -65,7 +65,14 @@ import static helpers.Interfaces.*;
 @ScriptConfiguration.List(
         {
                 @ScriptConfiguration(
-                        name = "Use pouches?",
+                        name = "Fragments",
+                        description = "How many fragments would you like to mine at the start?",
+                        defaultValue = "165",
+                        minMaxIntValues = {50, 200},
+                        optionType = OptionType.INTEGER_SLIDER
+                ),
+                @ScriptConfiguration(
+                        name = "Pouches",
                         description = "Do you want to use pouches?",
                         defaultValue = "False",
                         optionType = OptionType.BOOLEAN
@@ -230,6 +237,7 @@ public class dmGOTR extends AbstractScript {
     public static int agilityLevel;
     public static int guardiansPower;
     public static int portalTime;
+    public static int fragmentsToMine;
 
     // COLORS
     public static List<Color> blackColor = Arrays.asList(
@@ -243,11 +251,12 @@ public class dmGOTR extends AbstractScript {
     @Override
     public void onStart(){
         Map<String, String> configs = getConfigurations();
-        doCosmics = Boolean.parseBoolean(configs.get("Do Cosmic runes?"));
-        doLaws = Boolean.parseBoolean(configs.get("Do Law runes?"));
-        doDeaths = Boolean.parseBoolean(configs.get("Do Death runes?"));
-        doBloods = Boolean.parseBoolean(configs.get("Do Blood runes?"));
-        usePouches = Boolean.parseBoolean(configs.get("Use pouches?"));
+        doCosmics = Boolean.parseBoolean(configs.get("Cosmic runes"));
+        doLaws = Boolean.parseBoolean(configs.get("Law runes"));
+        doDeaths = Boolean.parseBoolean(configs.get("Death runes"));
+        doBloods = Boolean.parseBoolean(configs.get("Blood runes"));
+        usePouches = Boolean.parseBoolean(configs.get("Pouches"));
+        fragmentsToMine = Integer.parseInt(configs.get("Fragments"));
 
         // 55-148, 55-147, 56-147, 56-148, 56-149, 57-149, 57-148, 57-147, 44-75, 42-75, 41-75, 40-75, 39-75, 38-75, 37-75, 36-75, 35-75, 34-75, 33-75, 32-75, 43-75, 50-75
         Walker.setup(new MapChunk(new String[]{"55-148", "55-147", "56-147", "56-148", "56-149", "57-149", "57-148", "57-147", "44-75", "42-75", "41-75", "41-75", "40-75", "39-75", "38-75", "37-75", "36-75", "35-75", "34-75", "33-75", "32-75", "43-75", "50-75"}, "0"));

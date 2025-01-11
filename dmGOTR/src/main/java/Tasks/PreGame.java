@@ -21,7 +21,7 @@ public class PreGame extends Task {
     }
 
     // AREAS
-    private static final Area INSIDE_AREA = new Area(
+    public static final Area INSIDE_AREA = new Area(
             new Tile(14375, 37829, 0),
             new Tile(14543, 37680, 0)
     );
@@ -29,7 +29,7 @@ public class PreGame extends Task {
     // TILES
     private static final Tile MIDDLE_INSIDE_GAME_TILE = new Tile(14463, 37721, 0);
     private static final Tile EAST_INSIDE_GAME_TILE = new Tile(14503, 37745, 0);
-    private static final Tile AGILITY_OUTSIDE_TILE = new Tile(14531, 37761, 0);
+    public static final Tile AGILITY_OUTSIDE_TILE = new Tile(14531, 37761, 0);
     private static final Tile AGILITY_INSIDE_TILE = new Tile(14547, 37761, 0);
 
     @Override
