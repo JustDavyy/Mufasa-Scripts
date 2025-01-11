@@ -96,6 +96,32 @@ public class PreGame extends Task {
 
         // Logic if we are inside the game area
         if (Player.isTileWithinArea(currentLocation, INSIDE_AREA)) {
+            if (Inventory.stackSize(ItemList.UNCHARGED_CELL_26882) < 6) {
+                setStatusAndDebugLog("Grab uncharged cells");
+                if (Walker.isReachable(UNCHARGED_CELL_TABLE_TILE)) {
+                    Walker.step(UNCHARGED_CELL_TABLE_TILE);
+                } else if (Walker.isReachable(MIDDLE_INSIDE_GAME_TILE)) {
+                    Walker.walkTo(MIDDLE_INSIDE_GAME_TILE);
+                    Player.waitTillNotMoving(15);
+                    Walker.step(UNCHARGED_CELL_TABLE_TILE);
+                } else {
+                    Walker.webWalk(UNCHARGED_CELL_TABLE_TILE);
+                    Player.waitTillNotMoving(15);
+                    Walker.step(UNCHARGED_CELL_TABLE_TILE);
+                }
+
+                // Check if we are at the tile, if not try once more
+                if (!Player.atTile(UNCHARGED_CELL_TABLE_TILE)) {
+                    Walker.step(UNCHARGED_CELL_TABLE_TILE);
+                }
+
+                // Grab new cells if at the table
+                if (Player.atTile(UNCHARGED_CELL_TABLE_TILE)) {
+                    Client.tap(UNCHARGED_CELL_TABLE_TAP_RECT);
+                    Condition.wait(() -> (Inventory.stackSize(ItemList.UNCHARGED_CELL_26882) > 6), 100, 85);
+                }
+            }
+
             if (usePreGameMineArea) {
                 setStatusAndDebugLog("Go to lower mining area");
                 // Check if east side is already reachable
@@ -140,8 +166,6 @@ public class PreGame extends Task {
                     Logger.debugLog("Done with PreGame, we're now ready to mine essence.");
                 }
             }
-
-
         }
 
         return false;
