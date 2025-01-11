@@ -114,6 +114,8 @@ public class dmGOTR extends AbstractScript {
     // GENERAL RECTANGLES
     public static Rectangle ELEMENTAL_RUNE_RECT = new Rectangle(107, 48, 23, 21);
     public static Rectangle CATALYTIC_RUNE_RECT = new Rectangle(188, 49, 24, 18);
+    public static Rectangle ELEMENTAL_POINTS_RECT = new Rectangle(127, 88, 39, 29);
+    public static Rectangle CATALYTIC_POINTS_RECT = new Rectangle(204, 88, 47, 29);
     public static Rectangle PORTAL_CHECK_RECT = new Rectangle(271, 80, 20, 18);
     public static Rectangle PORTAL_READ_RECT = new Rectangle(276, 104, 39, 26);
     public static Rectangle PORTAL_LOCATION_READ_RECT = new Rectangle(248, 102, 34, 32);
@@ -256,9 +258,12 @@ public class dmGOTR extends AbstractScript {
 
     // INTS
     public static int agilityLevel;
+    public static int runecraftingLevel;
     public static int guardiansPower;
     public static int portalTime;
     public static int fragmentsToMine;
+    public static int elementalPoints = 0;
+    public static int catalyticPoints = 0;
 
     // COLORS
     public static List<Color> blackColor = Arrays.asList(
@@ -289,7 +294,8 @@ public class dmGOTR extends AbstractScript {
         }
 
         if (GameTabs.isTabOpen(UITabs.STATS)) {
-            agilityLevel = Stats.getRealLevel(Skills.AGILITY); //Get the agi level
+            agilityLevel = Stats.getRealLevel(Skills.AGILITY); //Get the agility level
+            runecraftingLevel = Stats.getRealLevel(Skills.RUNECRAFTING); // Get the runecrafting level
         }
 
         if (agilityLevel < 56) {

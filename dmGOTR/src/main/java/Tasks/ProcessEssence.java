@@ -43,6 +43,8 @@ public class ProcessEssence extends Task {
 
         // Done crafting pouches, ready to craft runes
         Walker.walkTo(GUARDIANS_MIDDLE_AREA_TILE);
+        readyToCraftEssences = false;
+        readyToCraftRunes = true;
 
         return false;
     }
