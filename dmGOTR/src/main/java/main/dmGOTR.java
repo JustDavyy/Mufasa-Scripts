@@ -96,63 +96,81 @@ public class dmGOTR extends AbstractScript {
     public static Rectangle PORTAL_LOCATION_READ_RECT = new Rectangle(248, 102, 34, 32);
     public static Rectangle GUARDIAN_POWER_READ_RECT = new Rectangle(186, 12, 38, 15);
     public static Rectangle TIMER_READ_RECT = new Rectangle(137, 47, 43, 27);
-    public static Rectangle UNCHARGED_CELL_TABLE_TAP_RECT = new Rectangle(496, 260, 32, 23);
-    public static Rectangle WORKBENCH_TAP_RECT = new Rectangle(391, 319, 55, 43);
-    public static Rectangle DEPOSIT_POOL_TAP_RECT = new Rectangle(431, 305, 21, 22);
+    public static Rectangle UNCHARGED_CELL_TABLE_TAP_RECT = new Rectangle(463, 261, 10, 9);
+    public static Rectangle WORKBENCH_TAP_RECT = new Rectangle(426, 280, 19, 19);
+    public static Rectangle DEPOSIT_POOL_TAP_RECT = new Rectangle(441, 276, 7, 11);
+    public static Rectangle CELL_PLACE_TAP_RECT = new Rectangle(463, 267, 6, 6);
 
     // GUARDIANS RECTANGLES
-    public static Rectangle MIND_GUARDIAN_TAP_RECT = new Rectangle(397, 289, 34, 47);
-    public static Rectangle BODY_GUARDIAN_TAP_RECT = new Rectangle(346, 248, 30, 45);
-    public static Rectangle CHAOS_GUARDIAN_TAP_RECT = new Rectangle(349, 201, 34, 51);
-    public static Rectangle DEATH_GUARDIAN_TAP_RECT = new Rectangle(347, 198, 27, 43);
-    public static Rectangle LAW_GUARDIAN_TAP_RECT = new Rectangle(415, 161, 25, 42);
-    public static Rectangle BLOOD_GUARDIAN_TAP_RECT = new Rectangle(462, 165, 29, 49);
-    public static Rectangle FIRE_GUARDIAN_TAP_RECT = new Rectangle(413, 163, 31, 49);
-    public static Rectangle NATURE_GUARDIAN_TAP_RECT = new Rectangle(462, 173, 22, 35);
-    public static Rectangle EARTH_GUARDIAN_TAP_RECT = new Rectangle(513, 229, 25, 33);
-    public static Rectangle WATER_GUARDIAN_TAP_RECT = new Rectangle(513, 229, 25, 33);
-    public static Rectangle COSMIC_GUARDIAN_TAP_RECT = new Rectangle(507, 266, 29, 34);
-    public static Rectangle AIR_GUARDIAN_TAP_RECT = new Rectangle(461, 290, 37, 53);
+    public static Rectangle MIND_GUARDIAN_TAP_RECT = new Rectangle(428, 275, 12, 18);
+    public static Rectangle BODY_GUARDIAN_TAP_RECT = new Rectangle(410, 258, 11, 18);
+    public static Rectangle CHAOS_GUARDIAN_TAP_RECT = new Rectangle(411, 246, 13, 15);
+    public static Rectangle DEATH_GUARDIAN_TAP_RECT = new Rectangle(411, 246, 13, 15);
+    public static Rectangle LAW_GUARDIAN_TAP_RECT = new Rectangle(428, 230, 10, 16);
+    public static Rectangle BLOOD_GUARDIAN_TAP_RECT = new Rectangle(453, 229, 10, 19);
+    public static Rectangle FIRE_GUARDIAN_TAP_RECT = new Rectangle(435, 230, 10, 15);
+    public static Rectangle NATURE_GUARDIAN_TAP_RECT = new Rectangle(451, 234, 12, 17);
+    public static Rectangle EARTH_GUARDIAN_TAP_RECT = new Rectangle(470, 250, 10, 19);
+    public static Rectangle WATER_GUARDIAN_TAP_RECT = new Rectangle(470, 250, 10, 19);
+    public static Rectangle COSMIC_GUARDIAN_TAP_RECT = new Rectangle(468, 267, 10, 15);
+    public static Rectangle AIR_GUARDIAN_TAP_RECT = new Rectangle(448, 283, 12, 18);
 
     // ALTAR TAP RECTANGLES
-    public static Rectangle AIR_ALTAR_FROM_PORTAL_TAP_RECT = new Rectangle(539, 59, 64, 51);
-    public static Rectangle AIR_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(458, 153, 74, 55);
-    public static Rectangle FIRE_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(471, 339, 63, 63);
-    public static Rectangle MIND_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(362, 154, 69, 59);
-    public static Rectangle BODY_ALTAR_FROM_PORTAL_TAP_RECT = new Rectangle(502, 43, 46, 34);
-    public static Rectangle BODY_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(464, 152, 67, 57);
-    public static Rectangle WATER_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(318, 191, 54, 53);
-    public static Rectangle COSMIC_ALTAR_NORTH_TAP_RECT = new Rectangle(428, 333, 46, 52);
-    public static Rectangle COSMIC_ALTAR_EAST_TAP_RECT = new Rectangle(318, 249, 55, 53);
-    public static Rectangle COSMIC_ALTAR_SOUTH_TAP_RECT = new Rectangle(429, 168, 49, 44);
-    public static Rectangle COSMIC_ALTAR_WEST_TAP_RECT = new Rectangle(510, 244, 51, 44);
-    public static Rectangle EARTH_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(468, 156, 56, 50);
+    public static Rectangle AIR_ALTAR_FROM_PORTAL_TAP_RECT = new Rectangle(481, 188, 21, 18);
+    public static Rectangle AIR_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(453, 223, 21, 24);
+    public static Rectangle FIRE_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(453, 294, 25, 22);
+    public static Rectangle FIRE_ALTAR_FROM_PORTAL_TAP_RECT = new Rectangle(764, 510, 47, 23);
+    public static Rectangle MIND_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(416, 224, 25, 21);
+    public static Rectangle MIND_ALTAR_FROM_PORTAL_TAP_RECT = new Rectangle(341, 101, 22, 15);
+    public static Rectangle BODY_ALTAR_FROM_PORTAL_TAP_RECT = new Rectangle(470, 173, 17, 18);
+    public static Rectangle BODY_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(454, 222, 22, 23);
+    public static Rectangle WATER_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(396, 236, 26, 25);
+    public static Rectangle WATER_ALTAR_FROM_PORTAL_TAP_RECT = new Rectangle(254, 175, 27, 23);
+    public static Rectangle COSMIC_ALTAR_NORTH_TAP_RECT = new Rectangle(432, 292, 21, 22);
+    public static Rectangle COSMIC_ALTAR_EAST_ATALTAR_TAP_RECT = new Rectangle(397, 254, 23, 21);
+    public static Rectangle COSMIC_ALTAR_EAST_FROMPORTAL_TAP_RECT = new Rectangle(85, 257, 25, 19);
+    public static Rectangle COSMIC_ALTAR_SOUTH_TAP_RECT = new Rectangle(436, 224, 23, 21);
+    public static Rectangle COSMIC_ALTAR_WEST_TAP_RECT = new Rectangle(471, 259, 22, 20);
+    public static Rectangle EARTH_ALTAR_AT_ALTAR_TAP_RECT = new Rectangle(454, 225, 22, 21);
+    public static Rectangle EARTH_ALTAR_FROM_PORTAL_TAP_RECT = new Rectangle(465, 64, 24, 21);
 
     // PORTAL TAP RECTANGLES
-    public static Rectangle PORTAL_TAP_RECT_FROM_HUGEREMAINS = new Rectangle(524, 140, 18, 17);
-    public static Rectangle PORTAL_TAP_RECT_ATPORTAL_HUGEREMAINS = new Rectangle(493, 254, 16, 20);
-    public static Rectangle AIR_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(433, 317, 20, 19);
-    public static Rectangle AIR_PORTAL_FROMALTAR_TAP_RECT = new Rectangle(341, 453, 16, 18);
-    public static Rectangle FIRE_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(438, 229, 19, 17);
-    public static Rectangle FIRE_PORTAL_FROMALTAR_TAP_RECT = new Rectangle(111, 15, 14, 13);
-    public static Rectangle MIND_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(437, 317, 20, 15);
-    public static Rectangle BODY_PORTAL_FROMALTAR_TAP_RECT = new Rectangle(391, 509, 21, 22);
-    public static Rectangle BODY_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(433, 323, 15, 16);
-    public static Rectangle WATER_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(485, 269, 19, 19);
-    public static Rectangle COSMIC_PORTAL_NORTHPORTAL_TAP_RECT = new Rectangle(444, 225, 17, 16);
-    public static Rectangle COSMIC_PORTAL_EASTPORTAL_TAP_RECT = new Rectangle(485, 271, 19, 16);
-    public static Rectangle COSMIC_PORTAL_SOUTHPORTAL_TAP_RECT = new Rectangle(445, 321, 18, 19);
-    public static Rectangle COSMIC_PORTAL_WESTPORTAL_TAP_RECT = new Rectangle(384, 277, 18, 17);
+    public static Rectangle PORTAL_TAP_RECT_FROM_HUGEREMAINS = new Rectangle(475, 221, 5, 8);
+    public static Rectangle PORTAL_TAP_RECT_ATPORTAL_HUGEREMAINS = new Rectangle(463, 263, 7, 6);
+    public static Rectangle AIR_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(442, 282, 10, 7);
+    public static Rectangle AIR_PORTAL_FROMALTAR_TAP_RECT = new Rectangle(408, 332, 8, 8);
+    public static Rectangle FIRE_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(444, 253, 8, 7);
+    public static Rectangle FIRE_PORTAL_FROMALTAR_TAP_RECT = new Rectangle(327, 178, 6, 5);
+    public static Rectangle MIND_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(443, 284, 8, 8);
+    public static Rectangle MIND_PORTAL_FROMALTAR_TAP_RECT = new Rectangle(577, 517, 10, 11);
+    public static Rectangle BODY_PORTAL_FROMALTAR_TAP_RECT = new Rectangle(427, 353, 7, 9);
+    public static Rectangle BODY_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(442, 284, 9, 6);
+    public static Rectangle WATER_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(460, 267, 8, 7);
+    public static Rectangle WATER_PORTAL_FROMALTAR_TAP_RECT = new Rectangle(587, 321, 4, 7);
+    public static Rectangle COSMIC_PORTAL_NORTHPORTAL_TAP_RECT = new Rectangle(442, 251, 7, 6);
+    public static Rectangle COSMIC_PORTAL_EASTPORTAL_TAP_RECT = new Rectangle(462, 265, 8, 8);
+    public static Rectangle COSMIC_PORTAL_SOUTHPORTAL_TAP_RECT = new Rectangle(443, 283, 7, 8);
+    public static Rectangle COSMIC_PORTAL_WESTPORTAL_ATPORTAL_TAP_RECT = new Rectangle(424, 269, 8, 8);
+    public static Rectangle COSMIC_PORTAL_WESTPORTAL_FROMALTAR_TAP_RECT = new Rectangle(121, 268, 10, 7);
+    public static Rectangle EARTH_PORTAL_ATPORTAL_TAP_RECT = new Rectangle(426, 268, 8, 7);
+    public static Rectangle EARTH_PORTAL_FROMALTAR_TAP_RECT = new Rectangle(409, 452, 9, 9);
 
     // MINING TAP RECTANGLES
-    public static Rectangle HUGE_GUARDIAN_REMAINS_TAP_RECT = new Rectangle(365, 339, 54, 57);
-
+    public static Rectangle HUGE_GUARDIAN_REMAINS_FROMPORTAL_TAP_RECT = new Rectangle(392, 347, 29, 30);
+    public static Rectangle HUGE_GUARDIAN_REMAINS_ATREMAINS_TAP_RECT = new Rectangle(413, 296, 28, 24);
+    public static Rectangle LARGE_REMAINS_OUTSIDE_AGILITY_TAP_RECT = new Rectangle(460, 267, 11, 10);
+    public static Rectangle LARGE_REMAINS_INSIDE_AGILITY_TAP_RECT = new Rectangle(427, 264, 9, 10);
+    public static Rectangle LARGE_GUARDIAN_REMAINS_FROMAGILITY_TAP_RECT = new Rectangle(490, 341, 32, 31);
+    public static Rectangle LARGE_GUARDIAN_REMAINS_ATREMAINS_TAP_RECT = new Rectangle(453, 292, 25, 26);
+    public static Rectangle LARGE_GUARDIAN_AGILITYSHORTCUT_FROMREMAINS_TAP_RECT = new Rectangle(395, 224, 11, 9);
+    public static Rectangle GUARDIAN_PARTS_TAP_RECT = new Rectangle(427, 271, 10, 7);
 
     // GENERAL TILES
     public static Tile currentLocation;
     public static Tile UNCHARGED_CELL_TABLE_TILE = new Tile(14467, 37701, 0);
     public static Tile WORKBENCH_TILE = new Tile(14447, 37701, 0);
     public static Tile DEPOSIT_POOL_TILE = new Tile(14435, 37701, 0);
+    public static Tile CELL_PLACE_TILE = new Tile(14483, 37761, 0);
 
     // GUARDIAN TILES (PORTALS TO THE ALTARS)
     public static Tile MIND_GUARDIAN_TILE = new Tile(14451, 37733, 0);
@@ -197,6 +215,7 @@ public class dmGOTR extends AbstractScript {
 
     // MINING TILES
     public static Tile HUGE_GUARDIAN_REMAINS_TILE = new Tile(14363, 37745, 0);
+    public static Tile GUARDIAN_PARTS_TILE = new Tile(14423, 37701, 0);
 
     // SETTINGS
     public static boolean doCosmics;
@@ -251,6 +270,9 @@ public class dmGOTR extends AbstractScript {
 
         // Make sure chatbox is closed
         Chatbox.closeChatbox();
+
+        // Zoom all the way out, zoom level 1
+        Game.setZoom("1");
 
         // Creating the Paint object
         Logger.debugLog("Creating paint object.");
