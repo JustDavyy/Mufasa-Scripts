@@ -274,6 +274,9 @@ public class dmGOTR extends AbstractScript {
         if (agilityLevel < 56) {
             Logger.log("Agility level below 56, not using east mine in pre-game");
             usePreGameMineArea = false;
+        } else {
+            Logger.log("Agility level above 56, using east lower mine in pre-game");
+            usePreGameMineArea = true;
         }
 
         // Creating the Paint object
@@ -322,30 +325,13 @@ public class dmGOTR extends AbstractScript {
 
         stateUpdater.updateAllStates();
 
-        if (stateUpdater.isGameGoing()) {
-            Logger.debugLog("Active elemental rune: " + stateUpdater.getElementalRune().getName());
-            Logger.debugLog("Active catalytic rune: " + stateUpdater.getCatalyticRune().getName());
-            Logger.debugLog("Guardians power: " + stateUpdater.getGuardiansPower());
-            Logger.debugLog("Portal active: " + stateUpdater.isPortalActive());
-            if (stateUpdater.isPortalActive()) {
-                Logger.debugLog("Portal time left: " + stateUpdater.getPortalTime());
-                Logger.debugLog("Portal location: " + stateUpdater.getPortalLocation());
-            }
-            Logger.debugLog("Time till next rune switch: " + stateUpdater.timeTillRuneSwitch());
-        } else {
-            Logger.debugLog("Game is currently NOT going.");
-        }
-
-
-        Condition.sleep(1500, 2500);
-
         //Run tasks
-        //for (Task task : gotrTasks) {
-        //    if (task.activate()) {
-        //        task.execute();
-        //        return;
-        //    }
-        //}
+        for (Task task : gotrTasks) {
+            if (task.activate()) {
+                task.execute();
+                return;
+            }
+        }
     }
 
 
