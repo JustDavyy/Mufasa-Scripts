@@ -15,20 +15,23 @@ public class CheckGear extends Task {
     boolean hasChisel = true;
 
     int[] pickaxeIDs = { //Reversed order to check highest pickaxes first instead of lower ones.
-            ItemList._3RD_AGE_PICKAXE_20014,
-            ItemList.INFERNAL_PICKAXE_13243,
-            ItemList.INFERNAL_PICKAXE_UNCHARGED_13244,
-            ItemList.CRYSTAL_PICKAXE_23680,
-            ItemList.CRYSTAL_PICKAXE_INACTIVE_23682,
+
             ItemList.DRAGON_PICKAXE_11920,
             ItemList.RUNE_PICKAXE_1275,
-            ItemList.GILDED_PICKAXE_23276,
             ItemList.ADAMANT_PICKAXE_1271,
             ItemList.MITHRIL_PICKAXE_1273,
             ItemList.BLACK_PICKAXE_12297,
             ItemList.STEEL_PICKAXE_1269,
             ItemList.IRON_PICKAXE_1267,
-            ItemList.BRONZE_PICKAXE_1265
+            ItemList.BRONZE_PICKAXE_1265,
+
+            // More odd pickaxes later
+            ItemList._3RD_AGE_PICKAXE_20014,
+            ItemList.INFERNAL_PICKAXE_13243,
+            ItemList.INFERNAL_PICKAXE_UNCHARGED_13244,
+            ItemList.CRYSTAL_PICKAXE_23680,
+            ItemList.CRYSTAL_PICKAXE_INACTIVE_23682,
+            ItemList.GILDED_PICKAXE_23276
     };
 
 
@@ -58,7 +61,7 @@ public class CheckGear extends Task {
             }
         }
 
-        if (!equipmentChecked) {
+        if (!hasPickaxe) {
             if (!GameTabs.isTabOpen(UITabs.EQUIP)) {
                 GameTabs.openTab(UITabs.EQUIP);
                 Condition.wait(() -> GameTabs.isTabOpen(UITabs.EQUIP), 50, 10);
