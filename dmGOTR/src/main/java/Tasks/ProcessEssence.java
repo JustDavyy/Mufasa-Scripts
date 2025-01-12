@@ -4,6 +4,7 @@ import helpers.utils.ItemList;
 import utils.StateUpdater;
 import utils.Task;
 
+import static Tasks.MineEssence.LARGE_REMAINS_MINING_AREA;
 import static helpers.Interfaces.*;
 import static main.dmGOTR.*;
 
@@ -16,7 +17,7 @@ public class ProcessEssence extends Task {
 
     @Override
     public boolean activate() {
-        return readyToCraftEssences || stateUpdater.isGameGoing() && Inventory.contains(ItemList.GUARDIAN_FRAGMENTS_26878, 0.8) && !Inventory.contains(ItemList.GUARDIAN_ESSENCE_26879, 0.8);
+        return readyToCraftEssences || stateUpdater.isGameGoing() && Inventory.contains(ItemList.GUARDIAN_FRAGMENTS_26878, 0.8) && !Inventory.contains(ItemList.GUARDIAN_ESSENCE_26879, 0.8) && !Player.isTileWithinArea(currentLocation, LARGE_REMAINS_MINING_AREA) && !Player.tileEquals(currentLocation, GUARDIAN_PARTS_TILE);
     }
 
     @Override

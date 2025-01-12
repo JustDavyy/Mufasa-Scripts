@@ -33,8 +33,6 @@ public class StateUpdater {
         gameGoing = false;
         shouldDepositRunes = false;
         shouldRepairPouches = false;
-        elementalRune = RuneInfo.NOELEMENTAL;
-        catalyticRune = RuneInfo.NOCATALYTIC;
         guardiansPower = 0;
         portalActive = false;
         portalTime = 0;
@@ -46,7 +44,6 @@ public class StateUpdater {
         readyToCraftEssences = false;
         elementalPoints = 0;
         catalyticPoints = 0;
-        runeToMake = RuneInfo.NOELEMENTAL;
         isGameAt90Percent = false;
     }
 
