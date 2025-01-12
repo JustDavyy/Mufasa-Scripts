@@ -85,6 +85,7 @@ public class GoToAltar extends Task {
             }
 
             Logger.debugLog("Waiting until we are within the altar area");
+            Condition.sleep(1800, 2200);
             Condition.wait(() -> Player.within(targetArea), 100, 100);
             if (Player.within(targetArea)) {
                 readyToCraftRunes = true;
@@ -92,6 +93,8 @@ public class GoToAltar extends Task {
                 setStatusAndDebugLog("Dismiss popup");
                 Client.sendKeystroke("space");
                 Condition.wait(() -> !Chatbox.isMakeMenuVisible(), 100, 35);
+            } else {
+                Logger.debugLog("Could not detect us in the altar area for " + runeToMake);
             }
             return true;
         } else {
