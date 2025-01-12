@@ -93,6 +93,7 @@ public class HandleAltars extends Task {
         Condition.wait(() -> Player.within(INSIDE_AREA), 100, 250);
 
         if (Player.within(INSIDE_AREA)) {
+            readyToGoToAltar = false;
             readyToCraftRunes = false;
             if (Inventory.contains(ItemList.GUARDIAN_FRAGMENTS_26878, 0.7)) {
                 readyToCraftEssences = true;

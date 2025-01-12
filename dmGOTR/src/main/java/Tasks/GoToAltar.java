@@ -25,7 +25,7 @@ public class GoToAltar extends Task {
 
     @Override
     public boolean activate() {
-        return readyToCraftRunes;
+        return readyToGoToAltar;
     }
 
     @Override
@@ -80,6 +80,9 @@ public class GoToAltar extends Task {
 
             Logger.debugLog("Waiting until we are within the altar area");
             Condition.wait(() -> Player.within(targetArea), 100, 100);
+            if (Player.within(targetArea)) {
+                readyToCraftRunes = true;
+            }
             return true;
         } else {
             Logger.debugLog("Failed to reach guardian tile in time. Exiting execution.");

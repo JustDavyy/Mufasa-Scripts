@@ -319,6 +319,7 @@ public class dmGOTR extends AbstractScript {
     public static boolean usePouches;
     public static boolean portalActive;
     public static boolean readyToCraftEssences = false;
+    public static boolean readyToGoToAltar = false;
     public static boolean readyToCraftRunes = false;
     public static boolean isGameAt90Percent = false;
     public static PortalLocation portalLocation = PortalLocation.NONE;
@@ -419,7 +420,9 @@ public class dmGOTR extends AbstractScript {
             Condition.wait(() -> GameTabs.isTabOpen(UITabs.INVENTORY), 100, 20);
         }
 
-        stateUpdater.updateAllStates();
+        if (!readyToCraftRunes) {
+            stateUpdater.updateAllStates();
+        }
 
         //Run tasks
         for (Task task : gotrTasks) {

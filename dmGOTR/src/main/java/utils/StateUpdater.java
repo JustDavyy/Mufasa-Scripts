@@ -42,10 +42,12 @@ public class StateUpdater {
         tempSwitchTimeHolder = 0;
         tempPortalLocationHolder = "";
         readyToCraftRunes = false;
+        readyToGoToAltar = false;
         readyToCraftEssences = false;
         elementalPoints = 0;
         catalyticPoints = 0;
         runeToMake = RuneInfo.NOELEMENTAL;
+        isGameAt90Percent = false;
     }
 
     //Update each state
