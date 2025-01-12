@@ -79,7 +79,8 @@ public class HandleAltars extends Task {
             Client.tap(getPortalAtPortalTapRectangle(runeToMake, direction));
         }
 
-        Condition.wait(() -> Player.within(INSIDE_AREA), 100, 250);
+        Condition.sleep(2800, 3200);
+        Condition.wait(() -> Player.within(INSIDE_AREA), 100, 30);
 
         if (Player.within(INSIDE_AREA)) {
             readyToGoToAltar = false;

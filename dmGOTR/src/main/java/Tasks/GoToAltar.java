@@ -160,18 +160,33 @@ public class GoToAltar extends Task {
     private RuneInfo getBestRune(RuneInfo activeRune, RuneType runeType) {
         setStatusAndDebugLog("Find best rune");
 
-        // Validate if we can craft this rune
+        // Skip level checks for elemental runes
+        if (runeType == RuneType.ELEMENTAL) {
+            Logger.debugLog("Rune " + activeRune.getName() + " is an elemental rune and always valid.");
+            return activeRune;
+        }
+
+        // Validate catalytic runes
         if (activeRune == null || runecraftingLevel < activeRune.getRequiredLevel()) {
             Logger.debugLog("Cannot craft rune: " + (activeRune == null ? "None active" : activeRune.getName()) +
                     " due to insufficient level.");
             return null;
         }
 
-        if (runeType == RuneType.CATALYTIC) {
-            if (!doCosmics && activeRune == RuneInfo.COSMIC) return null;
-            if (!doLaws && activeRune == RuneInfo.LAW) return null;
-            if (!doDeaths && activeRune == RuneInfo.DEATH) return null;
-            if (!doBloods && activeRune == RuneInfo.BLOOD) return null;
+        // Additional restrictions for catalytic runes
+        switch (activeRune) {
+            case COSMIC:
+                if (!doCosmics) return null;
+                break;
+            case LAW:
+                if (!doLaws) return null;
+                break;
+            case DEATH:
+                if (!doDeaths) return null;
+                break;
+            case BLOOD:
+                if (!doBloods) return null;
+                break;
         }
 
         Logger.debugLog("Rune " + activeRune.getName() + " can be crafted.");
@@ -181,20 +196,11 @@ public class GoToAltar extends Task {
     private RuneInfo getBestRuneByTier(RuneInfo elementalRune, RuneInfo catalyticRune) {
         setStatusAndDebugLog("Determine highest tier");
 
-        // Assign tier priorities
-        int elementalTier = getTier(elementalRune);
-        int catalyticTier = getTier(catalyticRune);
+        // No level checks for elemental runes
+        Logger.debugLog("Elemental rune does not require level validation: " +
+                (elementalRune != null ? elementalRune.getName() : "None"));
 
-        Logger.debugLog("Initial tiers -> Elemental: " + elementalTier + ", Catalytic: " + catalyticTier);
-
-        // Validate elemental rune
-        if (elementalRune != null && runecraftingLevel < elementalRune.getRequiredLevel()) {
-            Logger.debugLog("Cannot craft elemental rune: " + elementalRune.getName() + " due to insufficient level.");
-            elementalRune = null;
-            elementalTier = 0; // Recalculate tier as 0
-        }
-
-        // Validate catalytic rune against booleans and level
+        // Validate catalytic rune
         if (catalyticRune != null) {
             switch (catalyticRune) {
                 case COSMIC:
@@ -209,24 +215,24 @@ public class GoToAltar extends Task {
                 case BLOOD:
                     if (!doBloods || runecraftingLevel < catalyticRune.getRequiredLevel()) catalyticRune = null;
                     break;
+                default:
+                    if (runecraftingLevel < catalyticRune.getRequiredLevel()) catalyticRune = null;
+                    break;
             }
         }
 
-        // Reassign catalytic tier after validation
-        catalyticTier = getTier(catalyticRune);
+        // Assign tier priorities
+        int elementalTier = getTier(elementalRune);
+        int catalyticTier = getTier(catalyticRune);
 
         Logger.debugLog("Validated tiers -> Elemental: " + elementalTier + ", Catalytic: " + catalyticTier);
 
         // Compare tiers
         if (elementalRune != null && catalyticRune != null) {
-            if (elementalTier > catalyticTier) {
-                return elementalRune;
-            } else if (catalyticTier > elementalTier) {
-                return catalyticRune;
-            }
+            return (elementalTier >= catalyticTier) ? elementalRune : catalyticRune;
         }
 
-        // Default to whichever is valid if one is null
+        // Return the valid rune, if any
         return (elementalRune != null) ? elementalRune : catalyticRune;
     }
 
