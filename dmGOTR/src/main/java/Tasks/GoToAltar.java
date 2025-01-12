@@ -1,6 +1,7 @@
 package Tasks;
 
 import helpers.utils.Area;
+import helpers.utils.ItemList;
 import helpers.utils.Tile;
 import utils.RuneInfo;
 import utils.RuneType;
@@ -43,6 +44,11 @@ public class GoToAltar extends Task {
         if (runeToMake == null) {
             Logger.debugLog("No rune can be crafted at this time. Exiting execution.");
             return false; // No rune to make, exit
+        }
+
+        if (!Inventory.contains(ItemList.GUARDIAN_ESSENCE_26879, 0.8)) {
+            readyToGoToAltar = false;
+            return false;
         }
 
         // Get the guardian tile for the chosen rune
