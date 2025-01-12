@@ -8,6 +8,7 @@ import utils.*;
 import java.awt.*;
 
 import static Tasks.GoToAltar.getAltarAreaForRune;
+import static Tasks.GoToAltar.targetArea;
 import static Tasks.PreGame.INSIDE_AREA;
 import static helpers.Interfaces.*;
 import static main.dmGOTR.*;
@@ -21,19 +22,7 @@ public class HandleAltars extends Task {
 
     @Override
     public boolean activate() {
-        // Check if the player is within the altar area for the rune to make
-        if (runeToMake == null) {
-            Logger.debugLog("Rune to make is null, cannot activate HandleAltars.");
-            return false;
-        }
-
-        Area altarArea = getAltarAreaForRune(runeToMake);
-        if (altarArea == null) {
-            Logger.debugLog("No altar area found for rune: " + runeToMake.getName());
-            return false;
-        }
-
-        return Player.isTileWithinArea(currentLocation, altarArea);
+        return readyToCraftRunes;
     }
 
     @Override

@@ -19,7 +19,7 @@ public class GoToAltar extends Task {
         this.stateUpdater = stateUpdater;
     }
 
-    private static Area targetArea;
+    public static Area targetArea;
 
     // RUNE INFO
 
@@ -74,10 +74,12 @@ public class GoToAltar extends Task {
         // Check if we successfully reached the guardian tile
         if (Player.atTile(guardianTile)) {
             Logger.debugLog("Reached guardian tile. Tapping guardian rectangle for rune: " + runeToMake.getName());
-            tapGuardianRectangle(runeToMake);
-
             // Get the altar area based on the rune type
             targetArea = getAltarAreaForRune(runeToMake);
+            tapGuardianRectangle(runeToMake);
+
+            Logger.debugLog("RUNE TO MAKE: " + runeToMake);
+            Logger.debugLog("TARGET AREA: " + targetArea + " | " + runeToMake);
 
             if (targetArea == null) {
                 Logger.debugLog("No area defined for rune: " + runeToMake.getName() + ". Exiting execution.");
@@ -85,18 +87,21 @@ public class GoToAltar extends Task {
             }
 
             Logger.debugLog("Waiting until we are within the altar area");
-            Condition.sleep(1800, 2200);
+            Condition.sleep(2800, 3200);
             Condition.wait(() -> Player.within(targetArea) || Chatbox.isMakeMenuVisible(), 100, 100);
             if (Player.within(targetArea)) {
+                Logger.debugLog("Player is within the altar target area");
                 readyToCraftRunes = true;
+                return false;
             } else if (Chatbox.isMakeMenuVisible()) {
                 setStatusAndDebugLog("Dismiss popup");
                 Client.sendKeystroke("space");
                 Condition.wait(() -> !Chatbox.isMakeMenuVisible(), 100, 35);
+                return false;
             } else {
                 Logger.debugLog("Could not detect us in the altar area for " + runeToMake);
+                return false;
             }
-            return true;
         } else {
             Logger.debugLog("Failed to reach guardian tile in time. Exiting execution.");
             return false; // Could not reach the tile in time
