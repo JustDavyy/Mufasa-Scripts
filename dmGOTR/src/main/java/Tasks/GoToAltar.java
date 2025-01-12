@@ -120,9 +120,9 @@ public class GoToAltar extends Task {
         Logger.debugLog("Active runes: Elemental: " + elementalRune.getName() + ", Catalytic: " + catalyticRune.getName());
         Logger.debugLog("Time till rune switch: " + timeTillSwitch + " ms");
 
-        // If there's less than 10 seconds, wait for the next cycle
-        if (timeTillSwitch < 10) {
-            Logger.debugLog("Less than 10 seconds remaining, waiting for next cycle...");
+        // If there's less than 8 seconds, wait for the next cycle
+        if (timeTillSwitch < 8) {
+            Logger.debugLog("Less than 8 seconds remaining, waiting for next cycle...");
             Condition.sleep(timeTillSwitch * 1000);
             return null;
         }
