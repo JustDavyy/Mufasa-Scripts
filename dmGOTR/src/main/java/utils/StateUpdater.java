@@ -123,6 +123,11 @@ public class StateUpdater {
 
     public void updateGuardiansPower() {
         guardiansPower = Chatbox.readDigitsInArea(GUARDIAN_POWER_READ_RECT, blackColor);
+        isGameAt90Percent = guardiansPower >= 90;
+    }
+
+    public void updateGameAt90Percent() {
+        isGameAt90Percent = Chatbox.readDigitsInArea(GUARDIAN_POWER_READ_RECT, blackColor) >= 90;
     }
 
     public void updatePortalActive() {

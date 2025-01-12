@@ -51,8 +51,10 @@ public class MineEssence extends Task {
             setStatusAndDebugLog("Large remains logic");
 
             // Check if we are at the mining tile, if not move there
-            if (!Player.tileEquals(currentLocation, LARGE_GUARDIAN_REMAINS_TILE)) {
-                Walker.step(LARGE_GUARDIAN_REMAINS_TILE);
+            if (!startedMiningFragments) {
+                if (!Player.tileEquals(currentLocation, LARGE_GUARDIAN_REMAINS_TILE)) {
+                    Walker.step(LARGE_GUARDIAN_REMAINS_TILE);
+                }
             }
 
             // Check if game has started yet

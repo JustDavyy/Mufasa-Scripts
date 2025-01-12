@@ -320,6 +320,7 @@ public class dmGOTR extends AbstractScript {
     public static boolean portalActive;
     public static boolean readyToCraftEssences = false;
     public static boolean readyToCraftRunes = false;
+    public static boolean isGameAt90Percent = false;
     public static PortalLocation portalLocation = PortalLocation.NONE;
     public static RuneInfo runeToMake = RuneInfo.NOELEMENTAL;
 

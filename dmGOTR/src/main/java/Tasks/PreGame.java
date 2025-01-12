@@ -97,15 +97,12 @@ public class PreGame extends Task {
                     Condition.wait(() -> Player.atTile(AGILITY_INSIDE_TILE), 100, 75);
                 }
 
-                // Check if we are now inside the mining area, if yes step to remains
+                // Check if we are now inside the mining area, if yes tap remains
                 if (Player.atTile(AGILITY_INSIDE_TILE)) {
-                    Walker.step(LARGE_GUARDIAN_REMAINS_TILE);
+                    Client.tap(LARGE_GUARDIAN_REMAINS_FROMAGILITY_TAP_RECT);
                 }
 
-                // Check if we're done
-                if (Player.atTile(LARGE_GUARDIAN_REMAINS_TILE)) {
-                    Logger.debugLog("Done with PreGame, we're now ready to mine essence.");
-                }
+                Logger.debugLog("Done with PreGame, we're now ready to mine essence.");
             } else {
                 setStatusAndDebugLog("Go to normal mining area");
                 // Check if the tile we mine at is already reachable

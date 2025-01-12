@@ -141,7 +141,8 @@ public class GoToAltar extends Task {
 
         // Validate if we can craft this rune
         if (activeRune == null || runecraftingLevel < activeRune.getRequiredLevel()) {
-            Logger.debugLog("Cannot craft rune: " + (activeRune == null ? "None active" : activeRune.getName()));
+            Logger.debugLog("Cannot craft rune: " + (activeRune == null ? "None active" : activeRune.getName()) +
+                    " due to insufficient level.");
             return null;
         }
 
@@ -163,7 +164,37 @@ public class GoToAltar extends Task {
         int elementalTier = getTier(elementalRune);
         int catalyticTier = getTier(catalyticRune);
 
-        Logger.debugLog("Elemental rune tier: " + elementalTier + ", Catalytic rune tier: " + catalyticTier);
+        Logger.debugLog("Initial tiers -> Elemental: " + elementalTier + ", Catalytic: " + catalyticTier);
+
+        // Validate elemental rune
+        if (elementalRune != null && runecraftingLevel < elementalRune.getRequiredLevel()) {
+            Logger.debugLog("Cannot craft elemental rune: " + elementalRune.getName() + " due to insufficient level.");
+            elementalRune = null;
+            elementalTier = 0; // Recalculate tier as 0
+        }
+
+        // Validate catalytic rune against booleans and level
+        if (catalyticRune != null) {
+            switch (catalyticRune) {
+                case COSMIC:
+                    if (!doCosmics || runecraftingLevel < catalyticRune.getRequiredLevel()) catalyticRune = null;
+                    break;
+                case LAW:
+                    if (!doLaws || runecraftingLevel < catalyticRune.getRequiredLevel()) catalyticRune = null;
+                    break;
+                case DEATH:
+                    if (!doDeaths || runecraftingLevel < catalyticRune.getRequiredLevel()) catalyticRune = null;
+                    break;
+                case BLOOD:
+                    if (!doBloods || runecraftingLevel < catalyticRune.getRequiredLevel()) catalyticRune = null;
+                    break;
+            }
+        }
+
+        // Reassign catalytic tier after validation
+        catalyticTier = getTier(catalyticRune);
+
+        Logger.debugLog("Validated tiers -> Elemental: " + elementalTier + ", Catalytic: " + catalyticTier);
 
         // Compare tiers
         if (elementalRune != null && catalyticRune != null) {

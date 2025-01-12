@@ -166,11 +166,20 @@ public class HandleAltars extends Task {
         } else {
             // From portal rectangles
             switch (direction) {
+                case NORTH:
+                    Walker.step(COSMIC_NORTH_ALTAR_TILE);
+                    return COSMIC_ALTAR_NORTH_TAP_RECT;
                 case EAST:
                     return COSMIC_ALTAR_EAST_FROMPORTAL_TAP_RECT;
+                case SOUTH:
+                    Walker.step(COSMIC_SOUTH_ALTAR_TILE);
+                    return COSMIC_ALTAR_SOUTH_TAP_RECT;
+                case WEST:
+                    Walker.step(COSMIC_WEST_ALTAR_TILE);
+                    return COSMIC_ALTAR_WEST_TAP_RECT;
                 default:
-                    Logger.debugLog("FROM PORTAL rectangle for Cosmic rune: " + direction + ". Defaulting to EAST FROMPORTAL.");
-                    return COSMIC_ALTAR_EAST_FROMPORTAL_TAP_RECT;
+                    Logger.debugLog("Invalid direction specified for Cosmic rune: " + direction + ". Defaulting to NORTH.");
+                    return COSMIC_ALTAR_NORTH_TAP_RECT;
             }
         }
     }
@@ -258,10 +267,13 @@ public class HandleAltars extends Task {
         } else {
             switch (direction) {
                 case NORTH:
+                    Walker.step(COSMIC_ALTAR_LEAVE_NORTH_PORTAL_TILE);
                     return COSMIC_PORTAL_NORTHPORTAL_TAP_RECT;
                 case EAST:
+                    Walker.step(COSMIC_ALTAR_LEAVE_EAST_PORTAL_TILE);
                     return COSMIC_PORTAL_EASTPORTAL_TAP_RECT;
                 case SOUTH:
+                    Walker.step(COSMIC_ALTAR_LEAVE_SOUTH_PORTAL_TILE);
                     return COSMIC_PORTAL_SOUTHPORTAL_TAP_RECT;
                 case WEST:
                     return COSMIC_PORTAL_WESTPORTAL_FROMALTAR_TAP_RECT;
