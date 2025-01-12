@@ -16,7 +16,7 @@ public class ProcessEssence extends Task {
 
     @Override
     public boolean activate() {
-        return readyToCraftEssences;
+        return readyToCraftEssences || stateUpdater.isGameGoing() && Inventory.contains(ItemList.GUARDIAN_FRAGMENTS_26878, 0.8) && !Inventory.contains(ItemList.GUARDIAN_ESSENCE_26879, 0.8);
     }
 
     @Override
