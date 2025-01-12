@@ -429,6 +429,7 @@ public class dmGOTR extends AbstractScript {
         for (Task task : gotrTasks) {
             if (task.activate()) {
                 task.execute();
+                XpBar.getXP();
                 return;
             }
         }
