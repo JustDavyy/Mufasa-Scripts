@@ -408,6 +408,7 @@ public class dmGOTR extends AbstractScript {
             new GoToAltar(stateUpdater),
             new DepositRunes(stateUpdater),
             new HandlePouches(stateUpdater),
+            new DepositStonesAndCells(stateUpdater),
             new ProcessEssence(stateUpdater),
             new MineEssence(stateUpdater),
             new EnterGame(stateUpdater)

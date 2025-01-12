@@ -82,6 +82,10 @@ public class GoToAltar extends Task {
             Condition.wait(() -> Player.within(targetArea), 100, 100);
             if (Player.within(targetArea)) {
                 readyToCraftRunes = true;
+            } else if (Chatbox.isMakeMenuVisible()) {
+                setStatusAndDebugLog("Dismiss popup");
+                Client.sendKeystroke("space");
+                Condition.wait(() -> !Chatbox.isMakeMenuVisible(), 100, 35);
             }
             return true;
         } else {
