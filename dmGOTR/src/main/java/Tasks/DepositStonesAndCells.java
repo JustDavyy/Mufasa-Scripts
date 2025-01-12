@@ -48,11 +48,14 @@ public class DepositStonesAndCells extends Task {
             Client.tap(MIDDLE_GUARDIAN_TAP_RECT);
             Condition.wait(() -> !Inventory.contains(ItemList.ELEMENTAL_GUARDIAN_STONE_26881, 0.8)
                     && !Inventory.contains(ItemList.CATALYTIC_GUARDIAN_STONE_26880, 0.8)
-                    && !Inventory.contains(ItemList.POLYELEMENTAL_GUARDIAN_STONE_26941, 0.8), 100, 200);
+                    && !Inventory.contains(ItemList.POLYELEMENTAL_GUARDIAN_STONE_26941, 0.8), 100, 400);
 
             // Deposit cells
             Client.tap(DEPOSIT_CELL_FROM_GUARDIAN_TAP_RECT);
-            Condition.wait(() -> !Inventory.contains(ItemList.WEAK_CELL_26883, 0.8), 100, 200);
+            Condition.wait(() -> !Inventory.contains(ItemList.WEAK_CELL_26883, 0.8)
+                    && !Inventory.contains(ItemList.MEDIUM_CELL_26884, 0.8)
+                    && !Inventory.contains(ItemList.STRONG_CELL_26885, 0.8)
+                    && !Inventory.contains(ItemList.OVERCHARGED_CELL_26886, 0.8), 100, 200);
         } else {
             return false;
         }

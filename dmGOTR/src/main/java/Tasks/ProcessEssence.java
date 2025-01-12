@@ -22,6 +22,8 @@ public class ProcessEssence extends Task {
     @Override
     public boolean execute() {
 
+        setStatusAndDebugLog("Create essence");
+
         // Step to workbench if needed
         if (!Player.tileEquals(currentLocation, WORKBENCH_TILE)) {
             Walker.step(WORKBENCH_TILE);
