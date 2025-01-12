@@ -18,11 +18,11 @@ public class MineEssence extends Task {
     }
 
     // AREAS
-    private static Area LARGE_REMAINS_MINING_AREA = new Area(
+    private static final Area LARGE_REMAINS_MINING_AREA = new Area(
             new Tile(14544, 37805, 0),
             new Tile(14590, 37697, 0)
     );
-    private static Area HUGE_REMAINS_MINING_AREA = new Area(
+    static final Area HUGE_REMAINS_MINING_AREA = new Area(
             new Tile(14337, 37809, 0),
             new Tile(14376, 37708, 0)
     );

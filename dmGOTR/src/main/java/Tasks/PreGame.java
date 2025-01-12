@@ -9,6 +9,7 @@ import utils.Task;
 import java.awt.*;
 
 import static Tasks.EnterGame.OUTSIDE_AREA;
+import static Tasks.MineEssence.HUGE_REMAINS_MINING_AREA;
 import static helpers.Interfaces.*;
 import static main.dmGOTR.*;
 
@@ -34,7 +35,7 @@ public class PreGame extends Task {
 
     @Override
     public boolean activate() {
-        return !stateUpdater.isGameGoing() && !Player.isTileWithinArea(currentLocation, OUTSIDE_AREA) || stateUpdater.isGameGoing() && stateUpdater.timeTillRuneSwitch() > 35;
+        return !stateUpdater.isGameGoing() && !Player.isTileWithinArea(currentLocation, OUTSIDE_AREA) || stateUpdater.isGameGoing() && stateUpdater.timeTillRuneSwitch() > 35 && (!Player.isTileWithinArea(currentLocation, HUGE_REMAINS_MINING_AREA) || !Player.tileEquals(currentLocation, GUARDIAN_PARTS_TILE));
     }
 
     @Override
