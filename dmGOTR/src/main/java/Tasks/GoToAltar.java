@@ -202,22 +202,27 @@ public class GoToAltar extends Task {
 
         // Validate catalytic rune
         if (catalyticRune != null) {
+            boolean validCatalytic = true;
             switch (catalyticRune) {
                 case COSMIC:
-                    if (!doCosmics || runecraftingLevel < catalyticRune.getRequiredLevel()) catalyticRune = null;
+                    validCatalytic = doCosmics && runecraftingLevel >= catalyticRune.getRequiredLevel();
                     break;
                 case LAW:
-                    if (!doLaws || runecraftingLevel < catalyticRune.getRequiredLevel()) catalyticRune = null;
+                    validCatalytic = doLaws && runecraftingLevel >= catalyticRune.getRequiredLevel();
                     break;
                 case DEATH:
-                    if (!doDeaths || runecraftingLevel < catalyticRune.getRequiredLevel()) catalyticRune = null;
+                    validCatalytic = doDeaths && runecraftingLevel >= catalyticRune.getRequiredLevel();
                     break;
                 case BLOOD:
-                    if (!doBloods || runecraftingLevel < catalyticRune.getRequiredLevel()) catalyticRune = null;
+                    validCatalytic = doBloods && runecraftingLevel >= catalyticRune.getRequiredLevel();
                     break;
                 default:
-                    if (runecraftingLevel < catalyticRune.getRequiredLevel()) catalyticRune = null;
+                    validCatalytic = runecraftingLevel >= catalyticRune.getRequiredLevel();
                     break;
+            }
+            if (!validCatalytic) {
+                Logger.debugLog("Cannot craft catalytic rune: " + catalyticRune.getName() + " due to insufficient level or boolean restriction.");
+                catalyticRune = null;
             }
         }
 
