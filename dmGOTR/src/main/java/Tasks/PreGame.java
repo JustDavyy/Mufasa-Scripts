@@ -34,7 +34,7 @@ public class PreGame extends Task {
 
     @Override
     public boolean activate() {
-        return !stateUpdater.isGameGoing() && !Player.isTileWithinArea(currentLocation, OUTSIDE_AREA);
+        return !stateUpdater.isGameGoing() && !Player.isTileWithinArea(currentLocation, OUTSIDE_AREA) || stateUpdater.isGameGoing() && stateUpdater.timeTillRuneSwitch() > 35;
     }
 
     @Override
