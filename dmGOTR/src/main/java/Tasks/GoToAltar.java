@@ -357,7 +357,7 @@ public class GoToAltar extends Task {
             case BLOOD:
                 return bloodAltarArea;
             default:
-                Logger.debugLog("Unknown rune: " + rune.getName());
+                Logger.debugLog("[AltarArea] Unknown rune: " + rune.getName());
                 return null; // Return null for unknown runes
         }
     }
