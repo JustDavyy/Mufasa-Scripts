@@ -123,7 +123,7 @@ public class GoToAltar extends Task {
         // If there's less than 8 seconds, wait for the next cycle
         if (timeTillSwitch < 8) {
             Logger.debugLog("Less than 8 seconds remaining, waiting for next cycle...");
-            Condition.sleep(timeTillSwitch * 1000);
+            Condition.sleep(timeTillSwitch * 1000 + 1500);
             return null;
         }
 
