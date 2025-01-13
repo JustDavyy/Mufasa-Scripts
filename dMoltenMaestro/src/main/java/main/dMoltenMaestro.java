@@ -21,7 +21,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dMoltenMaestro",
         description = "Creates jewellery, bars, molten glass and cannonballs using furnaces at different locations",
-        version = "1.01",
+        version = "1.02",
         guideLink = "https://wiki.mufasaclient.com/docs/dmoltenmaestro/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Crafting, ScriptCategory.Ironman},
         skipZoomSetup = true

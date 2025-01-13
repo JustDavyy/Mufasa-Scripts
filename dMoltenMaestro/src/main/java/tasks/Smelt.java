@@ -53,7 +53,7 @@ public class Smelt extends Task {
         }
 
         if (atFurnace()) {
-            if ("Molten glass".equals(resource)) {
+            if ("Molten glass".equals(resource) || "Silver bar".equals(resource) || "Gold bar".equals(resource) || "Iron bar".equals(resource)) {
                 currentUsedSlots = Inventory.count(resultItemID, 0.8);
             } else {
                 currentUsedSlots = Inventory.usedSlots();
