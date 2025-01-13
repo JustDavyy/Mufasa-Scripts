@@ -188,14 +188,22 @@ public class Bank extends Task {
                     Inventory.tapItem(shopBuyer.bankItemID, 0.7);
                     Condition.sleep(generateRandomDelay(200, 400));
                     Inventory.tapItem(ItemList.SEAWEED_401, 0.7);
+                    break;
+                case "Bucket of sand + Soda ash":
+                    Inventory.tapItem(shopBuyer.bankItemID, 0.7);
+                    Condition.sleep(generateRandomDelay(200, 400));
+                    Inventory.tapItem(ItemList.SODA_ASH_1781, 0.7);
+                    break;
                 case "Sand + Seaweed + Soda ash":
                     Inventory.tapItem(shopBuyer.bankItemID, 0.7);
                     Condition.sleep(generateRandomDelay(200, 400));
                     Inventory.tapItem(ItemList.SEAWEED_401, 0.7);
                     Condition.sleep(generateRandomDelay(200, 400));
                     Inventory.tapItem(ItemList.SODA_ASH_1781, 0.7);
+                    break;
                 default:
                     Inventory.tapItem(shopBuyer.bankItemID, 0.7);
+                    break;
             }
         }
 
@@ -286,6 +294,10 @@ public class Bank extends Task {
                 case "Bucket of sand + Seaweed":
                     shopBuyer.boughtAmount1 = shopBuyer.boughtAmount1 + Inventory.count(ItemList.BUCKET_OF_SAND_1783, 0.85);
                     shopBuyer.boughtAmount2 = shopBuyer.boughtAmount2 + Inventory.count(ItemList.SEAWEED_401, 0.85);
+                    break;
+                case "Bucket of sand + Soda ash":
+                    shopBuyer.boughtAmount1 = shopBuyer.boughtAmount1 + Inventory.count(ItemList.BUCKET_OF_SAND_1783, 0.85);
+                    shopBuyer.boughtAmount2 = shopBuyer.boughtAmount2 + Inventory.count(ItemList.SODA_ASH_1781, 0.85);
                     break;
                 case "Sand + Seaweed + Soda ash":
                     shopBuyer.boughtAmount1 = shopBuyer.boughtAmount1 + Inventory.count(ItemList.BUCKET_OF_SAND_1783, 0.85);

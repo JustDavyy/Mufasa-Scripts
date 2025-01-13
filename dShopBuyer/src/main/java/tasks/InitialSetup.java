@@ -319,6 +319,7 @@ public class InitialSetup extends Task {
             case "Bucket of sand":
             case "Sand + Seaweed + Soda ash":
             case "Bucket of sand + Seaweed":
+            case "Bucket of sand + Soda ash":
                 shopBuyer.bankItemID = ItemList.BUCKET_OF_SAND_1783;
                 break;
             case "Seaweed":
@@ -485,6 +486,15 @@ public class InitialSetup extends Task {
                 shopBuyer.paintProfit = Paint.createBox("Coins used (est)", ItemList.COINS_10000_1004, 0);
                 shopBuyer.itemCost1 = 6;
                 shopBuyer.itemCost2 = 7;
+                break;
+            case "Bucket of sand + Soda ash":
+                shopBuyer.paintItem1 = Paint.createBox("Bucket of sand", ItemList.BUCKET_OF_SAND_1783, 0);
+                Condition.sleep(250);
+                shopBuyer.paintItem2 = Paint.createBox("Soda ash", ItemList.SODA_ASH_1781, 0);
+                Condition.sleep(250);
+                shopBuyer.paintProfit = Paint.createBox("Coins used (est)", ItemList.COINS_10000_1004, 0);
+                shopBuyer.itemCost1 = 6;
+                shopBuyer.itemCost2 = 6;
                 break;
             case "Sand + Seaweed + Soda ash":
                 shopBuyer.paintItem1 = Paint.createBox("Bucket of sand", ItemList.BUCKET_OF_SAND_1783, 0);

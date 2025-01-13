@@ -233,6 +233,11 @@ public class Buy extends Task {
                 stackSize2 = interfaces.readStackSize(khazardSeaweedStackRect);
                 printStackSizes(2);
                 break;
+            case "Bucket of sand + Soda ash":
+                stackSize1 = interfaces.readStackSize(khazardBucketofSandStackRect);
+                stackSize2 = interfaces.readStackSize(khazardSodaAshStackRect);
+                printStackSizes(2);
+                break;
             case "Sand + Seaweed + Soda ash":
                 stackSize1 = interfaces.readStackSize(khazardBucketofSandStackRect);
                 stackSize2 = interfaces.readStackSize(khazardSeaweedStackRect);
@@ -343,6 +348,9 @@ public class Buy extends Task {
                 break;
             case "Bucket of sand + Seaweed":
                 buyLogicDouble(khazardBucketofSandClickRect, khazardSeaweedClickRect);
+                break;
+            case "Bucket of sand + Soda ash":
+                buyLogicDouble(khazardBucketofSandClickRect, khazardSodaAshClickRect);
                 break;
             case "Sand + Seaweed + Soda ash":
                 buyLogicTriple(khazardBucketofSandClickRect, khazardSeaweedClickRect, khazardSodaAshClickRect);
@@ -575,7 +583,10 @@ public class Buy extends Task {
             }
         } else {
             if (!shopBuyer.doneMESSetup) {
-                Logger.log("MES Setup is not done yet, verifying if it's set up correctly!");
+                if (dShopBuyer.MESSetupTries < 4) {
+                    Logger.log("MES Setup is not done yet, verifying if it's set up correctly!");
+                    dShopBuyer.MESSetupTries++;
+                }
 
                 if (isChatWindowOpen()) {
                     Logger.log("Chat window is open, confirmed talk-to option is the first option.");
@@ -666,7 +677,10 @@ public class Buy extends Task {
             }
 
         } if (!shopBuyer.doneMESSetup) {
-            Logger.log("MES Setup is not done yet, verifying if it's set up correctly!");
+            if (dShopBuyer.MESSetupTries < 4) {
+                Logger.log("MES Setup is not done yet, verifying if it's set up correctly!");
+                dShopBuyer.MESSetupTries++;
+            }
 
             if (isChatWindowOpen()) {
                 Logger.log("Chat window is open, confirmed talk-to option is the first option.");
@@ -777,7 +791,10 @@ public class Buy extends Task {
 
         } else {
             if (!shopBuyer.doneMESSetup) {
-                Logger.log("MES Setup is not done yet, verifying if it's set up correctly!");
+                if (dShopBuyer.MESSetupTries < 4) {
+                    Logger.log("MES Setup is not done yet, verifying if it's set up correctly!");
+                    dShopBuyer.MESSetupTries++;
+                }
 
                 if (isChatWindowOpen()) {
                     Logger.log("Chat window is open, confirmed talk-to option is the first option.");

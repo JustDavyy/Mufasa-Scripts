@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dShopBuyer",
         description = "Buys stuff from different stores all around Gielinor, aimed to aid ironman accounts",
-        version = "1.08",
+        version = "1.09",
         guideLink = "https://wiki.mufasaclient.com/docs/dshopbuyer/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Crafting, ScriptCategory.Moneymaking, ScriptCategory.Ironman},
         skipZoomSetup = true
@@ -60,6 +60,7 @@ import static helpers.Interfaces.*;
                                 @AllowedValue(optionIcon = "401", optionName = "Seaweed"),
                                 @AllowedValue(optionIcon = "1781", optionName = "Soda ash"),
                                 @AllowedValue(optionIcon = "1775", optionName = "Bucket of sand + Seaweed"),
+                                @AllowedValue(optionIcon = "1775", optionName = "Bucket of sand + Soda ash"),
                                 @AllowedValue(optionIcon = "24260", optionName = "Sand + Seaweed + Soda ash")
                         },
                         optionType = OptionType.STRING
@@ -105,6 +106,7 @@ public class dShopBuyer extends AbstractScript {
     public int boughtAmount1 = -50;
     public int boughtAmount2 = -50;
     public int boughtAmount3 = -50;
+    public static int MESSetupTries = 0;
     public long startTime;
     public long lastUpdateTime = System.currentTimeMillis();
 
