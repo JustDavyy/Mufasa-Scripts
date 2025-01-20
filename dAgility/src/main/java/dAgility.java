@@ -15,7 +15,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAgility",
         description = "Trains agility at various courses. World hopping and eating food is supported, as well as picking up Marks of Grace when running a rooftop course.",
-        version = "1.25",
+        version = "1.26",
         categories = {ScriptCategory.Agility},
         guideLink = "https://wiki.mufasaclient.com/docs/dagility/",
         skipZoomSetup = true
@@ -95,6 +95,18 @@ import static helpers.Interfaces.*;
                         description = "Would you like to hop worlds based on your hop profile settings?",
                         defaultValue = "0",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -105,6 +117,8 @@ public class dAgility extends AbstractScript {
     private String hopProfile;
     private boolean hopEnabled;
     private boolean useWDH;
+    private boolean antiBan;
+    private boolean extendedAntiBan;
     private static String courseChosen;
     private String foodChosen;
     private int eatPercent;
@@ -122,6 +136,8 @@ public class dAgility extends AbstractScript {
         courseChosen = configs.get("Course");
         foodChosen = configs.get("Food");
         eatPercent = Integer.parseInt(configs.get("EatPercent").replaceAll("%", ""));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         // Set up the Agility SDK settings
         setCourse();
@@ -145,6 +161,16 @@ public class dAgility extends AbstractScript {
         Logger.debugLog("Pass on the paint indexes to SDK");
         agility.setPaintHandler(paintUpdater, MoGIndex, termiteIndex, shardIndex);
 
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
+        }
+
         // Run the 'onStart' of the agility SDK
         agility.preStart();
 
@@ -157,6 +183,9 @@ public class dAgility extends AbstractScript {
     @Override
     public void poll() {
         agility.runCourse();
+        if (antiBan) {
+            Game.antiBan();
+        }
         hopActions();
     }
 
