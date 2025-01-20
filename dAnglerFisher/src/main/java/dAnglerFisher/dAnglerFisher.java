@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAnglerFisher",
         description = "Fishes Anglerfish at Port Piscarilius",
-        version = "1.42",
+        version = "1.43",
         categories = {ScriptCategory.Fishing},
         guideLink = "https://wiki.mufasaclient.com/docs/danglerfisher/"
 )
@@ -33,6 +33,18 @@ import static helpers.Interfaces.*;
                         description = "Would you like to hop worlds based on your hop profile settings? WDH is disabled for this script, as there's users on every world.",
                         defaultValue = "1",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -41,6 +53,8 @@ public class dAnglerFisher extends AbstractScript {
     private final ArrayList<Task> taskList = new ArrayList<>();
     String hopProfile;
     Boolean hopEnabled;
+    private boolean antiBan;
+    private boolean extendedAntiBan;
     public static int previousXP;
     public static int newXP;
     public static long startTime;
@@ -98,10 +112,23 @@ public class dAnglerFisher extends AbstractScript {
         Map<String, String> configs = getConfigurations();
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
+
         if (!Player.within(portPiscArea)){
             Logger.log("Not at fishing area, stopping script.");
             Logout.logout();
             Script.stop();
+        }
+
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
         }
 
         checkEquipment();
@@ -144,6 +171,9 @@ public class dAnglerFisher extends AbstractScript {
         // Looped tasks go here.
         hopActions();
         readXP();
+        if (antiBan) {
+            Game.antiBan();
+        }
         for (Task task : taskList) {
             if (task.activate()) {
                 task.execute();
