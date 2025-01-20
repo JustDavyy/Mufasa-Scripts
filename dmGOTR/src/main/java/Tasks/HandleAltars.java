@@ -7,8 +7,6 @@ import utils.*;
 
 import java.awt.*;
 
-import static Tasks.GoToAltar.getAltarAreaForRune;
-import static Tasks.GoToAltar.targetArea;
 import static Tasks.PreGame.INSIDE_AREA;
 import static helpers.Interfaces.*;
 import static main.dmGOTR.*;
@@ -177,6 +175,8 @@ public class HandleAltars extends Task {
 
     private AltarSpawn determineCosmicSpawnDirection() {
         Logger.debugLog("Determining Cosmic altar spawn direction...");
+
+        currentLocation = Walker.getPlayerPosition();
 
         if (Player.isTileWithinArea(currentLocation, cosmicAltarNorth)) {
             Logger.debugLog("Spawned in Cosmic altar NORTH area.");

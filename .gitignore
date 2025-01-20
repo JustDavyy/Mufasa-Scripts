@@ -15,3 +15,5 @@
 **/gradlew.bat
 /TEMPTESTSHIT
 dAgility/jar/.DS_Store
+/test
+/RandomTestStuff
