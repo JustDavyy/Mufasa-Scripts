@@ -2,6 +2,7 @@ package tasks;
 
 import helpers.utils.ItemList;
 import helpers.utils.Spells;
+import helpers.utils.UITabs;
 import main.dTeleAlcher;
 import utils.Task;
 
@@ -30,10 +31,10 @@ public class PerformTeleAlching extends Task {
         }
 
         // Open the Magic tab if it is not already open
-        if (!GameTabs.isMagicTabOpen()) {
+        if (!GameTabs.isTabOpen(UITabs.MAGIC)) {
             Logger.log("Opening Magic tab");
-            GameTabs.openMagicTab();
-            Condition.wait(GameTabs::isMagicTabOpen, 100, 25);
+            GameTabs.openTab(UITabs.MAGIC);
+            Condition.wait(() -> GameTabs.isTabOpen(UITabs.MAGIC), 100, 25);
         }
 
         // Tap alchemy spell based on the chosen teleport spell
@@ -42,7 +43,7 @@ public class PerformTeleAlching extends Task {
             case "Ardougne teleport":
                 Logger.log("Pressing High Alchemy spell");
                 Magic.castSpell(Spells.HIGH_LEVEL_ALCHEMY);
-                Condition.wait(GameTabs::isInventoryTabOpen, 100, 40);
+                Condition.wait(() -> GameTabs.isTabOpen(UITabs.INVENTORY), 100, 40);
                 break;
             case "Camelot teleport - Low Alchemy":
             case "Falador teleport":
@@ -50,16 +51,16 @@ public class PerformTeleAlching extends Task {
             case "Varrock teleport":
                 Logger.log("Pressing Low Alchemy spell");
                 Magic.castSpell(Spells.LOW_LEVEL_ALCHEMY);
-                Condition.wait(GameTabs::isInventoryTabOpen, 100, 40);
+                Condition.wait(() -> GameTabs.isTabOpen(UITabs.INVENTORY), 100, 40);
                 break;
         }
 
         // Tap the item in the Inventory
-        if (GameTabs.isInventoryTabOpen()) {
+        if (GameTabs.isTabOpen(UITabs.INVENTORY)) {
             Logger.log("Pressing item in inventory");
             Inventory.tapItem(itemID, true, 0.69);
             // Need to wait for magic tab to open again, repeating the process
-            Condition.wait(GameTabs::isMagicTabOpen, 100, 40);
+            Condition.wait(() -> GameTabs.isTabOpen(UITabs.MAGIC), 100, 40);
         }
 
         // Press the chosen teleport spell

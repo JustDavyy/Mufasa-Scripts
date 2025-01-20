@@ -19,7 +19,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dTeaYoinker",
         description = "Steals from the tea stall in east Varrock. Supports world hopping and banking the tea.",
-        version = "2.00",
+        version = "2.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dtea-yoinker/",
         categories = {ScriptCategory.Thieving}
 )
@@ -36,6 +36,18 @@ import java.util.Random;
                         description = "Would you like to hop worlds based on your hop profile settings?",
                         defaultValue = "0",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -45,6 +57,8 @@ public class dTeaYoinker extends AbstractScript {
     // Creating the strings for later use
     public static String hopProfile;
     public static Boolean hopEnabled;
+    private boolean antiBan;
+    private boolean extendedAntiBan;
     public static Boolean useWDH;
     public static Boolean bankYN;
     public static Tile playerPos;
@@ -70,6 +84,8 @@ public class dTeaYoinker extends AbstractScript {
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
         bankYN= Boolean.valueOf((configs.get("Bank the stolen teas?")));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         Logger.log("Thank you for using the dTeaYoinker script!\nSetting up everything for your gains now...");
 
@@ -78,6 +94,17 @@ public class dTeaYoinker extends AbstractScript {
 
         // Set up the walker with the created MapChunk
         Walker.setup(chunks);
+
+
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
+        }
 
         if (Player.within(scriptArea)) {
             Logger.debugLog("We are located in the Varrock area needed for the script to run. Continuing... ");
@@ -99,9 +126,14 @@ public class dTeaYoinker extends AbstractScript {
     @Override
     public void poll() {
 
-        GameTabs.openTab(UITabs.INVENTORY);
         hopActions();
         readXP();
+
+        if (antiBan) {
+            Game.antiBan();
+        }
+
+        GameTabs.openTab(UITabs.INVENTORY);
 
         for (Task task : ThievingTasks) {
             if (task.activate()) {

@@ -4,12 +4,14 @@ import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
+import helpers.utils.AntiBan;
 import helpers.utils.OptionType;
 import helpers.utils.Skills;
 
 import java.awt.Color;
 import java.awt.Rectangle;
 
+import helpers.utils.UITabs;
 import tasks.CheckForItems;
 import tasks.PerformTeleAlching;
 import utils.Task;
@@ -24,7 +26,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dTeleportAlcher",
         description = "Uses alchemy in combination with camelot or ardougne teleport for high XP rates.",
-        version = "1.04",
+        version = "1.05",
         guideLink = "",
         categories = {ScriptCategory.Magic}
 )
@@ -56,6 +58,18 @@ import static helpers.Interfaces.*;
                         description = "Would you like to hop worlds based on your hop profile settings?",
                         defaultValue = "1",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -68,6 +82,8 @@ public class dTeleAlcher extends AbstractScript {
     public static String teleport;
     public static Boolean hopEnabled;
     public static Boolean useWDH;
+    private boolean antiBan;
+    private boolean extendedAntiBan;
     public static int magicLevel = 0;
     
 
@@ -80,6 +96,8 @@ public class dTeleAlcher extends AbstractScript {
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
         teleport = configs.get("Teleport");
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         switch (dTeleAlcher.teleport) {
             case "Camelot teleport":
@@ -102,9 +120,19 @@ public class dTeleAlcher extends AbstractScript {
                 break;
         }
 
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
+        }
+
         // Open the magic tab
-        GameTabs.openMagicTab();
-        Condition.wait(() -> GameTabs.isMagicTabOpen(),200,10);
+        GameTabs.openTab(UITabs.MAGIC);
+        Condition.wait(() -> GameTabs.isTabOpen(UITabs.MAGIC),200,10);
         if (Client.isColorInRect(MagicInfoTabColor, MagicInfoTab, 5)) {
             Logger.log("You have Info enabled, disabling now.");
             Client.tap(MagicInfoTab);
