@@ -52,7 +52,7 @@ public class CollectFinds extends Task {
     }
 
     private void collectFinds() {
-        while (!Inventory.isFull() && Player.atTile(collectTile) && !Script.isScriptStopping() && !Script.isTimeForBreak()) {
+        while (!Inventory.isFull() && Player.atTile(collectTile) && !Script.isScriptStopping() && !Client.isTimeForBreak()) {
             if (checkIfPlayersAround()) {
                 Logger.log("Player nearby! aborting to hop!");
                 break;

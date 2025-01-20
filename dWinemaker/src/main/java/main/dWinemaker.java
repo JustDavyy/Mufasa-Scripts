@@ -3,6 +3,7 @@ package main;
 import helpers.*;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
+import helpers.utils.AntiBan;
 import helpers.utils.ItemList;
 import helpers.utils.OptionType;
 import helpers.utils.UITabs;
@@ -22,7 +23,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dWinemaker",
         description = "Creates well fermented wine for those juicy cooking gains. Supports dynamic banking.",
-        version = "2.01",
+        version = "2.02",
         guideLink = "https://wiki.mufasaclient.com/docs/dwinemaker/",
         categories = {ScriptCategory.Cooking}
 )
@@ -39,6 +40,18 @@ import static helpers.Interfaces.*;
                         description = "Would you like to hop worlds based on your hop profile settings?",
                         defaultValue = "0",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -51,6 +64,8 @@ public class dWinemaker extends AbstractScript {
     public static String bankloc;
     public static int banktab;
     public static final Random random = new Random();
+    private boolean antiBan;
+    private boolean extendedAntiBan;
 
     // Process stuff we need to re-initiate actions
     public static long lastProcessTime = System.currentTimeMillis();
@@ -85,6 +100,8 @@ public class dWinemaker extends AbstractScript {
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         Logger.log("Thank you for using the dWinemaker script!\nSetting up everything for your gains now...");
 
@@ -102,6 +119,16 @@ public class dWinemaker extends AbstractScript {
         // One-time setup
         hopActions();
 
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
+        }
+
         startTime = System.currentTimeMillis();
     }
 
@@ -114,6 +141,10 @@ public class dWinemaker extends AbstractScript {
 
     @Override
     public void poll() {
+
+        if (antiBan) {
+            Game.antiBan();
+        }
 
         if (stopScript & doneBanking) {
             Logger.log("Script has been marked to stop by script dev marked situation, stopping!");

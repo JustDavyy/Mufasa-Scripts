@@ -63,7 +63,7 @@ public class DepositFinds extends Task {
         }
         Condition.wait(() -> Chatbox.findChatboxMenu() != null, 100, 20);
         Client.tap(chatboxRectangle);
-        Condition.wait(() -> !Inventory.containsAny(depositItemsList, 0.80) || checkIfPlayersAround() || Script.isTimeForBreak(), 100, 600);
+        Condition.wait(() -> !Inventory.containsAny(depositItemsList, 0.80) || checkIfPlayersAround() || Client.isTimeForBreak(), 100, 600);
 
         shouldDeposit = false;
 

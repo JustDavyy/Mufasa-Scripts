@@ -17,9 +17,9 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "ezMuseumCleaner",
         description = "Does Museum Cleaning for all your off-skill needs",
-        version = "1.51",
+        version = "1.52",
         guideLink = "https://wiki.mufasaclient.com/docs/ezmuseumcleaner/",
-        categories = {ScriptCategory.Minigames}
+        categories = {ScriptCategory.Misc, ScriptCategory.Ironman}
 )
 @ScriptConfiguration.List(
         {
@@ -66,6 +66,18 @@ import static helpers.Interfaces.*;
                         description = "Toggle this to drop everything, darts, knives, bolts etc. it will NOT drop the coins.",
                         defaultValue = "false",
                         optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -82,6 +94,8 @@ public class ezMuseumCleaner extends AbstractScript {
     public static String selectedLampSkill;
     public static Rectangle selectedLampSkillRectangle;
     public static boolean dropAll;
+    private boolean antiBan;
+    private boolean extendedAntiBan;
 
     public static Tile depositTile = new Tile(13059, 13517, 0);
     public static Tile cleanTile = new Tile(13047, 13525, 0);
@@ -115,6 +129,8 @@ public class ezMuseumCleaner extends AbstractScript {
         useWDH = Boolean.valueOf(configs.get("Use world hopper?.useWDH"));
         selectedLampSkill = configs.get("Lamp skill");
         dropAll = Boolean.parseBoolean(configs.get("Drop All"));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         // Create the MapChunk with chunk 50-53 and plane "0"
         MapChunk chunks = new MapChunk(new String[]{"50-53"}, "0");
@@ -124,6 +140,16 @@ public class ezMuseumCleaner extends AbstractScript {
 
         Chatbox.closeChatbox();
         Game.setZoom("2");
+
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
+        }
 
         Logger.log("Starting ezMuseumCleaner v1.0");
         Paint.Create(null);
@@ -150,6 +176,10 @@ public class ezMuseumCleaner extends AbstractScript {
 
     @Override
     public void poll() {
+        if (antiBan) {
+            Game.antiBan();
+        }
+
         if(hopEnabled) {
             Game.hop(hopProfile, useWDH, false);
         }
