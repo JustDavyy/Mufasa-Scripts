@@ -21,7 +21,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dAIO Bow Fletcher",
         description = "Cuts or strings bows for you. Supports all log tiers, and both short and longbows with dynamic banking.",
-        version = "2.00",
+        version = "2.01",
         guideLink = "https://wiki.mufasaclient.com/docs/daio-bow-fletcher/",
         categories = {ScriptCategory.Fletching}
 )
@@ -72,6 +72,18 @@ import static helpers.Interfaces.*;
                         description = "Would you like to hop worlds based on your hop profile settings?",
                         defaultValue = "0",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -82,6 +94,8 @@ public class dAIOBowFletcher extends AbstractScript {
     public static boolean prepareScriptStop = false;
     public static boolean stopScript = false;
     public static boolean doneBanking = false;
+    private boolean antiBan;
+    private boolean extendedAntiBan;
     public static int retrycount = 0;
     public static int totalcount = 0;
     public static int processedcount = 0;
@@ -132,6 +146,8 @@ public class dAIOBowFletcher extends AbstractScript {
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         //Logs for debugging purposes
         Logger.log("Thank you for using the dAIO Bow Fletcher script!");
@@ -152,6 +168,16 @@ public class dAIOBowFletcher extends AbstractScript {
 
         // One-time setup
         hopActions();
+
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
+        }
 
         startTime = System.currentTimeMillis();
     }
@@ -176,6 +202,10 @@ public class dAIOBowFletcher extends AbstractScript {
 
         // Check if it's time to hop
         hopActions();
+
+        if (antiBan) {
+            Game.antiBan();
+        }
 
         // Read XP
         readXP();
