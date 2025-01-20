@@ -14,7 +14,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dMinnows Fisher",
         description = "Fishes Minnows at Kylie Minnow's fishing platform at the Fishing Guild. The angler's outfit is needed to unlock the platform.",
-        version = "1.08",
+        version = "1.09",
         guideLink = "https://wiki.mufasaclient.com/docs/dminnows-fisher/",
         categories = {ScriptCategory.Fishing}
 )
@@ -25,6 +25,18 @@ import static helpers.Interfaces.*;
                         description = "Would you like to hop worlds based on your hop profile settings? WDH is disabled for this script, as there's users on every world mostly.",
                         defaultValue = "1",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -36,6 +48,8 @@ Area minnowPlatform = new Area(
 );
 private Instant lastXpGainTime = Instant.now().minusSeconds(5);
 private Instant lastSharkAction = Instant.now();
+private boolean antiBan;
+private boolean extendedAntiBan;
 int previousXP;
 int newXP;
 String hopProfile;
@@ -57,6 +71,8 @@ Rectangle bottomRect = new Rectangle(441, 303, 24, 43);
         Map<String, String> configs = getConfigurations();
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         Logger.log("Thank you for using the dMinnows Fisher script!");
         Logger.log("Setting up everything for your gains now...");
@@ -82,10 +98,18 @@ Rectangle bottomRect = new Rectangle(441, 303, 24, 43);
             Script.stop();
         }
 
-        // Checking if we have a net in our inventory
-        if(!GameTabs.isInventoryTabOpen()) {
-            GameTabs.openInventoryTab();
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
         }
+
+        // Checking if we have a net in our inventory
+        GameTabs.openTab(UITabs.INVENTORY);
 
         if(!Inventory.contains("303", 0.90)) {
             Logger.log("No small fishing net was found in the inventory, please grab it and restart the script.");
@@ -93,7 +117,7 @@ Rectangle bottomRect = new Rectangle(441, 303, 24, 43);
             Script.stop();
         } else {
             Logger.debugLog("Fishing net is present in the inventory, we're good to go!");
-            GameTabs.closeInventoryTab();
+            GameTabs.closeTab(UITabs.INVENTORY);
         }
 
         // Make sure the chatbox is opened
@@ -116,6 +140,9 @@ Rectangle bottomRect = new Rectangle(441, 303, 24, 43);
             }
         }
         readXP();
+        if (antiBan) {
+            Game.antiBan();
+        }
 
         if(hopEnabled) {
             hopActions();

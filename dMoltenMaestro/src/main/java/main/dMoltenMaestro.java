@@ -21,7 +21,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dMoltenMaestro",
         description = "Creates jewellery, bars, molten glass and cannonballs using furnaces at different locations",
-        version = "1.02",
+        version = "1.03",
         guideLink = "https://wiki.mufasaclient.com/docs/dmoltenmaestro/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Crafting, ScriptCategory.Ironman},
         skipZoomSetup = true
@@ -94,6 +94,18 @@ import static helpers.Interfaces.*;
                         description = "Would you like to hop worlds based on your hop profile settings?",
                         defaultValue = "0",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -103,6 +115,8 @@ public class dMoltenMaestro extends AbstractScript {
     String hopProfile;
     Boolean hopEnabled;
     Boolean useWDH;
+    private boolean antiBan;
+    private boolean extendedAntiBan;
     public static String resource;
     public static String productType;
     public static String location;
@@ -168,6 +182,8 @@ public class dMoltenMaestro extends AbstractScript {
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
         resource = configs.get("Resource");
         productType = configs.get("Product type");
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         MapChunk chunks = null;
         switch (location) {
@@ -213,6 +229,16 @@ public class dMoltenMaestro extends AbstractScript {
         Paint.setStatus("Closing chatbox");
         Chatbox.closeChatbox();
 
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
+        }
+
         //Logs for debugging purposes
         Logger.log("Thank you for using the dMoltenMaestro script!");
         Logger.log("Setting up everything for your gains now...");
@@ -229,6 +255,10 @@ public class dMoltenMaestro extends AbstractScript {
 
         // Read XP
         readXP();
+
+        if (antiBan) {
+            Game.antiBan();
+        }
 
         // Open inventory tab
         GameTabs.openTab(UITabs.INVENTORY);

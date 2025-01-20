@@ -25,7 +25,7 @@ import static utils.SideManager.pickRandomSide;
 @ScriptManifest(
         name = "dmWinterbodt",
         description = "Completes the Wintertodt minigame. Start inside the Wintertodt minigame area",
-        version = "2.27",
+        version = "2.28",
         guideLink = "https://wiki.mufasaclient.com/docs/dmwinterbodt/",
         categories = {ScriptCategory.Firemaking, ScriptCategory.Minigames}
 )
@@ -67,6 +67,12 @@ import static utils.SideManager.pickRandomSide;
                         description = "Would you like to only burn and not fletch? This gives increased FM xp, but no fletching xp and less points per game.",
                         defaultValue = "False",
                         optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -93,6 +99,7 @@ public class dmWinterbodt extends AbstractScript {
     public static boolean gameAt15Percent;
     public static boolean gameAt20Percent;
     public static boolean gameAt70Percent;
+    private boolean antiBan;
     public static boolean shouldBurn;
     public static boolean inventoryHasKindlings;
     public static boolean inventoryHasLogs;
@@ -222,6 +229,7 @@ public class dmWinterbodt extends AbstractScript {
         pickedSide = configs.get("Side");
         burnOnly = Boolean.parseBoolean(configs.get("Burn only?"));
         druidicRitualCompleted = Boolean.parseBoolean(configs.get("Druidic ritual completed?"));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
 
         // 24-63, 24-62, 24-61, 25-63, 25-62, 25-61, 26-63, 26-62, 26-61, 24-60, 25-60, 26-60, 50-50
         Walker.setup(new MapChunk(new String[]{"24-63", "24-62", "24-61", "25-63", "25-62", "25-61", "26-63", "26-62", "26-61", "24-60", "50-50"}, "0"));
@@ -263,10 +271,19 @@ public class dmWinterbodt extends AbstractScript {
         // Disable break and AFK handlers, as we use custom breaks
         Client.disableBreakHandler();
         Client.disableAFKHandler();
+
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+        }
     }
 
     @Override
     public void poll() {
+        if (antiBan) {
+            Game.antiBan();
+        }
+
         if (!GameTabs.isTabOpen(UITabs.INVENTORY)) {
             GameTabs.openTab(UITabs.INVENTORY);
             Condition.wait(() -> GameTabs.isTabOpen(UITabs.INVENTORY), 100, 10);
