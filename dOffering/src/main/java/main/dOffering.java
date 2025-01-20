@@ -4,6 +4,7 @@ import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
+import helpers.utils.AntiBan;
 import helpers.utils.ItemList;
 import helpers.utils.OptionType;
 import helpers.utils.UITabs;
@@ -21,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dOffering",
         description = "Offers bones and ashes using the Arceuus spellbook for quick prayer gains.",
-        version = "2.01",
+        version = "2.02",
         guideLink = "https://wiki.mufasaclient.com/docs/doffering/",
         categories = {ScriptCategory.Prayer, ScriptCategory.Magic}
 )
@@ -73,6 +74,18 @@ import static helpers.Interfaces.*;
                         description = "Would you like to hop worlds based on your hop profile settings?",
                         defaultValue = "0",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -83,6 +96,8 @@ public class dOffering extends AbstractScript {
     static String hopProfile;
     static Boolean hopEnabled;
     static Boolean useWDH;
+    private boolean antiBan;
+    private boolean extendedAntiBan;
     public static boolean setupDone = false;
     public static String bankloc;
     public static int banktab;
@@ -115,6 +130,8 @@ public class dOffering extends AbstractScript {
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         Logger.log("Thank you for using the dOffering script!\nSetting up everything for your gains now...");
 
@@ -126,6 +143,16 @@ public class dOffering extends AbstractScript {
 
         // One-time setup
         hopActions();
+
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
+        }
 
         // Open inventory tab
         GameTabs.openTab(UITabs.INVENTORY);
@@ -140,6 +167,10 @@ public class dOffering extends AbstractScript {
 
     @Override
     public void poll() {
+
+        if (antiBan) {
+            Game.antiBan();
+        }
 
         if (stopScript & doneBanking) {
             Logger.log("Script has been marked to stop by script dev marked situation, stopping!");

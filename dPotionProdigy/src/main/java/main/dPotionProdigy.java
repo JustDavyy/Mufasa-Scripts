@@ -4,6 +4,7 @@ import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
+import helpers.utils.AntiBan;
 import helpers.utils.ItemList;
 import helpers.utils.OptionType;
 import helpers.utils.UITabs;
@@ -23,7 +24,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dPotionProdigy",
         description = "Bank stander script for the Herblore skill, uses dynamic banking to support a variety of banks around Gielinor. Current supported operations: Cleaning herbs, making tars and mixing unfinished, finished and barbarian potions.",
-        version = "1.02",
+        version = "1.03",
         guideLink = "https://wiki.mufasaclient.com/docs/dpotionprodigy/",
         categories = {ScriptCategory.Herblore, ScriptCategory.Moneymaking}
 )
@@ -169,6 +170,18 @@ import static helpers.Interfaces.*;
                         description = "Would you like to hop worlds based on your hop profile settings?",
                         defaultValue = "0",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -186,6 +199,8 @@ public class dPotionProdigy extends AbstractScript {
     public static int sourceItem;
     public static String activity;
     public static boolean usingCache = false;
+    private boolean antiBan;
+    private boolean extendedAntiBan;
 
     // Process stuff we need to re-initiate actions
     public static long lastProcessTime = System.currentTimeMillis();
@@ -219,6 +234,8 @@ public class dPotionProdigy extends AbstractScript {
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         Logger.log("Thank you for using the dPotionProdigy script!\nSetting up everything for your gains now...");
 
@@ -236,6 +253,16 @@ public class dPotionProdigy extends AbstractScript {
         Paint.setStatus("Initializing...");
         Paint.setStatistic("Statistics will update soon.");
 
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
+        }
+
         // One-time setup
         hopActions();
 
@@ -251,6 +278,10 @@ public class dPotionProdigy extends AbstractScript {
 
     @Override
     public void poll() {
+
+        if (antiBan) {
+            Game.antiBan();
+        }
 
         if (stopScript & doneBanking) {
             Logger.log("Script has been marked to stop by script dev marked situation, stopping!");

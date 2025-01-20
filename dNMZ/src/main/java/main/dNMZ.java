@@ -18,7 +18,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on auto pilot. Automatically restocks on potions, supports all styles.",
-        version = "2.00",
+        version = "2.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -92,6 +92,12 @@ import static helpers.Interfaces.*;
                         description = "Would you like to hop worlds based on your hop profile settings?",
                         defaultValue = "0",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -119,6 +125,7 @@ public class dNMZ extends AbstractScript {
     public static boolean dominicMESDone = false;
     public static boolean rockcakeMESDone = false;
     public static boolean dreamStarted = false;
+    private boolean antiBan;
 
     // Lists
     public static  List<Integer> notifiedTimes = new ArrayList<>();
@@ -245,6 +252,7 @@ public class dNMZ extends AbstractScript {
         NMZMethod = (configs.get("NMZ Method"));
         lowerBreak = Integer.parseInt(configs.get("Breaking (lower end)"));
         higherBreak = Integer.parseInt(configs.get("Breaking (higher end)"));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
 
         Logger.log("Thank you for using the dNMZ script!\nSetting up everything for your gains now...");
 
@@ -257,6 +265,11 @@ public class dNMZ extends AbstractScript {
         // Disable the built-in break/AFK handler, as we use our own break handler and do not want to AFK.
         Client.disableBreakHandler();
         Client.disableAFKHandler();
+
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+        }
 
         currentTime = System.currentTimeMillis();
     }
@@ -273,6 +286,10 @@ public class dNMZ extends AbstractScript {
 
     @Override
     public void poll() {
+
+        if (antiBan) {
+            Game.antiBan();
+        }
 
         // Check/update insideNMZ only if 5 seconds have passed since the last update
         if (System.currentTimeMillis() - lastNMZCheckTimestamp >= 5_000) {
