@@ -1,5 +1,6 @@
 package tasks;
 
+import helpers.utils.UITabs;
 import utils.Task;
 
 import static helpers.Interfaces.*;
@@ -18,9 +19,7 @@ public class AFK extends Task {
     public boolean execute() {
         Game.antiAFK();
 
-        if (!GameTabs.isInventoryTabOpen()) {
-            GameTabs.openInventoryTab();
-        }
+        GameTabs.openTab(UITabs.INVENTORY);
 
         return false;
     }

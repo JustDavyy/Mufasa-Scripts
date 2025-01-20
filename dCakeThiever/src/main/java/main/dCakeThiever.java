@@ -19,7 +19,7 @@ import java.util.Random;
 @ScriptManifest(
         name = "dCakeThiever",
         description = "Steals from the bakery stall at Ardougne market. Supports world hopping and banking. Detects being caught, runs away if needed.",
-        version = "2.11",
+        version = "2.12",
         guideLink = "https://wiki.mufasaclient.com/docs/dcake-thiever/",
         categories = {ScriptCategory.Thieving}
 )
@@ -36,6 +36,18 @@ import java.util.Random;
                         description = "Would you like to hop worlds based on your hop profile settings? Keep in mind, this script will ALWAYS hop if a crasher is detected.",
                         defaultValue = "0",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -45,6 +57,8 @@ public class dCakeThiever extends AbstractScript {
     public static Random random = new Random();
     public static String hopProfile;
     public static Boolean hopEnabled;
+    private boolean antiBan;
+    private boolean extendedAntiBan;
     Boolean useWDH;
     public static Boolean bankYN;
 
@@ -111,6 +125,8 @@ public class dCakeThiever extends AbstractScript {
         hopEnabled = Boolean.valueOf((configs.get("World hopping.enabled")));
         useWDH = Boolean.valueOf((configs.get("World hopping.useWDH")));
         bankYN= Boolean.valueOf((configs.get("Banking")));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         Logger.log("Thank you for using the dCakeThiever script!\nSetting up everything for your gains now...");
         Logger.debugLog("Selected hopProfile: " + hopProfile);
@@ -120,6 +136,16 @@ public class dCakeThiever extends AbstractScript {
 
         // Set up the walker with the created MapChunk
         Walker.setup(chunks);
+
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
+        }
 
         hopActions();
         initialSetup();
@@ -137,6 +163,9 @@ public class dCakeThiever extends AbstractScript {
     // This is the main part of the script, poll gets looped constantly
     @Override
     public void poll() {
+        if (antiBan) {
+            Game.antiBan();
+        }
         for (Task task : ThievingTasks) {
             if (task.activate()) {
                 task.execute();

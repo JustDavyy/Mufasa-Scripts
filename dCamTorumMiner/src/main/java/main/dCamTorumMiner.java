@@ -16,7 +16,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dCamTorumMiner",
         description = "Mines the calcified rocks in the Cam Torum mine",
-        version = "1.02",
+        version = "1.03",
         guideLink = "https://wiki.mufasaclient.com/docs/dcamtorumminer/",
         categories = {ScriptCategory.Ironman, ScriptCategory.Mining, ScriptCategory.Prayer}
 )
@@ -27,6 +27,18 @@ import static helpers.Interfaces.*;
                         description = "Would you like to hop worlds based on your hop profile settings?",
                         defaultValue = "0",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -35,6 +47,8 @@ public class dCamTorumMiner extends AbstractScript {
     // Creating the strings for later use
     public static String hopProfile;
     public static Boolean hopEnabled;
+    private boolean antiBan;
+    private boolean extendedAntiBan;
     Boolean useWDH;
 
     public static Area scriptArea = new Area(
@@ -58,6 +72,8 @@ public class dCamTorumMiner extends AbstractScript {
         hopProfile = (configs.get("World hopping"));
         hopEnabled = Boolean.valueOf((configs.get("World hopping.enabled")));
         useWDH = Boolean.valueOf((configs.get("World hopping.useWDH")));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         Logger.log("Thank you for using the dCamTorumMiner script!\nSetting up everything for your gains now...");
         Logger.debugLog("Selected hopProfile: " + hopProfile);
@@ -91,6 +107,16 @@ public class dCamTorumMiner extends AbstractScript {
         // Initialize AFK timer
         Game.antiAFK();
 
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
+        }
+
         // Close chatbox
         Chatbox.closeChatbox();
 
@@ -119,9 +145,11 @@ public class dCamTorumMiner extends AbstractScript {
         hopActions();
         XpBar.getXP();
 
-        if (!GameTabs.isInventoryTabOpen()) {
-            GameTabs.openInventoryTab();
+        if (antiBan) {
+            Game.antiBan();
         }
+
+        GameTabs.openTab(UITabs.INVENTORY);
 
         for (Task task : tasks) {
             if (task.activate()) {

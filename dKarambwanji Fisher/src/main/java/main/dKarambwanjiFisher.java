@@ -21,7 +21,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dKarambwanji Fisher",
         description = "Fishes Karambwanji at Karamja to use as bait for Karambwans. Has a safe option for low HP accounts (keep in mind, this slows down the catch rate).",
-        version = "2.00",
+        version = "2.01",
         guideLink = "https://wiki.mufasaclient.com/docs/dkarambwanji-fisher/",
         categories = {ScriptCategory.Fishing}
 )
@@ -38,6 +38,18 @@ import static helpers.Interfaces.*;
                         description = "Would you like to hop worlds based on your hop profile settings?",
                         defaultValue = "0",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -46,6 +58,8 @@ public class dKarambwanjiFisher extends AbstractScript {
     public static String hopProfile;
     public static Boolean hopEnabled;
     public static Boolean useWDH;
+    private boolean antiBan;
+    private boolean extendedAntiBan;
     public static boolean setupDone = false;
     public static Area FishingArea = new Area(
             new Tile(11109, 11740, 0),
@@ -82,6 +96,8 @@ public class dKarambwanjiFisher extends AbstractScript {
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         Logger.log("Thank you for using the dKarambwanjiFisher script!\nSetting up everything for your gains now...");
 
@@ -97,6 +113,16 @@ public class dKarambwanjiFisher extends AbstractScript {
 
         // Create a single image box, to show the amount of processed items
         productIndex = Paint.createBox("Karambwanji", ItemList.RAW_KARAMBWANJI_3150, karambwanjiGainedCount);
+
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
+        }
 
         hopActions();
         startTime = System.currentTimeMillis();
@@ -117,6 +143,10 @@ public class dKarambwanjiFisher extends AbstractScript {
 
         // Read XP
         readXP();
+
+        if (antiBan) {
+            Game.antiBan();
+        }
 
         // Check for inactivity
         if (Duration.between(lastActionTime, Instant.now()).toMinutes() >= 4) {
