@@ -28,7 +28,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dArceuus RCer",
         description = "Crafts blood or soul runes at Arceuus, supports using blood essence and hopping worlds. DISCLAIMER: This script is NOT fully safe for 10HP accounts, use at own risk!",
-        version = "2.16",
+        version = "2.17",
         guideLink = "https://wiki.mufasaclient.com/docs/darceuus-rcer/",
         categories = {ScriptCategory.Runecrafting, ScriptCategory.Moneymaking}
 )
@@ -49,6 +49,18 @@ import static helpers.Interfaces.*;
                         description = "Would you like to hop worlds based on your hop profile settings? WDH is disabled for this script, as there's users on every world.",
                         defaultValue = "1",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -293,6 +305,8 @@ public class dArceuusRCer extends AbstractScript {
     public static Boolean hopEnabled;
     public static Boolean usingEssence = false;
     public static Boolean initialCheckDone = false;
+    private boolean antiBan;
+    private boolean extendedAntiBan;
     public static Random random = new Random();
     public static Tile playerPos;
     public static long lastItemTime;
@@ -320,6 +334,8 @@ public class dArceuusRCer extends AbstractScript {
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         runeType = (configs.get("Runes"));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         Logger.log("Thank you for using the dArceuusRCer script!");
         Logger.log("Setting up everything for your gains now...");
@@ -401,6 +417,16 @@ public class dArceuusRCer extends AbstractScript {
         // Close the chatbox
         Chatbox.closeChatbox();
 
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
+        }
+
         // Filling playerPos with current position
         Paint.setStatus("Fetch player position");
         playerPos = Walker.getPlayerPosition();
@@ -428,6 +454,10 @@ public class dArceuusRCer extends AbstractScript {
     @Override
     public void poll() {
         boolean anyTaskActivated = false; // Track if any task was activated
+
+        if (antiBan) {
+            Game.antiBan();
+        }
 
         // Check invent open
         GameTabs.openTab(UITabs.INVENTORY);

@@ -4,6 +4,7 @@ import helpers.*;
 import helpers.annotations.AllowedValue;
 import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
+import helpers.utils.AntiBan;
 import helpers.utils.ItemList;
 import helpers.utils.OptionType;
 import helpers.utils.UITabs;
@@ -21,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dBankCrafter",
         description = "Bank stander script for the Crafting skill, uses dynamic banking to support a variety of banks around Gielinor. Current supported operations: Glassblowing, Gem cutting, Amethyst cutting, battlestaff crafting and leather/hide crafting. For jewellery crafting use the dMoltenMaestro script.",
-        version = "1.05",
+        version = "1.06",
         guideLink = "https://wiki.mufasaclient.com/docs/dbankcrafter/",
         categories = {ScriptCategory.Crafting}
 )
@@ -97,6 +98,18 @@ import static helpers.Interfaces.*;
                         description = "Would you like to hop worlds based on your hop profile settings?",
                         defaultValue = "0",
                         optionType = OptionType.WORLDHOPPER
+                ),
+                @ScriptConfiguration(
+                        name = "Run anti-ban",
+                        description = "Would you like to run anti-ban features?",
+                        defaultValue = "true",
+                        optionType = OptionType.BOOLEAN
+                ),
+                @ScriptConfiguration(
+                        name = "Run extended anti-ban",
+                        description = "Would you like to run additional, extended anti-ban like some additional AFK patterns, on TOP of the regular anti-ban?",
+                        defaultValue = "false",
+                        optionType = OptionType.BOOLEAN
                 )
         }
 )
@@ -106,6 +119,8 @@ public class dBankCrafter extends AbstractScript {
     static String hopProfile;
     static Boolean hopEnabled;
     static Boolean useWDH;
+    private boolean antiBan;
+    private boolean extendedAntiBan;
     public static boolean setupDone = false;
     public static String bankloc;
     public static int banktab;
@@ -147,6 +162,8 @@ public class dBankCrafter extends AbstractScript {
         hopProfile = (configs.get("Use world hopper?"));
         hopEnabled = Boolean.valueOf((configs.get("Use world hopper?.enabled")));
         useWDH = Boolean.valueOf((configs.get("Use world hopper?.useWDH")));
+        antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
+        extendedAntiBan = Boolean.valueOf(configs.get("Run extended anti-ban"));
 
         Logger.log("Thank you for using the dBankCrafter script!\nSetting up everything for your gains now...");
 
@@ -167,6 +184,16 @@ public class dBankCrafter extends AbstractScript {
         // One-time setup
         hopActions();
 
+        if (antiBan) {
+            Logger.debugLog("Initializing anti-ban timer");
+            Game.antiBan();
+            if (extendedAntiBan) {
+                Logger.debugLog("Initializing extended anti-ban timer");
+                Game.enableOptionalAntiBan(AntiBan.EXTENDED_AFK);
+                Game.antiBan();
+            }
+        }
+
         startTime = System.currentTimeMillis();
     }
 
@@ -179,6 +206,10 @@ public class dBankCrafter extends AbstractScript {
 
     @Override
     public void poll() {
+
+        if (antiBan) {
+            Game.antiBan();
+        }
 
         if (stopScript & doneBanking) {
             Logger.log("Script has been marked to stop by script dev marked situation, stopping!");
