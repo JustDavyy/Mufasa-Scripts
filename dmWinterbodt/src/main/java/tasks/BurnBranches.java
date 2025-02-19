@@ -105,6 +105,12 @@ public class BurnBranches extends Task {
             Condition.wait(() -> {
                 // Handle reburning/fixing
                 SideManager.updateBurnStates();
+
+                currentLocation = Walker.getPlayerPosition();
+                if (!Player.tileEquals(currentLocation, SideManager.getBurnTile())) {
+                    return false;
+                }
+
                 if (SideManager.getNeedsFixing() && isGameGoing && !SideManager.getMageDead() || SideManager.getNeedsReburning() && isGameGoing && !SideManager.getMageDead() || ( (inventoryHasKindlings && Helpers.countItemUnchanged(ItemList.BRUMA_KINDLING_20696)) || (inventoryHasLogs && Helpers.countItemUnchanged(ItemList.BRUMA_ROOT_20695)) ) ) {
                     Logger.log("Brazier needs fixing or re-lighting!");
                     if (SideManager.getNeedsFixing()) {
