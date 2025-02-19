@@ -28,7 +28,6 @@ public class Buy extends Task {
     Rectangle chatWindowCheck2Rect = new Rectangle(518, 130, 26, 26);
 
     // Blast Furnace
-    List<Color> OrdanLetterColors = Arrays.asList(java.awt.Color.decode("#ffffff"), java.awt.Color.decode("#ffff00"));
     Rectangle copperOreCheckRect = new Rectangle(160, 223, 22, 25);
     Rectangle goldOreCheckRect = new Rectangle(399, 218, 15, 26);
     Rectangle shopFromShopTileRect = new Rectangle(442, 248, 4, 6);
@@ -853,6 +852,9 @@ public class Buy extends Task {
         Rectangle mesDisabled = null;
 
         mesEnabled = Objects.getBestMatch("/imgs/enabled-mes.png", 0.8);
+
+        Logger.log("mesEnabled:" + mesEnabled);
+        Logger.debugLog("mesEnabled: " + mesEnabled);
 
         if (mesEnabled != null) {
             Logger.debugLog("Found the MES enabled option, Menu Entry Swapper menu is enabled!");

@@ -22,7 +22,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dShopBuyer",
         description = "Buys stuff from different stores all around Gielinor, aimed to aid ironman accounts",
-        version = "1.10",
+        version = "1.11",
         guideLink = "https://wiki.mufasaclient.com/docs/dshopbuyer/",
         categories = {ScriptCategory.Smithing, ScriptCategory.Crafting, ScriptCategory.Moneymaking, ScriptCategory.Ironman},
         skipZoomSetup = true
