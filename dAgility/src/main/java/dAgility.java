@@ -6,16 +6,13 @@ import helpers.annotations.ScriptConfiguration;
 import helpers.annotations.ScriptManifest;
 import helpers.utils.*;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
 import java.util.Map;
 import static helpers.Interfaces.*;
 
 @ScriptManifest(
         name = "dAgility",
         description = "Trains agility at various courses. World hopping and eating food is supported, as well as picking up Marks of Grace when running a rooftop course.",
-        version = "1.28",
+        version = "1.29",
         categories = {ScriptCategory.Agility},
         guideLink = "https://wiki.mufasaclient.com/docs/dagility/",
         skipZoomSetup = true
