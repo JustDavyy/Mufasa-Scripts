@@ -73,19 +73,19 @@ public class Bank extends Task {
         if (Bank.isOpen()) {
             Logger.debugLog("Deposit inventory");
             Bank.tapDepositInventoryButton();
-            Condition.sleep(generateDelay(800, 1400));
+            Condition.sleep(800, 1400);
             // Go to the right bank tab if needed
             if (!Bank.isSelectedBankTab(banktab)) {
                 Bank.openTab(banktab);
                 Condition.wait(() -> Bank.isSelectedBankTab(banktab), 250, 12);
                 Logger.debugLog("Opened bank tab " + banktab);
-                Condition.sleep(generateDelay(600, 800));
+                Condition.sleep(600, 800);
             }
             // Withdraw the HP lower item we need, offensive pots and/or prayer pots based on the config entries
             withdrawItems();
 
             Bank.close();
-            Condition.sleep(generateDelay(600, 900));
+            Condition.sleep(600, 900);
             if (Bank.isOpen()) {
                 Bank.close();
             }
@@ -161,11 +161,11 @@ public class Bank extends Task {
             if (!Bank.isSelectedQuantity10Button()) {
                 Bank.tapQuantity10Button();
                 Condition.wait(Bank::isSelectedQuantity10Button, 250, 12);
-                Condition.sleep(generateDelay(250, 500));
+                Condition.sleep(250, 500);
             }
             for (int i = 0; i < batchesOf10; i++) {
                 Bank.withdrawItem(itemId, 0.75, potionColor);
-                Condition.sleep(generateDelay(200, 400));
+                Condition.sleep(200, 400);
             }
         }
 
@@ -174,11 +174,11 @@ public class Bank extends Task {
             if (!Bank.isSelectedQuantity5Button()) {
                 Bank.tapQuantity5Button();
                 Condition.wait(Bank::isSelectedQuantity5Button, 250, 12);
-                Condition.sleep(generateDelay(250, 500));
+                Condition.sleep(250, 500);
             }
             for (int i = 0; i < batchesOf5; i++) {
                 Bank.withdrawItem(itemId, 0.75, potionColor);
-                Condition.sleep(generateDelay(200, 400));
+                Condition.sleep(200, 400);
             }
         }
 
@@ -187,11 +187,11 @@ public class Bank extends Task {
             if (!Bank.isSelectedQuantity1Button()) {
                 Bank.tapQuantity1Button();
                 Condition.wait(Bank::isSelectedQuantity1Button, 250, 12);
-                Condition.sleep(generateDelay(250, 500));
+                Condition.sleep(250, 500);
             }
             for (int i = 0; i < remainder; i++) {
                 Bank.withdrawItem(itemId, 0.75, potionColor);
-                Condition.sleep(generateDelay(200, 400));
+                Condition.sleep(200, 400);
             }
         }
     }

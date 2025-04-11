@@ -17,10 +17,6 @@ public class RestockPotions extends Task {
     private int overloadDosesNeeded = 0;
     private int absorbDosesTooMany = 0;
     private int overloadDosesTooMany = 0;
-    private int absorbStockCount;
-    private int overloadStockCount;
-    private int additionalAbsorbDosesNeeded;
-    private int additionalOverloadDosesNeeded;
 
     // Rectangles
     private final Rectangle rewardInterfaceCheckRect1 = new Rectangle(87, 174, 16, 16);
@@ -75,6 +71,7 @@ public class RestockPotions extends Task {
             Logger.debugLog("Moving towards the reward chest");
             if (Walker.isReachable(rewardChestTile)) {
                 Walker.step(rewardChestTile);
+                Condition.sleep(1200, 1600);
             } else {
                 Walker.webWalk(rewardChestTile);
                 Player.waitTillNotMoving(20);
@@ -95,17 +92,17 @@ public class RestockPotions extends Task {
         if (absorbDosesTooMany > 0) {
             Logger.debugLog("We have an excess of Absorption potions, storing them!");
             ensurePlayerAtTile(absorptionBarrelTile);
-            Condition.sleep(generateDelay(750, 1500));
+            Condition.sleep(750, 1500);
             if (Player.atTile(absorptionBarrelTile)) {
                 Client.longPress(tapAbsorptionBarrelRect);
-                Condition.sleep(generateDelay(600, 1000));
+                Condition.sleep(600, 1000);
                 tapStoreOption();
                 Condition.wait(() -> Chatbox.isMakeMenuVisible(), 100, 50);
 
                 if (Chatbox.isMakeMenuVisible()) {
                     Client.sendKeystroke("1");
                     Condition.wait(() -> !Chatbox.isMakeMenuVisible(), 100, 50);
-                    Condition.sleep(generateDelay(500, 750));
+                    Condition.sleep(500, 750);
                     Logger.debugLog("Recalculate needed absorb doses...");
                     absorbDosesNeeded = calculateDosesNeeded(ItemList.ABSORPTION_1_11737, ItemList.ABSORPTION_2_11736, ItemList.ABSORPTION_3_11735, ItemList.ABSORPTION_4_11734, absorbPotColor, 84);
                 }
@@ -115,17 +112,17 @@ public class RestockPotions extends Task {
         if (overloadDosesTooMany > 0) {
             Logger.debugLog("We have an excess of Overload potions, storing them!");
             ensurePlayerAtTile(overloadBarrelTile);
-            Condition.sleep(generateDelay(750, 1500));
+            Condition.sleep(750, 1500);
             if (Player.atTile(overloadBarrelTile)) {
                 Client.longPress(tapOverloadBarrelRect);
-                Condition.sleep(generateDelay(600, 1000));
+                Condition.sleep(600, 1000);
                 tapStoreOption();
                 Condition.wait(() -> Chatbox.isMakeMenuVisible(), 100, 50);
 
                 if (Chatbox.isMakeMenuVisible()) {
                     Client.sendKeystroke("1");
                     Condition.wait(() -> !Chatbox.isMakeMenuVisible(), 100, 50);
-                    Condition.sleep(generateDelay(500, 750));
+                    Condition.sleep(500, 750);
                     Logger.debugLog("Recalculate needed overload doses...");
                     overloadDosesNeeded = calculateDosesNeeded(ItemList.OVERLOAD_1_11733, ItemList.OVERLOAD_2_11732, ItemList.OVERLOAD_3_11731, ItemList.OVERLOAD_4_11730, overloadPotColor, 24);
                 }
@@ -153,26 +150,26 @@ public class RestockPotions extends Task {
             if (rewardInterfaceOpen()) {
                 Client.tap(rewardChestBenefitsRect);
                 Condition.wait(() -> Client.isColorInRect(Color.decode("#811f1d"), rewardChestBenefitsRect, 10), 100, 50);
-                Condition.sleep(generateDelay(500, 750));
+                Condition.sleep(500, 750);
             }
 
             // Check current potion stock, buy more if needed
             if (rewardInterfaceOpen()) {
                 // Read the current stock we have
-                absorbStockCount = interfaces.readCustomStackSize(absorbStockCountRect, potionstockTextColors, potionstockDigitPatterns);
-                overloadStockCount = interfaces.readCustomStackSize(ovlStockCountRect, potionstockTextColors, potionstockDigitPatterns);
+                int absorbStockCount = interfaces.readCustomStackSize(absorbStockCountRect, potionstockTextColors, potionstockDigitPatterns);
+                int overloadStockCount = interfaces.readCustomStackSize(ovlStockCountRect, potionstockTextColors, potionstockDigitPatterns);
 
                 // Compare this to how many doses we need, buy more if needed (based on config)
                 if ("Absorption".equals(NMZMethod)) {
                     if (absorbStockCount < absorbDosesNeeded) {
-                        additionalAbsorbDosesNeeded = absorbDosesNeeded - absorbStockCount; // Total required: 21 full potions (84 doses)
+                        int additionalAbsorbDosesNeeded = absorbDosesNeeded - absorbStockCount; // Total required: 21 full potions (84 doses)
                         Logger.debugLog("We need to buy more absorption doses. Needed: " + absorbDosesNeeded + " We have: " + absorbStockCount);
                         Logger.log("Buying " + additionalAbsorbDosesNeeded + " more absorption doses.");
 
                         // Long press and tap Buy-X
                         Client.longPressWithMenuAction(rewardInterfaceAbsorbRect, 158, 224, lpMenuTextColors, "Buy-X");
                         Condition.wait(() -> Chatbox.isMakeMenuVisible(), 100, 50);
-                        Condition.sleep(generateDelay(1000, 2000));
+                        Condition.sleep(1000, 2000);
 
                         // Convert the integer quantity to a string for keystroke simulation
                         String quantityStr = Integer.toString(additionalAbsorbDosesNeeded);
@@ -185,24 +182,24 @@ public class RestockPotions extends Task {
                                 keycode = String.valueOf(c);
                             }
                             Client.sendKeystroke(keycode);
-                            Condition.sleep(generateDelay(20, 40));
+                            Condition.sleep(20, 40);
                         }
                         Client.sendKeystroke("enter");
                         Condition.wait(() -> !Chatbox.isMakeMenuVisible(), 100, 50);
-                        Condition.sleep(generateDelay(500, 750));
+                        Condition.sleep(500, 750);
                     }
                 }
 
                 if ("Overload".equals(potions)) {
                     if (overloadStockCount < overloadDosesNeeded) {
-                        additionalOverloadDosesNeeded = overloadDosesNeeded - overloadStockCount; // Total required: 6 full potions (24 doses)
+                        int additionalOverloadDosesNeeded = overloadDosesNeeded - overloadStockCount; // Total required: 6 full potions (24 doses)
                         Logger.debugLog("We need to buy more overload doses. Needed: " + overloadDosesNeeded + " We have: " + overloadStockCount);
                         Logger.log("Buying " + additionalOverloadDosesNeeded + " more overload doses.");
 
                         // Long press and tap Buy-X
                         Client.longPressWithMenuAction(rewardInterfaceOverloadRect, 158, 224, lpMenuTextColors, "Buy-X");
                         Condition.wait(() -> Chatbox.isMakeMenuVisible(), 100, 50);
-                        Condition.sleep(generateDelay(1000, 2000));
+                        Condition.sleep(1000, 2000);
 
                         // Convert the integer quantity to a string for keystroke simulation
                         String quantityStr = Integer.toString(additionalOverloadDosesNeeded);
@@ -215,11 +212,11 @@ public class RestockPotions extends Task {
                                 keycode = String.valueOf(c);
                             }
                             Client.sendKeystroke(keycode);
-                            Condition.sleep(generateDelay(20, 40));
+                            Condition.sleep(20, 40);
                         }
                         Client.sendKeystroke("enter");
                         Condition.wait(() -> !Chatbox.isMakeMenuVisible(), 100, 50);
-                        Condition.sleep(generateDelay(500, 750));
+                        Condition.sleep(500, 750);
                     }
                 }
 
@@ -237,12 +234,12 @@ public class RestockPotions extends Task {
                         if (!Player.atTile(overloadBarrelTile)) {
                             if (Walker.isReachable(overloadBarrelTile)) {
                                 Walker.step(overloadBarrelTile);
-                                Condition.sleep(generateDelay(500, 750));
+                                Condition.sleep(500, 750);
                             } else {
                                 Walker.webWalk(overloadBarrelTile);
                                 Player.waitTillNotMoving(20);
                                 Walker.step(overloadBarrelTile);
-                                Condition.sleep(generateDelay(500, 750));
+                                Condition.sleep(500, 750);
                             }
                         }
 
@@ -268,11 +265,11 @@ public class RestockPotions extends Task {
                                         keycode = String.valueOf(c);
                                     }
                                     Client.sendKeystroke(keycode);
-                                    Condition.sleep(generateDelay(20, 40));
+                                    Condition.sleep(20, 40);
                                 }
                                 Client.sendKeystroke("enter");
                                 Condition.wait(() -> !Chatbox.isMakeMenuVisible(), 100, 50);
-                                Condition.sleep(generateDelay(500, 750));
+                                Condition.sleep(500, 750);
                             }
                         } else {
                             Logger.debugLog("Failed to path to the overload barrel!");
@@ -289,12 +286,12 @@ public class RestockPotions extends Task {
                         if (!Player.atTile(absorptionBarrelTile)) {
                             if (Walker.isReachable(absorptionBarrelTile)) {
                                 Walker.step(absorptionBarrelTile);
-                                Condition.sleep(generateDelay(500, 750));
+                                Condition.sleep(500, 750);
                             } else {
                                 Walker.webWalk(absorptionBarrelTile);
                                 Player.waitTillNotMoving(20);
                                 Walker.step(absorptionBarrelTile);
-                                Condition.sleep(generateDelay(500, 750));
+                                Condition.sleep(500, 750);
                             }
                         }
 
@@ -320,11 +317,11 @@ public class RestockPotions extends Task {
                                         keycode = String.valueOf(c);
                                     }
                                     Client.sendKeystroke(keycode);
-                                    Condition.sleep(generateDelay(20, 40));
+                                    Condition.sleep(20, 40);
                                 }
                                 Client.sendKeystroke("enter");
                                 Condition.wait(() -> !Chatbox.isMakeMenuVisible(), 100, 50);
-                                Condition.sleep(generateDelay(500, 750));
+                                Condition.sleep(500, 750);
                             }
                         } else {
                             Logger.debugLog("Failed to path to the absorption barrel!");

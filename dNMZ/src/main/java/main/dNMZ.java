@@ -18,7 +18,7 @@ import static helpers.Interfaces.*;
 @ScriptManifest(
         name = "dNMZ",
         description = "Slays all the nightmare monsters in Gielinor on auto pilot. Automatically restocks on potions, supports all styles.",
-        version = "2.01",
+        version = "2.02",
         guideLink = "https://wiki.mufasaclient.com/docs/dnmz/",
         categories = {ScriptCategory.Combat, ScriptCategory.Magic}
 )
@@ -74,20 +74,6 @@ import static helpers.Interfaces.*;
                         optionType = OptionType.BANKTABS
                 ),
                 @ScriptConfiguration(
-                        name =  "Breaking (lower end)",
-                        description = "Please provide the lower end of your desired break time (in minutes).\nDISCLAIMER: It is advised to stay under an hour when breaking while doing NMZ.\nValid range is between 15 and 60, it will be randomised between the lower and higher end.",
-                        defaultValue = "20",
-                        minMaxIntValues = {15, 300},
-                        optionType = OptionType.INTEGER
-                ),
-                @ScriptConfiguration(
-                        name =  "Breaking (higher end)",
-                        description = "Please provide the higher end of your desired break time (in minutes).\nDISCLAIMER: It is advised to stay under an hour when breaking while doing NMZ.\nValid range is between 30 and 120, it will be randomised between the lower and higher end.",
-                        defaultValue = "50",
-                        minMaxIntValues = {30, 345},
-                        optionType = OptionType.INTEGER
-                ),
-                @ScriptConfiguration(
                         name =  "World hopping",
                         description = "Would you like to hop worlds based on your hop profile settings?",
                         defaultValue = "0",
@@ -132,9 +118,6 @@ public class dNMZ extends AbstractScript {
 
     // Integers
     public static int banktab;
-    public static int lowerBreak;
-    public static int higherBreak;
-    public static int breakAfterMinutes;
     public static int absorptionPotionInterval;
     public static int offensivePotionInterval = 302000;
     public static int targetHPForAction = 0;
@@ -143,7 +126,6 @@ public class dNMZ extends AbstractScript {
     public static int timeUntilNextDrinkOffensive;
 
     // Longs
-    public static long lastBreakTime;
     public static long lastOffensivePotionTime;
     public static long lastAbsorptionPotionTime;
     public static long nextQuickPrayerFlickTime = 0;
@@ -250,8 +232,6 @@ public class dNMZ extends AbstractScript {
         potions = (configs.get("Potions"));
         HPMethod = (configs.get("HP Drop Method"));
         NMZMethod = (configs.get("NMZ Method"));
-        lowerBreak = Integer.parseInt(configs.get("Breaking (lower end)"));
-        higherBreak = Integer.parseInt(configs.get("Breaking (higher end)"));
         antiBan = Boolean.valueOf(configs.get("Run anti-ban"));
 
         Logger.log("Thank you for using the dNMZ script!\nSetting up everything for your gains now...");
@@ -261,10 +241,6 @@ public class dNMZ extends AbstractScript {
 
         // Set up the walker with our chunks
         Walker.setup(mapChunk);
-
-        // Disable the built-in break/AFK handler, as we use our own break handler and do not want to AFK.
-        Client.disableBreakHandler();
-        Client.disableAFKHandler();
 
         if (antiBan) {
             Logger.debugLog("Initializing anti-ban timer");
@@ -319,7 +295,7 @@ public class dNMZ extends AbstractScript {
         XpBar.getXP();
     }
 
-    public static int generateDelay(int lowerEnd, int higherEnd) {
+    public static int generateRandom(int lowerEnd, int higherEnd) {
         if (lowerEnd > higherEnd) {
             // Swap lowerEnd and higherEnd if lowerEnd is greater
             int temp = lowerEnd;
@@ -337,7 +313,7 @@ public class dNMZ extends AbstractScript {
             Client.tap(776,99);
         }
         // CHANGE THIS TO CONDITIONAL WAIT
-        Condition.sleep(generateDelay(4000,6000));
+        Condition.sleep(4000, 6000);
         Walker.step(vialInsideTile);
         Condition.wait(() -> Player.atTile(vialInsideTile), 250, 30);
 
@@ -356,7 +332,7 @@ public class dNMZ extends AbstractScript {
 
     public static void toggleQuickPrayer() {
         Client.tap(quickPrayers);
-        Condition.sleep(generateDelay(100, 150));
+        Condition.sleep(100, 150);
         Client.tap(quickPrayers);
     }
 
@@ -456,7 +432,7 @@ public class dNMZ extends AbstractScript {
         if (mesEnabled != null) {
             Logger.debugLog("Disabling MES option menu.");
             Client.tap(mesEnabled);
-            Condition.sleep(generateDelay(500, 1000));
+            Condition.sleep(500, 1000);
             return true;
         }
 
@@ -531,7 +507,7 @@ public class dNMZ extends AbstractScript {
 
         if (rockCake != null) {
             Client.longPress(rockCake);
-            Condition.sleep(generateDelay( 800, 1200));
+            Condition.sleep(800, 1200);
         }
 
         if (!isGuzzleTopMost()) {
@@ -614,7 +590,7 @@ public class dNMZ extends AbstractScript {
         if (mesEnabled != null) {
             Logger.debugLog("Disabling MES option menu.");
             Client.tap(mesEnabled);
-            Condition.sleep(generateDelay(500, 1000));
+            Condition.sleep(500, 1000);
             return true;
         }
 
@@ -704,7 +680,7 @@ public class dNMZ extends AbstractScript {
         // Special handling for Overload (reset HP regen if using Absorption method)
         if ("Overload".equals(potions) && "Absorption".equals(NMZMethod)) {
             toggleQuickPrayer();
-            Condition.sleep(generateDelay(9000, 11000));
+            Condition.sleep(9000, 11000);
         }
     }
 
@@ -727,7 +703,7 @@ public class dNMZ extends AbstractScript {
         for (int[] combo : comboPotions) {
             if (Inventory.containsAll(combo, 0.9)) {
                 Inventory.eat(combo[0], 0.9);
-                Condition.sleep(generateDelay(1750, 2500));
+                Condition.sleep(1750, 2500);
                 Inventory.eat(combo[1], 0.9);
                 lastOffensivePotionTime = System.currentTimeMillis();
                 return; // Successfully consumed a combo

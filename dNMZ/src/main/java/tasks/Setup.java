@@ -1,6 +1,5 @@
 package tasks;
 
-import helpers.utils.ItemList;
 import helpers.utils.UITabs;
 import utils.Task;
 
@@ -36,6 +35,12 @@ public class Setup extends Task {
             GameTabs.openTab(UITabs.INVENTORY);
         }
 
+        Logger.log("Setting break and sleep manager to postpone mode");
+        Client.postponeBreaksAndSleeps();
+
+        Logger.log("Disabling AFK Handler");
+        Client.disableAFKHandler();
+
         Logger.log("Filling the offensive potion map");
         potionData.put("Divine super combat", new int[]{23694, 23691, 23688, 23685});
         potionData.put("Divine ranging", new int[]{23742, 23739, 23736, 23733});
@@ -44,19 +49,8 @@ public class Setup extends Task {
         potionData.put("Super combat", new int[]{12701, 12699, 12697, 12695});
         potionData.put("Super strength only", new int[]{161, 159, 157, 2440});
 
-        Logger.log("Checking break times");
-        // Ensure that break times are correctly ordered
-        if (lowerBreak > higherBreak) {
-            int temp = lowerBreak;
-            lowerBreak = higherBreak;
-            higherBreak = temp;
-        }
-
-        Logger.log("Initializing break timer");
-        // Initialize the break timer
-        breakAfterMinutes = generateDelay(lowerBreak, higherBreak) * 60000; // Convert minutes to milliseconds
-        lastBreakTime = System.currentTimeMillis();
-        absorptionPotionInterval = generateDelay(75000, 150000);
+        // Initialize absorb pot interval
+        absorptionPotionInterval = generateRandom(75000, 150000);
 
         Logger.log("Making sure chatbox is closed");
         Chatbox.closeChatbox();
@@ -68,7 +62,7 @@ public class Setup extends Task {
 
         // Check Auto retaliate
         GameTabs.openTab(UITabs.COMBAT);
-        Condition.sleep(generateDelay(750, 1000));
+        Condition.sleep(750, 1000);
         if (!Player.isAutoRetaliateOn()) {
             Logger.log("Enable auto retaliate");
             Player.enableAutoRetaliate();

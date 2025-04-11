@@ -15,6 +15,7 @@ public class StartDream extends Task {
     // Rectangles
     private final Rectangle dominicOnionRect = new Rectangle(449, 215, 8, 17);
     private final Rectangle dominicHardRumbleCheckRect = new Rectangle(332, 84, 79, 52);
+    private final Rectangle dominicDreamAlreadyStartedCheckRect = new Rectangle(355, 74, 48, 30);
     private final Rectangle vialRect = new Rectangle(436, 219, 8, 11);
     private final Rectangle nmzInterfaceOpenCheckRect1 = new Rectangle(130, 157, 17, 15);
     private final Rectangle nmzInterfaceOpenCheckRect2 = new Rectangle(527, 476, 12, 17);
@@ -34,6 +35,9 @@ public class StartDream extends Task {
 
     @Override
     public boolean execute() {
+
+        Logger.debugLog("Setting breaks and sleeps to postpone mode");
+        Client.postponeBreaksAndSleeps();
 
         Logger.log("Starting a new dream.");
 
@@ -64,6 +68,9 @@ public class StartDream extends Task {
                 if (hardRumbleAvailable()) {
                     Logger.debugLog("Hard rumble option present, starting dream.");
                     startDream();
+                } else if (dreamAlreadyStarted()) {
+                    Logger.debugLog("A dream is already started, continuing!");
+                    dreamStarted = true;
                 } else {
                     Logger.log("Hard rumble option not found, make sure to set up a hard rumble dream once before starting the script.");
                     Logger.log("Stopping script!");
@@ -81,10 +88,12 @@ public class StartDream extends Task {
         // Enter the dream we just started
         if (dreamStarted) {
             // Check if we need to set up rock cake MES done
-            if (HPMethod.equals("Rock cake")) {
-                if (!rockcakeMESDone) {
-                    Logger.debugLog("Checking if MES is setup correctly for Rock cake");
-                    handleRockCakeMES();
+            if ("Absorption".equals(NMZMethod)) {
+                if (HPMethod.equals("Rock cake")) {
+                    if (!rockcakeMESDone) {
+                        Logger.debugLog("Checking if MES is setup correctly for Rock cake");
+                        handleRockCakeMES();
+                    }
                 }
             }
             enterDream();
@@ -110,7 +119,7 @@ public class StartDream extends Task {
         if (Player.atTile(vialOutsideTile)) {
             if (!Player.isRunEnabled()) {
                 Player.toggleRun();
-                Condition.sleep(generateDelay(500, 1000));
+                Condition.sleep(500, 1000);
             }
             // Tap the vial
             Client.tap(vialRect);
@@ -121,7 +130,7 @@ public class StartDream extends Task {
             // Only continue if interface is open
             if (startNMZInterfaceOpen()) {
                 Client.tap(acceptStartRect);
-                Condition.sleep(generateDelay(8000, 10000));
+                Condition.sleep(8000, 10000);
                 // We should now be inside the NMZ Arena
             }
         } else {
@@ -179,22 +188,23 @@ public class StartDream extends Task {
             if (itemRect != null) {
                 for (int taps = 0; taps < 4; taps++) { // Each potion provides 4 taps worth of absorption
                     Client.tap(itemRect);
-                    Condition.sleep(generateDelay(400, 600));
+                    Condition.sleep(400, 600);
                 }
+                Condition.sleep(350, 600);
             }
         }
     }
 
     private void enablePrayer() {
         GameTabs.openTab(UITabs.PRAYER);
-        Condition.sleep(generateDelay(1250, 2000));
+        Condition.sleep(1250, 2000);
 
         // Activate Protect from Melee
         Prayer.activateProtectfromMelee(); // Quick prayers
-        Condition.sleep(generateDelay(750, 1250));
+        Condition.sleep(750, 1250);
         if (!Prayer.isActiveProtectfromMelee()) {
             Prayer.activateProtectfromMelee();
-            Condition.sleep(generateDelay(750, 1250));
+            Condition.sleep(750, 1250);
         }
 
         // Activate offensive prayers
@@ -231,11 +241,11 @@ public class StartDream extends Task {
 
     private void startDream() {
         Client.sendKeystroke("4"); // Previous: Customisable Rumble (hard) line
-        Condition.sleep(generateDelay(1000,1300));
+        Condition.sleep(1000, 1300);
         Client.sendKeystroke("space"); // Tap here to continue line
-        Condition.sleep(generateDelay(1000,1300));
+        Condition.sleep(1000, 1300);
         Client.sendKeystroke("1"); // Yes option line
-        Condition.sleep(generateDelay(1000,1300));
+        Condition.sleep(1000, 1300);
         Client.sendKeystroke("space"); // Tap here to continue line
         Condition.wait(() -> !Chatbox.isMakeMenuVisible(), 100, 50);
         dreamStarted = true;
@@ -243,6 +253,10 @@ public class StartDream extends Task {
 
     private boolean hardRumbleAvailable() {
         return Chatbox.isTextVisible(dominicHardRumbleCheckRect, dominicChatTextColors, dominicChatPatterns, "hard");
+    }
+
+    private boolean dreamAlreadyStarted() {
+        return Chatbox.readQuill8Text(dominicDreamAlreadyStartedCheckRect, dominicChatTextColors).equals("cancel");
     }
 
     private boolean startNMZInterfaceOpen() {
@@ -267,7 +281,7 @@ public class StartDream extends Task {
                 default:
                     Logger.debugLog("No HP method selected.");
             }
-            Condition.sleep(generateDelay(200, 400)); // Short delay between uses
+            Condition.sleep(200, 400); // Short delay between uses
         }
     }
 
@@ -335,7 +349,7 @@ public class StartDream extends Task {
         if (mesEnabled != null) {
             Logger.debugLog("Disabling MES option menu.");
             Client.tap(mesEnabled);
-            Condition.sleep(generateDelay(500, 1000));
+            Condition.sleep(500, 1000);
             return true;
         }
 

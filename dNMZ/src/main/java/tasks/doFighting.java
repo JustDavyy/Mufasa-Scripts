@@ -1,6 +1,5 @@
 package tasks;
 
-import helpers.annotations.AllowedValue;
 import helpers.utils.ItemList;
 import utils.Task;
 
@@ -43,7 +42,7 @@ public class doFighting extends Task {
                 topUpAbsorption();
                 Logger.debugLog("Topped up our absorption.");
                 lastAbsorptionPotionTime = System.currentTimeMillis();
-                absorptionPotionInterval = generateDelay(80000, 125000);
+                absorptionPotionInterval = generateRandom(80000, 125000);
             }
         }
 
@@ -100,7 +99,7 @@ public class doFighting extends Task {
             case "Prayer - Chivalry":
                 if (currentPrayerPoints < 37) {
                     if (timeUntilNextDrinkOffensive > 15000) { // More than 15 seconds until the next offensive potion
-                        Condition.sleep(generateDelay(250, 1000));
+                        Condition.sleep(250, 1000);
                         consumePrayerPotion(prayerPotColor);
                         Logger.log("Restored some prayer points.");
                     }
@@ -109,7 +108,7 @@ public class doFighting extends Task {
             case "Prayer - Piety":
                 if (currentPrayerPoints < 45) {
                     if (timeUntilNextDrinkOffensive > 15000) { // More than 15 seconds until the next offensive potion
-                        Condition.sleep(generateDelay(250, 1000));
+                        Condition.sleep(250, 1000);
                         consumePrayerPotion(prayerPotColor);
                         Logger.log("Restored some prayer points.");
                     }
@@ -118,7 +117,7 @@ public class doFighting extends Task {
             case "Prayer - Rigour":
                 if (currentPrayerPoints < 48) {
                     if (timeUntilNextDrinkOffensive > 15000) { // More than 15 seconds until the next offensive potion
-                        Condition.sleep(generateDelay(250, 1000));
+                        Condition.sleep(250, 1000);
                         consumePrayerPotion(prayerPotColor);
                         Logger.log("Restored some prayer points.");
                     }
@@ -127,7 +126,7 @@ public class doFighting extends Task {
             case "Prayer - Augury":
                 if (currentPrayerPoints < 50) {
                     if (timeUntilNextDrinkOffensive > 15000) { // More than 15 seconds until the next offensive potion
-                        Condition.sleep(generateDelay(250, 1000));
+                        Condition.sleep(250, 1000);
                         consumePrayerPotion(prayerPotColor);
                         Logger.log("Restored some prayer points.");
                     }
@@ -135,38 +134,36 @@ public class doFighting extends Task {
                 break;
             default:
                 if (currentPrayerPoints < 24) {
-                    Condition.sleep(generateDelay(250, 1000));
+                    Condition.sleep(250, 1000);
                     consumePrayerPotion(prayerPotColor);
                     Logger.log("Restored some prayer points.");
                 }
         }
     }
 
-    private boolean consumePrayerPotion(Color potColor) {
+    private void consumePrayerPotion(Color potColor) {
         if (Inventory.contains(ItemList.PRAYER_POTION_1_143, 0.94, potColor)) {
             Logger.debugLog("Drinking from a 1 dosed " + "Prayer" + " potion.");
             Inventory.eat(ItemList.PRAYER_POTION_1_143, 0.94, potColor);
-            Condition.sleep(generateDelay(2000, 3000));
-            return true;
+            Condition.sleep(2000, 3000);
+            return;
         } else if (Inventory.contains(ItemList.PRAYER_POTION_2_141, 0.94, potColor)) {
             Logger.debugLog("Drinking from a 2 dosed " + "Prayer" + " potion.");
             Inventory.eat(ItemList.PRAYER_POTION_2_141, 0.94, potColor);
-            Condition.sleep(generateDelay(2000, 3000));
-            return true;
+            Condition.sleep(2000, 3000);
+            return;
         } if (Inventory.contains(ItemList.PRAYER_POTION_3_139, 0.94, potColor)) {
             Logger.debugLog("Drinking from a 3 dosed " + "Prayer" + " potion.");
             Inventory.eat(ItemList.PRAYER_POTION_3_139, 0.94, potColor);
-            Condition.sleep(generateDelay(2000, 3000));
-            return true;
+            Condition.sleep(2000, 3000);
+            return;
         } if (Inventory.contains(ItemList.PRAYER_POTION_4_2434, 0.94, potColor)) {
             Logger.debugLog("Drinking from a 4 dosed " + "Prayer" + " potion.");
             Inventory.eat(ItemList.PRAYER_POTION_4_2434, 0.94, potColor);
-            Condition.sleep(generateDelay(2000, 3000));
-            return true;
+            Condition.sleep(2000, 3000);
         } else {
             Logger.debugLog("No " + "Prayer" + " potions found in inventory, leaving the instance!");
             leaveNMZ();
-            return false;
         }
     }
 
@@ -191,9 +188,9 @@ public class doFighting extends Task {
             currentAbsorption += absorptionAdded;
 
             // Short delay to simulate human-like interaction
-            Condition.sleep(generateDelay(200, 500));
+            Condition.sleep(200, 500);
         }
-        Condition.sleep(generateDelay(750, 1250));
+        Condition.sleep(750, 1250);
         Logger.log("Topped up absorption count. (now at: " + absorpLeft() + ")");
     }
 
@@ -226,7 +223,7 @@ public class doFighting extends Task {
     private void tapAbsorbPotion(Rectangle potRect, int taps) {
         for (int i = 0; i < taps; i++) {
             Client.tap(potRect);
-            Condition.sleep(generateDelay(350, 500)); // Delay between taps
+            Condition.sleep(350, 500); // Delay between taps
         }
     }
 
@@ -239,7 +236,7 @@ public class doFighting extends Task {
         Logger.debugLog("Quick prayers flicked to reset HP timer.");
 
         // Generate delay for the next flick time
-        long delayMillis = generateDelay(15000, 45000); // Delay between 15 to 45 seconds
+        long delayMillis = generateRandom(15000, 45000); // Delay between 15 to 45 seconds
         nextQuickPrayerFlickTime = System.currentTimeMillis() + delayMillis;
 
         // Log the next flick time in seconds
@@ -325,7 +322,7 @@ public class doFighting extends Task {
                 default:
                     Logger.debugLog("No HP method selected.");
             }
-            Condition.sleep(generateDelay(200, 400)); // Short delay between uses
+            Condition.sleep(200, 400); // Short delay between uses
         }
     }
 
