@@ -51,7 +51,6 @@ public class BreakManager extends Task {
         if (Client.isTimeForSleep()) {
             Logger.log("It is time to sleep!");
             Client.resumeSleeps();
-            Client.resumeBreaks();
             insideNMZ = false;
             return;
         }
