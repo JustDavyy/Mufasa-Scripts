@@ -53,8 +53,14 @@ public class RestockPotions extends Task {
         // Check how many potions of each we still need
         Logger.debugLog("Check how many doses we still need of each potion.");
         if ("Absorption".equals(NMZMethod)) {
-            absorbDosesNeeded = calculateDosesNeeded(ItemList.ABSORPTION_1_11737, ItemList.ABSORPTION_2_11736, ItemList.ABSORPTION_3_11735, ItemList.ABSORPTION_4_11734, absorbPotColor, 84);
-            absorbDosesTooMany = calculateExcessDoses(ItemList.ABSORPTION_1_11737, ItemList.ABSORPTION_2_11736, ItemList.ABSORPTION_3_11735, ItemList.ABSORPTION_4_11734, absorbPotColor, 84);
+            if (Inventory.contains(ItemList.RUNE_POUCH_12791, 0.7) || Inventory.contains(ItemList.DIVINE_RUNE_POUCH_27281, 0.7)) {
+                absorbDosesNeeded = 80;
+                Logger.log("Rune pouch detected, we only need 80 doses of absorbs instead of 84.");
+            } else {
+                absorbDosesNeeded = 84;
+            }
+            absorbDosesNeeded = calculateDosesNeeded(ItemList.ABSORPTION_1_11737, ItemList.ABSORPTION_2_11736, ItemList.ABSORPTION_3_11735, ItemList.ABSORPTION_4_11734, absorbPotColor, absorbDosesNeeded);
+            absorbDosesTooMany = calculateExcessDoses(ItemList.ABSORPTION_1_11737, ItemList.ABSORPTION_2_11736, ItemList.ABSORPTION_3_11735, ItemList.ABSORPTION_4_11734, absorbPotColor, absorbDosesNeeded);
         }
         if ("Overload".equals(potions)) {
             overloadDosesNeeded = calculateDosesNeeded(ItemList.OVERLOAD_1_11733, ItemList.OVERLOAD_2_11732, ItemList.OVERLOAD_3_11731, ItemList.OVERLOAD_4_11730, overloadPotColor, 24);
@@ -104,7 +110,13 @@ public class RestockPotions extends Task {
                     Condition.wait(() -> !Chatbox.isMakeMenuVisible(), 100, 50);
                     Condition.sleep(500, 750);
                     Logger.debugLog("Recalculate needed absorb doses...");
-                    absorbDosesNeeded = calculateDosesNeeded(ItemList.ABSORPTION_1_11737, ItemList.ABSORPTION_2_11736, ItemList.ABSORPTION_3_11735, ItemList.ABSORPTION_4_11734, absorbPotColor, 84);
+                    if (Inventory.contains(ItemList.RUNE_POUCH_12791, 0.7) || Inventory.contains(ItemList.DIVINE_RUNE_POUCH_27281, 0.7)) {
+                        absorbDosesNeeded = 80;
+                        Logger.log("Rune pouch detected, we only need 80 doses of absorbs instead of 84.");
+                    } else {
+                        absorbDosesNeeded = 84;
+                    }
+                    absorbDosesNeeded = calculateDosesNeeded(ItemList.ABSORPTION_1_11737, ItemList.ABSORPTION_2_11736, ItemList.ABSORPTION_3_11735, ItemList.ABSORPTION_4_11734, absorbPotColor, absorbDosesNeeded);
                 }
             }
         }
