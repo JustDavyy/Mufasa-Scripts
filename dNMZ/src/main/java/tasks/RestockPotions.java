@@ -396,10 +396,20 @@ public class RestockPotions extends Task {
 
         // Check for absorption potions
         int absorptionCount = Inventory.count(ItemList.ABSORPTION_4_11734, 0.94, absorbPotColor);
-        if (absorptionCount < 21) {
-            Logger.debugLog("Need to restock absorption potions. Found: " + absorptionCount + ", Required: 21.");
-            return true;
+        if (Inventory.contains(ItemList.RUNE_POUCH_12791, 0.7) || Inventory.contains(ItemList.DIVINE_RUNE_POUCH_27281, 0.7)) {
+            absorbDosesNeeded = 80;
+            Logger.log("Rune pouch detected, we only need 80 doses of absorbs instead of 84.");
+            if (absorptionCount < 20) {
+                Logger.debugLog("Need to restock absorption potions. Found: " + absorptionCount + ", Required: 20.");
+                return true;
+            }
+        } else {
+            if (absorptionCount < 21) {
+                Logger.debugLog("Need to restock absorption potions. Found: " + absorptionCount + ", Required: 21.");
+                return true;
+            }
         }
+
         Logger.debugLog("Sufficient absorption potions available: " + absorptionCount);
 
         Logger.debugLog("No need to restock potions.");
