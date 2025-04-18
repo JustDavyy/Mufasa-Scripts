@@ -53,7 +53,7 @@ public class RestockPotions extends Task {
         // Check how many potions of each we still need
         Logger.debugLog("Check how many doses we still need of each potion.");
         if ("Absorption".equals(NMZMethod)) {
-            if (Inventory.contains(ItemList.RUNE_POUCH_12791, 0.7) || Inventory.contains(ItemList.DIVINE_RUNE_POUCH_27281, 0.7)) {
+            if (Inventory.contains(ItemList.RUNE_POUCH_12791, 0.48) || Inventory.contains(ItemList.DIVINE_RUNE_POUCH_27281, 0.48)) {
                 absorbDosesNeeded = 80;
                 Logger.log("Rune pouch detected, we only need 80 doses of absorbs instead of 84.");
             } else {
@@ -110,7 +110,7 @@ public class RestockPotions extends Task {
                     Condition.wait(() -> !Chatbox.isMakeMenuVisible(), 100, 50);
                     Condition.sleep(500, 750);
                     Logger.debugLog("Recalculate needed absorb doses...");
-                    if (Inventory.contains(ItemList.RUNE_POUCH_12791, 0.7) || Inventory.contains(ItemList.DIVINE_RUNE_POUCH_27281, 0.7)) {
+                    if (Inventory.contains(ItemList.RUNE_POUCH_12791, 0.48) || Inventory.contains(ItemList.DIVINE_RUNE_POUCH_27281, 0.48)) {
                         absorbDosesNeeded = 80;
                         Logger.log("Rune pouch detected, we only need 80 doses of absorbs instead of 84.");
                     } else {
@@ -396,7 +396,7 @@ public class RestockPotions extends Task {
 
         // Check for absorption potions
         int absorptionCount = Inventory.count(ItemList.ABSORPTION_4_11734, 0.94, absorbPotColor);
-        if (Inventory.contains(ItemList.RUNE_POUCH_12791, 0.7) || Inventory.contains(ItemList.DIVINE_RUNE_POUCH_27281, 0.7)) {
+        if (Inventory.contains(ItemList.RUNE_POUCH_12791, 0.48) || Inventory.contains(ItemList.DIVINE_RUNE_POUCH_27281, 0.48)) {
             absorbDosesNeeded = 80;
             Logger.log("Rune pouch detected, we only need 80 doses of absorbs instead of 84.");
             if (absorptionCount < 20) {
